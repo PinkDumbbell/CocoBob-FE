@@ -9,7 +9,8 @@
     "airbnb-base",
     "plugin:import/errors",
     "plugin:import/warnings",
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "eslint-config-prettier"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -35,7 +36,7 @@
     ],
     "no-param-reassign": ["error", { "props": false }],
     "import/no-extraneous-dependencies": "off",
-    "prettier/prettier": ["error"]
+    "prettier/prettier": "error"
   },
   "settings": {
     "import/resolver": {
