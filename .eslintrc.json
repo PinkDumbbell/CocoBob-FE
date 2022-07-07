@@ -6,7 +6,10 @@
   "extends": [
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:react/recommended",
-    "airbnb-base"
+    "airbnb-base",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -16,7 +19,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
     "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
     "react/react-in-jsx-scope": "off",
@@ -27,14 +30,20 @@
         "js": "never",
         "jsx": "never",
         "ts": "never",
-        "tsx": "never",
-        "json": "never"
+        "tsx": "never"
       }
-    ]
+    ],
+    "no-param-reassign": ["error", { "props": false }],
+    "import/no-extraneous-dependencies": "off",
+    "prettier/prettier": ["error"]
   },
   "settings": {
     "import/resolver": {
       "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      },
+      "alias": {
+        "map": [["@", "./src"]],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }
