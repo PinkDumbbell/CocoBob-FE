@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /home/ec2-user/cocobob-fe/dist
+    overwrite: yes
+
+permissions:
+  - object: /home/ec2-user/cocobob-fe/dist
+    owner: root
+    group: root
+    mode: 755
+hooks:
+  AfterInstall:
+    - location: deploy.sh
+      timeout: 60
+      runas: root
