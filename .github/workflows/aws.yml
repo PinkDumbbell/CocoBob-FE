@@ -44,14 +44,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Check Node
-      run: node -v
+    # - name: Check Node
+    #   run: node -v
     
-    - name: Install Dependencies
-      run: yarn install --frozen-lockfile
+    # - name: Install Dependencies
+    #   run: yarn install --frozen-lockfile
       
-    - name: Build
-      run: yarn build
+    # - name: Build
+    #   run: yarn build
       
     - name: zip create
       run: zip -qq -r ./cocobob-fe-build.zip .
