@@ -1,7 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 
-import './App.css';
-
 import LoginPage from '@/pages/Login';
 import EmailLoginPage from '@/pages/Login/email';
 
