@@ -6,6 +6,8 @@ import Header from './Header';
 
 const ChildrenWrapper = styled.div`
   padding-top: 3rem;
+  height: 100%;
+  width: 100%;
 `;
 interface LayoutProps {
   canGoBack?: boolean;
@@ -16,10 +18,10 @@ interface LayoutProps {
 }
 export default function Layout({ canGoBack, title, header, footer, children }: LayoutProps) {
   return (
-    <div>
+    <>
       {(header || title) && <Header canGoBack={canGoBack} title={title} />}
       <ChildrenWrapper>{children}</ChildrenWrapper>
       {footer && <Footer />}
-    </div>
+    </>
   );
 }
