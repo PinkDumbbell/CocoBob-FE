@@ -1,27 +1,26 @@
-FROM node:14-alpine AS builder
-# Add a work directory
-RUN mkdir /usr/app
-WORKDIR /usr/app
-ENV NODE_ENV builder
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
-# Cache and Install dependencies
-COPY package.json /usr/app/package.json
-COPY package-lock.json /usr/app/package-lock.json
+# nginx 이미지를 사용합니다. 뒤에 tag가 없으면 latest 를 사용합니다.
+FROM nginx
 
-RUN npm install --silent
-RUN npm install react-scripts@3.4.1 -g --silent
+# root 에 app 폴더를 생성
+RUN mkdir /app
 
-# Copy app files
-COPY . /usr/app
-RUN npm run build
+# work dir 고정
+WORKDIR /app
 
-FROM nginx:latest
+# work dir 에 build 폴더 생성 /app/build
+RUN mkdir ./build
 
-RUN rm -rf /etc/nginx/conf.d
-COPY conf /etc/nginx
+# host pc의 현재경로의 build 폴더를 workdir 의 build 폴더로 복사
+ADD ./dist ./build
 
-COPY --from=builder /usr/app/dist /usr/share/nginx/html
+# nginx 의 default.conf 를 삭제
+RUN rm /etc/nginx/conf.d/default.conf
 
-# Expose port
+# host pc 의 nginx.conf 를 아래 경로에 복사
+COPY ./conf/conf.d /etc/nginx/dev.config
+
+# 80 포트 오픈
 EXPOSE 3000
-CMD [ "nginx", "-g", "daemon off;" ]
+
+# container 실행 시 자동으로 실행할 command. nginx 시작함
+CMD ["nginx", "-g", "daemon off;"]
