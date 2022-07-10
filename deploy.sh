@@ -1,1 +1,1 @@
-echo "> FE Deployed"
+echo "> FE Code Deployed"
