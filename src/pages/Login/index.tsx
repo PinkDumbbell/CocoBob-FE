@@ -1,10 +1,13 @@
-import LoginForm from './components/Form';
+import LoginSubmenus from './components/LoginSubmenus';
+import SocialLoginForm from './components/SocialLoginForm';
+import { PageContainer } from './index.style';
 
 export default function LoginPage() {
   return (
-    <div>
-      <h1>로그인페이지</h1>
-      <LoginForm />
-    </div>
+    <PageContainer>
+      <h1>로그인</h1>
+      <SocialLoginForm />
+      <LoginSubmenus />
+    </PageContainer>
   );
 }
