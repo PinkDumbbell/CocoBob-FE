@@ -4,6 +4,7 @@ import './App.css';
 import MainPage from '@/pages/Main';
 import LoginPage from '@/pages/Login';
 import PrivateRoute from './routes/PrivateRoute';
+import EmailLoginPage from './pages/Login/email';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         path={'/'}
       />
       <Route element={<LoginPage />} path="/login" />
+      <Route element={<EmailLoginPage />} path="/login/email" />
     </Routes>
   );
 }
