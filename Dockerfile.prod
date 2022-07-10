@@ -1,6 +1,6 @@
 FROM node:14-alpine AS builder
 # Add a work directory
-RUN mkdir /usr/app
+RUN sudo mkdir /usr/app
 WORKDIR /usr/app
 ENV NODE_ENV builder
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
