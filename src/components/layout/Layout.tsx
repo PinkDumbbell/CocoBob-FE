@@ -1,14 +1,8 @@
 import { ReactNode } from 'react';
-import styled from 'styled-components';
-
 import Footer from './Footer';
 import Header from './Header';
+import { ChildrenWrapper } from './Layout.style';
 
-const ChildrenWrapper = styled.div`
-  padding-top: 3rem;
-  height: 100%;
-  width: 100%;
-`;
 interface LayoutProps {
   canGoBack?: boolean;
   children: ReactNode;

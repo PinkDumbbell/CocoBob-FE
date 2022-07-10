@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-const NavBar = styled.nav`
+// eslint-disable-next-line import/prefer-default-export
+export const NavBar = styled.nav`
   background: white;
   width: 100%;
   color: #555;
@@ -13,7 +14,3 @@ const NavBar = styled.nav`
   justify-content: space-between;
   font-size: 1rem;
 `;
-
-export default function Footer() {
-  return <NavBar></NavBar>;
-}
