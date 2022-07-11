@@ -1,9 +1,12 @@
 import FormInput from '@/components/FormInput';
 import { useForm } from 'react-hook-form';
+import { useLoginMutation } from '@/utils/api/userApi';
 import { ILoginForm } from '../types';
 import { LoginForm, LoginButton } from './EmailLoginForm.style';
 
 export default function EmailLoginForm() {
+  const [login] = useLoginMutation();
+
   const {
     handleSubmit,
     register,
@@ -11,8 +14,9 @@ export default function EmailLoginForm() {
     watch,
   } = useForm<ILoginForm>();
 
-  const onSubmitLoginForm = (data: ILoginForm) => {
+  const onSubmitLoginForm = async (data: ILoginForm) => {
     console.log(data);
+    await login(data);
   };
 
   return (

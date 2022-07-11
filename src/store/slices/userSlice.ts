@@ -1,9 +1,13 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+export interface IUser {
+  name: string;
+  email: string;
+}
 export type UserState = {
   isLoggedIn: boolean;
-  user: { email: string; name: string } | null;
+  user: IUser | null;
 };
 export type LoginPayload = {
   email: string;
@@ -19,20 +23,19 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    loginAction(state: UserState, action: PayloadAction<LoginPayload>) {
+    setUserAction(state: UserState, action: PayloadAction<LoginPayload>) {
       state.isLoggedIn = true;
       state.user = {
         email: action.payload.email,
         name: 'tester',
       };
     },
-    logoutAction(state: UserState) {
-      state.user = null;
-      state.isLoggedIn = false;
+    logoutAction() {
+      return initialState;
     },
   },
 });
 
 const { reducer, actions } = userSlice;
-export const { loginAction, logoutAction } = actions;
+export const { setUserAction, logoutAction } = actions;
 export default reducer;
