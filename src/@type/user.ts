@@ -1,8 +1,7 @@
 import { IGenericResponse } from '@/utils/api/types';
 import { IPet } from './pet';
 
-export interface IUser extends IGenericResponse {
-  code: number;
+export interface IUser {
   userId: number;
   name: string;
   email: string;

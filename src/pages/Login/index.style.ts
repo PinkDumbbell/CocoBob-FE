@@ -7,6 +7,8 @@ export const PageContainer = styled.div`
   gap: 1rem;
   height: calc(100% - 1rem);
   width: calc(100% - 1rem);
+  max-width: 500px;
+  margin: 0 auto;
   background: white;
   padding: 0.5rem;
 

@@ -1,6 +1,4 @@
-import { IGenericResponse } from '@/utils/api/types';
-
-export interface IPet extends IGenericResponse {
+export interface IPet {
   petId: number;
   petName: string;
   petAge: number;

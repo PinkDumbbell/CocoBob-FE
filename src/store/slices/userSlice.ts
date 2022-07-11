@@ -1,33 +1,46 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IUser } from '@/@type/user';
+import { IGenericResponse } from '@/utils/api/types';
 
-export interface IUser {
-  name: string;
-  email: string;
-}
 export type UserState = {
   isLoggedIn: boolean;
   user: IUser | null;
 };
-export type LoginPayload = {
-  email: string;
-  password: string;
-};
+export interface UserPayload extends IGenericResponse, IUser {}
 
 const initialState: UserState = {
-  isLoggedIn: false,
-  user: null,
+  isLoggedIn: true,
+  user: {
+    userId: 1,
+    email: 'test@test.com',
+    name: '테스터',
+    representativeAnimal: {
+      petId: 101,
+      petName: '코코',
+      petAge: 42,
+      petAllergy: ['닭', '보리', '마늘'],
+    },
+  },
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUserAction(state: UserState, action: PayloadAction<LoginPayload>) {
+    // eslint-disable-next-line no-unused-vars
+    setUserAction(state: UserState, action: PayloadAction<UserPayload>) {
       state.isLoggedIn = true;
       state.user = {
-        email: action.payload.email,
-        name: 'tester',
+        userId: 1,
+        email: 'test@test.com',
+        name: '테스터',
+        representativeAnimal: {
+          petId: 101,
+          petName: '코코',
+          petAge: 42,
+          petAllergy: ['닭', '보리', '마늘'],
+        },
       };
     },
     logoutAction() {
