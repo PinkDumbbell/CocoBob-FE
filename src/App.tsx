@@ -1,10 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-
 import LoginPage from '@/pages/Login';
 import EmailLoginPage from '@/pages/Login/email';
-
 import PrivateRoutes from './routes/PrivateRoutes';
-
 import PageTransition from './components/transition/PageTransition';
 
 function App() {
