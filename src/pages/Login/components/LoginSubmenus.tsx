@@ -1,11 +1,14 @@
-import { EmailLoginLink } from './LoginSubmenus.style';
+import { LinkButton, SubmenusContainer } from './LoginSubmenus.style';
 
 export default function LoginSubmenus() {
   return (
-    <div>
-      <EmailLoginLink to="/login/email">
+    <SubmenusContainer>
+      <LinkButton to="/login/email">
         <p>이메일로 로그인</p>
-      </EmailLoginLink>
-    </div>
+      </LinkButton>
+      <LinkButton to="/signup">
+        <p>회원가입</p>
+      </LinkButton>
+    </SubmenusContainer>
   );
 }
