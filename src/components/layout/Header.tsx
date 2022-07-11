@@ -3,7 +3,7 @@ import { BackButton, HeaderWrapper, LeftMenuWrapper, Title } from './Header.styl
 
 interface HeaderProps {
   canGoBack?: boolean;
-  title: string;
+  title?: string;
 }
 export default function Header({ canGoBack, title }: HeaderProps) {
   const navigator = useNavigate();
