@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import 'tailwindcss/tailwind.css';
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
@@ -25,6 +26,7 @@ const GlobalStyle = createGlobalStyle`
     --t-title : #1d1d1d;
     --t-default : #333333;
     --t-caption : #999999;
+    --gutter: 1.25rem;
   }
 
   // App.tsx
