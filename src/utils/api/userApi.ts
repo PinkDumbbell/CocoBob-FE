@@ -7,7 +7,7 @@ import { IGenericResponse } from './types';
 export const userApi = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.BASE_URL || 'localhost:8080'}/v1/users`,
+    baseUrl: `${'http://localhost:8080'}/v1/users`,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.accessToken;
       if (token) {
