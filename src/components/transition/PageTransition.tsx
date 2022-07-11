@@ -1,4 +1,5 @@
 import EmailLoginPage from '@/pages/Login/email';
+import SignUpPage from '@/pages/SignUp';
 import React, { ReactNode } from 'react';
 import { useLocation, useNavigationType, matchRoutes } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
@@ -12,7 +13,10 @@ type PageTransitionProps = {
 
 const normalDirection = 'slideLeft';
 const reverseDirection = 'slideRight';
-const detailPages = [{ path: '/login/email', component: EmailLoginPage }];
+const detailPages = [
+  { path: '/login/email', component: EmailLoginPage },
+  { path: '/signup', component: SignUpPage },
+];
 const PageTransitionV2 = ({ transitionKey, children }: PageTransitionProps) => {
   const action = useNavigationType();
   const location = useLocation();
