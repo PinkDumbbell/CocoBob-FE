@@ -4,16 +4,20 @@ export const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
   gap: 1rem;
-  height: 100%;
-  width: 100%;
+  height: calc(100% - 1rem);
+  width: calc(100% - 1rem);
   background: white;
-  padding: 0.5rem 0;
+  padding: 0.5rem;
+
+  h1 {
+    margin-bottom: 5rem;
+  }
 `;
 export const ItemsCenter = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 2rem;
+  width: 100%;
 `;
