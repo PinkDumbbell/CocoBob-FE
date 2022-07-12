@@ -1,40 +1,17 @@
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { ErrorMessage, FormContainer, FormInput, FormLabel } from './SignUpForm.style';
 
-type passwordType = {
-  password: string;
-  passwordConfirm: string;
-};
-type emailType = {
-  email: string;
-  emailChecked: string;
-};
 export default function SignUpForm() {
-  const [emailCheck, setEmailCheck] = useState<emailType>({
-    email: '',
-    emailChecked: '',
-  });
-  const [passwordCheck, setPasswordCheck] = useState<passwordType>({
-    password: '',
-    passwordConfirm: '',
-  });
-
-  const onChangePassword = (e: any) => {
-    setPasswordCheck((prevState: passwordType) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
-  const onChangeEmail = (e: any) => {
-    setEmailCheck({
-      email: e.target.value,
-      emailChecked: '',
-    });
-  };
-  const onClickSignUp = (e: any) => {
-    e.preventDefault();
-    const { email, emailChecked } = emailCheck;
-    if (!emailChecked || email !== emailChecked) {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const [emailChecked, setEmailChecked] = useState<string>('');
+  const onClickSignUp = (data: any) => {
+    if (!emailChecked || data.email !== emailChecked) {
       // 에러 메세지 출력
     }
   };
@@ -42,30 +19,29 @@ export default function SignUpForm() {
     // todo : api요청 후 이메일 중복 테스트
 
     // 성공 했을 때
-    setEmailCheck((prevState: emailType) => ({
-      ...prevState,
-      emailChecked: e.target.value,
-    }));
+    setEmailChecked(e.target.value);
   };
   return (
-    <FormContainer onSubmit={onClickSignUp}>
+    <FormContainer onSubmit={handleSubmit(onClickSignUp)}>
       <FormLabel htmlFor="email">이메일</FormLabel>
       <div>
-        <FormInput type="text" id="email" name="email" onChange={onChangeEmail} />
+        <FormInput type="text" id="email" {...register('email', { required: true })} />
         <button type="button" onClick={onClickDoubleCheck}>
           중복확인
         </button>
       </div>
+      {errors.email && <ErrorMessage>이메일을 입력해주세요</ErrorMessage>}
       <FormLabel htmlFor="password">비밀번호</FormLabel>
-      <FormInput type="password" id="password" name="password" onChange={onChangePassword} />
+      <FormInput type="password" id="password" {...register('password', { required: true })} />
+      {errors.password && <ErrorMessage>비밀번호 입력해주세요</ErrorMessage>}
       <FormLabel htmlFor="password-confirm">비밀번호 확인</FormLabel>
       <FormInput
         type="password"
         id="password-confirm"
-        name="passwordConfirm"
-        onChange={onChangePassword}
+        {...register('passwordConfirm', { required: true })}
       />
-      {passwordCheck.password !== passwordCheck.passwordConfirm && (
+      {errors.passwordConfirm && <ErrorMessage>비밀번호를 확인해주세요</ErrorMessage>}
+      {watch('password') !== watch('passwordConfirm') && !errors.passwordConfirm && (
         <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
       )}
       <button onClick={onClickSignUp}>회원가입</button>
