@@ -1,10 +1,17 @@
 import styled from 'styled-components';
 
-export const LoginButton = styled.button`
+export const LoginButton = styled.button<{ disabled: boolean }>`
   background: #e5ab64;
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
   border: none;
   color: white;
-  width: 16rem;
+  width: 100%;
+  border-radius: 8px;
+  padding: 0.5rem;
+
+  &:active {
+    opacity: 0.8;
+  }
 `;
 export const LoginForm = styled.form`
   display: flex;

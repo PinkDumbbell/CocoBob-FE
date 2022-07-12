@@ -8,7 +8,7 @@ export const HeaderWrapper = styled.header`
   padding: 0 0.5rem;
   width: 100%;
   height: 3rem;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   color: #222;
