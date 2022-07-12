@@ -18,7 +18,7 @@ function App() {
         <Route element={<PrivateRoutes />} path="/*" />
         <Route element={<LoginPage />} path="/login" />
         <Route element={<EmailLoginPage />} path="/login/email" />
-        <Route element={<SignUpPage />} path="/signup" />
+        <Route element={<SignUpPage />} path="/join" />
       </Routes>
     </PageTransition>
   );

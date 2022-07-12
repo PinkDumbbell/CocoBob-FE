@@ -15,7 +15,7 @@ const normalDirection = 'slideLeft';
 const reverseDirection = 'slideRight';
 const detailPages = [
   { path: '/login/email', component: EmailLoginPage },
-  { path: '/signup', component: SignUpPage },
+  { path: '/join', component: SignUpPage },
 ];
 const PageTransitionV2 = ({ transitionKey, children }: PageTransitionProps) => {
   const action = useNavigationType();

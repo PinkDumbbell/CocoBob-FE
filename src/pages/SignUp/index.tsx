@@ -4,7 +4,7 @@ import { SignUpPageContainer } from './index.style';
 
 export default function SignUpPage() {
   return (
-    <Layout title="회원가입" canGoBack>
+    <Layout title="회원가입" canGoBack header>
       <SignUpPageContainer>
         <SignUpForm />
       </SignUpPageContainer>
