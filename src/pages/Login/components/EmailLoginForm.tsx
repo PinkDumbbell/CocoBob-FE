@@ -32,7 +32,7 @@ export default function EmailLoginForm() {
       />
       <FormInput
         label="비밀번호"
-        name="pw"
+        name="password"
         required={true}
         type="password"
         placeholder="비밀번호를 입력하세요"
