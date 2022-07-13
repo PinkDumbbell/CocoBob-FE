@@ -25,3 +25,6 @@ export const SubmenuLink = styled(Link)`
   padding: 0 0.5rem;
   text-decoration: none;
 `;
+export const SubmenusContainer = styled.div`
+  text-align: center;
+`;
