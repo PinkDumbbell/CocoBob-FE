@@ -14,23 +14,30 @@ const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
-  primary: true,
+  primary: 'first',
   label: 'Button',
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
+  primary: 'second',
   label: 'Button',
 };
 
-export const Full = Template.bind({});
-Full.args = {
-  size: 'full',
+export const Tertiary = Template.bind({});
+Tertiary.args = {
+  primary: 'third',
   label: 'Button',
 };
 
-export const Small = Template.bind({});
-Small.args = {
-  size: 'small',
+export const Quaternary = Template.bind({});
+Quaternary.args = {
+  primary: 'fourth',
+  label: 'Button',
+};
+
+export const Sub = Template.bind({});
+Sub.args = {
+  primary: 'etc',
   label: 'Button',
 };

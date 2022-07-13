@@ -7,7 +7,12 @@ module.exports = {
       nw: '350px',
       nh: '844px',
     },
-    extend: {},
+    extend: {
+      colors: {
+        redf: '#A93536',
+        redt: '#EA5758',
+      },
+    },
   },
   plugins: [],
   fontFamily: {
