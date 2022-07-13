@@ -7,6 +7,21 @@ import { Provider } from 'react-redux';
 import { act } from 'react-dom/test-utils';
 import EmailLoginForm from './EmailLoginForm';
 
+/**
+ * case 1:
+ *    이메일 입력 x, 비밀번호 입력 x => 로그인 버튼 비활성화
+ *
+ * case 2:
+ *    이메일 입력 o, 비밀번호 입력 x => 로그인 버튼 비활성화
+ *
+ * case 3:
+ *    이메일 입력 x, 비밀번호 입력 o => 로그인 버튼 비활성화
+ *
+ * case 4:
+ *    이메일 입력 o, 비밀번호 입력 o => 로그인 버튼 활성화
+ *
+ *
+ */
 describe('<EmailLoginForm />', () => {
   beforeEach(() => {
     render(
@@ -16,7 +31,7 @@ describe('<EmailLoginForm />', () => {
     );
   });
 
-  it('email과 password가 null일 때 로그인 버튼 disabled', async () => {
+  it('email과 password 모두 입력하지 않았을 때, 로그인 버튼 disabled', async () => {
     act(() => {
       fireEvent.input(screen.getByTestId('email'), {
         target: {
@@ -34,7 +49,7 @@ describe('<EmailLoginForm />', () => {
   });
 
   // it('이메일 형식 invalid 에러');
-  it('비밀번호 최소 길이 에러', async () => {
+  it('이메일 입력, 비밀번호 입력하지 않았을 때, 로그인 버튼 disabled', async () => {
     act(() => {
       fireEvent.input(screen.getByTestId('email'), {
         target: {
@@ -43,12 +58,12 @@ describe('<EmailLoginForm />', () => {
       });
       fireEvent.input(screen.getByTestId('password'), {
         target: {
-          value: '12',
+          value: '',
         },
       });
     });
 
-    expect(screen.getByText('로그인')).not.toBeDisabled();
+    expect(screen.getByText('로그인')).toBeDisabled();
     act(() => {
       fireEvent.click(screen.getByText('로그인'));
     });
@@ -59,7 +74,32 @@ describe('<EmailLoginForm />', () => {
     // expect(() => mockLogin('test@test.com', '12')).not.toBeCalled();
   });
 
-  it('email, password 값 입력 시 버튼 available', async () => {
+  it('이메일 입력하지 않았을때, 비밀번호 입력했을때, 로그인 버튼 disabled', async () => {
+    act(() => {
+      fireEvent.input(screen.getByTestId('email'), {
+        target: {
+          value: '',
+        },
+      });
+      fireEvent.input(screen.getByTestId('password'), {
+        target: {
+          value: 'password',
+        },
+      });
+    });
+
+    expect(screen.getByText('로그인')).toBeDisabled();
+    act(() => {
+      fireEvent.click(screen.getByText('로그인'));
+    });
+
+    // expect(screen.getByTestId('email')).toHaveStyle('border: 1px solid #ddd');
+    // expect(screen.getByTestId('password')).toHaveStyle('border: 1px solid red');
+
+    // expect(() => mockLogin('test@test.com', '12')).not.toBeCalled();
+  });
+
+  it('이메일 입력, 비밀번호 입력 했을때 버튼 available', async () => {
     fireEvent.input(screen.getByTestId('email'), {
       target: {
         value: 'test@test.com',
