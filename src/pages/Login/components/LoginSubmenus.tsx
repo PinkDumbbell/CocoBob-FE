@@ -1,4 +1,4 @@
-import { SubmenuLink } from './LoginSubmenus.style';
+import { SubmenuLink, EmailLoginContainer, EmailLoginButton } from './LoginSubmenus.style';
 
 interface LoginSubmenusProps {
   join?: boolean;
@@ -7,11 +7,14 @@ interface LoginSubmenusProps {
 }
 export default function LoginSubmenus({ join, findPassword, loginWithEmail }: LoginSubmenusProps) {
   return (
-    <div>
+    <>
       {loginWithEmail && (
-        <SubmenuLink to="/login/email">
-          <p>이메일로 로그인</p>
-        </SubmenuLink>
+        <EmailLoginContainer>
+          <EmailLoginButton>이메일로 로그인</EmailLoginButton>
+          <p>
+            계정이 없으시다면? <SubmenuLink to="/login/email">회원가입 </SubmenuLink>
+          </p>
+        </EmailLoginContainer>
       )}
       {join && (
         <SubmenuLink to="/join">
@@ -23,6 +26,6 @@ export default function LoginSubmenus({ join, findPassword, loginWithEmail }: Lo
           <p>비밀번호 찾기</p>
         </SubmenuLink>
       )}
-    </div>
+    </>
   );
 }
