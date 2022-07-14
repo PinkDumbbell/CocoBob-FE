@@ -5,7 +5,7 @@ export interface IUser {
   userId: number;
   name: string;
   email: string;
-  representativeAnimal: IPet;
+  representativePet: IPet;
 }
 export interface IUserLoginResponse extends IGenericResponse {
   userId: number;
