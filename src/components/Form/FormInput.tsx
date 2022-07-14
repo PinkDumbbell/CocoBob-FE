@@ -17,17 +17,17 @@ const InputContainer = styled.div`
     margin-bottom: 0.5rem;
   }
 `;
-const Label = styled.label`
+const Label = styled.label<{ isError: boolean | undefined }>`
   display: block;
   font-size: 0.75rem;
   font-weight: 500;
-  color: #666;
+  color: ${({ isError }) => (isError ? '#E85354' : '#1d1d1d')};
   padding: 0 0.5rem;
 `;
 const InputWrapper = styled.div`
   display: flex;
   justify-content: center;
-  box-shadow: 0 0 3px #00000029;
+  /* box-shadow: 0 0 3px #00000029; */
   position: relative;
   border-radius: 4px;
   width: 100%;
@@ -38,9 +38,14 @@ const InputStyle = styled.input<{ isError: boolean | undefined }>`
   appearance: none;
   width: 100%;
   padding: 0.75rem 0.5rem;
-  border: 1px solid ${({ isError }) => (isError ? 'red' : '#ddd')};
+  border: 1px solid ${({ isError }) => (isError ? '#E85354' : '#EDEDED')};
   border-radius: 8px;
-  placeholder: #ccc;
+  ::placeholder {
+    color: #333333;
+    font-size: 16px;
+    line-height: 23px;
+    letter-spacing: -0.02em;
+  }
 `;
 
 export default function Input({
@@ -54,7 +59,9 @@ export default function Input({
 }: InputProps) {
   return (
     <InputContainer>
-      <Label htmlFor={name}>{label}</Label>
+      <Label htmlFor={name} isError={isError}>
+        {label}
+      </Label>
       <InputWrapper>
         <InputStyle
           id={name}

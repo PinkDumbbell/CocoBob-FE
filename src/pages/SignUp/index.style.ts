@@ -4,11 +4,15 @@ import styled from 'styled-components';
 export const SignUpPageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: 1rem;
-  height: 100%;
-  width: 100%;
+  height: calc(100% - 1rem);
+  width: calc(100% - 1rem);
+  max-width: 500px;
+  margin: 0 auto;
   background: white;
-  padding: 0.5rem 0;
+  padding: 0.5rem;
+
+  h1 {
+    margin-bottom: 5rem;
+  }
 `;
