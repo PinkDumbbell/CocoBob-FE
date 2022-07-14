@@ -1,13 +1,12 @@
-import Layout from '@/components/layout/Layout';
+// import Layout from '@/components/layout/Layout';
 import SignUpForm from './components/SignUpForm';
 import { SignUpPageContainer } from './index.style';
 
 export default function SignUpPage() {
   return (
-    <Layout title="회원가입" canGoBack header>
-      <SignUpPageContainer>
-        <SignUpForm />
-      </SignUpPageContainer>
-    </Layout>
+    <SignUpPageContainer>
+      <h2>회원가입</h2>
+      <SignUpForm />
+    </SignUpPageContainer>
   );
 }
