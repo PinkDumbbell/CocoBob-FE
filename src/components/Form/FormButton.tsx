@@ -1,8 +1,11 @@
+import { useCallback } from 'react';
 import styled from 'styled-components';
 
 interface ButtonProps {
   name: string;
   disabled: boolean;
+  // eslint-disable-next-line no-unused-vars
+  onClick?: Function;
 }
 
 const FormButtonContainer = styled.button<{ disabled: boolean }>`
@@ -22,6 +25,13 @@ const FormButtonContainer = styled.button<{ disabled: boolean }>`
   }
 `;
 export default function FormButton(props: ButtonProps) {
-  const { name, disabled } = props;
-  return <FormButtonContainer disabled={disabled}>{name}</FormButtonContainer>;
+  const { name, disabled, onClick } = props;
+
+  const onClickButton = useCallback(() => onClick && onClick(), [onClick]);
+
+  return (
+    <FormButtonContainer onClick={onClickButton} disabled={disabled}>
+      {name}
+    </FormButtonContainer>
+  );
 }
