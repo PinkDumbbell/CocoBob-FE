@@ -5,10 +5,12 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { userApi } from '@/utils/api/userApi';
 import userSlice from './slices/userSlice';
 import authSlice from './slices/authSlice';
+import registerPetSlice from './slices/registerPetSlice';
 
 const rootReducer = combineReducers({
   user: userSlice,
   auth: authSlice,
+  registerPet: registerPetSlice,
   [userApi.reducerPath]: userApi.reducer,
 });
 
