@@ -70,6 +70,7 @@ export default function Input({
           placeholder={placeholder}
           {...register}
           isError={isError}
+          data-testid={name}
         />
       </InputWrapper>
     </InputContainer>

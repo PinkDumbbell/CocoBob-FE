@@ -1,15 +1,17 @@
 import LoginSubmenus from './components/LoginSubmenus';
 import SocialLoginForm from './components/SocialLoginForm';
-import { ItemsCenter, PageContainer } from './index.style';
+import { PageContainer, LogoContainer, FormContainer, MockLogo } from './index.style';
 
 export default function LoginPage() {
   return (
     <PageContainer>
-      <h1>코코밥</h1>
-      <ItemsCenter>
+      <LogoContainer>
+        <MockLogo>로고</MockLogo>
+      </LogoContainer>
+      <FormContainer>
         <SocialLoginForm />
         <LoginSubmenus loginWithEmail />
-      </ItemsCenter>
+      </FormContainer>
     </PageContainer>
   );
 }
