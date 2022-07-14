@@ -2,12 +2,10 @@ import { SocialLoginButton, FormWrapper } from './SocialLoginForm.style';
 
 export default function SocialLoginForm() {
   return (
-    <div>
-      <FormWrapper>
-        <SocialLoginButton>카카오</SocialLoginButton>
-        <SocialLoginButton>구글</SocialLoginButton>
-        <SocialLoginButton>애플</SocialLoginButton>
-      </FormWrapper>
-    </div>
+    <FormWrapper>
+      <SocialLoginButton className="kakao">카카오로 로그인</SocialLoginButton>
+      <SocialLoginButton>구글로 로그인</SocialLoginButton>
+      <SocialLoginButton className="apple">애플로 로그인</SocialLoginButton>
+    </FormWrapper>
   );
 }
