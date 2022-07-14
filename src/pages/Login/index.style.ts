@@ -6,8 +6,8 @@ export const PageContainer = styled.div`
   align-items: center;
   justify-content: flex-start;
   gap: 1rem;
-  height: calc(100% - 1rem);
-  width: calc(100% - 2rem);
+  height: 100%;
+  width: 100%;
   max-width: 500px;
   margin: 0 auto;
   background: radial-gradient(#fabbbc, #f56e6f);

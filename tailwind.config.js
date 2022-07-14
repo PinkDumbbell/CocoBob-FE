@@ -4,8 +4,8 @@ module.exports = {
   theme: {
     screens: {
       // for iPhone 12 pro (390, 844, gutter 20)
-      nw: '350px',
-      nh: '844px',
+      nw: '100vw',
+      nh: '100vh',
     },
     extend: {
       colors: {
