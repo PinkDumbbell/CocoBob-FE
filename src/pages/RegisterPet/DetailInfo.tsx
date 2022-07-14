@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import FormInput from '@/components/Form/FormInput';
 import { ActivityLevelType } from '@/@type/pet';
-import { RegisterPetInfo } from './index';
+import FormButton from '@/components/Form/FormButton';
+import { setDetailInfo } from '@/store/slices/registerPetSlice';
+import { RootState } from '@/store/config';
 import {
-  Button,
   ButtonWrapper,
   PageContainer,
   PetNameHighlight,
@@ -14,56 +16,77 @@ import {
   QuestionWrapper,
 } from './index.style';
 
+interface IDetailFormInputs {
+  bodyWeight: number;
+}
+export interface IDetailInfo extends IDetailFormInputs {
+  spayed: boolean;
+  pregnant: boolean;
+  activityLevel: ActivityLevelType;
+}
 const DetailInformation = ({
-  data,
   goNextPage,
   goPrevPage,
 }: {
-  data: RegisterPetInfo;
-  goNextPage: (payload: any) => void;
-  goPrevPage: (payload: any) => void;
+  goNextPage: () => void;
+  goPrevPage: () => void;
 }) => {
-  const { register, handleSubmit, getValues, setValue } = useForm<{ bodyWeight: number }>();
-  const [isSpayed, setIsSpayed] = useState(data.spayed);
-  const [isPregnant, setIsPregnant] = useState(data.pregnant);
-  const [selectedActivityLevel, setSelectedActivityLevel] = useState(data?.activityLevel ?? 3);
+  const dispatch = useDispatch();
+  const { register, handleSubmit, getValues, setValue, watch } = useForm<IDetailFormInputs>();
+  const currentPetInformation = useSelector((state: RootState) => state.registerPet);
 
-  const saveFormInputs = (formInputs: { bodyWeight: number }) => {
-    const formData = {
-      ...formInputs,
+  const [isSpayed, setIsSpayed] = useState(currentPetInformation.spayed);
+  const [isPregnant, setIsPregnant] = useState(currentPetInformation.pregnant);
+  const [selectedActivityLevel, setSelectedActivityLevel] = useState(
+    currentPetInformation?.activityLevel ?? 3,
+  );
+
+  const isButtonDisabled = !watch(['bodyWeight']).every((value) => value);
+
+  const saveFormInputs = (formInputs: IDetailFormInputs) => {
+    const { bodyWeight } = formInputs;
+
+    const detailData = {
+      bodyWeight,
       spayed: isSpayed,
       pregnant: isPregnant,
       activityLevel: selectedActivityLevel,
     };
-    console.log(formData);
-    goNextPage(formData);
+    dispatch(setDetailInfo(detailData));
+    goNextPage();
   };
 
   const onClickGoPrevPage = () => {
     const bodyWeight = getValues('bodyWeight');
 
-    goPrevPage({
+    const detailData = {
+      bodyWeight,
       spayed: isSpayed,
       pregnant: isPregnant,
-      bodyWeight,
       activityLevel: selectedActivityLevel,
-    });
+    };
+    dispatch(setDetailInfo(detailData));
+    goPrevPage();
   };
 
   useEffect(() => {
-    const { bodyWeight } = data;
-
-    setValue('bodyWeight', bodyWeight);
+    if (currentPetInformation.bodyWeight) {
+      setValue('bodyWeight', currentPetInformation.bodyWeight);
+    }
+  }, [currentPetInformation]);
+  useEffect(() => {
+    console.log(currentPetInformation);
   }, []);
-
   const handleSelectActivityLevel = (level: ActivityLevelType) => {
     setSelectedActivityLevel(level);
   };
+
   return (
     <PageContainer>
       <div>
         <QuestionText>
-          <PetNameHighlight>{data.petName}</PetNameHighlight>에 대해서 더 알려주시겠어요?
+          <PetNameHighlight>{currentPetInformation.petName}</PetNameHighlight>에 대해서 더
+          알려주시겠어요?
         </QuestionText>
         <QuestionWrapper>
           <input
@@ -143,7 +166,11 @@ const DetailInformation = ({
 
       <ButtonWrapper>
         <PrevPageButton onClick={onClickGoPrevPage}>이전으로</PrevPageButton>
-        <Button onClick={handleSubmit(saveFormInputs)}>다음으로</Button>
+        <FormButton
+          name="다음으로"
+          onClick={handleSubmit(saveFormInputs)}
+          disabled={isButtonDisabled}
+        />
       </ButtonWrapper>
     </PageContainer>
   );

@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 import FormInput from '@/components/Form/FormInput';
-import { RegisterPetInfo } from '.';
+import FormButton from '@/components/Form/FormButton';
+import { setBasicInfo } from '@/store/slices/registerPetSlice';
+import { RootState } from '@/store/config';
 
-import { Button, ButtonWrapper, PageContainer, QuestionText, SubQuestionText } from './index.style';
+import { ButtonWrapper, PageContainer, QuestionText, SubQuestionText } from './index.style';
 
 export interface IBasicInfo {
   petName: string;
@@ -11,25 +14,29 @@ export interface IBasicInfo {
   petAge: number;
 }
 const BasicInformation = ({
-  data,
   goNextPage,
 }: {
-  data: RegisterPetInfo;
   // eslint-disable-next-line no-unused-vars
-  goNextPage: (payload: any) => void;
+  goNextPage: () => void;
 }) => {
-  const { register, handleSubmit, setValue } = useForm<IBasicInfo>();
+  const dispatch = useDispatch();
+  const { register, handleSubmit, setValue, watch } = useForm<IBasicInfo>();
+  const currentPetInformation = useSelector((state: RootState) => state.registerPet);
 
   useEffect(() => {
-    const { petName, petBreed, petAge } = data;
+    const { petName, petBreed, petAge } = currentPetInformation;
     setValue('petName', petName);
     setValue('petBreed', petBreed);
     setValue('petAge', petAge);
-  }, []);
+  }, [currentPetInformation]);
 
   const saveFormInputs = (formInputs: IBasicInfo) => {
-    goNextPage(formInputs);
+    console.log('next');
+    dispatch(setBasicInfo(formInputs));
+    goNextPage();
   };
+
+  const isButtonDisabled = !watch(['petName', 'petAge', 'petBreed']).every((value) => value);
 
   return (
     <PageContainer>
@@ -71,7 +78,11 @@ const BasicInformation = ({
         </div>
       </div>
       <ButtonWrapper>
-        <Button onClick={handleSubmit(saveFormInputs)}>다음으로</Button>
+        <FormButton
+          onClick={handleSubmit(saveFormInputs)}
+          name="다음으로"
+          disabled={isButtonDisabled}
+        />
       </ButtonWrapper>
     </PageContainer>
   );
