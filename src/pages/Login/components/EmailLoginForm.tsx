@@ -1,7 +1,7 @@
 import FormInput from '@/components/Form/FormInput';
 // eslint-disable-next-line import/no-unresolved
 import { useForm } from 'react-hook-form';
-import { useLoginMutation } from '@/utils/api/userApi';
+import { useLoginMutation } from '@/store/api/authSlice';
 import FormButton from '@/components/Form/FormButton';
 import { ILoginForm } from '../types';
 import { LoginForm } from './EmailLoginForm.style';

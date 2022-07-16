@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '@/@type/user';
-import { IGenericResponse } from '@/utils/api/types';
+import { IGenericResponse } from '@/store/api/types';
 import { IPet } from '@/@type/pet';
 
 export type UserState = {

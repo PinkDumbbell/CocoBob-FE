@@ -1,4 +1,4 @@
-import { IGenericResponse } from '@/utils/api/types';
+import { IGenericResponse } from '@/store/api/types';
 import { IPet } from './pet';
 
 export interface IUser {
