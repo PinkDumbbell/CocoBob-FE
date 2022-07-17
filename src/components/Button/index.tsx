@@ -30,7 +30,7 @@ export const Button = ({
 
   return (
     <button type="button" className={totalStyle.join(' ')} style={{ backgroundColor }} {...props}>
-      <h3>{label}</h3>
+      {label}
     </button>
   );
 };
