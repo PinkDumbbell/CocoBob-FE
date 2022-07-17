@@ -2,15 +2,16 @@ import Button from '@/components/Button';
 import { useState } from 'react';
 import JoinLink from './components/JoinLink';
 import SocialLoginForm from './components/SocialLoginForm';
-import EmailLoginPage from './email';
+import EmailLoginSheet from './EmailLoginSheet';
 import { PageContainer, LogoContainer, FormContainer, MockLogo } from './index.style';
+import SignUpSheet from './SignUpSheet';
 
 export default function LoginPage() {
   const [bottomSheet, setBottomSheet] = useState('');
 
   const closeBottomSheet = () => setBottomSheet('');
-  const openEmailLogin = () => setBottomSheet('email');
-  // const openSignUp = () => setBottomSheet('signUp');
+  const openEmailLoginSheet = () => setBottomSheet('email');
+  const openSignUpSheet = () => setBottomSheet('signUp');
 
   return (
     <>
@@ -26,12 +27,21 @@ export default function LoginPage() {
             backgroundColor="transparent"
             size="full"
             primary="first"
-            onClick={openEmailLogin}
+            onClick={openEmailLoginSheet}
           />
-          <JoinLink color="white" />
+          <JoinLink color="white" openSignUpSheet={openSignUpSheet} />
         </FormContainer>
       </PageContainer>
-      <EmailLoginPage isOpen={bottomSheet === 'email'} close={closeBottomSheet} />
+      <EmailLoginSheet
+        isOpen={bottomSheet === 'email'}
+        close={closeBottomSheet}
+        openSignUpSheet={openSignUpSheet}
+      />
+      <SignUpSheet
+        isOpen={bottomSheet === 'signUp'}
+        close={closeBottomSheet}
+        openEmailLoginSheet={openEmailLoginSheet}
+      />
     </>
   );
 }

@@ -24,7 +24,6 @@ export default function EmailLoginForm() {
 
   return (
     <LoginForm onSubmit={handleSubmit(onSubmitLoginForm)}>
-      <h2>로그인</h2>
       <FormInput
         label="이메일"
         name="email"
