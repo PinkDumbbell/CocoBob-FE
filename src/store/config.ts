@@ -2,14 +2,12 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { userApi } from '@/utils/api/userApi';
 import userSlice from './slices/userSlice';
 import authSlice from './slices/authSlice';
 
 const rootReducer = combineReducers({
   user: userSlice,
   auth: authSlice,
-  [userApi.reducerPath]: userApi.reducer,
 });
 
 const initialState = {};
