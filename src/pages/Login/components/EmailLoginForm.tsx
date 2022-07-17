@@ -15,6 +15,7 @@ export default function EmailLoginForm() {
     formState: { errors },
     watch,
   } = useForm<ILoginForm>();
+  const isDisabled = !watch('email') || !watch('password');
 
   const onSubmitLoginForm = async (data: ILoginForm) => {
     console.log(data);
@@ -42,7 +43,8 @@ export default function EmailLoginForm() {
         register={register('password', { required: true })}
         isError={!!errors.password}
       />
-      <FormButton name="로그인" disabled={!watch('email') || !watch('password')} />
+
+      <FormButton name="로그인" disabled={isDisabled} />
     </LoginForm>
   );
 }

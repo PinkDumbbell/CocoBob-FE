@@ -1,9 +1,13 @@
+import { concatClasses } from '@/utils/libs/concatClasses';
+
 interface ButtonProps {
   primary?: 'first' | 'second' | 'third' | 'fourth' | 'etc';
   backgroundColor?: string;
   size?: 'full' | 'small';
   label: string;
   onClick?: () => void;
+  className?: string;
+  disabled?: boolean;
 }
 
 export const Button = ({
@@ -11,6 +15,8 @@ export const Button = ({
   primary = 'first',
   backgroundColor,
   label,
+  className,
+  disabled,
   ...props
 }: ButtonProps) => {
   const volume = size === 'full' ? 'min-w-full' : 'min-w-sm';
@@ -29,8 +35,14 @@ export const Button = ({
   if (primary === 'etc') totalStyle.push('text-[#999999] font-medium underline decoration-1');
 
   return (
-    <button type="button" className={totalStyle.join(' ')} style={{ backgroundColor }} {...props}>
-      <h3>{label}</h3>
+    <button
+      type="button"
+      className={concatClasses(totalStyle.join(' '), className ?? '')}
+      disabled={disabled}
+      style={{ backgroundColor }}
+      {...props}
+    >
+      {label}
     </button>
   );
 };
