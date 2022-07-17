@@ -3,13 +3,11 @@ import styled from 'styled-components';
 export const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   width: 100%;
-  div {
-    margin-bottom: 1rem;
-  }
+  gap: 0.75rem;
 `;
-export const SignupFooter = styled.div`
+export const SignUpFooter = styled.div`
+  padding: 1rem 0;
   align-self: center;
   a {
     margin-left: 0.5rem;

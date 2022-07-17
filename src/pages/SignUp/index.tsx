@@ -1,5 +1,5 @@
 // import Layout from '@/components/layout/Layout';
-import SignUpForm from './components/SignUpForm';
+import SignUpForm from '../Login/components/SignUpForm';
 import { SignUpPageContainer } from './index.style';
 
 export default function SignUpPage() {
