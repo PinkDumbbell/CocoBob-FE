@@ -11,7 +11,7 @@ export const PageContainer = styled.div`
   max-width: 500px;
   margin: 0 auto;
   background: radial-gradient(#fabbbc, #f56e6f);
-  padding: 0.5rem 1rem;
+  padding: 1rem;
 `;
 export const ItemsCenter = styled.div`
   display: flex;
