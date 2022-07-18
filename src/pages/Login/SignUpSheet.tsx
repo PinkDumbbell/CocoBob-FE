@@ -17,7 +17,7 @@ export default function SignUpSheet({ isOpen }: SignUpSheetProps) {
       <SheetContent>
         <div className="w-full flex flex-col items-center gap-2 bg-white">
           <h2>회원가입</h2>
-          <SignUpForm />
+          <SignUpForm isOpen={isOpen} />
           <SignUpFooter>
             <span>이미 계정이 있으시다면 ?</span>
             <a

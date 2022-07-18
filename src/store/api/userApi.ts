@@ -1,5 +1,5 @@
 import { IUser, IUserLoginResponse } from '@/@type/user';
-import { ILoginForm } from '@/pages/Login/types';
+import { ILoginForm, ISignUpForm } from '@/pages/Login/types';
 
 import { apiSlice } from '../slices/apiSlice';
 import { IGenericResponse } from './types';
@@ -22,9 +22,21 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
       }),
     }),
+    signUp: builder.mutation<IGenericResponse, ISignUpForm>({
+      query: (data) => ({
+        url: '/users/new',
+        method: 'POST',
+        body: {
+          username: data.username,
+          email: data.email,
+          password: data.password,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetUserQuery, useLoginMutation, useLogoutMutation } = userApiSlice;
+export const { useGetUserQuery, useLoginMutation, useLogoutMutation, useSignUpMutation } =
+  userApiSlice;
 
 export const selectUserResult = userApiSlice.endpoints.getUser.select();

@@ -1,6 +1,6 @@
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '@/components/Button';
 import { selectBottomSheet, setBottomSheetAction } from '@/store/slices/bottomSheetSlice';
-import { useDispatch, useSelector } from 'react-redux';
 import JoinLink from './components/JoinLink';
 import SocialLoginForm from './components/SocialLoginForm';
 import EmailLoginSheet from './EmailLoginSheet';

@@ -5,11 +5,13 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import userSlice from './slices/userSlice';
 import authSlice from './slices/authSlice';
 import bottomSheetSlice from './slices/bottomSheetSlice';
+import { apiSlice } from './slices/apiSlice';
 
 const rootReducer = combineReducers({
   user: userSlice,
   auth: authSlice,
   bottomSheet: bottomSheetSlice,
+  api: apiSlice.reducer,
 });
 
 const initialState = {};
