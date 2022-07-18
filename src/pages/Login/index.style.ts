@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import tw from 'tailwind-styled-components';
 
 export const PageContainer = styled.div`
   display: flex;
@@ -57,4 +58,45 @@ export const LoginButton = styled.button`
   &:active {
     opacity: 0.8;
   }
+`;
+
+export const SheetContent = tw.div`
+  w-full 
+  h-full 
+  py-2 
+  px-2 
+  flex 
+  flex-col 
+  items-center 
+  justify-between
+`;
+export const FormWrapper = tw.div`
+  w-full 
+  flex 
+  flex-col 
+  items-center 
+  gap-2 
+  bg-white
+  `;
+export const SubmenuWrapper = tw.div`border-t 
+border-gray-200 
+  w-full 
+  flex 
+  flex-col 
+  items-center 
+  py-4 
+  gap-4
+`;
+
+export const SocialLoginButtonWrapper = tw.div`
+  flex 
+  justify-center 
+  items-center 
+  gap-4
+`;
+export const SocialLoginButton = tw.button`
+  rounded-full 
+  bg-gray-300 
+  w-12 
+  h-12
 `;

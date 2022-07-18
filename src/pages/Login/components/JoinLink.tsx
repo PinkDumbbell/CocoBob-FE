@@ -1,24 +1,42 @@
-import { concatClasses } from '@/utils/libs/concatClasses';
+import { setBottomSheetAction } from '@/store/slices/bottomSheetSlice';
+import { SyntheticEvent } from 'react';
+import { useDispatch } from 'react-redux';
+import tw from 'tailwind-styled-components';
+
+interface LinkProps {
+  isPrimary: boolean;
+}
+const LinkWrapper = tw.div<LinkProps>`
+  flex
+  gap-3
+  ${({ isPrimary }: LinkProps) => (isPrimary ? 'text-black' : 'text-white')}
+`;
+const Link = tw.a<LinkProps>`
+  font-bold
+  ${({ isPrimary }: LinkProps) => (isPrimary ? 'text-[#E85354]' : 'text-white')}
+`;
 
 interface JoinLinkProps {
   color: 'white' | 'primary';
-  openSignUpSheet: () => void;
 }
-export default function JoinLink({ color, openSignUpSheet }: JoinLinkProps) {
-  const wrapperClasses = color === 'primary' ? 'text-black' : 'text-white';
-  const linkClasses = color === 'primary' ? 'text-[#E85354]' : 'text-white';
+export default function JoinLink({ color }: JoinLinkProps) {
+  const isPrimary = color === 'primary';
+
+  const dispatch = useDispatch();
+  const openSignUpSheet = () => dispatch(setBottomSheetAction('signUp'));
+
   return (
-    <div className={concatClasses(wrapperClasses, 'flex gap-3')}>
+    <LinkWrapper isPrimary={isPrimary}>
       <span>계정이 없으시다면?</span>
-      <a
-        onClick={(e) => {
+      <Link
+        onClick={(e: SyntheticEvent<HTMLAnchorElement>) => {
           e.preventDefault();
           openSignUpSheet();
         }}
-        className={concatClasses(linkClasses, 'font-bold')}
+        isPrimary={isPrimary}
       >
         회원가입
-      </a>
-    </div>
+      </Link>
+    </LinkWrapper>
   );
 }
