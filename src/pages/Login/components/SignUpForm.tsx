@@ -96,15 +96,14 @@ export default function SignUpForm({ isOpen, close }: { isOpen: boolean; close: 
           />
         </div>
         <div className="w-2/12 h-12 flex justify-center items-center pt-7">
-          {!emailChecked && (
-            <button className="h-12 w-12 border border-red-500 rounded-lg " onClick={checkEmail}>
-              확인
-            </button>
-          )}
-          {emailChecked && (
+          {emailChecked ? (
             <div className="h-12 w-12 bg-green-400 text-white flex items-center justify-center text-2xl rounded-full">
               V
             </div>
+          ) : (
+            <button className="h-12 w-12 border border-red-500 rounded-lg " onClick={checkEmail}>
+              확인
+            </button>
           )}
         </div>
       </div>
