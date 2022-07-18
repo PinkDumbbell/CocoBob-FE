@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
 import { useState } from 'react';
@@ -17,12 +18,13 @@ export default function SignUpForm() {
   const {
     register,
     handleSubmit,
-    getValues,
     formState: { errors },
     watch,
   } = useForm<SignUpFormInput>();
   const [emailChecked, setEmailChecked] = useState<string>('');
   const email = watch('email');
+  const password = watch('password');
+  const passwordConfirm = watch('passwordConfirm');
 
   const onClickSignUp = (data: SignUpFormInput) => {
     if (!emailChecked || data.email !== emailChecked) {
@@ -30,17 +32,14 @@ export default function SignUpForm() {
     }
   };
 
-  const checkEmail = debounce(async () => {
-    const emailValue = getValues('email');
-    const isAvailable = await checkEmailDuplicated(emailValue);
-
+  const checkEmail = async () => {
+    const isAvailable = await checkEmailDuplicated(email);
+    console.log('check : ', isAvailable);
     if (!isAvailable) {
       setEmailChecked('');
-      return false;
     }
-    setEmailChecked(emailValue);
-    return true;
-  }, 200);
+    setEmailChecked(email);
+  };
 
   return (
     <FormContainer onSubmit={handleSubmit(onClickSignUp)}>
@@ -61,7 +60,10 @@ export default function SignUpForm() {
             required={true}
             type="text"
             placeholder="이메일을 입력하세요"
-            register={register('email', { required: true, validate: checkEmail })}
+            onChange={debounce(() => checkEmail(), 300)}
+            register={register('email', {
+              required: true,
+            })}
             isError={!!errors.email}
           />
         </div>
@@ -92,12 +94,9 @@ export default function SignUpForm() {
         type="password"
         placeholder="비밀번호를 확인해주세요"
         register={register('passwordConfirm', { required: true })}
-        isError={watch('password') !== watch('passwordConfirm') || !!errors.passwordConfirm}
+        isError={password !== passwordConfirm || !!errors.passwordConfirm}
       />
-      <FormButton
-        name="회원가입"
-        disabled={!watch('email') || !watch('password') || !watch('passwordConfirm')}
-      />
+      <FormButton name="회원가입" disabled={!email || !password || !passwordConfirm} />
     </FormContainer>
   );
 }

@@ -1,3 +1,4 @@
+import { ChangeEventHandler } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import styled from 'styled-components';
 
@@ -5,6 +6,7 @@ interface InputProps {
   label: string;
   name: string;
   type?: string;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
   register?: UseFormRegisterReturn;
   required: boolean;
   placeholder?: string;
@@ -55,6 +57,7 @@ export default function Input({
   type,
   required,
   placeholder,
+  onChange,
   isError,
 }: InputProps) {
   return (
@@ -71,6 +74,7 @@ export default function Input({
           {...register}
           isError={isError}
           data-testid={name}
+          onChange={onChange}
         />
       </InputWrapper>
     </InputContainer>
