@@ -2,10 +2,10 @@ import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import { FormContainer, SignupFooter } from './SignUpForm.style';
+import { FormContainer } from './SignUpForm.style';
 
 interface SignUpFormInput {
+  username: string;
   email: string;
   password: string;
   passwordConfirm: string;
@@ -33,6 +33,15 @@ export default function SignUpForm() {
   return (
     <FormContainer onSubmit={handleSubmit(onClickSignUp)}>
       <FormInput
+        label="이름"
+        name="username"
+        required={true}
+        type="text"
+        placeholder="이름을 입력하세요"
+        register={register('username', { required: true })}
+        isError={!!errors.username}
+      />
+      <FormInput
         label="이메일"
         name="email"
         required={true}
@@ -51,7 +60,7 @@ export default function SignUpForm() {
         isError={!!errors.password}
       />
       <FormInput
-        label="비밀번호"
+        label="비밀번호 확인"
         name="passwordConfirm"
         required={true}
         type="password"
@@ -63,10 +72,6 @@ export default function SignUpForm() {
         name="회원가입"
         disabled={!watch('email') || !watch('password') || !watch('passwordConfirm')}
       />
-      <SignupFooter>
-        <span>이미 계정이 있으시다면 ?</span>
-        <Link to="/login">로그인</Link>
-      </SignupFooter>
     </FormContainer>
   );
 }

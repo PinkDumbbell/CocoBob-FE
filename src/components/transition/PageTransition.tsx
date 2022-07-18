@@ -1,8 +1,7 @@
-import EmailLoginPage from '@/pages/Login/email';
-import SignUpPage from '@/pages/SignUp';
 import React, { ReactNode } from 'react';
 import { useLocation, useNavigationType, matchRoutes } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { JsxElement } from 'typescript';
 import usePrevious from './hooks/usePrevious';
 import { PageTransitionGroup, PageTransitionWrapper } from './PageTransition.style';
 
@@ -10,13 +9,14 @@ type PageTransitionProps = {
   transitionKey: string;
   children: ReactNode;
 };
+type DetailPageType = {
+  path: string;
+  component: JsxElement;
+};
 
 const normalDirection = 'slideLeft';
 const reverseDirection = 'slideRight';
-const detailPages = [
-  { path: '/login/email', component: EmailLoginPage },
-  { path: '/join', component: SignUpPage },
-];
+const detailPages: DetailPageType[] = [];
 const PageTransitionV2 = ({ transitionKey, children }: PageTransitionProps) => {
   const action = useNavigationType();
   const location = useLocation();
