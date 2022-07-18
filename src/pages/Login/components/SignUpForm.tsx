@@ -1,45 +1,66 @@
 /* eslint-disable no-unused-vars */
 import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { debounce } from 'lodash';
-import { concatClasses } from '@/utils/libs/concatClasses';
+import { useSignUpMutation } from '@/store/api/userApi';
 import { checkEmailDuplicated } from '../api';
 import { FormContainer } from './SignUpForm.style';
+import { ISignUpForm } from '../types';
 
-interface SignUpFormInput {
-  username: string;
-  email: string;
-  password: string;
-  passwordConfirm: string;
-}
-export default function SignUpForm() {
+export default function SignUpForm({ isOpen, close }: { isOpen: boolean; close: () => void }) {
   const {
     register,
     handleSubmit,
+    trigger,
     formState: { errors },
+    reset,
+    getValues,
+    setError,
     watch,
-  } = useForm<SignUpFormInput>();
+  } = useForm<ISignUpForm>();
+  const [signUp, { error }] = useSignUpMutation();
+
   const [emailChecked, setEmailChecked] = useState<string>('');
-  const email = watch('email');
+
   const password = watch('password');
   const passwordConfirm = watch('passwordConfirm');
 
-  const onClickSignUp = (data: SignUpFormInput) => {
+  const onClickSignUp = async (data: ISignUpForm) => {
     if (!emailChecked || data.email !== emailChecked) {
       // 에러 메세지 출력
+      console.log('email check 안됨');
     }
+    await signUp(data);
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    close();
   };
 
   const checkEmail = async () => {
-    const isAvailable = await checkEmailDuplicated(email);
-    console.log('check : ', isAvailable);
-    if (!isAvailable) {
+    const emailValue = getValues('email');
+    if (!emailValue) return;
+    const result = await trigger('email');
+    if (!result) return;
+
+    const response = await checkEmailDuplicated(emailValue);
+    if (!response || !response.isAvailable) {
       setEmailChecked('');
+      return;
     }
-    setEmailChecked(email);
+
+    setEmailChecked(emailValue);
   };
+
+  useEffect(() => {
+    if (isOpen) return;
+
+    reset();
+    setEmailChecked('');
+  }, [isOpen]);
 
   return (
     <FormContainer onSubmit={handleSubmit(onClickSignUp)}>
@@ -51,8 +72,10 @@ export default function SignUpForm() {
         placeholder="이름을 입력하세요"
         register={register('username', { required: true })}
         isError={!!errors.username}
+        errorMessage={errors.username?.message}
       />
-      <div className="flex items-end w-full gap-2">
+
+      <div className="flex items-center w-full gap-2">
         <div className="w-10/12">
           <FormInput
             label="이메일"
@@ -60,22 +83,29 @@ export default function SignUpForm() {
             required={true}
             type="text"
             placeholder="이메일을 입력하세요"
-            onChange={debounce(() => checkEmail(), 300)}
+            onChange={() => setEmailChecked('')}
             register={register('email', {
               required: true,
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: '이메일 형식이 올바르지 않습니다.',
+              },
             })}
             isError={!!errors.email}
+            errorMessage={errors.email?.message}
           />
         </div>
-        <div className="w-2/12 h-12 flex justify-center">
-          <div
-            className={concatClasses(
-              'h-full  w-10 flex justify-center items-center text-2xl',
-              emailChecked && emailChecked === email ? 'text-green-400' : 'text-red-400',
-            )}
-          >
-            V
-          </div>
+        <div className="w-2/12 h-12 flex justify-center items-center pt-7">
+          {!emailChecked && (
+            <button className="h-12 w-12 border border-red-500 rounded-lg " onClick={checkEmail}>
+              확인
+            </button>
+          )}
+          {emailChecked && (
+            <div className="h-12 w-12 bg-green-400 text-white flex items-center justify-center text-2xl rounded-full">
+              V
+            </div>
+          )}
         </div>
       </div>
       <FormInput
@@ -84,19 +114,44 @@ export default function SignUpForm() {
         required={true}
         type="password"
         placeholder="비밀번호를 입력해주세요"
-        register={register('password', { required: true })}
+        register={register('password', {
+          required: true,
+          pattern: {
+            value: /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/,
+            message: '영어 대소문자, 숫자, 특수문자를 포함해야합니다.',
+          },
+        })}
         isError={!!errors.password}
+        errorMessage={errors.password?.message}
       />
+
       <FormInput
         label="비밀번호 확인"
         name="signup-passwordConfirm"
         required={true}
         type="password"
         placeholder="비밀번호를 확인해주세요"
-        register={register('passwordConfirm', { required: true })}
+        register={register('passwordConfirm', {
+          required: true,
+          validate: (value) => {
+            if (value !== password) {
+              setError('passwordConfirm', {
+                message: '비밀번호가 일치하지 않습니다.',
+              });
+              return '비밀번호가 일치하지 않습니다.';
+            }
+            return undefined;
+          },
+          pattern: {
+            value: /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/,
+            message: '영어 대소문자, 숫자, 특수문자를 포함해야합니다.',
+          },
+        })}
         isError={password !== passwordConfirm || !!errors.passwordConfirm}
+        errorMessage={errors.passwordConfirm?.message}
       />
-      <FormButton name="회원가입" disabled={!email || !password || !passwordConfirm} />
+
+      <FormButton name="회원가입" disabled={false} />
     </FormContainer>
   );
 }

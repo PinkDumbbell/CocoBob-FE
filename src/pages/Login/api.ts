@@ -2,13 +2,16 @@ import axios from '@/utils/api';
 
 export async function checkEmailDuplicated(email: string) {
   try {
-    console.log(email);
-    await axios.get(`/users/email?email=${email}`);
-    return true;
+    const { data } = await axios.get(`/users/email?email=${email}`);
+    return {
+      isAvailable: true,
+      message: data.message,
+    };
   } catch (error: any) {
-    if (error.response.data.code === 'EMAIL_DUPLICATED') return false;
+    const { response } = error;
+    if (response.data.code === 'EMAIL_DUPLICATED')
+      return { isAvailable: false, message: response.data.message };
 
-    console.log(error);
-    return false;
+    return null;
   }
 }

@@ -11,6 +11,7 @@ interface InputProps {
   required: boolean;
   placeholder?: string;
   isError?: boolean | undefined;
+  errorMessage: string | undefined;
 }
 
 const InputContainer = styled.div`
@@ -28,6 +29,7 @@ const Label = styled.label<{ isError: boolean | undefined }>`
 `;
 const InputWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   /* box-shadow: 0 0 3px #00000029; */
   position: relative;
@@ -59,6 +61,7 @@ export default function Input({
   placeholder,
   onChange,
   isError,
+  errorMessage,
 }: InputProps) {
   return (
     <InputContainer>
@@ -76,6 +79,7 @@ export default function Input({
           data-testid={name}
           onChange={onChange}
         />
+        <p className="text-red-500 text-sm pt-1">{errorMessage}</p>
       </InputWrapper>
     </InputContainer>
   );
