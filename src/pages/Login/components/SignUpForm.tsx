@@ -2,6 +2,9 @@ import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { debounce } from 'lodash';
+import { concatClasses } from '@/utils/libs/concatClasses';
+import { checkEmailDuplicated } from '../api';
 import { FormContainer } from './SignUpForm.style';
 
 interface SignUpFormInput {
@@ -14,45 +17,68 @@ export default function SignUpForm() {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
     watch,
   } = useForm<SignUpFormInput>();
   const [emailChecked, setEmailChecked] = useState<string>('');
+  const email = watch('email');
+
   const onClickSignUp = (data: SignUpFormInput) => {
     if (!emailChecked || data.email !== emailChecked) {
       // 에러 메세지 출력
     }
   };
-  // eslint-disable-next-line no-unused-vars
-  const DoubleCheck = () => {
-    // todo : api요청 후 이메일 중복 테스트
 
-    // 성공 했을 때
-    setEmailChecked('');
-  };
+  const checkEmail = debounce(async () => {
+    const emailValue = getValues('email');
+    const isAvailable = await checkEmailDuplicated(emailValue);
+
+    if (!isAvailable) {
+      setEmailChecked('');
+      return false;
+    }
+    setEmailChecked(emailValue);
+    return true;
+  }, 200);
+
   return (
     <FormContainer onSubmit={handleSubmit(onClickSignUp)}>
       <FormInput
         label="이름"
-        name="username"
+        name="signup-username"
         required={true}
         type="text"
         placeholder="이름을 입력하세요"
         register={register('username', { required: true })}
         isError={!!errors.username}
       />
-      <FormInput
-        label="이메일"
-        name="email"
-        required={true}
-        type="text"
-        placeholder="이메일을 입력하세요"
-        register={register('email', { required: true })}
-        isError={!!errors.email}
-      />
+      <div className="flex items-end w-full gap-2">
+        <div className="w-10/12">
+          <FormInput
+            label="이메일"
+            name="signup-email"
+            required={true}
+            type="text"
+            placeholder="이메일을 입력하세요"
+            register={register('email', { required: true, validate: checkEmail })}
+            isError={!!errors.email}
+          />
+        </div>
+        <div className="w-2/12 h-12 flex justify-center">
+          <div
+            className={concatClasses(
+              'h-full  w-10 flex justify-center items-center text-2xl',
+              emailChecked && emailChecked === email ? 'text-green-400' : 'text-red-400',
+            )}
+          >
+            V
+          </div>
+        </div>
+      </div>
       <FormInput
         label="비밀번호"
-        name="password"
+        name="signup-password"
         required={true}
         type="password"
         placeholder="비밀번호를 입력해주세요"
@@ -61,7 +87,7 @@ export default function SignUpForm() {
       />
       <FormInput
         label="비밀번호 확인"
-        name="passwordConfirm"
+        name="signup-passwordConfirm"
         required={true}
         type="password"
         placeholder="비밀번호를 확인해주세요"
