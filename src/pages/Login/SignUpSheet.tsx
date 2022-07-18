@@ -3,7 +3,7 @@ import { setBottomSheetAction } from '@/store/slices/bottomSheetSlice';
 import { useDispatch } from 'react-redux';
 import SignUpForm from './components/SignUpForm';
 import { SignUpFooter } from './components/SignUpForm.style';
-import { SheetContent } from './index.style';
+import { FormWrapper, SheetContent } from './index.style';
 
 interface SignUpSheetProps {
   isOpen: boolean;
@@ -15,7 +15,7 @@ export default function SignUpSheet({ isOpen }: SignUpSheetProps) {
   return (
     <BottomSheet isOpen={isOpen}>
       <SheetContent>
-        <div className="w-full flex flex-col items-center gap-2 bg-white">
+        <FormWrapper>
           <h2>회원가입</h2>
           <SignUpForm isOpen={isOpen} />
           <SignUpFooter>
@@ -30,7 +30,7 @@ export default function SignUpSheet({ isOpen }: SignUpSheetProps) {
               로그인
             </a>
           </SignUpFooter>
-        </div>
+        </FormWrapper>
       </SheetContent>
     </BottomSheet>
   );

@@ -7,7 +7,14 @@ import FormInput from '@/components/Form/FormInput';
 import { useSignUpMutation } from '@/store/api/userApi';
 import { setBottomSheetAction } from '@/store/slices/bottomSheetSlice';
 import { checkEmailDuplicated } from '../api';
-import { FormContainer } from './SignUpForm.style';
+import {
+  CheckEmailButton,
+  EmailCheckButtonWrapper,
+  EmailChecked,
+  EmailInputStyle,
+  EmailInputWrapper,
+  FormContainer,
+} from './SignUpForm.style';
 import { ISignUpForm } from '../types';
 
 export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
@@ -79,8 +86,8 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
         errorMessage={errors.username?.message}
       />
 
-      <div className="flex items-center w-full gap-2">
-        <div className="w-10/12">
+      <EmailInputWrapper>
+        <EmailInputStyle>
           <FormInput
             label="이메일"
             name="signup-email"
@@ -98,19 +105,15 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
             isError={!!errors.email}
             errorMessage={errors.email?.message}
           />
-        </div>
-        <div className="w-2/12 h-12 flex justify-center items-center pt-7">
+        </EmailInputStyle>
+        <EmailCheckButtonWrapper>
           {emailChecked ? (
-            <div className="h-12 w-12 bg-green-400 text-white flex items-center justify-center text-2xl rounded-full">
-              V
-            </div>
+            <EmailChecked>V</EmailChecked>
           ) : (
-            <button className="h-12 w-12 border border-red-500 rounded-lg " onClick={checkEmail}>
-              확인
-            </button>
+            <CheckEmailButton onClick={checkEmail}>확인</CheckEmailButton>
           )}
-        </div>
-      </div>
+        </EmailCheckButtonWrapper>
+      </EmailInputWrapper>
       <FormInput
         label="비밀번호"
         name="signup-password"
