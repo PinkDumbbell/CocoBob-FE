@@ -3,38 +3,33 @@ import { SyntheticEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import tw from 'tailwind-styled-components';
 
-interface LinkProps {
-  isPrimary: boolean;
-}
-const LinkWrapper = tw.div<LinkProps>`
-  flex
-  gap-3
-  text-sm
-  ${({ isPrimary }: LinkProps) => (isPrimary ? 'text-black' : 'text-white')}
-`;
-const Link = tw.a<LinkProps>`
-  font-bold
-  ${({ isPrimary }: LinkProps) => (isPrimary ? 'text-[#E85354]' : 'text-white')}
-`;
-
 interface JoinLinkProps {
   color: 'white' | 'primary';
 }
-export default function JoinLink({ color }: JoinLinkProps) {
-  const isPrimary = color === 'primary';
+const LinkWrapper = tw.div<JoinLinkProps>`
+  flex
+  gap-3
+  text-sm
+  ${({ color }: JoinLinkProps) => (color === 'primary' ? 'text-black' : 'text-white')}
+`;
+const Link = tw.a<JoinLinkProps>`
+  font-bold
+  ${({ color }: JoinLinkProps) => (color === 'primary' ? 'text-[#E85354]' : 'text-white')}
+`;
 
+export default function JoinLink({ color }: JoinLinkProps) {
   const dispatch = useDispatch();
   const openSignUpSheet = () => dispatch(setBottomSheetAction('signUp'));
 
   return (
-    <LinkWrapper isPrimary={isPrimary}>
+    <LinkWrapper color={color}>
       <span>계정이 없으시다면?</span>
       <Link
         onClick={(e: SyntheticEvent<HTMLAnchorElement>) => {
           e.preventDefault();
           openSignUpSheet();
         }}
-        isPrimary={isPrimary}
+        color={color}
       >
         회원가입
       </Link>
