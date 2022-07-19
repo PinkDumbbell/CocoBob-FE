@@ -2,16 +2,18 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { apiSlice } from '@/store/api/apiSlice';
 import userSlice from './slices/userSlice';
 import authSlice from './slices/authSlice';
+import bottomSheetSlice from './slices/bottomSheetSlice';
 import registerPetSlice from './slices/registerPetSlice';
+import { apiSlice } from './slices/apiSlice';
 
 const rootReducer = combineReducers({
   user: userSlice,
   auth: authSlice,
   registerPet: registerPetSlice,
-  [apiSlice.reducerPath]: apiSlice.reducer,
+  bottomSheet: bottomSheetSlice,
+  api: apiSlice.reducer,
 });
 
 const initialState = {};

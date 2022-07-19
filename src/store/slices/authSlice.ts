@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from '@/store/config';
-import { authApiSlice } from '../api/authSlice';
+import { userApiSlice } from '../api/userApi';
 
 export type AuthState = {
   userId: number | null;
@@ -31,13 +31,13 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addMatcher(authApiSlice.endpoints.login.matchFulfilled, (state, { payload }) => {
+      .addMatcher(userApiSlice.endpoints.login.matchFulfilled, (state, { payload }) => {
         const { userId, accessToken, refreshToken } = payload;
         state.userId = userId;
         state.accessToken = accessToken;
         state.refreshToken = refreshToken;
       })
-      .addMatcher(authApiSlice.endpoints.logout.matchFulfilled, (state) => {
+      .addMatcher(userApiSlice.endpoints.logout.matchFulfilled, (state) => {
         state.userId = null;
         state.accessToken = null;
         state.refreshToken = null;

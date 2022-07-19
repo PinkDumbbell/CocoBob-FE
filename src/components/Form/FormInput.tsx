@@ -1,3 +1,4 @@
+import { ChangeEventHandler } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import styled from 'styled-components';
 
@@ -5,10 +6,12 @@ interface InputProps {
   label: string;
   name: string;
   type?: string;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
   register?: UseFormRegisterReturn;
   required: boolean;
   placeholder?: string;
   isError?: boolean | undefined;
+  errorMessage?: string;
 }
 
 const InputContainer = styled.div`
@@ -19,17 +22,17 @@ const InputContainer = styled.div`
 `;
 const Label = styled.label<{ isError: boolean | undefined }>`
   display: block;
-  font-size: 0.75rem;
+  font-size: 14px;
+  line-height: 20px;
   font-weight: 500;
   color: ${({ isError }) => (isError ? '#E85354' : '#1d1d1d')};
-  padding: 0 0.5rem;
 `;
 const InputWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  /* box-shadow: 0 0 3px #00000029; */
   position: relative;
-  border-radius: 4px;
+  border-radius: 10px;
   width: 100%;
 `;
 const InputStyle = styled.input<{ isError: boolean | undefined }>`
@@ -37,14 +40,23 @@ const InputStyle = styled.input<{ isError: boolean | undefined }>`
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  padding: 0.75rem 0.5rem;
+  height: 46px;
+  padding: 0 0.5rem;
+  background: #fffdfd;
   border: 1px solid ${({ isError }) => (isError ? '#E85354' : '#EDEDED')};
-  border-radius: 8px;
+  border-radius: 10px;
+
   ::placeholder {
-    color: #333333;
+    font-weight: 400;
     font-size: 16px;
     line-height: 23px;
+    /* identical to box height, or 144% */
     letter-spacing: -0.02em;
+    color: #999999;
+  }
+
+  :focus {
+    outline: 1px solid #1d1d1d;
   }
 `;
 
@@ -55,7 +67,9 @@ export default function Input({
   type,
   required,
   placeholder,
+  onChange,
   isError,
+  errorMessage,
 }: InputProps) {
   return (
     <InputContainer>
@@ -71,7 +85,9 @@ export default function Input({
           {...register}
           isError={isError}
           data-testid={name}
+          onChange={onChange}
         />
+        {errorMessage && <p className="text-red-500 text-sm pt-1">{errorMessage}</p>}
       </InputWrapper>
     </InputContainer>
   );

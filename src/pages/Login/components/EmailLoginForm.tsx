@@ -1,7 +1,7 @@
 import FormInput from '@/components/Form/FormInput';
 // eslint-disable-next-line import/no-unresolved
 import { useForm } from 'react-hook-form';
-import { useLoginMutation } from '@/store/api/authSlice';
+import { useLoginMutation } from '@/store/api/userApi';
 import FormButton from '@/components/Form/FormButton';
 import { ILoginForm } from '../types';
 import { LoginForm } from './EmailLoginForm.style';
@@ -15,6 +15,7 @@ export default function EmailLoginForm() {
     formState: { errors },
     watch,
   } = useForm<ILoginForm>();
+  const isDisabled = !watch('email') || !watch('password');
 
   const onSubmitLoginForm = async (data: ILoginForm) => {
     console.log(data);
@@ -23,7 +24,6 @@ export default function EmailLoginForm() {
 
   return (
     <LoginForm onSubmit={handleSubmit(onSubmitLoginForm)}>
-      <h2>로그인</h2>
       <FormInput
         label="이메일"
         name="email"
@@ -42,7 +42,8 @@ export default function EmailLoginForm() {
         register={register('password', { required: true })}
         isError={!!errors.password}
       />
-      <FormButton name="로그인" disabled={!watch('email') || !watch('password')} />
+
+      <FormButton name="로그인" disabled={isDisabled} />
     </LoginForm>
   );
 }

@@ -1,17 +1,17 @@
 import styled from 'styled-components';
+import tw from 'tailwind-styled-components';
 
 export const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 1rem;
-  height: calc(100% - 1rem);
-  width: calc(100% - 2rem);
+  height: 100%;
+  width: 100%;
   max-width: 500px;
   margin: 0 auto;
-  background: radial-gradient(#fabbbc, #f56e6f);
-  padding: 0.5rem 1rem;
+  background: radial-gradient(at 30% 20%, #fabbbc, #f56e6f);
+  padding: 1rem;
 `;
 export const ItemsCenter = styled.div`
   display: flex;
@@ -32,8 +32,8 @@ export const FormContainer = styled(ItemsCenter)`
   }
 `;
 export const MockLogo = styled.div`
-  width: 269px;
-  height: 269px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   background: lightgrey;
   display: flex;
@@ -57,4 +57,52 @@ export const LoginButton = styled.button`
   &:active {
     opacity: 0.8;
   }
+`;
+const SheetContentBg = styled.div`
+  background: linear-gradient(133.79deg, #fffdfd 23.76%, #ffeeee 136.99%);
+`;
+export const SheetContent = tw(SheetContentBg)`
+  w-full 
+  h-full 
+  py-2 
+  px-3 
+  flex 
+  flex-col 
+  items-center 
+  justify-between
+  gap-10
+`;
+export const FormWrapper = tw.div`
+  w-full 
+  flex 
+  flex-col 
+  items-center 
+  gap-4 
+  mb-12
+  `;
+
+const BorderGray = styled.div`
+  border-top: 1px solid #ededed;
+`;
+export const SubmenuWrapper = tw(BorderGray)`
+  border-t 
+  w-full 
+  flex 
+  flex-col 
+  items-center 
+  py-4 
+  gap-7
+`;
+
+export const SocialLoginButtonWrapper = tw.div`
+  flex 
+  justify-center 
+  items-center 
+  gap-4
+`;
+export const SocialLoginButton = tw.button`
+  rounded-full 
+  bg-gray-300 
+  w-12 
+  h-12
 `;
