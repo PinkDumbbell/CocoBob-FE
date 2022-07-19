@@ -11,7 +11,7 @@ const rootReducer = combineReducers({
   user: userSlice,
   auth: authSlice,
   bottomSheet: bottomSheetSlice,
-  api: apiSlice.reducer,
+  [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
 const initialState = {};
@@ -19,6 +19,7 @@ const initialState = {};
 export const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.NODE_ENV !== 'production',
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
   preloadedState: initialState,
   enhancers: (defaultEnhancers) => [...defaultEnhancers],
 });
