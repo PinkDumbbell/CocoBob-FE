@@ -69,6 +69,7 @@ export const SheetContent = tw.div`
   flex-col 
   items-center 
   justify-between
+  gap-10
 `;
 export const FormWrapper = tw.div`
   w-full 
