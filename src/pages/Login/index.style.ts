@@ -6,12 +6,11 @@ export const PageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 1rem;
   height: 100%;
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
-  background: radial-gradient(#fabbbc, #f56e6f);
+  background: radial-gradient(at 30% 20%, #fabbbc, #f56e6f);
   padding: 1rem;
 `;
 export const ItemsCenter = styled.div`
@@ -33,8 +32,8 @@ export const FormContainer = styled(ItemsCenter)`
   }
 `;
 export const MockLogo = styled.div`
-  width: 269px;
-  height: 269px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   background: lightgrey;
   display: flex;
@@ -59,12 +58,14 @@ export const LoginButton = styled.button`
     opacity: 0.8;
   }
 `;
-
-export const SheetContent = tw.div`
+const SheetContentBg = styled.div`
+  background: linear-gradient(133.79deg, #fffdfd 23.76%, #ffeeee 136.99%);
+`;
+export const SheetContent = tw(SheetContentBg)`
   w-full 
   h-full 
   py-2 
-  px-2 
+  px-3 
   flex 
   flex-col 
   items-center 
@@ -76,17 +77,21 @@ export const FormWrapper = tw.div`
   flex 
   flex-col 
   items-center 
-  gap-2 
-  bg-white
+  gap-4 
+  mb-12
   `;
-export const SubmenuWrapper = tw.div`border-t 
-border-gray-200 
+
+const BorderGray = styled.div`
+  border-top: 1px solid #ededed;
+`;
+export const SubmenuWrapper = tw(BorderGray)`
+  border-t 
   w-full 
   flex 
   flex-col 
   items-center 
   py-4 
-  gap-4
+  gap-7
 `;
 
 export const SocialLoginButtonWrapper = tw.div`

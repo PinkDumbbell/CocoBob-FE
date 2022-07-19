@@ -3,7 +3,6 @@ import { ReactNode } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import BottomSheetHeader from './BottomSheetHeader';
 
 const BottomSheetWrapper = styled(SwipeableDrawer)`
   .css-9emuhu-MuiPaper-root-MuiDrawer-paper {
@@ -29,8 +28,8 @@ export default function BottomSheet({
       onClose={closeBottomSheet}
       onOpen={() => {}}
     >
-      <BottomSheetHeader close={closeBottomSheet} />
-      <div className="flex-1 overflow-auto">{children}</div>
+      {/* <BottomSheetHeader close={closeBottomSheet} /> */}
+      <div className="flex-1 overflow-auto pt-8">{children}</div>
     </BottomSheetWrapper>
   );
 }

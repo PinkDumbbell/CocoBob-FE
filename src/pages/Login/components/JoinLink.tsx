@@ -9,6 +9,7 @@ interface LinkProps {
 const LinkWrapper = tw.div<LinkProps>`
   flex
   gap-3
+  text-sm
   ${({ isPrimary }: LinkProps) => (isPrimary ? 'text-black' : 'text-white')}
 `;
 const Link = tw.a<LinkProps>`

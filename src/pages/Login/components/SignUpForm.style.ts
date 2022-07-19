@@ -9,6 +9,9 @@ export const FormContainer = styled.form`
 `;
 export const SignUpFooter = styled.div`
   padding: 1rem 0;
+  margin-bottom: 2rem;
+  font-size: 14px;
+  color: #333333;
   align-self: center;
   a {
     margin-left: 0.5rem;
