@@ -11,7 +11,7 @@ interface InputProps {
   required: boolean;
   placeholder?: string;
   isError?: boolean | undefined;
-  errorMessage?: string | undefined;
+  errorMessage?: string;
 }
 
 const InputContainer = styled.div`
