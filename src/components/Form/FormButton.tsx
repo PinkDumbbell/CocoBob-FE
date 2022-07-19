@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 interface ButtonProps {
   name: string;
-  disabled: boolean;
+  disabled?: boolean;
   // eslint-disable-next-line no-unused-vars
   onClick?: Function;
 }
@@ -17,19 +17,11 @@ const FormButtonContainer = styled.button<{ disabled: boolean }>`
   border-radius: 8px;
   padding: 0.5rem;
 
-  h3 {
-    text-align: center;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 29px;
-    letter-spacing: -0.02em;
-    text-align: center;
-    letter-spacing: -0.02em;
-    color: #fefefe;
-    /* Text/White */
-
-    color: #fefefe;
-  }
+  /* Text/White */
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  color: #fefefe;
 
   &:active {
     opacity: 0.8;
@@ -41,8 +33,8 @@ export default function FormButton(props: ButtonProps) {
   const onClickButton = useCallback(() => onClick && onClick(), [onClick]);
 
   return (
-    <FormButtonContainer onClick={onClickButton} disabled={disabled}>
-      <h3>{name}</h3>
+    <FormButtonContainer onClick={onClickButton} disabled={disabled ?? false}>
+      {name}
     </FormButtonContainer>
   );
 }
