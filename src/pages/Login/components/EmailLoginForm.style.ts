@@ -20,7 +20,7 @@ export const LoginForm = styled.form`
   gap: 1rem;
   width: 100%;
   padding: 0.5rem;
-  background: white;
+  background: none;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 `;

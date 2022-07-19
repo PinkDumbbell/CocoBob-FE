@@ -1,19 +1,23 @@
 import BottomSheet from '@/components/BottomSheet';
+import { setBottomSheetAction } from '@/store/slices/bottomSheetSlice';
+import { useDispatch } from 'react-redux';
 import SignUpForm from './components/SignUpForm';
 import { SignUpFooter } from './components/SignUpForm.style';
+import { FormWrapper, SheetContent } from './index.style';
 
 interface SignUpSheetProps {
   isOpen: boolean;
-  close: () => void;
-  openEmailLoginSheet: () => void;
 }
-export default function SignUpSheet({ close, isOpen, openEmailLoginSheet }: SignUpSheetProps) {
+export default function SignUpSheet({ isOpen }: SignUpSheetProps) {
+  const dispatch = useDispatch();
+  const openEmailLoginSheet = () => dispatch(setBottomSheetAction('emailLogin'));
+
   return (
-    <BottomSheet close={close} isOpen={isOpen}>
-      <div className="w-full h-full py-2 px-2 flex flex-col items-center justify-between">
-        <div className="w-full flex flex-col items-center gap-2 bg-white">
+    <BottomSheet isOpen={isOpen}>
+      <SheetContent>
+        <FormWrapper>
           <h2>회원가입</h2>
-          <SignUpForm isOpen={isOpen} close={close} />
+          <SignUpForm isOpen={isOpen} />
           <SignUpFooter>
             <span>이미 계정이 있으시다면 ?</span>
             <a
@@ -26,8 +30,8 @@ export default function SignUpSheet({ close, isOpen, openEmailLoginSheet }: Sign
               로그인
             </a>
           </SignUpFooter>
-        </div>
-      </div>
+        </FormWrapper>
+      </SheetContent>
     </BottomSheet>
   );
 }

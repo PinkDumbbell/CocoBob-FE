@@ -13,9 +13,20 @@ const FormButtonContainer = styled.button<{ disabled: boolean }>`
   width: 100%;
   border-radius: 8px;
   padding: 0.5rem;
-  font-size: 20px;
-  line-height: 29px;
-  letter-spacing: -0.02em;
+
+  h3 {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 29px;
+    letter-spacing: -0.02em;
+    text-align: center;
+    letter-spacing: -0.02em;
+    color: #fefefe;
+    /* Text/White */
+
+    color: #fefefe;
+  }
 
   &:active {
     opacity: 0.8;
@@ -23,5 +34,9 @@ const FormButtonContainer = styled.button<{ disabled: boolean }>`
 `;
 export default function FormButton(props: ButtonProps) {
   const { name, disabled } = props;
-  return <FormButtonContainer disabled={disabled}>{name}</FormButtonContainer>;
+  return (
+    <FormButtonContainer disabled={disabled}>
+      <h3>{name}</h3>
+    </FormButtonContainer>
+  );
 }
