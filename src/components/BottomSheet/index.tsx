@@ -27,8 +27,7 @@ export default function BottomSheet({
       anchor={'bottom'}
       open={isOpen}
       onClose={closeBottomSheet}
-      onOpen={() => null}
-      style={{ borderTopLeftRadius: 10 }}
+      onOpen={() => {}}
     >
       <BottomSheetHeader close={closeBottomSheet} />
       <div className="flex-1 overflow-auto">{children}</div>
