@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "es2022",
     "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext", "ES2022"],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
+    "module": "es2022",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
