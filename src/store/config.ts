@@ -2,10 +2,17 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import userSlice from './slices/userSlice';
 import authSlice from './slices/authSlice';
 import bottomSheetSlice from './slices/bottomSheetSlice';
 import { apiSlice } from './slices/apiSlice';
+
+const persistConfig = {
+  key: 'root',
+  storage,
+};
 
 const rootReducer = combineReducers({
   user: userSlice,
@@ -14,10 +21,12 @@ const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 const initialState = {};
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
   devTools: import.meta.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
   preloadedState: initialState,
@@ -30,4 +39,5 @@ export type AppDispatch = typeof store.dispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 
+export const persistor = persistStore(store);
 export default store;
