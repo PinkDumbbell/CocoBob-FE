@@ -9,9 +9,8 @@ export async function checkEmailDuplicated(email: string) {
     };
   } catch (error: any) {
     const { response } = error;
-    if (response.data.code === 'EMAIL_DUPLICATED')
-      return { isAvailable: false, message: response.data.message };
+    if (response.data.status === 409) return { isAvailable: false, message: response.data.message };
 
-    return null;
+    return { isAvailable: false, message: '알 수 없는 에러가 발생하였습니다.' };
   }
 }
