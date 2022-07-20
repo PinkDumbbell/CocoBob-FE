@@ -16,6 +16,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiBackdrop: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'rgb(0, 0, 0, 0.1)',
+        },
+      },
+    },
   },
 });
 
@@ -39,7 +46,6 @@ export default function BottomSheet({
         onClose={closeBottomSheet}
         onOpen={() => {}}
       >
-        {/* <BottomSheetHeader close={closeBottomSheet} /> */}
         {children}
       </BottomSheetWrapper>
     </ThemeProvider>
