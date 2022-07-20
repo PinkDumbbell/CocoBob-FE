@@ -29,7 +29,7 @@ name: Deploy to Amazon ECS
 on:
   push:
     branches:
-      - "main"
+      - "develop"
 
 permissions:
   contents: read
