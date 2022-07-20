@@ -29,7 +29,7 @@ name: Development Deploy workflow
 on:
   push:
     branches:
-      - "develop"
+      - 'develop'
 
 jobs:
   deploy:
@@ -38,48 +38,46 @@ jobs:
     environment: development
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Check Node
-      run: node -v
-    
-    - name: Install Dependencies
-      run: npm install --frozen-lockfile
-      
-    - name: Generate Application Environment File
-      env:
-        VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
-      run: |
-        echo "VITE_API_BASE_URL: $VITE_API_BASE_URL" >> ./.env
-        cat ./.env
-      
-    - name: Build
-      run: npm run build
-      
-    - name: zip create
-      run: zip -qq -r ./cocobob-fe-dev-build.zip .
-      shell: bash
-    
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        # name in repository settings
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-        aws-region: ${{ secrets.AWS_REGION }}
-        
-    - name: Upload to S3
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-        
-      run:
-        aws s3 cp --region ap-northeast-2 ./cocobob-fe-dev-build.zip s3://cocobob-storage/cocobob-deploy/cocobob-fe-dev-build.zip
-        
-    - name: Deploy
-      run: aws deploy create-deployment
-        --application-name cocobob-fe
-        --deployment-config-name CodeDeployDefault.AllAtOnce
-        --deployment-group-name cocobob-code-deploy
-        --s3-location bucket=cocobob-storage,key=cocobob-deploy/cocobob-fe-dev-build.zip,bundleType=zip
+      - name: Check Node
+        run: node -v
+
+      - name: Generate Application Environment File
+        run: |
+          echo "VITE_API_BASE_URL=$VITE_API_BASE_URL" >> .env
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+
+      - name: Install Dependencies
+        run: npm install --frozen-lockfile
+
+      - name: Build
+        run: npm run build
+
+      - name: zip create
+        run: zip -qq -r ./cocobob-fe-dev-build.zip .
+        shell: bash
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          # name in repository settings
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+
+        run: aws s3 cp --region ap-northeast-2 ./cocobob-fe-dev-build.zip s3://cocobob-storage/cocobob-deploy/cocobob-fe-dev-build.zip
+
+      - name: Deploy
+        run: aws deploy create-deployment
+          --application-name cocobob-fe
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --deployment-group-name cocobob-code-deploy
+          --s3-location bucket=cocobob-storage,key=cocobob-deploy/cocobob-fe-dev-build.zip,bundleType=zip
