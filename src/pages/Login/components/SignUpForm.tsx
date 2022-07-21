@@ -24,12 +24,13 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
     handleSubmit,
     trigger,
     formState: { errors },
-    reset,
+    reset: formReset,
     getValues,
     setError,
     watch,
   } = useForm<ISignUpForm>();
-  const [signUp, { error }] = useSignUpMutation();
+
+  const [signUp, { error, reset: mutationReset }] = useSignUpMutation();
 
   const [emailChecked, setEmailChecked] = useState<string>('');
 
@@ -40,13 +41,10 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
 
   const onClickSignUp = async (data: ISignUpForm) => {
     if (!emailChecked || data.email !== emailChecked) {
-      console.log('email check 안됨');
-    }
-    await signUp(data);
-    if (error) {
-      console.log(error);
+      alert('이메일 중복체크가 필요합니다.');
       return;
     }
+    await signUp(data);
 
     openEmailLoginSheet();
   };
@@ -57,19 +55,24 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
     const result = await trigger('email');
     if (!result) return;
 
-    const response = await checkEmailDuplicated(emailValue);
-    if (!response || !response.isAvailable) {
-      setEmailChecked('');
+    const fetchResult = await checkEmailDuplicated(emailValue);
+    if (!fetchResult) {
+      alert('에러가 발생하였습니다.');
       return;
     }
 
+    if (!fetchResult.isAvailable) {
+      setError('email', { message: fetchResult.message }, { shouldFocus: true });
+      setEmailChecked('');
+      return;
+    }
     setEmailChecked(emailValue);
   };
 
   useEffect(() => {
     if (isOpen) return;
 
-    reset();
+    formReset();
     setEmailChecked('');
   }, [isOpen]);
 
