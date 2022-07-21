@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/config';
 import { logoutAction } from '@/store/slices/userSlice';
+import { selectIsLoggedIn } from '@/store/slices/authSlice';
 
 export default function useUser() {
-  const { isLoggedIn } = useSelector((state: RootState) => state.user);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
   const dispatch = useDispatch();
 
   const logout = useCallback(() => {

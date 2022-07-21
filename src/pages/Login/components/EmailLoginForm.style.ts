@@ -19,7 +19,12 @@ export const LoginForm = styled.form`
   align-items: center;
   gap: 1rem;
   width: 100%;
+  padding: 0.5rem;
+  background: none;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 `;
+
 export const FormInput = styled.input`
   width: 16rem;
   height: 2rem;

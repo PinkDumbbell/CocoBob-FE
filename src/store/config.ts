@@ -2,15 +2,17 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { apiSlice } from '@/store/api/apiSlice';
 import userSlice from './slices/userSlice';
 import authSlice from './slices/authSlice';
+import bottomSheetSlice from './slices/bottomSheetSlice';
 import registerPetSlice from './slices/registerPetSlice';
+import { apiSlice } from './slices/apiSlice';
 
 const rootReducer = combineReducers({
   user: userSlice,
   auth: authSlice,
   registerPet: registerPetSlice,
+  bottomSheet: bottomSheetSlice,
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
@@ -18,7 +20,8 @@ const initialState = {};
 
 export const store = configureStore({
   reducer: rootReducer,
-  devTools: process.env.NODE_ENV !== 'production',
+  devTools: import.meta.env.NODE_ENV !== 'production',
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
   preloadedState: initialState,
   enhancers: (defaultEnhancers) => [...defaultEnhancers],
 });

@@ -1,29 +1,55 @@
-import FormInput from '@/components/Form/FormInput';
-// eslint-disable-next-line import/no-unresolved
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { useLoginMutation } from '@/store/api/authSlice';
+import { useNavigate } from 'react-router-dom';
+
+import FormInput from '@/components/Form/FormInput';
+import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
+import { useLoginMutation } from '@/store/api/userApi';
 import FormButton from '@/components/Form/FormButton';
+import { selectIsLoggedIn } from '@/store/slices/authSlice';
 import { ILoginForm } from '../types';
 import { LoginForm } from './EmailLoginForm.style';
 
 export default function EmailLoginForm() {
-  const [login] = useLoginMutation();
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const [login, { isLoading, error, reset: mutationReset }] = useLoginMutation();
   const {
     handleSubmit,
     register,
     formState: { errors },
-    watch,
+    reset: formReset,
   } = useForm<ILoginForm>();
 
   const onSubmitLoginForm = async (data: ILoginForm) => {
-    console.log(data);
     await login(data);
   };
 
+  useEffect(() => {
+    if (!error) return;
+    const {
+      status,
+      data: { code },
+    } = error as { status: number; data: any };
+
+    if (status === 404 && code === 'USER_NOT_FOUND') {
+      alert('이메일 또는 비밀번호를 확인해주세요.');
+      formReset();
+      mutationReset();
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    dispatch(closeBottomSheetAction);
+    navigate('/');
+  }, [isLoggedIn]);
+
   return (
     <LoginForm onSubmit={handleSubmit(onSubmitLoginForm)}>
-      <h2>로그인</h2>
       <FormInput
         label="이메일"
         name="email"
@@ -42,7 +68,7 @@ export default function EmailLoginForm() {
         register={register('password', { required: true })}
         isError={!!errors.password}
       />
-      <FormButton name="로그인" disabled={!watch('email') || !watch('password')} />
+      <FormButton name={!isLoading ? '로그인' : '로그인 중...'} disabled={isLoading} />
     </LoginForm>
   );
 }

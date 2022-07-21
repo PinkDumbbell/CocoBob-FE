@@ -20,7 +20,7 @@ const BasicInformation = ({
   goNextPage: () => void;
 }) => {
   const dispatch = useDispatch();
-  const { register, handleSubmit, setValue, watch } = useForm<IBasicInfo>();
+  const { register, handleSubmit, setValue } = useForm<IBasicInfo>();
   const currentPetInformation = useSelector((state: RootState) => state.registerPet);
 
   useEffect(() => {
@@ -35,8 +35,6 @@ const BasicInformation = ({
     dispatch(setBasicInfo(formInputs));
     goNextPage();
   };
-
-  const isButtonDisabled = !watch(['petName', 'petAge', 'petBreed']).every((value) => value);
 
   return (
     <PageContainer>
@@ -78,11 +76,7 @@ const BasicInformation = ({
         </div>
       </div>
       <ButtonWrapper>
-        <FormButton
-          onClick={handleSubmit(saveFormInputs)}
-          name="다음으로"
-          disabled={isButtonDisabled}
-        />
+        <FormButton onClick={handleSubmit(saveFormInputs)} name="다음으로" disabled={false} />
       </ButtonWrapper>
     </PageContainer>
   );
