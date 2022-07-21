@@ -3,13 +3,30 @@ import { ReactNode } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import { createTheme, ThemeProvider } from '@mui/material';
 
-const BottomSheetWrapper = styled(SwipeableDrawer)`
-  .css-9emuhu-MuiPaper-root-MuiDrawer-paper {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-  }
-`;
+const theme = createTheme({
+  components: {
+    MuiDrawer: {
+      styleOverrides: {
+        paperAnchorBottom: {
+          borderTopRightRadius: 10,
+          borderTopLeftRadius: 10,
+          paddingTop: 10,
+        },
+      },
+    },
+    MuiBackdrop: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'rgb(0, 0, 0, 0.1)',
+        },
+      },
+    },
+  },
+});
+
+const BottomSheetWrapper = styled(SwipeableDrawer)``;
 
 export default function BottomSheet({
   isOpen,
@@ -22,14 +39,15 @@ export default function BottomSheet({
   const closeBottomSheet = () => dispatch(closeBottomSheetAction());
 
   return (
-    <BottomSheetWrapper
-      anchor={'bottom'}
-      open={isOpen}
-      onClose={closeBottomSheet}
-      onOpen={() => {}}
-    >
-      {/* <BottomSheetHeader close={closeBottomSheet} /> */}
-      <div className="flex-1 overflow-auto pt-8">{children}</div>
-    </BottomSheetWrapper>
+    <ThemeProvider theme={theme}>
+      <BottomSheetWrapper
+        anchor={'bottom'}
+        open={isOpen}
+        onClose={closeBottomSheet}
+        onOpen={() => {}}
+      >
+        {children}
+      </BottomSheetWrapper>
+    </ThemeProvider>
   );
 }

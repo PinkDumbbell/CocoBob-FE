@@ -36,7 +36,12 @@ export const userApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetUserQuery, useLoginMutation, useLogoutMutation, useSignUpMutation } =
-  userApiSlice;
+export const {
+  useGetUserQuery,
+  useLoginMutation,
+  useLogoutMutation,
+  useSignUpMutation,
+  useCheckEmailDuplicatedQuery,
+} = userApiSlice;
 
 export const selectUserResult = userApiSlice.endpoints.getUser.select();
