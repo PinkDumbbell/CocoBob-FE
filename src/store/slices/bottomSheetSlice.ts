@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '@/store/config';
 
 export type BottomSheetState = {
-  bottomSheet: 'emailLogin' | 'signUp' | '';
+  bottomSheet: '' | 'emailLogin' | 'signUp' | 'exact' | 'ambiguos';
 };
 
 const initialState: BottomSheetState = {

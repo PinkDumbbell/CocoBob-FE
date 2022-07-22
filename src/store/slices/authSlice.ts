@@ -31,6 +31,7 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(userApiSlice.endpoints.login.matchFulfilled, (state, respoonse) => {
+        console.log('login fulfilled');
         authSlice.caseReducers.setCredentials(state, respoonse);
       })
       .addMatcher(userApiSlice.endpoints.logout.matchFulfilled, (state) => {
