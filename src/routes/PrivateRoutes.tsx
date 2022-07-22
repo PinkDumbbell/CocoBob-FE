@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import useUser from '@/utils/hooks/useUser';
 import MainPage from '@/pages/Main';
@@ -19,8 +19,9 @@ function WithPageGuard(WrappedComponent: React.ComponentType) {
   );
 }
 function PrivateRoutes() {
+  const location = useLocation();
   return (
-    <Routes>
+    <Routes location={location}>
       <Route element={WithPageGuard(MainPage)} path={'/'} />
       <Route element={WithPageGuard(RegisterPet)} path={'/register'} />
     </Routes>

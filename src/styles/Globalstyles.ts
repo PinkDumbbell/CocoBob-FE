@@ -101,6 +101,18 @@ const GlobalStyle = createGlobalStyle`
     letter-spacing: -0.02em;
     color : var(--t-caption);
   }
+
+  input[type='date']{
+    position:relative;
+  }
+  input[type='date']:before{
+    display:none;
+  }
+  input[type='date']::-webkit-calendar-picker-indicator{
+    z-index:1;
+    position:abosulte;
+    left:0;
+  }
 `;
 
 export default GlobalStyle;

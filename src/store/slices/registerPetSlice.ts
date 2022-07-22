@@ -1,8 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IPet } from '@/@type/pet';
-import { IDetailInfo } from '@/pages/RegisterPet/DetailInfo';
-import { IBasicInfo } from '@/pages/RegisterPet/BasicInfo';
 
 const initialState: IPet = {
   activityLevel: 3,
@@ -15,26 +13,22 @@ const initialState: IPet = {
   pregnant: false,
   spayed: false,
 };
+
+interface RegisterInfo {
+  petName?: string;
+  petSex?: 'male' | 'female' | '';
+}
 export const registerPetSlice = createSlice({
   name: 'pet',
   initialState,
   reducers: {
-    setBasicInfo(state: IPet, action: PayloadAction<IBasicInfo>) {
-      const { petAge, petBreed, petName } = action.payload;
-      state.petAge = petAge;
-      state.petBreed = petBreed;
-      state.petName = petName;
-    },
-    setDetailInfo(state: IPet, action: PayloadAction<IDetailInfo>) {
-      const { activityLevel, bodyWeight, pregnant, spayed } = action.payload;
-      state.activityLevel = activityLevel;
-      state.bodyWeight = bodyWeight;
-      state.pregnant = pregnant;
-      state.spayed = spayed;
+    setRegisterInfo(state, action: PayloadAction<RegisterInfo>) {
+      const { payload } = action;
+      state = { ...state, ...payload };
     },
   },
 });
 
 const { reducer, actions } = registerPetSlice;
-export const { setBasicInfo, setDetailInfo } = actions;
+export const { setRegisterInfo } = actions;
 export default reducer;

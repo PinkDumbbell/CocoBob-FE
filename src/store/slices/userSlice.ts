@@ -5,28 +5,16 @@ import { IGenericResponse } from '@/store/api/types';
 import { IPet } from '@/@type/pet';
 
 export type UserState = {
-  isLoggedIn: boolean;
   user: IUser | null;
 };
 export interface UserPayload extends IGenericResponse, IUser {}
 
 const initialState: UserState = {
-  isLoggedIn: true,
   user: {
-    userId: 1,
-    email: 'test@test.com',
-    name: '테스터',
-    representativePet: {
-      petId: 101,
-      petName: '코코',
-      petAge: 42,
-      petAllergy: ['닭', '보리', '마늘'],
-      petBreed: '잡종',
-      spayed: false,
-      pregnant: false,
-      bodyWeight: 2.9,
-      activityLevel: 4,
-    },
+    userId: null,
+    email: null,
+    name: null,
+    representativePet: null,
   },
 };
 
@@ -34,10 +22,9 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    // eslint-disable-next-line no-unused-vars
     setUserAction(state: UserState, action: PayloadAction<UserPayload>) {
-      state.isLoggedIn = true;
-      state.user = initialState.user;
+      const { payload } = action;
+      state.user = payload;
     },
     setRepresentativePet(state: UserState, action: PayloadAction<IPet>) {
       if (state.user) {

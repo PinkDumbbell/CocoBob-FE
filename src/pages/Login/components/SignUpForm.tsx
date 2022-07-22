@@ -81,7 +81,6 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
       <FormInput
         label="이름"
         name="signup-username"
-        required={true}
         type="text"
         placeholder="이름을 입력하세요"
         register={register('username', { required: true })}
@@ -94,7 +93,6 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
           <FormInput
             label="이메일"
             name="signup-email"
-            required={true}
             type="text"
             placeholder="이메일을 입력하세요"
             onChange={() => setEmailChecked('')}
@@ -113,14 +111,15 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
           {emailChecked ? (
             <EmailChecked>V</EmailChecked>
           ) : (
-            <CheckEmailButton onClick={checkEmail}>확인</CheckEmailButton>
+            <CheckEmailButton type="button" onClick={checkEmail}>
+              확인
+            </CheckEmailButton>
           )}
         </EmailCheckButtonWrapper>
       </EmailInputWrapper>
       <FormInput
         label="비밀번호"
         name="signup-password"
-        required={true}
         type="password"
         placeholder="비밀번호를 입력해주세요"
         register={register('password', {
@@ -137,7 +136,6 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
       <FormInput
         label="비밀번호 확인"
         name="signup-passwordConfirm"
-        required={true}
         type="password"
         placeholder="비밀번호를 확인해주세요"
         register={register('passwordConfirm', {

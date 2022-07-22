@@ -8,7 +8,7 @@ interface InputProps {
   type?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   register?: UseFormRegisterReturn;
-  required: boolean;
+  required?: boolean;
   placeholder?: string;
   isError?: boolean | undefined;
   errorMessage?: string;
@@ -82,10 +82,10 @@ export default function Input({
           required={required}
           type={type}
           placeholder={placeholder}
-          {...register}
           isError={isError}
           data-testid={name}
           onChange={onChange}
+          {...register}
         />
         {errorMessage && <p className="text-red-500 text-sm pt-1">{errorMessage}</p>}
       </InputWrapper>

@@ -12,15 +12,13 @@ const FormButtonContainer = styled.button<{ disabled: boolean }>`
   background: #e85354;
   opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
   border: none;
-  color: #fefefe;
-  width: 100%;
   border-radius: 8px;
   padding: 0.5rem;
+  width: 100%;
 
-  /* Text/White */
   font-size: 20px;
   font-weight: 700;
-  text-align: center;
+  letter-spacing: -0.02em;
   color: #fefefe;
 
   &:active {
@@ -30,7 +28,7 @@ const FormButtonContainer = styled.button<{ disabled: boolean }>`
 export default function FormButton(props: ButtonProps) {
   const { name, disabled, onClick } = props;
 
-  const onClickButton = useCallback(() => onClick && onClick(), [onClick]);
+  const onClickButton = useCallback(() => !disabled && onClick && onClick(), [onClick]);
 
   return (
     <FormButtonContainer onClick={onClickButton} disabled={disabled ?? false}>
