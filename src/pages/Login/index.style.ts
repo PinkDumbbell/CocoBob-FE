@@ -78,7 +78,7 @@ export const FormWrapper = tw.div`
   flex-col 
   items-center 
   gap-4 
-  mb-12
+  mb-8
   `;
 
 const BorderGray = styled.div`

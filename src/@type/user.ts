@@ -7,8 +7,12 @@ export interface IUser {
   email: string;
   representativePet: IPet;
 }
-export interface IUserLoginResponse extends IGenericResponse {
-  userId: number;
-  accessToken: string;
-  refreshToken: string;
+export interface IAuthenticatedUser {
+  accessToken: string | null;
+  refreshToken: string | undefined | null;
+  email: string;
+  role: 'USER' | 'ADMIN' | 'NONE';
+  userId: number | null;
+  username: string;
 }
+export interface IUserLoginResponse extends IGenericResponse, IAuthenticatedUser {}

@@ -44,14 +44,20 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    # - name: Check Node
-    #   run: node -v
-    
-    # - name: Install Dependencies
-    #   run: yarn install --frozen-lockfile
+    - name: Check Node
+      run: node -v
+
+    - name: Generate Application Environment File
+      run: |
+          echo "VITE_API_BASE_URL=$VITE_API_BASE_URL" >> .env
+      env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+
+    - name: Install Dependencies
+      run: npm install --frozen-lockfile
       
-    # - name: Build
-    #   run: yarn build
+    - name: Build
+      run: npm run build
       
     - name: zip create
       run: zip -qq -r ./cocobob-fe-build.zip .
