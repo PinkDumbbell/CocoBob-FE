@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import tw from 'tailwind-styled-components';
 
 export const PageContainer = styled.div`
   display: flex;
@@ -6,10 +7,6 @@ export const PageContainer = styled.div`
   padding: 1rem;
   justify-content: space-between;
   height: 100%;
-
-  div {
-    margin-bottom: 1rem;
-  }
 
   h3 {
     margin-bottom: 1.125rem;
@@ -33,9 +30,12 @@ export const SubQuestionText = styled.p`
   font-size: 0.9rem;
   color: #555;
 `;
-export const PetNameHighlight = styled.span`
-  color: #ffcc70;
-  font-weight: 600;
+export const PetNameHighlight = tw.span`
+  text-primary-900
+  font-bold
+  bg-primary-100
+  px-1
+  border-b-primary-900
 `;
 
 export const ButtonWrapper = styled.div`
@@ -60,4 +60,11 @@ export const Button = styled.button`
   color: white;
   font-size: 1.1rem;
   font-weight: 700;
+`;
+
+export const Form = tw.form`
+  h-full
+  flex
+  flex-col
+  justify-between
 `;

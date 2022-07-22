@@ -22,7 +22,6 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    // eslint-disable-next-line no-unused-vars
     setUserAction(state: UserState, action: PayloadAction<UserPayload>) {
       const { payload } = action;
       state.user = payload;
