@@ -31,11 +31,11 @@ export default function EmailLoginForm() {
     if (!error) return;
     const {
       status,
-      data: { code },
+      data: { code, message },
     } = error as { status: number; data: any };
 
     if (status === 404 && code === 'USER_NOT_FOUND') {
-      alert('이메일 또는 비밀번호를 확인해주세요.');
+      alert(message);
       formReset();
       mutationReset();
     }
@@ -53,7 +53,6 @@ export default function EmailLoginForm() {
       <FormInput
         label="이메일"
         name="email"
-        required={true}
         type="text"
         placeholder="이메일을 입력하세요"
         register={register('email', { required: true })}
@@ -62,7 +61,6 @@ export default function EmailLoginForm() {
       <FormInput
         label="비밀번호"
         name="password"
-        required={true}
         type="password"
         placeholder="비밀번호를 입력하세요"
         register={register('password', { required: true })}
