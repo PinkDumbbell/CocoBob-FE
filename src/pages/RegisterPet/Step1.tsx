@@ -1,41 +1,61 @@
 /* eslint-disable no-unused-vars */
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
 import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
 import { concatClasses } from '@/utils/libs/concatClasses';
-import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import { ButtonWrapper, PageContainer, QuestionText, SubQuestionText, Form } from './index.style';
+import { selectRegisterInfo, setRegisterInfo } from '@/store/slices/registerPetSlice';
+import { ButtonWrapper, PageContainer, QuestionText, Form, QuestionWrapper } from './index.style';
 import { INextStep } from './type';
 
 interface IStep1Form {
   petName: string;
   petSex: 'male' | 'female' | '';
+  isSpayed: boolean;
+  isPregnant: boolean;
 }
 export default function Step1({ goNextStep }: INextStep) {
   const dispatch = useDispatch();
+  const registerInfo = useSelector(selectRegisterInfo);
+
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<IStep1Form>();
 
-  console.log(watch());
+  const onValidSubmit = (submitData: IStep1Form) => {
+    const { petName, petSex, isSpayed, isPregnant } = submitData;
 
-  const onValidSubmit = (data: IStep1Form) => {
-    console.log(data);
-
+    dispatch(setRegisterInfo({ petName, petSex, isSpayed, isPregnant }));
     goNextStep();
   };
+
+  useEffect(() => {
+    if (!registerInfo) return;
+    console.log(registerInfo);
+    setValue('petName', registerInfo.petName);
+    setValue('petSex', registerInfo.petSex);
+    setValue('isSpayed', registerInfo.isSpayed);
+    setValue('isPregnant', registerInfo.isPregnant);
+  }, []);
 
   return (
     <PageContainer>
       <div>
         <QuestionText>함께하는 아이에 대해 알고싶어요!</QuestionText>
-        {/* <SubQuestionText>8자 이내면 저희가 기억하기 쉬울 것 같아요!</SubQuestionText> */}
       </div>
       <Form onSubmit={handleSubmit(onValidSubmit)}>
         <div className="flex flex-col gap-6">
+          <div className="flex flex-col items-center gap-4">
+            <label className="relative h-32 w-32 rounded-full bg-gray-400" htmlFor="pet-thumbnail">
+              <div className="absolute bottom-2 right-2 h-8 w-8 bg-primary-900 rounded-md"></div>
+            </label>
+            <input type="file" id="pet-thumbnail" accept="image/jpg, image/png, image/jpeg" />
+          </div>
           <FormInput
             label="이름"
             name="pet-name"
@@ -88,6 +108,16 @@ export default function Step1({ goNextStep }: INextStep) {
               </div>
             </div>
             <p className="text-primary-900 text-sm">{errors.petSex?.message}</p>
+          </div>
+          <div>
+            <QuestionWrapper>
+              <input type="checkbox" id="spayed" {...register('isSpayed')} />
+              <label htmlFor="spayed">중성화를 했나요?</label>
+            </QuestionWrapper>
+            <QuestionWrapper>
+              <input type="checkbox" id="pregnant" {...register('isPregnant')} />
+              <label htmlFor="pregnant">임신/수유 중인가요?</label>
+            </QuestionWrapper>
           </div>
         </div>
         <ButtonWrapper>

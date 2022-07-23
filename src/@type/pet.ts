@@ -2,11 +2,12 @@ export type ActivityLevelType = 1 | 2 | 3 | 4 | 5;
 export interface IPet {
   petId: number;
   petName: string;
+  petSex: 'male' | 'female' | '';
   petAge: number;
   petAllergy: string[];
   petBreed: string;
-  spayed: boolean;
-  pregnant: boolean;
+  isSpayed: boolean;
+  isPregnant: boolean;
   bodyWeight: number;
   activityLevel: ActivityLevelType;
 }

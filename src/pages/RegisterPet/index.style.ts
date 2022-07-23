@@ -62,7 +62,19 @@ export const Button = styled.button`
   font-weight: 700;
 `;
 
-export const Form = tw.form`
+const StyledForm = styled.form`
+  input[type='file'] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+`;
+export const Form = tw(StyledForm)`
   h-full
   flex
   flex-col

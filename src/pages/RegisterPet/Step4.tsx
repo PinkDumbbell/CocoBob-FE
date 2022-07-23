@@ -3,6 +3,7 @@ import { ActivityLevelType } from '@/@type/pet';
 import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
 import { RootState } from '@/store/config';
+import { selectRegisterInfo } from '@/store/slices/registerPetSlice';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,10 +20,8 @@ import { IPrevNextStep } from './type';
 export default function Step4({ goPrevStep, goNextStep }: IPrevNextStep) {
   // const dispatch = useDispatch();
   const { register, handleSubmit, setValue, watch } = useForm();
-  const currentPetInformation = useSelector((state: RootState) => state.registerPet);
+  const currentPetInformation = useSelector(selectRegisterInfo);
 
-  const [isSpayed, setIsSpayed] = useState(currentPetInformation.spayed);
-  const [isPregnant, setIsPregnant] = useState(currentPetInformation.pregnant);
   const [selectedActivityLevel, setSelectedActivityLevel] = useState(
     currentPetInformation?.activityLevel ?? 3,
   );
@@ -34,8 +33,6 @@ export default function Step4({ goPrevStep, goNextStep }: IPrevNextStep) {
 
     // const detailData = {
     //   bodyWeight,
-    //   spayed: isSpayed,
-    //   pregnant: isPregnant,
     //   activityLevel: selectedActivityLevel,
     // };
     // dispatch(setDetailInfo(detailData));
@@ -64,26 +61,6 @@ export default function Step4({ goPrevStep, goNextStep }: IPrevNextStep) {
       </div>
       <Form onSubmit={handleSubmit(saveFormInputs)}>
         <div className="flex flex-col gap-4">
-          <QuestionWrapper>
-            <input
-              type="checkbox"
-              name=""
-              id="spayed"
-              checked={isSpayed}
-              onChange={({ target: { checked } }) => setIsSpayed(checked)}
-            />
-            <label htmlFor="spayed">중성화를 했나요?</label>
-          </QuestionWrapper>
-          <QuestionWrapper>
-            <input
-              type="checkbox"
-              name=""
-              id="pregnant"
-              checked={isPregnant}
-              onChange={({ target: { checked } }) => setIsPregnant(checked)}
-            />
-            <label htmlFor="spayed">임신/수유 중인가요?</label>
-          </QuestionWrapper>
           <FormInput
             label="몸무게"
             name="bodyWeight"

@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import styled from 'styled-components';
 import BottomSheet from '@/components/BottomSheet';
 import Button from '@/components/Button';
 import FormButton from '@/components/Form/FormButton';
@@ -18,7 +17,7 @@ type PetAgeType = {
   years: number | null;
   months: number | null;
 };
-type AgeModeType = 'exact' | 'ambiguos' | '';
+type AgeModeType = 'exact' | 'ambiguous' | '';
 
 export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
   const dispatch = useDispatch();
@@ -38,7 +37,8 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
   };
 
   const onSelectAgeMode = (mode: AgeModeType) => dispatch(setBottomSheetAction(mode));
-
+  const onSaveAge = (mode: AgeModeType, saveAge: number) => {};
+  const saveAmbiguousAge = () => {};
   useEffect(
     () => () => {
       dispatch(closeBottomSheetAction);
@@ -64,10 +64,14 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
             )}
           </div>
           <div className="flex flex-col gap-2">
-            <button className="text-left" type="button" onClick={() => onSelectAgeMode('ambiguos')}>
+            <button
+              className="text-left"
+              type="button"
+              onClick={() => onSelectAgeMode('ambiguous')}
+            >
               대략적인 나이만 알고 있어요
             </button>
-            {selectedMode === 'ambiguos' && (
+            {selectedMode === 'ambiguous' && (
               <div className="pl-5">
                 <p>5년 8개월</p>
               </div>
@@ -78,7 +82,7 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
           <FormButton name="다음으로" disabled={false} />
         </ButtonWrapper>
       </Form>
-      <BottomSheet isOpen={currentSelectMode === 'exact' || currentSelectMode === 'ambiguos'}>
+      <BottomSheet isOpen={currentSelectMode === 'exact' || currentSelectMode === 'ambiguous'}>
         <div className="p-4">
           {currentSelectMode === 'exact' && (
             <div className="flex flex-col gap-2">
@@ -93,15 +97,12 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
               <Button label="선택완료" />
             </div>
           )}
-          {currentSelectMode === 'ambiguos' && (
+          {currentSelectMode === 'ambiguous' && (
             <div className="flex flex-col gap-2">
               <h4 className="text-lg font-bold">추정 나이는 몇 살인가요?</h4>
               <h6 className="text-md">맞춤형 정보를 위해 나이 정보는 꼭 필요해요</h6>
               <div className="py-3 w-full flex flex-col items-center justify-center gap-3">
-                <input
-                  type="date"
-                  className="text-gray-600 relative w-full text-center bg-primary-100 rounded-md text-md py-1"
-                />
+                <div className="flex justify-evenly"></div>
                 <p className="text-sm text-primary-900">나이 : 3년 8개월</p>
               </div>
               <Button label="선택완료" />
