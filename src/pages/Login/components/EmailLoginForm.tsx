@@ -55,7 +55,7 @@ export default function EmailLoginForm() {
         name="email"
         type="text"
         placeholder="이메일을 입력하세요"
-        register={register('email', { required: true })}
+        rules={register('email', { required: true })}
         isError={!!errors.email}
       />
       <FormInput
@@ -63,7 +63,7 @@ export default function EmailLoginForm() {
         name="password"
         type="password"
         placeholder="비밀번호를 입력하세요"
-        register={register('password', { required: true })}
+        rules={register('password', { required: true })}
         isError={!!errors.password}
       />
       <FormButton name={!isLoading ? '로그인' : '로그인 중...'} disabled={isLoading} />

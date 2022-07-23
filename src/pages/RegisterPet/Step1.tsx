@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import Button from '@/components/Button';
 import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
 import { concatClasses } from '@/utils/libs/concatClasses';
@@ -41,7 +40,7 @@ export default function Step1({ goNextStep }: INextStep) {
             label="이름"
             name="pet-name"
             placeholder="반려동물의 이름을 입력해주세요"
-            register={register('petName', {
+            rules={register('petName', {
               required: '이름을 입력해주세요',
               maxLength: 20,
             })}

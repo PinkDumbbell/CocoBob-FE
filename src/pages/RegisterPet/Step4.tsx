@@ -88,7 +88,7 @@ export default function Step4({ goPrevStep, goNextStep }: IPrevNextStep) {
             label="몸무게"
             name="bodyWeight"
             placeholder="몸무게를 입력해주세요"
-            register={register('bodyWeight', {
+            rules={register('bodyWeight', {
               required: true,
               setValueAs: (v) => Number(v),
             })}

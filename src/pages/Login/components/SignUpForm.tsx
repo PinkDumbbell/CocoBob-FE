@@ -83,7 +83,7 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
         name="signup-username"
         type="text"
         placeholder="이름을 입력하세요"
-        register={register('username', { required: true })}
+        rules={register('username', { required: true })}
         isError={!!errors.username}
         errorMessage={errors.username?.message}
       />
@@ -95,13 +95,13 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
             name="signup-email"
             type="text"
             placeholder="이메일을 입력하세요"
-            onChange={() => setEmailChecked('')}
-            register={register('email', {
+            rules={register('email', {
               required: true,
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                 message: '이메일 형식이 올바르지 않습니다.',
               },
+              onChange: () => setEmailChecked(''),
             })}
             isError={!!errors.email}
             errorMessage={errors.email?.message}
@@ -122,7 +122,7 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
         name="signup-password"
         type="password"
         placeholder="비밀번호를 입력해주세요"
-        register={register('password', {
+        rules={register('password', {
           required: true,
           pattern: {
             value: /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/,
@@ -138,7 +138,7 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
         name="signup-passwordConfirm"
         type="password"
         placeholder="비밀번호를 확인해주세요"
-        register={register('passwordConfirm', {
+        rules={register('passwordConfirm', {
           required: true,
           validate: (value) => {
             if (value !== password) {
