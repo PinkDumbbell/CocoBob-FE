@@ -14,6 +14,7 @@ const initialState: IRegisterInfo = {
     isPregnant: false,
     isSpayed: false,
     petAge: 0,
+    petBirthday: '',
     petBreed: '',
     activityLevel: 3,
     bodyWeight: 0,
@@ -22,10 +23,15 @@ const initialState: IRegisterInfo = {
 };
 
 interface RegisterInfo {
+  /* step 1 */
   petName?: string;
   petSex?: 'male' | 'female' | '';
   isSpayed?: boolean;
   isPregnant?: boolean;
+
+  /* step 2 */
+  petAge?: number;
+  petBirthday?: string;
 }
 export const registerPetSlice = createSlice({
   name: 'pet',

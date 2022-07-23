@@ -4,6 +4,7 @@ export interface IPet {
   petName: string;
   petSex: 'male' | 'female' | '';
   petAge: number;
+  petBirthday: string;
   petAllergy: string[];
   petBreed: string;
   isSpayed: boolean;
