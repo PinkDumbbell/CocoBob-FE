@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { ActivityLevelType, IPet } from '@/@type/pet';
+import { ActivityLevelType, IBreeds, IPet } from '@/@type/pet';
 import Layout from '@/components/layout/Layout';
 import { RootState } from '@/store/config';
 
@@ -11,16 +11,6 @@ import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
 import Step4 from './Step4';
-
-export interface RegisterPetInfo {
-  petName: string;
-  petAge: number;
-  petBreed: string;
-  spayed: boolean;
-  pregnant: boolean;
-  bodyWeight: number;
-  activityLevel: ActivityLevelType;
-}
 
 export default function RegisterPet() {
   const MAX_STEP = 4;

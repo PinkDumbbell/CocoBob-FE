@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IPet } from '@/@type/pet';
+import { IBreeds, IPet } from '@/@type/pet';
 import { RootState } from '../config';
 
 interface IRegisterInfo {
@@ -15,7 +15,7 @@ const initialState: IRegisterInfo = {
     isSpayed: false,
     petAge: 0,
     petBirthday: '',
-    petBreed: '',
+    petBreed: null,
     activityLevel: 3,
     bodyWeight: 0,
     petAllergy: [],
@@ -32,6 +32,9 @@ interface RegisterInfo {
   /* step 2 */
   petAge?: number;
   petBirthday?: string;
+
+  /* step3 */
+  petBreed: IBreeds;
 }
 export const registerPetSlice = createSlice({
   name: 'pet',
