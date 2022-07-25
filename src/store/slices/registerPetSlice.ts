@@ -7,7 +7,7 @@ interface IRegisterInfo {
   registerInfo: {
     name: string;
     breedId?: number; // 견종 ID
-    profile?: File;
+    petImage?: File;
     sex: 'male' | 'female' | ''; // 1: male, 2: female
     isSpayed: boolean; // 중성화
     isPregnant: boolean;
@@ -22,7 +22,7 @@ const initialState: IRegisterInfo = {
   registerInfo: {
     name: '',
     breedId: undefined,
-    profile: undefined,
+    petImage: undefined,
     sex: '',
     isPregnant: false,
     isSpayed: false,
