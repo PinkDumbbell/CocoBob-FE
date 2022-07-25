@@ -35,7 +35,7 @@ export default function Step3({ goPrevStep, goNextStep }: IPrevNextStep) {
     }
     dispatch(
       setRegisterInfo({
-        petBreed: selectedBreed,
+        breedId: selectedBreed.breedId,
       }),
     );
     goNextStep();

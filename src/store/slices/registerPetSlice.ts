@@ -1,46 +1,62 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IBreeds, IPet } from '@/@type/pet';
+import { ActivityLevelType } from '@/@type/pet';
 import { RootState } from '../config';
 
 interface IRegisterInfo {
-  registerInfo: IPet;
+  registerInfo: {
+    name: string;
+    breedId?: number; // 견종 ID
+    profile?: File;
+    sex: 'male' | 'female' | ''; // 1: male, 2: female
+    isSpayed: boolean; // 중성화
+    isPregnant: boolean;
+    birthday?: string; // *Nullable
+    age: number; // months
+    bodyWeight: number;
+    activityLevel: ActivityLevelType; // 1~5
+  };
 }
+
 const initialState: IRegisterInfo = {
   registerInfo: {
-    petId: 1,
-    petName: '',
-    petSex: '',
+    name: '',
+    breedId: undefined,
+    profile: undefined,
+    sex: '',
     isPregnant: false,
     isSpayed: false,
-    petAge: 0,
-    petBirthday: '',
-    petBreed: null,
+    age: 0,
+    birthday: undefined,
     activityLevel: 3,
     bodyWeight: 0,
-    petAllergy: [],
   },
 };
 
-interface RegisterInfo {
+export interface RegisterInfoForm {
   /* step 1 */
-  petName?: string;
-  petSex?: 'male' | 'female' | '';
+  profil?: File;
+  name?: string;
+  sex?: 'male' | 'female' | '';
   isSpayed?: boolean;
   isPregnant?: boolean;
 
   /* step 2 */
-  petAge?: number;
-  petBirthday?: string;
+  age?: number;
+  birthday?: string;
 
   /* step3 */
-  petBreed?: IBreeds;
+  breedId?: number;
+
+  /* step4 */
+  bodyWeight?: number;
+  activityLevel?: ActivityLevelType;
 }
 export const registerPetSlice = createSlice({
   name: 'pet',
   initialState,
   reducers: {
-    setRegisterInfo(state, action: PayloadAction<RegisterInfo>) {
+    setRegisterInfo(state, action: PayloadAction<RegisterInfoForm>) {
       const { payload } = action;
       state.registerInfo = {
         ...state.registerInfo,
@@ -48,10 +64,13 @@ export const registerPetSlice = createSlice({
       };
       console.log('in redux store', state.registerInfo);
     },
+    clearRegisterInfo(state) {
+      state.registerInfo = initialState.registerInfo;
+    },
   },
 });
 
 const { reducer, actions } = registerPetSlice;
 export const selectRegisterInfo = (state: RootState) => state.registerPet.registerInfo;
-export const { setRegisterInfo } = actions;
+export const { setRegisterInfo, clearRegisterInfo } = actions;
 export default reducer;

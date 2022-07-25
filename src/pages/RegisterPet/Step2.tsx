@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,11 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import BottomSheet from '@/components/BottomSheet';
 import Button from '@/components/Button';
 import FormButton from '@/components/Form/FormButton';
-import {
-  closeBottomSheetAction,
-  selectBottomSheet,
-  setBottomSheetAction,
-} from '@/store/slices/bottomSheetSlice';
 import { selectRegisterInfo, setRegisterInfo } from '@/store/slices/registerPetSlice';
 import {
   getKoreanStringDateFromDate,
@@ -21,13 +15,13 @@ import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { ButtonWrapper, PageContainer, QuestionText, Form, PetNameHighlight } from './index.style';
 import { IPrevNextStep } from './type';
 
-type PetAgeType = {
+type ageType = {
   months: number;
-  birthday: string;
+  birthday?: string;
 };
 type AgeModeType = 'exact' | 'ambiguous' | '';
 
-export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
+export default function Step2({ goNextStep }: IPrevNextStep) {
   const {
     currentBottomSheet,
     isBottomSheetOpen: isExactDateBottomSheetOpen,
@@ -42,7 +36,7 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
   const dispatch = useDispatch();
   const registerInfo = useSelector(selectRegisterInfo);
 
-  const [petAge, setPetAge] = useState<PetAgeType>({
+  const [age, setAge] = useState<ageType>({
     months: 0,
     birthday: '',
   });
@@ -58,7 +52,7 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
   const saveAmbiguousAge = () => {
     if (ambiguousDate.year === 0 && ambiguousDate.month === 0) return;
     setSelectedMode('ambiguous');
-    setPetAge({
+    setAge({
       birthday: '',
       months: getTotalMonthWithYearAndMonth(ambiguousDate.year, ambiguousDate.month),
     });
@@ -66,23 +60,23 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
   };
 
   const saveBirthday = () => {
-    if (!petAge.birthday) return;
+    if (!age.birthday) return;
 
     setSelectedMode('exact');
-    setPetAge((prevAge) => ({ ...prevAge, months: getDateDiff(petAge.birthday, 'month') }));
+    setAge((prevAge) => ({ ...prevAge, months: getDateDiff(age.birthday!, 'month') }));
     closeBottomSheet();
   };
 
   const saveAgeInStore = () =>
     dispatch(
       setRegisterInfo({
-        petAge: petAge.months,
-        petBirthday: petAge.birthday,
+        age: age.months,
+        birthday: age.birthday,
       }),
     );
 
   const onValidSubmit = () => {
-    if (!petAge.birthday && !petAge.months) {
+    if (!age.birthday && !age.months) {
       alert('나이를 입력해주세요');
       return;
     }
@@ -90,22 +84,23 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
     goNextStep();
   };
 
-  const petAgeString = useMemo(() => {
-    const yearDiff = getDateDiff(petAge.birthday, 'year');
-    const monthDiff = getDateDiff(petAge.birthday, 'month') % 12;
+  const ageString = useMemo(() => {
+    if (!age.birthday) return '';
+
+    const yearDiff = getDateDiff(age.birthday, 'year');
+    const monthDiff = getDateDiff(age.birthday, 'month') % 12;
 
     if (!yearDiff && !monthDiff) return '1개월 이하';
     if (!yearDiff) return `${monthDiff}개월`;
     return `${yearDiff}년 ${monthDiff}개월`;
-  }, [petAge]);
+  }, [age]);
 
-  // eslint-disable-next-line arrow-body-style
   useEffect(() => {
-    setPetAge({
-      birthday: registerInfo.petBirthday,
-      months: registerInfo.petAge,
+    setAge({
+      birthday: registerInfo.birthday,
+      months: registerInfo.age,
     });
-    if (registerInfo.petBirthday) setSelectedMode('exact');
+    if (registerInfo.birthday) setSelectedMode('exact');
     else setSelectedMode('ambiguous');
     return () => {
       closeBottomSheet();
@@ -126,7 +121,7 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
             </button>
             {selectedMode === 'exact' && !currentBottomSheet && (
               <div className="pl-5 py-2">
-                <p>{getKoreanStringDateFromDate(petAge.birthday)}</p>
+                <p>{getKoreanStringDateFromDate(age.birthday ?? '')}</p>
               </div>
             )}
           </div>
@@ -137,7 +132,7 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
             {selectedMode === 'ambiguous' && !currentBottomSheet && (
               <div className="pl-5 py-1">
                 <p>
-                  {Math.floor(petAge.months! / 12)}년 {petAge.months! % 12}개월
+                  {Math.floor(age.months! / 12)}년 {age.months! % 12}개월
                 </p>
               </div>
             )}
@@ -154,13 +149,11 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
             <div className="py-3 w-full flex flex-col items-center justify-center gap-3">
               <input
                 type="date"
-                defaultValue={petAge.birthday}
+                defaultValue={age.birthday}
                 className="text-gray-600 relative w-full text-center bg-primary-100 rounded-md text-md py-1"
-                onChange={(e) => setPetAge((prev) => ({ ...prev, birthday: e.target.value }))}
+                onChange={(e) => setAge((prev) => ({ ...prev, birthday: e.target.value }))}
               />
-              {petAge.birthday && (
-                <p className="text-sm text-primary-900">{`나이 : ${petAgeString}`}</p>
-              )}
+              {age.birthday && <p className="text-sm text-primary-900">{`나이 : ${ageString}`}</p>}
             </div>
             <Button label="선택완료" onClick={saveBirthday} />
           </div>
@@ -176,7 +169,7 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
                 <select
                   name=""
                   id=""
-                  defaultValue={Math.floor(petAge.months / 12)}
+                  defaultValue={Math.floor(age.months / 12)}
                   onChange={(e) =>
                     setAmbiguousDate((prev) => ({ ...prev, year: Number(e.target.value) }))
                   }
@@ -195,7 +188,7 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
                 <select
                   name=""
                   id=""
-                  defaultValue={petAge.months % 12}
+                  defaultValue={age.months % 12}
                   onChange={(e) =>
                     setAmbiguousDate((prev) => ({ ...prev, month: Number(e.target.value) }))
                   }

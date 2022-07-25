@@ -2,23 +2,16 @@
 import { ActivityLevelType } from '@/@type/pet';
 import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
-import { RootState } from '@/store/config';
-import { selectRegisterInfo } from '@/store/slices/registerPetSlice';
+import { useAppDispatch } from '@/store/config';
+import { selectRegisterInfo, setRegisterInfo } from '@/store/slices/registerPetSlice';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  PageContainer,
-  QuestionText,
-  Form,
-  QuestionWrapper,
-  PetNameHighlight,
-  ButtonWrapper,
-} from './index.style';
+import { PageContainer, QuestionText, Form, PetNameHighlight, ButtonWrapper } from './index.style';
 import { IPrevNextStep } from './type';
 
 export default function Step4({ goPrevStep, goNextStep }: IPrevNextStep) {
-  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { register, handleSubmit, setValue, watch } = useForm();
   const currentPetInformation = useSelector(selectRegisterInfo);
 
@@ -31,11 +24,12 @@ export default function Step4({ goPrevStep, goNextStep }: IPrevNextStep) {
   const saveFormInputs = (formInputs: any) => {
     const { bodyWeight } = formInputs;
 
-    // const detailData = {
-    //   bodyWeight,
-    //   activityLevel: selectedActivityLevel,
-    // };
-    // dispatch(setDetailInfo(detailData));
+    const detailData = {
+      bodyWeight,
+      activityLevel: selectedActivityLevel,
+    };
+    console.log(detailData);
+    dispatch(setRegisterInfo(detailData));
     goNextStep();
   };
 
@@ -45,9 +39,6 @@ export default function Step4({ goPrevStep, goNextStep }: IPrevNextStep) {
     }
   }, [currentPetInformation]);
 
-  useEffect(() => {
-    console.log(currentPetInformation);
-  }, []);
   const handleSelectActivityLevel = (level: ActivityLevelType) => {
     setSelectedActivityLevel(level);
   };
@@ -67,9 +58,13 @@ export default function Step4({ goPrevStep, goNextStep }: IPrevNextStep) {
             placeholder="몸무게를 입력해주세요"
             rules={register('bodyWeight', {
               required: true,
-              setValueAs: (v) => Number(v),
+              valueAsNumber: true,
+              pattern: {
+                value: /^(0|[1-9]\d*)(\.\d+)?$/,
+                message: '숫자를 입력해주세요',
+              },
             })}
-            type="number"
+            type="text"
           />
           <div>
             <p>활동수준</p>

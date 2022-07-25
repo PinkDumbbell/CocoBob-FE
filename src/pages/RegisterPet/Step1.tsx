@@ -10,8 +10,8 @@ import { ButtonWrapper, PageContainer, QuestionText, Form, QuestionWrapper } fro
 import { INextStep } from './type';
 
 interface IStep1Form {
-  petName: string;
-  petSex: 'male' | 'female' | '';
+  name: string;
+  sex: 'male' | 'female' | '';
   isSpayed: boolean;
   isPregnant: boolean;
 }
@@ -28,17 +28,17 @@ export default function Step1({ goNextStep }: INextStep) {
   } = useForm<IStep1Form>();
 
   const onValidSubmit = (submitData: IStep1Form) => {
-    const { petName, petSex, isSpayed, isPregnant } = submitData;
+    const { name, sex, isSpayed, isPregnant } = submitData;
 
-    dispatch(setRegisterInfo({ petName, petSex, isSpayed, isPregnant }));
+    dispatch(setRegisterInfo({ name, sex, isSpayed, isPregnant }));
     goNextStep();
   };
 
   useEffect(() => {
     if (!registerInfo) return;
     console.log(registerInfo);
-    setValue('petName', registerInfo.petName);
-    setValue('petSex', registerInfo.petSex);
+    setValue('name', registerInfo.name);
+    setValue('sex', registerInfo.sex);
     setValue('isSpayed', registerInfo.isSpayed);
     setValue('isPregnant', registerInfo.isPregnant);
   }, []);
@@ -60,13 +60,13 @@ export default function Step1({ goNextStep }: INextStep) {
             label="이름"
             name="pet-name"
             placeholder="반려동물의 이름을 입력해주세요"
-            rules={register('petName', {
+            rules={register('name', {
               required: '이름을 입력해주세요',
               maxLength: 20,
             })}
             type="text"
-            isError={!!errors.petName?.message}
-            errorMessage={errors.petName?.message}
+            isError={!!errors.name?.message}
+            errorMessage={errors.name?.message}
           />
           <div>
             <div className="flex gap-1 items-center mb-2">
@@ -76,13 +76,13 @@ export default function Step1({ goNextStep }: INextStep) {
                   className="hidden"
                   value="male"
                   id="pet-sex-man"
-                  {...register('petSex', { required: '성별을 선택해주세요' })}
+                  {...register('sex', { required: '성별을 선택해주세요' })}
                 />
                 <label
                   htmlFor="pet-sex-man"
                   className={concatClasses(
                     'border border-primary-900 rounded-md w-full block',
-                    watch('petSex') === 'male' ? 'bg-primary-100 text-primary-900' : '',
+                    watch('sex') === 'male' ? 'bg-primary-100 text-primary-900' : '',
                   )}
                 >
                   남자
@@ -94,20 +94,20 @@ export default function Step1({ goNextStep }: INextStep) {
                   className="hidden"
                   value="female"
                   id="pet-sex-woman"
-                  {...register('petSex', { required: '성별을 선택해주세요' })}
+                  {...register('sex', { required: '성별을 선택해주세요' })}
                 />
                 <label
                   htmlFor="pet-sex-woman"
                   className={concatClasses(
                     'border border-primary-900 rounded-md w-full block',
-                    watch('petSex') === 'female' ? 'bg-primary-100 text-primary-900' : '',
+                    watch('sex') === 'female' ? 'bg-primary-100 text-primary-900' : '',
                   )}
                 >
                   여자
                 </label>
               </div>
             </div>
-            <p className="text-primary-900 text-sm">{errors.petSex?.message}</p>
+            <p className="text-primary-900 text-sm">{errors.sex?.message}</p>
           </div>
           <div>
             <QuestionWrapper>

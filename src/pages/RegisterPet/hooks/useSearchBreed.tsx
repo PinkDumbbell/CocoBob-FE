@@ -11,7 +11,7 @@ export default function useSearchBreed() {
   const registerInfo = useSelector(selectRegisterInfo);
 
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [selectedBreed, setSelectedBreed] = useState<IBreeds | null>(null);
+  const [selectedBreed, setSelectedBreed] = useState<IBreeds | undefined>(undefined);
 
   const foundBreeds = breedsMock.filter((breed) => breed.breedName.includes(searchKeyword));
 
@@ -24,7 +24,10 @@ export default function useSearchBreed() {
     setSearchKeyword(e.target.value);
 
   useEffect(() => {
-    setSelectedBreed(registerInfo.petBreed);
+    if (!registerInfo.breedId) return;
+
+    const currentBreed = breedsMock.find((v) => v.breedId === registerInfo.breedId);
+    setSelectedBreed(currentBreed);
   }, []);
   useEffect(() => {
     setSearchKeyword('');

@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { ActivityLevelType, IBreeds, IPet } from '@/@type/pet';
 import Layout from '@/components/layout/Layout';
-import { RootState } from '@/store/config';
+import { RootState, useAppDispatch, useAppSelector } from '@/store/config';
 
+import { useSaveEnrollmentDataMutation } from '@/store/api/petApi';
+import { clearRegisterInfo } from '@/store/slices/registerPetSlice';
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
@@ -15,17 +15,15 @@ import Step4 from './Step4';
 export default function RegisterPet() {
   const MAX_STEP = 4;
   const navigate = useNavigate();
-  const currentPetInformation = useSelector((state: RootState) => state.registerPet);
+  const dispatch = useAppDispatch();
+  const currentPetInformation = useAppSelector(
+    (state: RootState) => state.registerPet.registerInfo,
+  );
   const [currentStep, setCurrentStep] = useState(1);
+  const [enrollPetMutation, { isLoading, isError, isSuccess }] = useSaveEnrollmentDataMutation();
 
-  const goNextStep = () => {
-    if (currentStep === MAX_STEP) {
-      console.log('max page', currentPetInformation);
-      navigate('/');
-    } else {
-      console.log('current Information', currentPetInformation);
-      setCurrentStep((step) => step + 1);
-    }
+  const goNextStep = async () => {
+    setCurrentStep((step) => step + 1);
   };
   const goPrevStep = () => {
     setCurrentStep((step) => step - 1);
@@ -35,6 +33,24 @@ export default function RegisterPet() {
     if (currentStep === 1) navigate(-1);
     else goPrevStep();
   };
+
+  useEffect(() => () => {
+    dispatch(clearRegisterInfo);
+  });
+  useEffect(() => {
+    if (currentStep <= MAX_STEP) return;
+    enrollPetMutation(currentPetInformation);
+  }, [currentStep]);
+
+  useEffect(() => {
+    if (!isSuccess) return;
+    navigate('/');
+  }, [isSuccess]);
+  useEffect(() => {
+    if (!isError) return;
+    alert('등록에 실패하였습니다.');
+    setCurrentStep((step) => step - 1);
+  }, [isError]);
 
   const stepList = [
     <Step1 key="step-1" goNextStep={goNextStep} />,
