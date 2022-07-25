@@ -33,7 +33,7 @@ const InputWrapper = styled.div`
   border-radius: 10px;
   width: 100%;
 `;
-const InputStyle = styled.input<{ isError: boolean | undefined }>`
+export const InputStyle = styled.input<{ isError: boolean | undefined }>`
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;

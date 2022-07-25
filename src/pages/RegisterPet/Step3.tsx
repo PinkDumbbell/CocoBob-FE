@@ -2,9 +2,14 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import FormButton from '@/components/Form/FormButton';
+import FormInput, { InputStyle } from '@/components/Form/FormInput';
 import { concatClasses } from '@/utils/libs/concatClasses';
-import { ButtonWrapper, PageContainer, QuestionText, Form, PetNameHighlight } from './index.style';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectBottomSheet, setBottomSheetAction } from '@/store/slices/bottomSheetSlice';
+import BottomSheet from '@/components/BottomSheet';
+import Button from '@/components/Button';
 import { IPrevNextStep } from './type';
+import { ButtonWrapper, PageContainer, QuestionText, Form, PetNameHighlight } from './index.style';
 
 type PetBreedType = {
   breedId: number | null;
@@ -12,6 +17,9 @@ type PetBreedType = {
   breedType: string;
 };
 export default function Step3({ goPrevStep, goNextStep }: IPrevNextStep) {
+  const dispatch = useDispatch();
+  const currentBottomSheet = useSelector(selectBottomSheet);
+
   const [selectedPetBreed, setSelectedPetBreed] = useState<PetBreedType | null>(null);
   const { register, handleSubmit } = useForm();
 
@@ -19,6 +27,12 @@ export default function Step3({ goPrevStep, goNextStep }: IPrevNextStep) {
     console.log(data);
     goNextStep();
   };
+
+  const onSelectBreedChip = (breed: any) => {
+    setSelectedPetBreed(breed);
+  };
+
+  const openSearchBreedSheet = () => dispatch(setBottomSheetAction('findBreed'));
   return (
     <PageContainer>
       <div>
@@ -28,12 +42,13 @@ export default function Step3({ goPrevStep, goNextStep }: IPrevNextStep) {
       </div>
       <Form onSubmit={handleSubmit(onValidSubmit)}>
         <div className="flex flex-col gap-4">
-          <input
-            className="border-b border-b-2 p-2 pl-8 text-sm"
-            type="text"
-            placeholder="품종을 검색해보세요"
-            value={selectedPetBreed?.breedName}
-          />
+          <button
+            type="button"
+            className="text-gray-400 text-left p-2 border-b border-b-gray-400"
+            onClick={openSearchBreedSheet}
+          >
+            품종을 검색해보세요
+          </button>
           <div className="flex flex-wrap gap-2 items-center">
             {[
               { breedId: 1, breedName: '말티즈', breedType: '소형견' },
@@ -52,7 +67,7 @@ export default function Step3({ goPrevStep, goNextStep }: IPrevNextStep) {
                     ? 'border border-primary-900 bg-primary-100 text-primary-900'
                     : 'border',
                 )}
-                onClick={() => setSelectedPetBreed(breed)}
+                onClick={() => onSelectBreedChip(breed)}
                 key={breed.breedId}
               >
                 {breed.breedName}
@@ -64,6 +79,37 @@ export default function Step3({ goPrevStep, goNextStep }: IPrevNextStep) {
           <FormButton name="다음으로" disabled={false} />
         </ButtonWrapper>
       </Form>
+      <BottomSheet isOpen={currentBottomSheet === 'findBreed'}>
+        <div className="p-4 flex flex-col gap-2">
+          <FormInput
+            placeholder="품종을 검색해보세요"
+            label=""
+            name="find-breed"
+            rules={register('find-breed')}
+          />
+          <div className="h-[50vh] px-4 py-3 overflow-y-scroll">
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+            <div className="h-8">품종 이름</div>
+          </div>
+          <Button label="선택 완료" />
+        </div>
+      </BottomSheet>
     </PageContainer>
   );
 }
