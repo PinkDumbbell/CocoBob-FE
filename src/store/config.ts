@@ -13,6 +13,7 @@ import { apiSlice } from './slices/apiSlice';
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['registerPet'],
 };
 
 const rootReducer = combineReducers({
