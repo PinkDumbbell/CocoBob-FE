@@ -1,62 +1,46 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import FormButton from '@/components/Form/FormButton';
-import FormInput, { InputStyle } from '@/components/Form/FormInput';
+import { InputStyle } from '@/components/Form/FormInput';
 import { concatClasses } from '@/utils/libs/concatClasses';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  closeBottomSheetAction,
-  selectBottomSheet,
-  setBottomSheetAction,
-} from '@/store/slices/bottomSheetSlice';
 import BottomSheet from '@/components/BottomSheet';
 import Button from '@/components/Button';
-import { breedsMock, favBreedfsMock } from '@/utils/constants/enrollment';
+import { setRegisterInfo } from '@/store/slices/registerPetSlice';
 import { IBreeds } from '@/@type/pet';
-import { selectRegisterInfo, setRegisterInfo } from '@/store/slices/registerPetSlice';
+import { favBreedfsMock } from '@/utils/constants/enrollment';
+import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { ButtonWrapper, PageContainer, QuestionText, Form, PetNameHighlight } from './index.style';
 import { IPrevNextStep } from './type';
+import useSearchBreed from './hooks/useSearchBreed';
 
 export default function Step3({ goPrevStep, goNextStep }: IPrevNextStep) {
-  const dispatch = useDispatch();
-  const currentBottomSheet = useSelector(selectBottomSheet);
-  const registerInfo = useSelector(selectRegisterInfo);
+  const { isBottomSheetOpen, openBottomSheet } = useBottomSheet('findBreed');
+  const {
+    breeds,
+    searchKeyword,
+    onChangeSearchKeyword,
+    selectedBreed,
+    foundBreeds,
+    onSelectBreed,
+  } = useSearchBreed();
 
-  const [selectedPetBreed, setSelectedPetBreed] = useState<IBreeds | null>(null);
-  const { register, handleSubmit, watch, setValue } = useForm();
+  const dispatch = useDispatch();
+  const { handleSubmit } = useForm();
 
   const onValidSubmit = (data: any) => {
-    if (!selectedPetBreed) {
+    if (!selectedBreed) {
       alert('견종을 선택해주세요');
       return;
     }
-    console.log(data);
     dispatch(
       setRegisterInfo({
-        petBreed: selectedPetBreed,
+        petBreed: selectedBreed,
       }),
     );
     goNextStep();
   };
 
-  const onSelectBreedChip = (breed: IBreeds) => {
-    setSelectedPetBreed(breed);
-  };
-
-  const onSelectBreed = (breed: IBreeds) => {
-    setSelectedPetBreed(breed);
-    dispatch(closeBottomSheetAction());
-  };
-
-  const openSearchBreedSheet = () => dispatch(setBottomSheetAction('findBreed'));
-
-  useEffect(() => {
-    setSelectedPetBreed(registerInfo.petBreed);
-  }, []);
-  useEffect(() => {
-    setValue('find-breed', '');
-  }, [currentBottomSheet]);
   return (
     <PageContainer>
       <div>
@@ -69,20 +53,20 @@ export default function Step3({ goPrevStep, goNextStep }: IPrevNextStep) {
           <button
             type="button"
             className="text-gray-400 text-left p-2 border-b border-b-gray-400"
-            onClick={openSearchBreedSheet}
+            onClick={openBottomSheet}
           >
-            {selectedPetBreed?.breedId ? selectedPetBreed.breedName : '품종을 검색해보세요'}
+            {selectedBreed?.breedId ? selectedBreed.breedName : '품종을 검색해보세요'}
           </button>
           <div className="flex flex-wrap gap-2 items-center">
             {favBreedfsMock.map((breed: IBreeds) => (
               <span
                 className={concatClasses(
                   'py-1 px-2 text-sm rounded-lg',
-                  breed.breedId === selectedPetBreed?.breedId
+                  breed.breedId === selectedBreed?.breedId
                     ? 'border border-primary-900 bg-primary-100 text-primary-900'
                     : 'border',
                 )}
-                onClick={() => onSelectBreedChip(breed)}
+                onClick={() => onSelectBreed(breed)}
                 key={breed.breedId}
               >
                 {breed.breedName}
@@ -94,17 +78,17 @@ export default function Step3({ goPrevStep, goNextStep }: IPrevNextStep) {
           <FormButton name="다음으로" disabled={false} />
         </ButtonWrapper>
       </Form>
-      <BottomSheet isOpen={currentBottomSheet === 'findBreed'}>
+      <BottomSheet isOpen={isBottomSheetOpen}>
         <div className="p-4 flex flex-col gap-2">
-          <FormInput
+          <InputStyle
+            isError={false}
+            value={searchKeyword}
+            onChange={onChangeSearchKeyword}
             placeholder="품종을 검색해보세요"
-            label=""
-            name="find-breed"
-            rules={register('find-breed')}
           />
           <div className="h-[50vh] px-2 py-3 overflow-y-scroll">
-            {!watch('find-breed')
-              ? breedsMock.map((breed) => (
+            {!searchKeyword
+              ? breeds.map((breed) => (
                   <div key={breed.breedId} onClick={() => onSelectBreed(breed)}>
                     <p className="py-2">
                       <span className="pr-2 text-primary-900">{breed.breedSize}</span>
@@ -112,16 +96,14 @@ export default function Step3({ goPrevStep, goNextStep }: IPrevNextStep) {
                     </p>
                   </div>
                 ))
-              : breedsMock
-                  .filter((breed) => breed.breedName.includes(watch('find-breed')))
-                  .map((breed) => (
-                    <div key={breed.breedId} onClick={() => onSelectBreed(breed)}>
-                      <p className="py-2">
-                        <span className="pr-2 text-primary-900">{breed.breedSize}</span>
-                        {breed.breedName}
-                      </p>
-                    </div>
-                  ))}
+              : foundBreeds.map((breed) => (
+                  <div key={breed.breedId} onClick={() => onSelectBreed(breed)}>
+                    <p className="py-2">
+                      <span className="pr-2 text-primary-900">{breed.breedSize}</span>
+                      {breed.breedName}
+                    </p>
+                  </div>
+                ))}
           </div>
           <Button label="선택 완료" />
         </div>
