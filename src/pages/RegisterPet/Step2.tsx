@@ -13,13 +13,11 @@ import {
 } from '@/store/slices/bottomSheetSlice';
 import { selectRegisterInfo, setRegisterInfo } from '@/store/slices/registerPetSlice';
 import {
-  getYear,
-  getMonth,
-  getDay,
   getKoreanStringDateFromDate,
   getDateDiff,
   getTotalMonthWithYearAndMonth,
 } from '@/utils/libs/date';
+import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { ButtonWrapper, PageContainer, QuestionText, Form, PetNameHighlight } from './index.style';
 import { IPrevNextStep } from './type';
 
@@ -30,8 +28,18 @@ type PetAgeType = {
 type AgeModeType = 'exact' | 'ambiguous' | '';
 
 export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
+  const {
+    currentBottomSheet,
+    isBottomSheetOpen: isExactDateBottomSheetOpen,
+    openBottomSheet: openExactDateBottomSheet,
+    closeBottomSheet,
+  } = useBottomSheet('exact');
+  const {
+    isBottomSheetOpen: isAmbiguousDateBottomSheetOpen,
+    openBottomSheet: openAmbiguousDateBottomSheet,
+  } = useBottomSheet('ambiguous');
+
   const dispatch = useDispatch();
-  const currentSelectMode = useSelector(selectBottomSheet);
   const registerInfo = useSelector(selectRegisterInfo);
 
   const [petAge, setPetAge] = useState<PetAgeType>({
@@ -46,9 +54,6 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
   });
 
   const { handleSubmit } = useForm();
-
-  const onSelectAgeMode = (mode: AgeModeType) => dispatch(setBottomSheetAction(mode));
-  const closeBottomSheet = () => dispatch(closeBottomSheetAction());
 
   const saveAmbiguousAge = () => {
     if (ambiguousDate.year === 0 && ambiguousDate.month === 0) return;
@@ -116,28 +121,20 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
       <Form onSubmit={handleSubmit(onValidSubmit)}>
         <div className="flex flex-col gap-1">
           <div className="flex flex-col">
-            <button
-              className="text-left py-1"
-              type="button"
-              onClick={() => onSelectAgeMode('exact')}
-            >
+            <button className="text-left py-1" type="button" onClick={openExactDateBottomSheet}>
               생년월일을 알고 있어요
             </button>
-            {selectedMode === 'exact' && currentSelectMode === '' && (
+            {selectedMode === 'exact' && !currentBottomSheet && (
               <div className="pl-5 py-2">
                 <p>{getKoreanStringDateFromDate(petAge.birthday)}</p>
               </div>
             )}
           </div>
           <div className="flex flex-col">
-            <button
-              className="text-left py-1"
-              type="button"
-              onClick={() => onSelectAgeMode('ambiguous')}
-            >
+            <button className="text-left py-1" type="button" onClick={openAmbiguousDateBottomSheet}>
               대략적인 나이만 알고 있어요
             </button>
-            {selectedMode === 'ambiguous' && currentSelectMode === '' && (
+            {selectedMode === 'ambiguous' && !currentBottomSheet && (
               <div className="pl-5 py-1">
                 <p>
                   {Math.floor(petAge.months! / 12)}년 {petAge.months! % 12}개월
@@ -150,7 +147,7 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
           <FormButton name="다음으로" disabled={false} />
         </ButtonWrapper>
       </Form>
-      <BottomSheet isOpen={currentSelectMode === 'exact'}>
+      <BottomSheet isOpen={isExactDateBottomSheetOpen}>
         <div className="p-4">
           <div className="flex flex-col gap-2">
             <h4 className="text-lg font-bold">언제 태어났나요?</h4>
@@ -169,7 +166,7 @@ export default function Step2({ goPrevStep, goNextStep }: IPrevNextStep) {
           </div>
         </div>
       </BottomSheet>
-      <BottomSheet isOpen={currentSelectMode === 'ambiguous'}>
+      <BottomSheet isOpen={isAmbiguousDateBottomSheetOpen}>
         <div className="p-4">
           <div className="flex flex-col gap-2">
             <h4 className="text-lg font-bold">추정 나이는 몇 살인가요?</h4>

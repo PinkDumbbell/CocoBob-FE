@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
 import { useSignUpMutation } from '@/store/api/userApi';
-import { setBottomSheetAction } from '@/store/slices/bottomSheetSlice';
+import useBottomSheet from '@/utils/hooks/useBottomSheet';
+
 import { checkEmailDuplicated } from '../api';
 import {
   CheckEmailButton,
@@ -18,7 +18,8 @@ import {
 import { ISignUpForm } from '../types';
 
 export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
-  const dispatch = useDispatch();
+  const { openBottomSheet: openEmailLoginBottomSheet } = useBottomSheet('emailLogin');
+
   const {
     register,
     handleSubmit,
@@ -30,14 +31,12 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
     watch,
   } = useForm<ISignUpForm>();
 
-  const [signUp, { error, reset: mutationReset }] = useSignUpMutation();
+  const [signUp] = useSignUpMutation();
 
   const [emailChecked, setEmailChecked] = useState<string>('');
 
   const password = watch('password');
   const passwordConfirm = watch('passwordConfirm');
-
-  const openEmailLoginSheet = () => dispatch(setBottomSheetAction('emailLogin'));
 
   const onClickSignUp = async (data: ISignUpForm) => {
     if (!emailChecked || data.email !== emailChecked) {
@@ -46,7 +45,7 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
     }
     await signUp(data);
 
-    openEmailLoginSheet();
+    openEmailLoginBottomSheet();
   };
 
   const checkEmail = async () => {

@@ -34,7 +34,7 @@ interface RegisterInfo {
   petBirthday?: string;
 
   /* step3 */
-  petBreed: IBreeds;
+  petBreed?: IBreeds;
 }
 export const registerPetSlice = createSlice({
   name: 'pet',
