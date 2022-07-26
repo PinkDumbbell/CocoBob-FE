@@ -15,7 +15,12 @@ export default function useSelectImage({
       target: { files },
     } = event;
     if (!files) return;
+
     const image = files[0];
+    if (!image.type.includes('image/')) {
+      alert('사진을 선택해주세요.');
+      return;
+    }
     setImageFile(URL.createObjectURL(image));
 
     const reader = new FileReader();
