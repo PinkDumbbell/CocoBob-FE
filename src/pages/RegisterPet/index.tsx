@@ -7,6 +7,7 @@ import { RootState, useAppDispatch, useAppSelector } from '@/store/config';
 
 import { useSaveEnrollmentDataMutation } from '@/store/api/petApi';
 import { clearRegisterInfo } from '@/store/slices/registerPetSlice';
+import { getFileFromObjectURL } from '@/utils/libs/getFileFromObjectURL';
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
@@ -34,12 +35,27 @@ export default function RegisterPet() {
     else goPrevStep();
   };
 
-  useEffect(() => () => {
-    dispatch(clearRegisterInfo);
-  });
+  useEffect(() => {
+    console.log('mount register pet');
+    return () => {
+      dispatch(clearRegisterInfo());
+    };
+  }, []);
   useEffect(() => {
     if (currentStep <= MAX_STEP) return;
-    enrollPetMutation(currentPetInformation);
+
+    async function enrollPet() {
+      const enrollData = {
+        ...currentPetInformation,
+        petImage: undefined as unknown as File,
+      };
+      if (currentPetInformation.petImage) {
+        const imageFileObject = await getFileFromObjectURL(currentPetInformation.petImage);
+        enrollData.petImage = imageFileObject;
+      }
+      enrollPetMutation(enrollData);
+    }
+    enrollPet();
   }, [currentStep]);
 
   useEffect(() => {

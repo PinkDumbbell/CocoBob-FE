@@ -7,12 +7,20 @@ export const petApiSlice = apiSlice.injectEndpoints({
     getEnrollmentData: builder.query<any, void>({
       query: () => '/pets/enrollment',
     }),
-    saveEnrollmentData: builder.mutation<IGenericResponse, RegisterInfoForm>({
-      query: (formData) => ({
-        url: '/pets',
-        method: 'POST',
-        body: formData,
-      }),
+    saveEnrollmentData: builder.mutation<IGenericResponse, RegisterInfoForm<File>>({
+      query: (data) => {
+        const formData = new FormData();
+        // eslint-disable-next-line no-restricted-syntax
+        for (const [key, value] of Object.entries(data)) {
+          if (value) formData.append(key, value);
+        }
+
+        return {
+          url: '/pets',
+          method: 'POST',
+          body: formData,
+        };
+      },
     }),
   }),
 });

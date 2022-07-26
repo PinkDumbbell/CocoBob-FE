@@ -28,7 +28,6 @@ export default function Step4({ goPrevStep, goNextStep }: IPrevNextStep) {
       bodyWeight,
       activityLevel: selectedActivityLevel,
     };
-    console.log(detailData);
     dispatch(setRegisterInfo(detailData));
     goNextStep();
   };

@@ -1,14 +1,14 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ActivityLevelType } from '@/@type/pet';
+import { ActivityLevelType, PetSexType } from '@/@type/pet';
 import { RootState } from '../config';
 
 interface IRegisterInfo {
   registerInfo: {
     name: string;
     breedId?: number; // 견종 ID
-    petImage?: File;
-    sex: 'male' | 'female' | ''; // 1: male, 2: female
+    petImage?: string;
+    sex: PetSexType; // 1: male, 2: female
     isSpayed: boolean; // 중성화
     isPregnant: boolean;
     birthday?: string; // *Nullable
@@ -33,11 +33,11 @@ const initialState: IRegisterInfo = {
   },
 };
 
-export interface RegisterInfoForm {
+export interface RegisterInfoForm<T> {
   /* step 1 */
-  profil?: File;
+  petImage?: T;
   name?: string;
-  sex?: 'male' | 'female' | '';
+  sex?: PetSexType;
   isSpayed?: boolean;
   isPregnant?: boolean;
 
@@ -56,7 +56,7 @@ export const registerPetSlice = createSlice({
   name: 'pet',
   initialState,
   reducers: {
-    setRegisterInfo(state, action: PayloadAction<RegisterInfoForm>) {
+    setRegisterInfo(state, action: PayloadAction<RegisterInfoForm<string>>) {
       const { payload } = action;
       state.registerInfo = {
         ...state.registerInfo,

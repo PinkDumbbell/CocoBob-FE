@@ -7,10 +7,11 @@ export interface IBreeds {
   breedSize: BreedSizeType;
 }
 
+export type PetSexType = 'FEMALE' | 'MALE' | '';
 export interface IPet {
   petId: number;
   petName: string;
-  petSex: 'male' | 'female' | '';
+  petSex: PetSexType;
   petAge: number;
   petBirthday: string;
   petAllergy: string[];

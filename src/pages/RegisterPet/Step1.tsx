@@ -6,19 +6,23 @@ import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
 import { concatClasses } from '@/utils/libs/concatClasses';
 import { selectRegisterInfo, setRegisterInfo } from '@/store/slices/registerPetSlice';
+import { PetSexType } from '@/@type/pet';
+import useSelectImage from '@/utils/hooks/useSelectImage';
 import { ButtonWrapper, PageContainer, QuestionText, Form, QuestionWrapper } from './index.style';
 import { INextStep } from './type';
 
 interface IStep1Form {
   name: string;
-  sex: 'male' | 'female' | '';
+  sex: PetSexType;
   isSpayed: boolean;
   isPregnant: boolean;
 }
 export default function Step1({ goNextStep }: INextStep) {
   const dispatch = useDispatch();
   const registerInfo = useSelector(selectRegisterInfo);
-
+  const { imageFile: petImage, handleChangeImage } = useSelectImage({
+    initImageFile: registerInfo.petImage,
+  });
   const {
     register,
     handleSubmit,
@@ -30,7 +34,7 @@ export default function Step1({ goNextStep }: INextStep) {
   const onValidSubmit = (submitData: IStep1Form) => {
     const { name, sex, isSpayed, isPregnant } = submitData;
 
-    dispatch(setRegisterInfo({ name, sex, isSpayed, isPregnant }));
+    dispatch(setRegisterInfo({ petImage, name, sex, isSpayed, isPregnant }));
     goNextStep();
   };
 
@@ -50,11 +54,24 @@ export default function Step1({ goNextStep }: INextStep) {
       </div>
       <Form onSubmit={handleSubmit(onValidSubmit)}>
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col items-center gap-4">
-            <label className="relative h-32 w-32 rounded-full bg-gray-400" htmlFor="pet-thumbnail">
-              <div className="absolute bottom-2 right-2 h-8 w-8 bg-primary-900 rounded-md"></div>
-            </label>
-            <input type="file" id="pet-thumbnail" accept="image/jpg, image/png, image/jpeg" />
+          <div className="flex flex-col items-center justify-center">
+            <div className="relative felx items-center justify-center">
+              <label
+                className="absolute bottom-2 right-2 h-8 w-8 bg-primary-900 rounded-md"
+                htmlFor="pet-thumbnail"
+              ></label>
+              <img
+                alt=""
+                src={petImage}
+                className="bg-gray-200 h-32 w-32 rounded-full overflow-hidden"
+              />
+            </div>
+            <input
+              type="file"
+              id="pet-thumbnail"
+              accept="image/jpg, image/png, image/jpeg"
+              onChange={handleChangeImage}
+            />
           </div>
           <FormInput
             label="이름"
@@ -74,7 +91,7 @@ export default function Step1({ goNextStep }: INextStep) {
                 <input
                   type="radio"
                   className="hidden"
-                  value="male"
+                  value="MALE"
                   id="pet-sex-man"
                   {...register('sex', { required: '성별을 선택해주세요' })}
                 />
@@ -82,7 +99,7 @@ export default function Step1({ goNextStep }: INextStep) {
                   htmlFor="pet-sex-man"
                   className={concatClasses(
                     'border border-primary-900 rounded-md w-full block',
-                    watch('sex') === 'male' ? 'bg-primary-100 text-primary-900' : '',
+                    watch('sex') === 'MALE' ? 'bg-primary-100 text-primary-900' : '',
                   )}
                 >
                   남자
@@ -92,7 +109,7 @@ export default function Step1({ goNextStep }: INextStep) {
                 <input
                   type="radio"
                   className="hidden"
-                  value="female"
+                  value="FEMALE"
                   id="pet-sex-woman"
                   {...register('sex', { required: '성별을 선택해주세요' })}
                 />
@@ -100,7 +117,7 @@ export default function Step1({ goNextStep }: INextStep) {
                   htmlFor="pet-sex-woman"
                   className={concatClasses(
                     'border border-primary-900 rounded-md w-full block',
-                    watch('sex') === 'female' ? 'bg-primary-100 text-primary-900' : '',
+                    watch('sex') === 'FEMALE' ? 'bg-primary-100 text-primary-900' : '',
                   )}
                 >
                   여자
