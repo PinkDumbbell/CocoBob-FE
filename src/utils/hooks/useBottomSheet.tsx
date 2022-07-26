@@ -4,7 +4,6 @@ import {
   selectBottomSheet,
   setBottomSheetAction,
 } from '@/store/slices/bottomSheetSlice';
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 interface UseBottomSheetReturn {
@@ -24,13 +23,6 @@ export default function useBottomSheet(bottomSheetName: BottomSheetType): UseBot
     dispatch(setBottomSheetAction(bottomSheetName));
   };
   const closeBottomSheet = () => dispatch(closeBottomSheetAction());
-
-  useEffect(
-    () => () => {
-      closeBottomSheet();
-    },
-    [],
-  );
 
   return { currentBottomSheet, isBottomSheetOpen, openBottomSheet, closeBottomSheet };
 }
