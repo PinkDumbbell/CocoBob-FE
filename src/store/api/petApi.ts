@@ -12,7 +12,7 @@ export const petApiSlice = apiSlice.injectEndpoints({
         const formData = new FormData();
         // eslint-disable-next-line no-restricted-syntax
         for (const [key, value] of Object.entries(data)) {
-          if (value) formData.append(key, value);
+          if (value !== undefined) formData.append(key, value);
         }
 
         return {
