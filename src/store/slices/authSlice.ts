@@ -5,6 +5,7 @@ import { IAuthenticatedUser, IUserLoginResponse } from '@/@type/user';
 import { userApiSlice } from '../api/userApi';
 
 const initialState: IAuthenticatedUser = {
+  isLoggedIn: false,
   userId: null,
   username: '',
   accessToken: null,
@@ -24,31 +25,36 @@ const authSlice = createSlice({
       state.role = role;
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
+      state.isLoggedIn = true;
+    },
+    updateToken: (
+      state,
+      { payload }: PayloadAction<{ accessToken: string; refreshToken: string }>,
+    ) => {
+      const { accessToken, refreshToken } = payload;
+      state.accessToken = accessToken;
+      state.refreshToken = refreshToken;
+    },
+    logout: (state) => {
+      state.userId = initialState.userId;
+      state.email = initialState.email;
+      state.username = initialState.username;
+      state.role = initialState.role;
+      state.accessToken = initialState.accessToken;
+      state.refreshToken = initialState.refreshToken;
+      state.isLoggedIn = false;
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addMatcher(userApiSlice.endpoints.login.matchFulfilled, (state, { payload }) => {
-        const { accessToken, email, role, userId, username, refreshToken } = payload;
-        console.log('login fulfilled', payload);
-        state.userId = userId;
-        state.email = email;
-        state.username = username;
-        state.role = role;
-        state.accessToken = accessToken;
-        state.refreshToken = refreshToken;
-      })
-      .addMatcher(userApiSlice.endpoints.logout.matchFulfilled, (state) => {
-        state.userId = initialState.userId;
-        state.email = initialState.email;
-        state.username = initialState.username;
-        state.role = initialState.role;
-        state.accessToken = initialState.accessToken;
-        state.refreshToken = initialState.refreshToken;
-      });
+    builder.addMatcher(userApiSlice.endpoints.login.matchFulfilled, (state, response) => {
+      console.log('login fulfilled');
+      authSlice.caseReducers.setCredentials(state, response);
+    });
   },
 });
 
 export const selectUserId = (state: RootState) => state.auth.userId;
-export const { setCredentials } = authSlice.actions;
+export const selectIsLoggedIn = (state: RootState) => state.auth.isLoggedIn;
+export const selectAccessToken = (state: RootState) => state.auth.accessToken;
+export const { setCredentials, updateToken, logout } = authSlice.actions;
 export default authSlice.reducer;

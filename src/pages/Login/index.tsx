@@ -1,6 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@/components/Button';
-import { selectBottomSheet, setBottomSheetAction } from '@/store/slices/bottomSheetSlice';
+import {
+  closeBottomSheetAction,
+  selectBottomSheet,
+  setBottomSheetAction,
+} from '@/store/slices/bottomSheetSlice';
+import { useEffect } from 'react';
 import JoinLink from './components/JoinLink';
 import SocialLoginForm from './components/SocialLoginForm';
 import EmailLoginSheet from './EmailLoginSheet';
@@ -13,6 +18,12 @@ export default function LoginPage() {
 
   const openEmailLoginSheet = () => dispatch(setBottomSheetAction('emailLogin'));
 
+  useEffect(
+    () => () => {
+      dispatch(closeBottomSheetAction());
+    },
+    [],
+  );
   return (
     <>
       <PageContainer>

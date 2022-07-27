@@ -8,6 +8,7 @@ export interface IUser {
   representativeAnimal: IPet;
 }
 export interface IAuthenticatedUser {
+  isLoggedIn: boolean;
   accessToken: string | null;
   refreshToken: string | undefined | null;
   email: string;
