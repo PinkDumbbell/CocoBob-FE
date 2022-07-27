@@ -3,9 +3,10 @@ import { BackButton, HeaderWrapper, LeftMenuWrapper, Title } from './Header.styl
 
 interface HeaderProps {
   canGoBack?: boolean;
+  onClickGoBack?: () => void;
   title?: string;
 }
-export default function Header({ canGoBack, title }: HeaderProps) {
+export default function Header({ canGoBack, onClickGoBack, title }: HeaderProps) {
   const navigator = useNavigate();
 
   const goBackPage = () => navigator(-1);
@@ -14,7 +15,7 @@ export default function Header({ canGoBack, title }: HeaderProps) {
     <HeaderWrapper>
       {canGoBack && (
         <LeftMenuWrapper>
-          <BackButton onClick={goBackPage}>Back</BackButton>
+          <BackButton onClick={onClickGoBack ?? goBackPage}>Back</BackButton>
         </LeftMenuWrapper>
       )}
       <Title>{title}</Title>

@@ -2,8 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from '@/store/config';
 
+export type BottomSheetType = '' | 'emailLogin' | 'signUp' | 'exact' | 'ambiguous' | 'findBreed';
 export type BottomSheetState = {
-  bottomSheet: 'emailLogin' | 'signUp' | '';
+  bottomSheet: BottomSheetType;
 };
 
 const initialState: BottomSheetState = {
@@ -13,7 +14,7 @@ const bottomSheetSlice = createSlice({
   name: 'bottomSheet',
   initialState,
   reducers: {
-    setBottomSheetAction: (state, { payload }) => {
+    setBottomSheetAction: (state, { payload }: { payload: BottomSheetType }) => {
       state.bottomSheet = payload;
     },
     closeBottomSheetAction: (state) => {
@@ -22,6 +23,7 @@ const bottomSheetSlice = createSlice({
   },
 });
 
-export const selectBottomSheet = (state: RootState) => state.bottomSheet.bottomSheet;
+export const selectBottomSheet = (state: RootState): BottomSheetType =>
+  state.bottomSheet.bottomSheet;
 export const { setBottomSheetAction, closeBottomSheetAction } = bottomSheetSlice.actions;
 export default bottomSheetSlice.reducer;

@@ -2,25 +2,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '@/@type/user';
 import { IGenericResponse } from '@/store/api/types';
+import { IPet } from '@/@type/pet';
 
 export type UserState = {
-  isLoggedIn: boolean;
   user: IUser | null;
 };
 export interface UserPayload extends IGenericResponse, IUser {}
 
 const initialState: UserState = {
-  isLoggedIn: true,
   user: {
-    userId: 1,
-    email: 'test@test.com',
-    name: '테스터',
-    representativeAnimal: {
-      petId: 101,
-      petName: '코코',
-      petAge: 42,
-      petAllergy: ['닭', '보리', '마늘'],
-    },
+    userId: null,
+    email: null,
+    name: null,
+    representativePet: null,
   },
 };
 
@@ -28,20 +22,14 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    // eslint-disable-next-line no-unused-vars
     setUserAction(state: UserState, action: PayloadAction<UserPayload>) {
-      state.isLoggedIn = true;
-      state.user = {
-        userId: 1,
-        email: 'test@test.com',
-        name: '테스터',
-        representativeAnimal: {
-          petId: 101,
-          petName: '코코',
-          petAge: 42,
-          petAllergy: ['닭', '보리', '마늘'],
-        },
-      };
+      const { payload } = action;
+      state.user = payload;
+    },
+    setRepresentativePet(state: UserState, action: PayloadAction<IPet>) {
+      if (state.user) {
+        state.user.representativePet = action.payload;
+      }
     },
     logoutAction() {
       return initialState;
@@ -50,5 +38,5 @@ export const userSlice = createSlice({
 });
 
 const { reducer, actions } = userSlice;
-export const { setUserAction, logoutAction } = actions;
+export const { setUserAction, logoutAction, setRepresentativePet } = actions;
 export default reducer;

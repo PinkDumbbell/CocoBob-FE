@@ -7,16 +7,19 @@ import storage from 'redux-persist/lib/storage';
 import userSlice from './slices/userSlice';
 import authSlice from './slices/authSlice';
 import bottomSheetSlice from './slices/bottomSheetSlice';
+import registerPetSlice from './slices/registerPetSlice';
 import { apiSlice } from './slices/apiSlice';
 
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['registerPet'],
 };
 
 const appReducer = combineReducers({
   user: userSlice,
   auth: authSlice,
+  registerPet: registerPetSlice,
   bottomSheet: bottomSheetSlice,
   [apiSlice.reducerPath]: apiSlice.reducer,
 });

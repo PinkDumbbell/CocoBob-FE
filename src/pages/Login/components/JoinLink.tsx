@@ -1,6 +1,5 @@
-import { setBottomSheetAction } from '@/store/slices/bottomSheetSlice';
+import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { SyntheticEvent } from 'react';
-import { useDispatch } from 'react-redux';
 import tw from 'tailwind-styled-components';
 
 interface JoinLinkProps {
@@ -18,8 +17,7 @@ const Link = tw.a<JoinLinkProps>`
 `;
 
 export default function JoinLink({ color }: JoinLinkProps) {
-  const dispatch = useDispatch();
-  const openSignUpSheet = () => dispatch(setBottomSheetAction('signUp'));
+  const { openBottomSheet: openSignUpBottomSheet } = useBottomSheet('signUp');
 
   return (
     <LinkWrapper color={color}>
@@ -27,7 +25,7 @@ export default function JoinLink({ color }: JoinLinkProps) {
       <Link
         onClick={(e: SyntheticEvent<HTMLAnchorElement>) => {
           e.preventDefault();
-          openSignUpSheet();
+          openSignUpBottomSheet();
         }}
         color={color}
       >

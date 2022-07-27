@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
 import { useSignUpMutation } from '@/store/api/userApi';
-import { setBottomSheetAction } from '@/store/slices/bottomSheetSlice';
+import useBottomSheet from '@/utils/hooks/useBottomSheet';
+
 import { checkEmailDuplicated } from '../api';
 import {
   CheckEmailButton,
@@ -18,7 +18,8 @@ import {
 import { ISignUpForm } from '../types';
 
 export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
-  const dispatch = useDispatch();
+  const { openBottomSheet: openEmailLoginBottomSheet } = useBottomSheet('emailLogin');
+
   const {
     register,
     handleSubmit,
@@ -30,14 +31,12 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
     watch,
   } = useForm<ISignUpForm>();
 
-  const [signUp, { error, reset: mutationReset }] = useSignUpMutation();
+  const [signUp] = useSignUpMutation();
 
   const [emailChecked, setEmailChecked] = useState<string>('');
 
   const password = watch('password');
   const passwordConfirm = watch('passwordConfirm');
-
-  const openEmailLoginSheet = () => dispatch(setBottomSheetAction('emailLogin'));
 
   const onClickSignUp = async (data: ISignUpForm) => {
     if (!emailChecked || data.email !== emailChecked) {
@@ -46,7 +45,7 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
     }
     await signUp(data);
 
-    openEmailLoginSheet();
+    openEmailLoginBottomSheet();
   };
 
   const checkEmail = async () => {
@@ -81,10 +80,9 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
       <FormInput
         label="이름"
         name="signup-username"
-        required={true}
         type="text"
         placeholder="이름을 입력하세요"
-        register={register('username', { required: true })}
+        rules={register('username', { required: true })}
         isError={!!errors.username}
         errorMessage={errors.username?.message}
       />
@@ -94,16 +92,15 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
           <FormInput
             label="이메일"
             name="signup-email"
-            required={true}
             type="text"
             placeholder="이메일을 입력하세요"
-            onChange={() => setEmailChecked('')}
-            register={register('email', {
+            rules={register('email', {
               required: true,
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                 message: '이메일 형식이 올바르지 않습니다.',
               },
+              onChange: () => setEmailChecked(''),
             })}
             isError={!!errors.email}
             errorMessage={errors.email?.message}
@@ -113,17 +110,18 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
           {emailChecked ? (
             <EmailChecked>V</EmailChecked>
           ) : (
-            <CheckEmailButton onClick={checkEmail}>확인</CheckEmailButton>
+            <CheckEmailButton type="button" onClick={checkEmail}>
+              확인
+            </CheckEmailButton>
           )}
         </EmailCheckButtonWrapper>
       </EmailInputWrapper>
       <FormInput
         label="비밀번호"
         name="signup-password"
-        required={true}
         type="password"
         placeholder="비밀번호를 입력해주세요"
-        register={register('password', {
+        rules={register('password', {
           required: true,
           pattern: {
             value: /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/,
@@ -137,10 +135,9 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
       <FormInput
         label="비밀번호 확인"
         name="signup-passwordConfirm"
-        required={true}
         type="password"
         placeholder="비밀번호를 확인해주세요"
-        register={register('passwordConfirm', {
+        rules={register('passwordConfirm', {
           required: true,
           validate: (value) => {
             if (value !== password) {

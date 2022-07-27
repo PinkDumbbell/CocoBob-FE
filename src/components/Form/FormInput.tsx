@@ -1,4 +1,3 @@
-import { ChangeEventHandler } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import styled from 'styled-components';
 
@@ -6,9 +5,8 @@ interface InputProps {
   label: string;
   name: string;
   type?: string;
-  onChange?: ChangeEventHandler<HTMLInputElement>;
-  register?: UseFormRegisterReturn;
-  required: boolean;
+  rules?: UseFormRegisterReturn;
+  required?: boolean;
   placeholder?: string;
   isError?: boolean | undefined;
   errorMessage?: string;
@@ -35,7 +33,7 @@ const InputWrapper = styled.div`
   border-radius: 10px;
   width: 100%;
 `;
-const InputStyle = styled.input<{ isError: boolean | undefined }>`
+export const InputStyle = styled.input<{ isError: boolean | undefined }>`
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
@@ -63,11 +61,10 @@ const InputStyle = styled.input<{ isError: boolean | undefined }>`
 export default function Input({
   label,
   name,
-  register,
+  rules,
   type,
   required,
   placeholder,
-  onChange,
   isError,
   errorMessage,
 }: InputProps) {
@@ -82,10 +79,9 @@ export default function Input({
           required={required}
           type={type}
           placeholder={placeholder}
-          {...register}
           isError={isError}
           data-testid={name}
-          onChange={onChange}
+          {...rules}
         />
         {errorMessage && <p className="text-red-500 text-sm pt-1">{errorMessage}</p>}
       </InputWrapper>
