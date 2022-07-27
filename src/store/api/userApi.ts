@@ -16,10 +16,10 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: credentials,
       }),
     }),
-    logout: builder.mutation<IGenericResponse, void>({
+    logout: builder.mutation<String, void>({
       query: () => ({
         url: '/users',
-        method: 'POST',
+        method: 'DELETE',
       }),
     }),
     signUp: builder.mutation<IGenericResponse, ISignUpForm>({

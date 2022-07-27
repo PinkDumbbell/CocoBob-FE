@@ -51,14 +51,9 @@ const authSlice = createSlice({
         console.log('login fulfilled');
         authSlice.caseReducers.setCredentials(state, response);
       })
-      .addMatcher(userApiSlice.endpoints.logout.matchFulfilled, (state) => {
-        state.userId = initialState.userId;
-        state.email = initialState.email;
-        state.username = initialState.username;
-        state.role = initialState.role;
-        state.accessToken = initialState.accessToken;
-        state.refreshToken = initialState.refreshToken;
-        state.isLoggedIn = false;
+      .addMatcher(userApiSlice.endpoints.logout.matchFulfilled, () => {
+        console.log('logout fulfilled');
+        authSlice.actions.logout();
       });
   },
 });
