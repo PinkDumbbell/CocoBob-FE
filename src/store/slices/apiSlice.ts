@@ -1,9 +1,26 @@
 import { RootState } from '@/store/config';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { ThunkDispatch } from '@reduxjs/toolkit';
+import { createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { logout, updateToken } from './authSlice';
 
+type BaseQueryApi = {
+  signal: AbortSignal;
+  dispatch: ThunkDispatch<any, any, any>;
+  getState: () => unknown;
+  extra: unknown;
+  endpoint: string;
+  type: 'query' | 'mutation';
+  forced?: boolean;
+};
+interface RefreshedTokenResult {
+  accessToken: string;
+  refreshToken: string;
+}
+
+const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/v1`;
+
 const baseQuery = fetchBaseQuery({
-  baseUrl: `${import.meta.env.VITE_API_BASE_URL}/v1`,
+  baseUrl,
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.accessToken;
     if (token) {
@@ -13,31 +30,45 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-const baseQueryWithReAuth = async (args: any, api: any, extraOptions: any) => {
+const refreshQuery = fetchBaseQuery({
+  baseUrl,
+  prepareHeaders: (headers, { getState }) => {
+    const { accessToken } = (getState() as RootState).auth;
+    const { refreshToken } = (getState() as RootState).auth;
+
+    if (accessToken && refreshToken) {
+      headers.set('authorization', `Bearer ${accessToken}`);
+      headers.set('refresh-token', `Bearer ${refreshToken}`);
+    }
+
+    return headers;
+  },
+});
+
+const baseQueryWithReAuth = async (
+  args: string | FetchArgs,
+  api: BaseQueryApi,
+  extraOptions: {},
+) => {
   let result = await baseQuery(args, api, extraOptions);
 
-  // accessToken 또는 refreshToken 만료 시 401에러 반환
+  // token expired
   if (result?.error?.status === 401) {
     console.log('accessToken expired');
-    const refreshResult = await baseQuery('/users/token', api, extraOptions);
-    /**
-     * {
-          "accessToken": "string",
-          "refreshToken": "string"
-        }
-     */
-
+    const refreshResult = await refreshQuery('/users/token', api, extraOptions);
     console.log(refreshResult);
     if (refreshResult?.data) {
       // store new token
       api.dispatch(
         updateToken({
-          ...(refreshResult.data as { accessToken: string; refreshToken: string }),
+          ...(refreshResult.data as RefreshedTokenResult),
         }),
       );
       // retry original query with new access token
       result = await baseQuery(args, api, extraOptions);
     } else {
+      // token expired
+      alert('인증 정보가 만료되었습니다. 재로그인이 필요합니다.');
       api.dispatch(logout());
     }
   }

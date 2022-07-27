@@ -2,6 +2,7 @@ import Button from '@/components/Button';
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
 import { useEffect } from 'react';
+import { useAppDispatch } from '@/store/config';
 import JoinLink from './components/JoinLink';
 import SocialLoginForm from './components/SocialLoginForm';
 import { PageContainer, LogoContainer, FormContainer, MockLogo } from './index.style';
@@ -9,6 +10,7 @@ import EmailLoginSheet from './EmailLoginSheet';
 import SignUpSheet from './SignUpSheet';
 
 export default function LoginPage() {
+  const dispatch = useAppDispatch();
   const { isBottomSheetOpen: isEmailBottomSheetOpen, openBottomSheet: openEmailLoginSheet } =
     useBottomSheet('emailLogin');
   const { isBottomSheetOpen: isSignUpBottomSheetOpen } = useBottomSheet('signUp');
