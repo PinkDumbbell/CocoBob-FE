@@ -21,11 +21,11 @@ const appReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
-const rootReducer: Reducer = (state: any, action: AnyAction) => {
+const rootReducer: Reducer = (state: ReturnType<typeof appReducer>, action: AnyAction) => {
   if (action.type === 'auth/logout') {
     storage.removeItem('persist:root');
 
-    return appReducer({} as any, action);
+    return appReducer({} as ReturnType<typeof appReducer>, action);
   }
   return appReducer(state, action);
 };
@@ -42,7 +42,7 @@ export const store = configureStore({
   enhancers: (defaultEnhancers) => [...defaultEnhancers],
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof appReducer>;
 export type AppDispatch = typeof store.dispatch;
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
