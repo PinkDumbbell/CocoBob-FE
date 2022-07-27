@@ -46,15 +46,10 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addMatcher(userApiSlice.endpoints.login.matchFulfilled, (state, response) => {
-        console.log('login fulfilled');
-        authSlice.caseReducers.setCredentials(state, response);
-      })
-      .addMatcher(userApiSlice.endpoints.logout.matchFulfilled, () => {
-        console.log('logout fulfilled');
-        authSlice.actions.logout();
-      });
+    builder.addMatcher(userApiSlice.endpoints.login.matchFulfilled, (state, response) => {
+      console.log('login fulfilled');
+      authSlice.caseReducers.setCredentials(state, response);
+    });
   },
 });
 

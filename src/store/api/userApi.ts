@@ -16,7 +16,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: credentials,
       }),
     }),
-    logout: builder.mutation<String, void>({
+    logout: builder.mutation<IGenericResponse, void>({
       query: () => ({
         url: '/users',
         method: 'DELETE',
