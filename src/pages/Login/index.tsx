@@ -1,6 +1,7 @@
 import Button from '@/components/Button';
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
-
+import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
+import { useEffect } from 'react';
 import JoinLink from './components/JoinLink';
 import SocialLoginForm from './components/SocialLoginForm';
 import { PageContainer, LogoContainer, FormContainer, MockLogo } from './index.style';
@@ -12,6 +13,12 @@ export default function LoginPage() {
     useBottomSheet('emailLogin');
   const { isBottomSheetOpen: isSignUpBottomSheetOpen } = useBottomSheet('signUp');
 
+  useEffect(
+    () => () => {
+      dispatch(closeBottomSheetAction());
+    },
+    [],
+  );
   return (
     <>
       <PageContainer>

@@ -27,27 +27,35 @@ const authSlice = createSlice({
       state.refreshToken = refreshToken;
       state.isLoggedIn = true;
     },
+    updateToken: (
+      state,
+      { payload }: PayloadAction<{ accessToken: string; refreshToken: string }>,
+    ) => {
+      const { accessToken, refreshToken } = payload;
+      state.accessToken = accessToken;
+      state.refreshToken = refreshToken;
+    },
+    logout: (state) => {
+      state.userId = initialState.userId;
+      state.email = initialState.email;
+      state.username = initialState.username;
+      state.role = initialState.role;
+      state.accessToken = initialState.accessToken;
+      state.refreshToken = initialState.refreshToken;
+      state.isLoggedIn = false;
+    },
   },
   extraReducers: (builder) => {
-    builder
-      .addMatcher(userApiSlice.endpoints.login.matchFulfilled, (state, respoonse) => {
-        console.log('login fulfilled');
-        authSlice.caseReducers.setCredentials(state, respoonse);
-      })
-      .addMatcher(userApiSlice.endpoints.logout.matchFulfilled, (state) => {
-        state.userId = initialState.userId;
-        state.email = initialState.email;
-        state.username = initialState.username;
-        state.role = initialState.role;
-        state.accessToken = initialState.accessToken;
-        state.refreshToken = initialState.refreshToken;
-        state.isLoggedIn = false;
-      });
+    builder.addMatcher(userApiSlice.endpoints.login.matchFulfilled, (state, response) => {
+      console.log('login fulfilled');
+      authSlice.caseReducers.setCredentials(state, response);
+    });
   },
 });
 
 export const selectUserId = (state: RootState) => state.auth.userId;
 export const selectIsLoggedIn = (state: RootState) => state.auth.isLoggedIn;
 export const selectAccessToken = (state: RootState) => state.auth.accessToken;
-export const { setCredentials } = authSlice.actions;
+export const { setCredentials, updateToken, logout } = authSlice.actions;
+
 export default authSlice.reducer;

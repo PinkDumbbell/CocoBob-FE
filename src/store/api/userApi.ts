@@ -19,7 +19,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
     logout: builder.mutation<IGenericResponse, void>({
       query: () => ({
         url: '/users',
-        method: 'POST',
+        method: 'DELETE',
       }),
     }),
     signUp: builder.mutation<IGenericResponse, ISignUpForm>({

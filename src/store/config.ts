@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { AnyAction, combineReducers, configureStore, Reducer } from '@reduxjs/toolkit';
 
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -16,13 +16,22 @@ const persistConfig = {
   blacklist: ['registerPet'],
 };
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   user: userSlice,
   auth: authSlice,
   registerPet: registerPetSlice,
   bottomSheet: bottomSheetSlice,
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
+
+const rootReducer: Reducer = (state: ReturnType<typeof appReducer>, action: AnyAction) => {
+  if (action.type === 'auth/logout') {
+    storage.removeItem('persist:root');
+
+    return appReducer({} as ReturnType<typeof appReducer>, action);
+  }
+  return appReducer(state, action);
+};
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -36,7 +45,7 @@ export const store = configureStore({
   enhancers: (defaultEnhancers) => [...defaultEnhancers],
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof appReducer>;
 export type AppDispatch = typeof store.dispatch;
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
