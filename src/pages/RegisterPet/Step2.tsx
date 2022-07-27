@@ -1,211 +1,75 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-
-import BottomSheet from '@/components/BottomSheet';
-import Button from '@/components/Button';
 import FormButton from '@/components/Form/FormButton';
+import { useAppDispatch, useAppSelector } from '@/store/config';
 import { selectRegisterInfo, setRegisterInfo } from '@/store/slices/registerPetSlice';
+import useSelectImage from '@/utils/hooks/useSelectImage';
+import { useForm } from 'react-hook-form';
 import {
-  getKoreanStringDateFromDate,
-  getDateDiff,
-  getTotalMonthWithYearAndMonth,
-} from '@/utils/libs/date';
-import useBottomSheet from '@/utils/hooks/useBottomSheet';
-import { ButtonWrapper, PageContainer, QuestionText, Form, PetNameHighlight } from './index.style';
-import { IPrevNextStep } from './type';
+  ButtonWrapper,
+  Form,
+  PageContainer,
+  PetNameHighlight,
+  QuestionText,
+  SkipButton,
+} from './index.style';
 
-type ageType = {
-  months: number;
-  birthday?: string;
-};
-type AgeModeType = 'exact' | 'ambiguous' | '';
+import AddPhotoImage from '../../assets/icon/btn_add_photo.png';
 
-export default function Step2({ goNextStep }: IPrevNextStep) {
-  const {
-    currentBottomSheet,
-    isBottomSheetOpen: isExactDateBottomSheetOpen,
-    openBottomSheet: openExactDateBottomSheet,
-    closeBottomSheet,
-  } = useBottomSheet('exact');
-  const {
-    isBottomSheetOpen: isAmbiguousDateBottomSheetOpen,
-    openBottomSheet: openAmbiguousDateBottomSheet,
-  } = useBottomSheet('ambiguous');
-
-  const dispatch = useDispatch();
-  const registerInfo = useSelector(selectRegisterInfo);
-
-  const [age, setAge] = useState<ageType>({
-    months: 0,
-    birthday: '',
+export default function Step2({ goNextStep }: any) {
+  const dispatch = useAppDispatch();
+  const registerInfo = useAppSelector(selectRegisterInfo);
+  const { imageFile: petImage, handleChangeImage } = useSelectImage({
+    initImageFile: registerInfo.petImage,
   });
-
-  const [selectedMode, setSelectedMode] = useState<AgeModeType>('');
-  const [ambiguousDate, setAmbiguousDate] = useState<{ year: number; month: number }>({
-    year: 0,
-    month: 0,
-  });
-
   const { handleSubmit } = useForm();
+  const isButtonDisabled = !petImage;
 
-  const saveAmbiguousAge = () => {
-    if (ambiguousDate.year === 0 && ambiguousDate.month === 0) return;
-    setSelectedMode('ambiguous');
-    setAge({
-      birthday: '',
-      months: getTotalMonthWithYearAndMonth(ambiguousDate.year, ambiguousDate.month),
-    });
-    closeBottomSheet();
-  };
-
-  const saveBirthday = () => {
-    if (!age.birthday) return;
-
-    setSelectedMode('exact');
-    setAge((prevAge) => ({ ...prevAge, months: getDateDiff(age.birthday!, 'month') }));
-    closeBottomSheet();
-  };
-
-  const saveAgeInStore = () =>
-    dispatch(
-      setRegisterInfo({
-        age: age.months,
-        birthday: age.birthday,
-      }),
-    );
-
-  const onValidSubmit = () => {
-    if (!age.birthday && !age.months) {
-      alert('나이를 입력해주세요');
-      return;
-    }
-    saveAgeInStore();
+  const savePhoto = () => {
+    dispatch(setRegisterInfo({ petImage }));
     goNextStep();
   };
 
-  const ageString = useMemo(() => {
-    if (!age.birthday) return '';
-
-    const yearDiff = getDateDiff(age.birthday, 'year');
-    const monthDiff = getDateDiff(age.birthday, 'month') % 12;
-
-    if (!yearDiff && !monthDiff) return '1개월 이하';
-    if (!yearDiff) return `${monthDiff}개월`;
-    return `${yearDiff}년 ${monthDiff}개월`;
-  }, [age]);
-
-  useEffect(() => {
-    setAge({
-      birthday: registerInfo.birthday,
-      months: registerInfo.age,
-    });
-    if (registerInfo.birthday) setSelectedMode('exact');
-    else setSelectedMode('ambiguous');
-    return () => {
-      closeBottomSheet();
-    };
-  }, []);
-
   return (
     <PageContainer>
-      <div>
-        <PetNameHighlight>코코!</PetNameHighlight>
-        <QuestionText>귀여운 이름이네요. 나이는요?</QuestionText>
-      </div>
-      <Form onSubmit={handleSubmit(onValidSubmit)}>
-        <div className="flex flex-col gap-1">
-          <div className="flex flex-col">
-            <button className="text-left py-1" type="button" onClick={openExactDateBottomSheet}>
-              생년월일을 알고 있어요
-            </button>
-            {selectedMode === 'exact' && !currentBottomSheet && (
-              <div className="pl-5 py-2">
-                <p>{getKoreanStringDateFromDate(age.birthday ?? '')}</p>
-              </div>
-            )}
+      <Form onSubmit={handleSubmit(savePhoto)}>
+        <div className="flex flex-col gap-20">
+          <div className="space-y-[10px]">
+            <h3 className="text-[24px] leading-[35px]">
+              <PetNameHighlight>{registerInfo.name}</PetNameHighlight>!
+            </h3>
+            <div>
+              <QuestionText>정말 사랑스러운 이름이네요! </QuestionText>
+              <QuestionText>혹시 사진이 있나요?</QuestionText>
+            </div>
           </div>
-          <div className="flex flex-col">
-            <button className="text-left py-1" type="button" onClick={openAmbiguousDateBottomSheet}>
-              대략적인 나이만 알고 있어요
-            </button>
-            {selectedMode === 'ambiguous' && !currentBottomSheet && (
-              <div className="pl-5 py-1">
-                <p>
-                  {Math.floor(age.months! / 12)}년 {age.months! % 12}개월
-                </p>
-              </div>
-            )}
+          <div className="flex flex-col items-center justify-center">
+            <div className="relative felx items-center justify-center">
+              <label
+                className="absolute opacity-4 bottom-1 right-1 rounded-full"
+                htmlFor="pet-thumbnail"
+              >
+                <img src={AddPhotoImage} alt="" />
+              </label>
+              <img
+                alt=""
+                src={petImage}
+                className="bg-gray-200 h-[200px] w-[200px] rounded-full overflow-hidden"
+              />
+            </div>
+            <input
+              type="file"
+              id="pet-thumbnail"
+              accept="image/jpg, image/png, image/jpeg"
+              onChange={handleChangeImage}
+            />
           </div>
         </div>
         <ButtonWrapper>
-          <FormButton name="다음으로" disabled={false} />
+          <SkipButton type="button" onClick={goNextStep}>
+            나중에 등록할래요
+          </SkipButton>
+          <FormButton name="다음으로" disabled={isButtonDisabled} />
         </ButtonWrapper>
       </Form>
-      <BottomSheet isOpen={isExactDateBottomSheetOpen}>
-        <div className="p-4">
-          <div className="flex flex-col gap-2">
-            <h4 className="text-lg font-bold">언제 태어났나요?</h4>
-            <div className="py-3 w-full flex flex-col items-center justify-center gap-3">
-              <input
-                type="date"
-                defaultValue={age.birthday}
-                className="text-gray-600 relative w-full text-center bg-primary-100 rounded-md text-md py-1"
-                onChange={(e) => setAge((prev) => ({ ...prev, birthday: e.target.value }))}
-              />
-              {age.birthday && <p className="text-sm text-primary-900">{`나이 : ${ageString}`}</p>}
-            </div>
-            <Button label="선택완료" onClick={saveBirthday} />
-          </div>
-        </div>
-      </BottomSheet>
-      <BottomSheet isOpen={isAmbiguousDateBottomSheetOpen}>
-        <div className="p-4">
-          <div className="flex flex-col gap-2">
-            <h4 className="text-lg font-bold">추정 나이는 몇 살인가요?</h4>
-            <h6 className="text-md">맞춤형 정보를 위해 나이 정보는 꼭 필요해요</h6>
-            <div className="py-3 w-full flex  items-center justify-center gap-3">
-              <div className="flex gap-1">
-                <select
-                  name=""
-                  id=""
-                  defaultValue={Math.floor(age.months / 12)}
-                  onChange={(e) =>
-                    setAmbiguousDate((prev) => ({ ...prev, year: Number(e.target.value) }))
-                  }
-                >
-                  {Array(51)
-                    .fill(0)
-                    .map((_, idx) => (
-                      <option key={String(idx)} value={idx}>
-                        {idx}
-                      </option>
-                    ))}
-                </select>
-                <span>년</span>
-              </div>
-              <div className="flex gap-1">
-                <select
-                  name=""
-                  id=""
-                  defaultValue={age.months % 12}
-                  onChange={(e) =>
-                    setAmbiguousDate((prev) => ({ ...prev, month: Number(e.target.value) }))
-                  }
-                >
-                  {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((value) => (
-                    <option key={String(value)} value={value}>
-                      {value}
-                    </option>
-                  ))}
-                </select>
-                <span>개월</span>
-              </div>
-            </div>
-            <Button label="선택완료" onClick={saveAmbiguousAge} />
-          </div>
-        </div>
-      </BottomSheet>
     </PageContainer>
   );
 }

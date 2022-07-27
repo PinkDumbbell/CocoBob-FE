@@ -7,10 +7,6 @@ export const PageContainer = styled.div`
   padding: 1rem;
   justify-content: space-between;
   height: 100%;
-
-  h3 {
-    margin-bottom: 1.125rem;
-  }
 `;
 export const QuestionWrapper = styled.div`
   display: flex;
@@ -20,22 +16,30 @@ export const QuestionWrapper = styled.div`
 `;
 
 export const QuestionText = styled.h3`
-  margin: 0;
-  padding: 0;
-  font-weight: 600;
-  font-size: 1.2rem;
+  /* H3/H3 Bold */
+
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 29px;
+  /* identical to box height, or 145% */
+
+  letter-spacing: -0.02em;
 `;
 export const SubQuestionText = styled.p`
+  font-family: 'Noto Sans KR';
+  font-style: normal;
   font-weight: 500;
-  font-size: 0.9rem;
-  color: #555;
+  font-size: 13px;
+  line-height: 20px;
+  /* identical to box height, or 154% */
+
+  letter-spacing: -0.02em;
 `;
 export const PetNameHighlight = tw.span`
   text-primary-900
   font-bold
-  bg-primary-100
-  px-1
-  border-b-primary-900
 `;
 
 export const ButtonWrapper = styled.div`
@@ -79,4 +83,14 @@ export const Form = tw(StyledForm)`
   flex
   flex-col
   justify-between
+`;
+export const SkipButton = tw.button`
+  font-gray-600;
+  decoration-gray-400
+  underline
+  underline-offset-4
+  text-center
+  leading-[20px]
+  text-[14px]
+  text-light
 `;

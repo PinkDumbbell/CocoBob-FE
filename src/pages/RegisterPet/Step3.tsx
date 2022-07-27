@@ -1,92 +1,151 @@
-/* eslint-disable no-unused-vars */
-import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import FormButton from '@/components/Form/FormButton';
-import { InputStyle } from '@/components/Form/FormInput';
-import { concatClasses } from '@/utils/libs/concatClasses';
+import { IBreeds } from '@/@type/pet';
 import BottomSheet from '@/components/BottomSheet';
 import Button from '@/components/Button';
+import FormButton from '@/components/Form/FormButton';
+import { InputStyle } from '@/components/Form/FormInput';
+import { useAppDispatch, useAppSelector } from '@/store/config';
 import { setRegisterInfo } from '@/store/slices/registerPetSlice';
-import { IBreeds } from '@/@type/pet';
-import { favBreedfsMock } from '@/utils/constants/enrollment';
+import { breedsMock, favBreedfsMock } from '@/utils/constants/enrollment';
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
-import { ButtonWrapper, PageContainer, QuestionText, Form, PetNameHighlight } from './index.style';
-import { IPrevNextStep } from './type';
+import { concatClasses } from '@/utils/libs/concatClasses';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+
+import { useForm } from 'react-hook-form';
 import useSearchBreed from './hooks/useSearchBreed';
+import { ButtonWrapper, Form, PageContainer, PetNameHighlight, QuestionText } from './index.style';
 
 interface IBreedList {
   breeds: IBreeds[];
-  onSelectBreed: (breed: IBreeds) => void;
+  selectedBreed?: IBreeds;
+  setBreed: Dispatch<SetStateAction<IBreeds | undefined>>;
 }
-const BreedList = ({ breeds, onSelectBreed }: IBreedList) => (
+const BreedList = ({ breeds, selectedBreed, setBreed }: IBreedList) => (
   <>
     {breeds.map((breed) => (
-      <div key={breed.breedId} onClick={() => onSelectBreed(breed)}>
-        <p className="py-2">
-          <span className="pr-2 text-primary-900">{breed.breedSize}</span>
-          {breed.breedName}
+      <div key={breed.breedId} onClick={() => setBreed(breed)}>
+        <p
+          className={concatClasses(
+            selectedBreed?.breedId === breed.breedId ? 'bg-primary-100' : '',
+            'py-2',
+          )}
+        >
+          <span className="inline-block text-primary-900 w-14">{breed.breedSize}</span>
+          <span>{breed.breedName}</span>
         </p>
       </div>
     ))}
   </>
 );
 
-export default function Step3({ goPrevStep, goNextStep }: IPrevNextStep) {
-  const { isBottomSheetOpen, openBottomSheet } = useBottomSheet('findBreed');
+const SearchBreedBottomSheet = ({
+  isBottomSheetOpen,
+  setBreed,
+}: {
+  isBottomSheetOpen: boolean;
+  setBreed: Dispatch<SetStateAction<IBreeds | undefined>>;
+}) => {
   const {
     breeds,
-    searchKeyword,
-    onChangeSearchKeyword,
-    selectedBreed,
+    closeBreedBottomSheet,
     foundBreeds,
-    onSelectBreed,
+    onChangeSearchKeyword,
+    searchKeyword,
+    selectedBreed,
+    setSelectedBreed,
   } = useSearchBreed();
 
-  const dispatch = useDispatch();
+  const onClickSelectButton = () => {
+    setBreed(selectedBreed);
+    closeBreedBottomSheet();
+  };
+
+  return (
+    <BottomSheet isOpen={isBottomSheetOpen}>
+      <div className="p-4 flex flex-col gap-2">
+        <InputStyle
+          isError={false}
+          value={searchKeyword}
+          onChange={onChangeSearchKeyword}
+          placeholder="품종을 검색해보세요"
+        />
+
+        <div className="h-[50vh] px-2 py-3 overflow-y-scroll">
+          {!searchKeyword ? (
+            <BreedList breeds={breeds} selectedBreed={selectedBreed} setBreed={setSelectedBreed} />
+          ) : (
+            <BreedList
+              breeds={foundBreeds}
+              selectedBreed={selectedBreed}
+              setBreed={setSelectedBreed}
+            />
+          )}
+        </div>
+        <Button label="선택" onClick={onClickSelectButton} />
+      </div>
+    </BottomSheet>
+  );
+};
+
+export default function Step3({ goNextStep }: any) {
+  const { isBottomSheetOpen, openBottomSheet, closeBottomSheet } = useBottomSheet('findBreed');
+
+  const [breed, setBreed] = useState<IBreeds | undefined>();
+
+  const dispatch = useAppDispatch();
+  const registerInfo = useAppSelector((state) => state.registerPet.registerInfo);
   const { handleSubmit } = useForm();
 
-  const onValidSubmit = (data: any) => {
-    if (!selectedBreed) {
+  const onValidSubmit = () => {
+    if (!breed) {
       alert('견종을 선택해주세요');
       return;
     }
     dispatch(
       setRegisterInfo({
-        breedId: selectedBreed.breedId,
+        breedId: breed.breedId,
       }),
     );
     goNextStep();
   };
 
+  useEffect(() => {
+    console.log(registerInfo.breedId);
+    const currentBreed = breedsMock.find((breedMock) => breedMock.breedId === registerInfo.breedId);
+    setBreed(currentBreed);
+    return () => {
+      closeBottomSheet();
+    };
+  }, []);
+
   return (
     <PageContainer>
-      <div>
+      <div className="mb-4">
         <QuestionText>
-          <PetNameHighlight>코코</PetNameHighlight>는 어떤 아이인가요?
+          <PetNameHighlight>{registerInfo.name}</PetNameHighlight>에 대해서 더 알려주세요
         </QuestionText>
       </div>
       <Form onSubmit={handleSubmit(onValidSubmit)}>
         <div className="flex flex-col gap-4">
-          <button
-            type="button"
+          <InputStyle
+            isError={false}
             className="text-gray-400 text-left p-2 border-b border-b-gray-400"
             onClick={openBottomSheet}
-          >
-            {selectedBreed?.breedId ? selectedBreed.breedName : '품종을 검색해보세요'}
-          </button>
-          <div className="flex flex-wrap gap-2 items-center">
-            {favBreedfsMock.map((breed: IBreeds) => (
+            placeholder={breed?.breedId ? breed.breedName : '품종을 검색해보세요'}
+          />
+
+          <div className="flex flex-wrap gap-2 items-center py-2">
+            {favBreedfsMock.map((breedChip: IBreeds) => (
               <span
                 className={concatClasses(
-                  'py-1 px-2 text-sm rounded-lg',
-                  breed.breedId === selectedBreed?.breedId
+                  'py-1 px-2 text-sm rounded-lg whitespace-nowrap',
+                  breedChip.breedId === breed?.breedId
                     ? 'border border-primary-900 bg-primary-100 text-primary-900'
                     : 'border',
                 )}
-                onClick={() => onSelectBreed(breed)}
-                key={breed.breedId}
+                onClick={() => setBreed(breedChip)}
+                key={breedChip.breedId}
               >
-                {breed.breedName}
+                {breedChip.breedName}
               </span>
             ))}
           </div>
@@ -95,24 +154,7 @@ export default function Step3({ goPrevStep, goNextStep }: IPrevNextStep) {
           <FormButton name="다음으로" disabled={false} />
         </ButtonWrapper>
       </Form>
-      <BottomSheet isOpen={isBottomSheetOpen}>
-        <div className="p-4 flex flex-col gap-2">
-          <InputStyle
-            isError={false}
-            value={searchKeyword}
-            onChange={onChangeSearchKeyword}
-            placeholder="품종을 검색해보세요"
-          />
-          <div className="h-[50vh] px-2 py-3 overflow-y-scroll">
-            {!searchKeyword ? (
-              <BreedList breeds={breeds} onSelectBreed={onSelectBreed} />
-            ) : (
-              <BreedList breeds={foundBreeds} onSelectBreed={onSelectBreed} />
-            )}
-          </div>
-          <Button label="선택 완료" />
-        </div>
-      </BottomSheet>
+      <SearchBreedBottomSheet isBottomSheetOpen={isBottomSheetOpen} setBreed={setBreed} />
     </PageContainer>
   );
 }

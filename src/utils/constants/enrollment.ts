@@ -24,7 +24,7 @@ export const breedsMock: IBreeds[] = [
   {
     breedId: 5,
     breedName: '폼피치',
-    breedSize: '소형',
+    breedSize: '초소형',
   },
   {
     breedId: 6,
@@ -39,9 +39,9 @@ export const breedsMock: IBreeds[] = [
   {
     breedId: 8,
     breedName: '말티즈',
-    breedSize: '소형',
+    breedSize: '초소형',
   },
-  { breedId: 10, breedName: '토이 푸들', breedSize: '소형' },
+  { breedId: 10, breedName: '토이 푸들', breedSize: '초소형' },
   { breedId: 11, breedName: '비숑 프리제', breedSize: '중형' },
   { breedId: 12, breedName: '시츄', breedSize: '소형' },
   { breedId: 13, breedName: '요크셔테리어', breedSize: '소형' },

@@ -12,9 +12,10 @@ import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
 import Step4 from './Step4';
+import Step5 from './Step5';
 
 export default function RegisterPet() {
-  const MAX_STEP = 4;
+  const MAX_STEP = 5;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const currentPetInformation = useAppSelector(
@@ -41,6 +42,7 @@ export default function RegisterPet() {
       dispatch(clearRegisterInfo());
     };
   }, []);
+
   useEffect(() => {
     if (currentStep <= MAX_STEP) return;
 
@@ -69,14 +71,15 @@ export default function RegisterPet() {
   }, [isError]);
 
   const stepList = [
-    <Step1 key="step-1" goNextStep={goNextStep} />,
-    <Step2 key="step-2" goNextStep={goNextStep} goPrevStep={goPrevStep} />,
-    <Step3 key="step-3" goNextStep={goNextStep} goPrevStep={goPrevStep} />,
-    <Step4 key="step-4" goNextStep={goNextStep} goPrevStep={goPrevStep} />,
+    <Step1 key="name" goNextStep={goNextStep} />,
+    <Step2 key="photo" goNextStep={goNextStep} />,
+    <Step3 key="breed" goNextStep={goNextStep} />,
+    <Step4 key="step-3" goNextStep={goNextStep} goPrevStep={goPrevStep} />,
+    <Step5 key="step-4" goNextStep={goNextStep} goPrevStep={goPrevStep} />,
   ];
 
   return (
-    <Layout header footer={false} title="우리 아이 등록" canGoBack onClickGoBack={onClickGoBack}>
+    <Layout header footer={false} title="내 반려동물 등록" canGoBack onClickGoBack={onClickGoBack}>
       {stepList[currentStep - 1]}
     </Layout>
   );
