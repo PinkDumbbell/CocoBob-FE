@@ -2,8 +2,6 @@ import { createGlobalStyle } from 'styled-components';
 import 'tailwindcss/tailwind.css';
 
 const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-
   // base setting
   * { // 초기화
     margin : 0;
