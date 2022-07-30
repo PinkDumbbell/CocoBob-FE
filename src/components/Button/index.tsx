@@ -25,13 +25,15 @@ export const Button = ({
     `${volume}`,
   ];
   if (primary === 'first')
-    totalStyle.push('text-white bg-[#EA5758] hover:bg-gradient-to-tl from-redf to-redt shadow-md');
+    totalStyle.push(
+      'text-white bg-primary-900 hover:bg-gradient-to-tl from-redf to-redt shadow-md',
+    );
   if (primary === 'second')
     totalStyle.push(
-      'text-[#EA5758] bg-transparent border-2 border-[#EA5758] hover:border-2 border[#e8c2c2]',
+      'text-primary-900 bg-transparent border-2 border-primary-dark hover:border-2 border-primary-100',
     );
-  if (primary === 'third') totalStyle.push('text-[#EA5758] bg-white border-2 border-[#dddddd]');
-  if (primary === 'fourth') totalStyle.push('text-black bg-white border-2 border-[#efefef');
+  if (primary === 'third') totalStyle.push('text-primary-900 bg-white border-2 border-[#dddddd]');
+  if (primary === 'fourth') totalStyle.push('text-black bg-white border-2 border-[#efefef]');
   if (primary === 'etc') totalStyle.push('text-[#999999] font-medium underline decoration-1');
 
   return (

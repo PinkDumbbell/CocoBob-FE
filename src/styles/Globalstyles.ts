@@ -25,6 +25,7 @@ const GlobalStyle = createGlobalStyle`
     --t-default : #333333;
     --t-caption : #999999;
     --gutter: 1.25rem;
+    --bg-primary: #1A70D2;
   }
 
   // App.tsx
