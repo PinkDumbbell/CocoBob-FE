@@ -7,10 +7,10 @@ export const PageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: 100%;
+
   width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
+  height: 100%;
+
   background: radial-gradient(
     at 10% 15%,
     ${theme.colors.primary.light},

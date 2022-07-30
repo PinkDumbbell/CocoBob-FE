@@ -11,13 +11,27 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Noto Sans KR', sans-serif;
     line-height: 1.5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    min-width: 280px; // galaxy fold width
+    margin: 0 auto;
+
+    @media (min-width: 425px){
+      width:425px;
+    }
+    @media (max-width: 425px){
+      width:100vw;
+    }
   }
 
-  #root {
-    width : 100vw;
-    height : 100vh;
+  #root{
+    width:100%;
+    height:100vh;
+    background-color:white;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   }
-
   // Variables
   :root {
     // Color

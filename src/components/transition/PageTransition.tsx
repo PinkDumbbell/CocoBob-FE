@@ -33,7 +33,6 @@ const PageTransitionV2 = ({ transitionKey, children }: PageTransitionProps) => {
   return (
     <PageTransitionGroup timeout={timeout} type={animationType}>
       <TransitionGroup
-        className="container"
         childFactory={(child) =>
           React.cloneElement(child, {
             classNames: animationType,
