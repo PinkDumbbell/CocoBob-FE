@@ -93,8 +93,8 @@ export default function Step5({ goPrevStep, goNextStep }: IPrevNextStep) {
                 <label
                   htmlFor="pet-sex-man"
                   className={concatClasses(
-                    'border border-primary-900 rounded-md w-full block',
-                    watch('sex') === 'MALE' ? 'bg-primary-100 text-primary-900' : '',
+                    'border border-primary-main rounded-md w-full block',
+                    watch('sex') === 'MALE' ? 'bg-primary-light text-primary-main' : '',
                   )}
                 >
                   남자
@@ -111,15 +111,15 @@ export default function Step5({ goPrevStep, goNextStep }: IPrevNextStep) {
                 <label
                   htmlFor="pet-sex-woman"
                   className={concatClasses(
-                    'border border-primary-900 rounded-md w-full block',
-                    watch('sex') === 'FEMALE' ? 'bg-primary-100 text-primary-900' : '',
+                    'border border-primary-main rounded-md w-full block',
+                    watch('sex') === 'FEMALE' ? 'bg-primary-light text-primary-main' : '',
                   )}
                 >
                   여자
                 </label>
               </div>
             </div>
-            <p className="text-primary-900 text-sm">{errors.sex?.message}</p>
+            <p className="text-primary-main text-sm">{errors.sex?.message}</p>
           </div>
           <FormInput
             label="몸무게"
