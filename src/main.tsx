@@ -8,6 +8,7 @@ import App from './App';
 
 import { store, persistor } from './store/config';
 import GlobalStyle from './styles/Globalstyles';
+import './styles/index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
