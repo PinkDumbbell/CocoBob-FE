@@ -164,7 +164,7 @@ export default function Step5({ goPrevStep, goNextStep }: IPrevNextStep) {
           </div>
         </div>
         <ButtonWrapper>
-          <FormButton name="다음으로" disabled={isButtonDisabled} />
+          <FormButton name="등록완료" disabled={isButtonDisabled} />
         </ButtonWrapper>
       </Form>
     </PageContainer>
