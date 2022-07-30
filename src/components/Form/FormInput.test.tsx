@@ -10,7 +10,7 @@ const formInputProps = {
 };
 
 test('Error가 없을 때 UI 테스트', () => {
-  render(<FormInput {...formInputProps} isError={true} />);
+  render(<FormInput {...formInputProps} />);
   const inputEl = screen.getByTestId('test-input');
 
   expect(inputEl).toHaveStyle('border: 1px solid #EDEDED');
