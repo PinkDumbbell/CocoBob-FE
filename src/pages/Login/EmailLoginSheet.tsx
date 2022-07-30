@@ -17,7 +17,7 @@ const EmailLoginSheet = ({ isOpen }: { isOpen: boolean }) => (
       <FormWrapper>
         <h2>로그인</h2>
         <EmailLoginForm />
-        <Link to="/find" className="font-normal text-[#E85354]">
+        <Link to="/find" className="font-normal text-primary-main">
           아이디/비밀번호 찾기
         </Link>
       </FormWrapper>

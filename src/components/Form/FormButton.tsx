@@ -9,7 +9,7 @@ interface ButtonProps {
 }
 
 const FormButtonContainer = styled.button<{ disabled: boolean }>`
-  background: var(--bg-primary);
+  background: var(--primary-main);
   opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
   border: none;
   border-radius: 8px;

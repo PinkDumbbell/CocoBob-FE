@@ -25,7 +25,11 @@ const GlobalStyle = createGlobalStyle`
     --t-default : #333333;
     --t-caption : #999999;
     --gutter: 1.25rem;
-    --bg-primary: #1A70D2;
+    --primary-light: rgb(206, 229, 255);
+    --primary-main: #1A70D2;
+    --primary-dark: #114786;
+    --secondary-light: #AAC7E9;
+    --secondary-main: #72A2D8;
   }
 
   // App.tsx
