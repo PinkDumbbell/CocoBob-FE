@@ -1,7 +1,7 @@
 import { RootState } from '@/store/config';
 import { useSelector } from 'react-redux';
 import Layout from '@/components/layout/Layout';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import useLogout from '@/utils/hooks/useLogout';
 
 export default function Main() {
