@@ -130,6 +130,18 @@ const GlobalStyle = createGlobalStyle`
     position:abosulte;
     left:0;
   }
+
+  input[type='radio']{
+    appearance: none;
+    border: 1px solid #555555;
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+  }
+  input[type='radio']:checked{
+    outline: 3px solid var(--primary-main);
+    outline-offset: -3.5px;
+  }
 `;
 
 export default GlobalStyle;
