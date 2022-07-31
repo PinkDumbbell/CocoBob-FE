@@ -6,7 +6,7 @@ import { InputStyle } from '@/components/Form/FormInput';
 import { useGetBreedsQuery } from '@/store/api/petApi';
 import { useAppDispatch, useAppSelector } from '@/store/config';
 import { setRegisterInfo } from '@/store/slices/registerPetSlice';
-import { breedsMock, favBreedfsMock } from '@/utils/constants/enrollment';
+import { favBreeds } from '@/utils/constants/enrollment';
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { concatClasses } from '@/utils/libs/concatClasses';
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
@@ -23,15 +23,12 @@ interface IBreedList {
 const BreedList = ({ breeds, selectedBreed, setBreed }: IBreedList) => (
   <>
     {breeds.map((breed) => (
-      <div key={breed.breedId} onClick={() => setBreed(breed)}>
+      <div key={breed.id} onClick={() => setBreed(breed)}>
         <p
-          className={concatClasses(
-            selectedBreed?.breedId === breed.breedId ? 'bg-primary-100' : '',
-            'py-2',
-          )}
+          className={concatClasses(selectedBreed?.id === breed.id ? 'bg-primary-100' : '', 'py-2')}
         >
-          <span className="inline-block text-primary-900 w-14">{breed.breedSize}</span>
-          <span>{breed.breedName}</span>
+          <span className="inline-block text-primary-900 w-14">{breed.size}</span>
+          <span>{breed.name}</span>
         </p>
       </div>
     ))}
@@ -72,7 +69,7 @@ const SearchBreedBottomSheet = ({
           placeholder="품종을 검색해보세요"
         />
         {isLoading && <div className="h-[50vh] px-2 py-3 overflow-y-scroll">로딩중...</div>}
-        {!isSuccess && (
+        {isSuccess && (
           <div className="h-[50vh] px-2 py-3 overflow-y-scroll">
             {!searchKeyword ? (
               <BreedList
@@ -98,6 +95,7 @@ const SearchBreedBottomSheet = ({
 export default function Step3({ goNextStep }: any) {
   const { isBottomSheetOpen, openBottomSheet, closeBottomSheet } = useBottomSheet('findBreed');
 
+  const { isSuccess, data: breeds } = useGetBreedsQuery();
   const [breed, setBreed] = useState<IBreeds | undefined>();
 
   const dispatch = useAppDispatch();
@@ -111,20 +109,25 @@ export default function Step3({ goNextStep }: any) {
     }
     dispatch(
       setRegisterInfo({
-        breedId: breed.breedId,
+        breedId: breed.id,
       }),
     );
     goNextStep();
   };
 
+  // eslint-disable-next-line arrow-body-style
   useEffect(() => {
-    console.log(registerInfo.breedId);
-    const currentBreed = breedsMock.find((breedMock) => breedMock.breedId === registerInfo.breedId);
-    setBreed(currentBreed);
     return () => {
       closeBottomSheet();
     };
   }, []);
+
+  useEffect(() => {
+    if (isSuccess) {
+      const currentBreed = breeds.find((value) => value.id === registerInfo.breedId);
+      setBreed(currentBreed);
+    }
+  }, [isSuccess]);
 
   return (
     <PageContainer>
@@ -139,22 +142,22 @@ export default function Step3({ goNextStep }: any) {
             isError={false}
             className="text-gray-400 text-left p-2 border-b border-b-gray-400"
             onClick={openBottomSheet}
-            placeholder={breed?.breedId ? breed.breedName : '품종을 검색해보세요'}
+            placeholder={breed?.id ? breed.name : '품종을 검색해보세요'}
           />
 
           <div className="flex flex-wrap gap-2 items-center py-2">
-            {favBreedfsMock.map((breedChip: IBreeds) => (
+            {favBreeds.map((breedChip: IBreeds) => (
               <span
                 className={concatClasses(
                   'py-1 px-2 text-sm rounded-lg whitespace-nowrap',
-                  breedChip.breedId === breed?.breedId
+                  breedChip.id === breed?.id
                     ? 'border border-primary-900 bg-primary-100 text-primary-900'
                     : 'border',
                 )}
                 onClick={() => setBreed(breedChip)}
-                key={breedChip.breedId}
+                key={breedChip.id}
               >
-                {breedChip.breedName}
+                {breedChip.name}
               </span>
             ))}
           </div>

@@ -36,8 +36,8 @@ export default function RegisterPet() {
     else goPrevStep();
   };
 
+  // eslint-disable-next-line arrow-body-style
   useEffect(() => {
-    console.log('mount register pet');
     return () => {
       dispatch(clearRegisterInfo());
     };

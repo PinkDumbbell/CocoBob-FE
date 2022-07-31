@@ -23,7 +23,7 @@ export default function useSearchBreed(breeds: IBreeds[]): UseSearchBreedReturn 
   const [searchKeyword, setSearchKeyword] = useState('');
   const [selectedBreed, setSelectedBreed] = useState<IBreeds | undefined>();
 
-  const foundBreeds = breeds.filter((breed) => breed.breedName.includes(searchKeyword)) ?? [];
+  const foundBreeds = breeds.filter((breed) => breed.name.includes(searchKeyword)) ?? [];
 
   const onSelectBreed = (breed: IBreeds) => {
     setSelectedBreed(breed);
@@ -35,9 +35,9 @@ export default function useSearchBreed(breeds: IBreeds[]): UseSearchBreedReturn 
     setSearchKeyword(e.target.value);
 
   useEffect(() => {
-    if (!registerInfo.breedId || !breeds || !Array.isArray(breeds)) return;
+    if (!registerInfo.breedId || !Array.isArray(breeds)) return;
 
-    const currentBreed = breeds.find((v) => v.breedId === registerInfo.breedId);
+    const currentBreed = breeds.find((v) => v.id === registerInfo.breedId);
     setSelectedBreed(currentBreed);
   }, [breeds]);
 
