@@ -60,19 +60,19 @@ const baseQueryWithReAuth = async (
     console.log('accessToken expired');
     const { meta, data, error } = await refreshQuery('/users/token', api, extraOptions);
     console.log(meta, data, error);
-    if ((data as IGenericResponse).status === 202) {
+    if (!data || error?.status === 401 || (data && (data as IGenericResponse).status === 401)) {
+      // error occured
+      alert('로그인이 필요합니다.');
+      api.dispatch(logout());
+    } else if (data && (data as IGenericResponse).status === 202) {
       // store new token
       api.dispatch(
         updateToken({
           ...((data as IGenericResponse).data as RefreshedTokenResult),
         }),
       );
-
       // retry original query with new access token
       result = await baseQuery(args, api, extraOptions);
-    } else if (error?.status === 401) {
-      alert('로그인이 필요합니다.');
-      api.dispatch(logout());
     }
   }
   return result;
