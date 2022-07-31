@@ -14,12 +14,18 @@ const theme = createTheme({
           borderTopLeftRadius: 10,
           paddingTop: 10,
         },
+        paper: {
+          margin: '0 auto',
+          maxWidth: 425,
+        },
       },
     },
     MuiBackdrop: {
       styleOverrides: {
         root: {
           backgroundColor: 'rgb(0, 0, 0, 0.1)',
+          margin: '0 auto',
+          maxWidth: 425,
         },
       },
     },
