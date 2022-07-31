@@ -1,16 +1,21 @@
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
+import { theme } from '@/styles/theme';
 
 export const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: 100%;
+
   width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-  background: radial-gradient(at 30% 20%, #fabbbc, #f56e6f);
+  height: 100%;
+
+  background: radial-gradient(
+    at 10% 15%,
+    ${theme.colors.primary.light},
+    ${theme.colors.primary.main}
+  );
   padding: 1rem;
 `;
 export const ItemsCenter = styled.div`
@@ -50,7 +55,7 @@ export const LoginButton = styled.button`
   font-weight: 700;
   border: none;
   background: white;
-  color: #e85354;
+  color: ${({ theme: { colors } }) => colors.text.default};
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
 

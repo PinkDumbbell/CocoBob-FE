@@ -38,8 +38,8 @@ export const SubQuestionText = styled.p`
   letter-spacing: -0.02em;
 `;
 export const PetNameHighlight = tw.span`
-  text-primary-900
   font-bold
+  text-primary-main
 `;
 
 export const ButtonWrapper = styled.div`

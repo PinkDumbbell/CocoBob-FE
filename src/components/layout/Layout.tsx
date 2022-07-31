@@ -22,7 +22,9 @@ export default function Layout({
   return (
     <>
       {header && <Header canGoBack={canGoBack} onClickGoBack={onClickGoBack} title={title} />}
-      <ChildrenWrapper headerShown={!!header}>{children}</ChildrenWrapper>
+      <ChildrenWrapper headerShown={!!header} footerShown={!!footer}>
+        {children}
+      </ChildrenWrapper>
       {footer && <Footer />}
     </>
   );
