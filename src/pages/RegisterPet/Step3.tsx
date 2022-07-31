@@ -71,19 +71,13 @@ const SearchBreedBottomSheet = ({
         {isLoading && <div className="h-[50vh] px-2 py-3 overflow-y-scroll">로딩중...</div>}
         {isSuccess && (
           <div className="h-[50vh] px-2 py-3 overflow-y-scroll">
-            {!searchKeyword ? (
+            {
               <BreedList
-                breeds={breeds}
+                breeds={!searchKeyword ? breeds : foundBreeds}
                 selectedBreed={selectedBreed}
                 setBreed={setSelectedBreed}
               />
-            ) : (
-              <BreedList
-                breeds={foundBreeds}
-                selectedBreed={selectedBreed}
-                setBreed={setSelectedBreed}
-              />
-            )}
+            }
           </div>
         )}
         <Button label="선택" onClick={onClickSelectButton} />
