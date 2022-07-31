@@ -1,26 +1,32 @@
 import { useLocation, useNavigate } from 'react-router-dom';
+import { concatClasses } from '@/utils/libs/concatClasses';
+
+import FoodIcon from '@/assets/icon/navbar_food.svg';
+import DailyIcon from '@/assets/icon/navbar_daily.svg';
+import ProfileIcon from '@/assets/icon/navbar_profile.svg';
+import HomeIcon from '@/assets/icon/navbar_home.svg';
 import { NavBar, NavBarItem } from './Footer.style';
 
 const navBarItems = [
   {
     path: '/',
-    title: '홈',
-  },
-  {
-    path: '/mypet',
-    title: 'My 펫',
+    title: '메인',
+    iconSrc: HomeIcon,
   },
   {
     path: '/products',
-    title: '상품',
+    title: '사료',
+    iconSrc: FoodIcon,
   },
   {
-    path: '/report',
-    title: '생활보고서',
+    path: '/daily',
+    title: '데일리',
+    iconSrc: DailyIcon,
   },
   {
     path: '/mypage',
-    title: '마이페이지',
+    title: '프로필',
+    iconSrc: ProfileIcon,
   },
 ];
 export default function Footer() {
@@ -31,11 +37,26 @@ export default function Footer() {
     if (location.pathname === path) return;
     navigate(path);
   };
+  console.log(location);
+  const isCurrentPage = (path: string) => location.pathname === path;
+
   return (
     <NavBar>
       {navBarItems.map((navBarItem) => (
         <NavBarItem key={navBarItem.path}>
-          <button onClick={() => goPage(navBarItem.path)}>{navBarItem.title}</button>
+          <button className="h-full p-1" onClick={() => goPage(navBarItem.path)}>
+            <div className="h-full flex flex-col items-center justify-end">
+              <img src={navBarItem.iconSrc} alt="" style={{ color: 'var(--primary-main)' }} />
+              <p
+                className={concatClasses(
+                  'text-sm',
+                  isCurrentPage(navBarItem.path) ? 'text-primary-bright' : 'text-caption',
+                )}
+              >
+                {navBarItem.title}
+              </p>
+            </div>
+          </button>
         </NavBarItem>
       ))}
     </NavBar>
