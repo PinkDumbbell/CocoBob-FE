@@ -33,11 +33,12 @@ const baseQuery = fetchBaseQuery({
 const refreshQuery = fetchBaseQuery({
   baseUrl,
   prepareHeaders: (headers, { getState }) => {
-    const { accessToken } = (getState() as RootState).auth;
-    const { refreshToken } = (getState() as RootState).auth;
+    const { accessToken, refreshToken } = (getState() as RootState).auth;
 
-    if (accessToken && refreshToken) {
+    if (accessToken) {
       headers.set('authorization', `Bearer ${accessToken}`);
+    }
+    if (refreshToken) {
       headers.set('refresh-token', `Bearer ${refreshToken}`);
     }
 
@@ -55,20 +56,19 @@ const baseQueryWithReAuth = async (
   // token expired
   if (result?.error?.status === 401) {
     console.log('accessToken expired');
-    const refreshResult = await refreshQuery('/users/token', api, extraOptions);
-    console.log(refreshResult);
-    if (refreshResult?.data) {
+    const { meta, data, error } = await refreshQuery('/users/token', api, extraOptions);
+    console.log(meta, data, error);
+    if (data) {
       // store new token
       api.dispatch(
         updateToken({
-          ...(refreshResult.data as RefreshedTokenResult),
+          ...(data as RefreshedTokenResult),
         }),
       );
       // retry original query with new access token
       result = await baseQuery(args, api, extraOptions);
-    } else {
-      // token expired
-      alert('인증 정보가 만료되었습니다. 재로그인이 필요합니다.');
+    } else if (error?.status === 401) {
+      alert('로그인이 필요합니다.');
       api.dispatch(logout());
     }
   }
