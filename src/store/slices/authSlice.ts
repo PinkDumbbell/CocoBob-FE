@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from '@/store/config';
-import { IAuthenticatedUser, IUserLoginResponse } from '@/@type/user';
+import { IAuthenticatedUser } from '@/@type/user';
 import { userApiSlice } from '../api/userApi';
 
 const initialState: IAuthenticatedUser = {
@@ -17,7 +17,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (state, { payload }: PayloadAction<IUserLoginResponse>) => {
+    setCredentials: (state, { payload }: PayloadAction<IAuthenticatedUser>) => {
       const { accessToken, email, role, userId, username, refreshToken } = payload;
       state.userId = userId;
       state.email = email;
@@ -47,7 +47,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(userApiSlice.endpoints.login.matchFulfilled, (state, response) => {
-      console.log('login fulfilled');
+      console.log('login fulfilled', response);
       authSlice.caseReducers.setCredentials(state, response);
     });
   },
