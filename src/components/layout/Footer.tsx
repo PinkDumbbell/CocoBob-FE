@@ -1,11 +1,9 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { concatClasses } from '@/utils/libs/concatClasses';
-
 import FoodIcon from '@/assets/icon/navbar_food.svg';
 import DailyIcon from '@/assets/icon/navbar_daily.svg';
 import ProfileIcon from '@/assets/icon/navbar_profile.svg';
 import HomeIcon from '@/assets/icon/navbar_home.svg';
-import { NavBar, NavBarItem } from './Footer.style';
+import { ButtonTitle, IconButton, IconWrapper, NavBar, NavBarItem } from './Footer.style';
 
 const navBarItems = [
   {
@@ -43,20 +41,15 @@ export default function Footer() {
   return (
     <NavBar>
       {navBarItems.map((navBarItem) => (
-        <NavBarItem key={navBarItem.path}>
-          <button className="h-full p-1" onClick={() => goPage(navBarItem.path)}>
-            <div className="h-full flex flex-col items-center justify-end">
-              <img src={navBarItem.iconSrc} alt="" style={{ color: 'var(--primary-main)' }} />
-              <p
-                className={concatClasses(
-                  'text-sm',
-                  isCurrentPage(navBarItem.path) ? 'text-primary-bright' : 'text-caption',
-                )}
-              >
-                {navBarItem.title}
-              </p>
-            </div>
-          </button>
+        <NavBarItem key={navBarItem.path} current={String(isCurrentPage(navBarItem.path))}>
+          <IconButton onClick={() => goPage(navBarItem.path)}>
+            <IconWrapper>
+              <img src={navBarItem.iconSrc} alt={`${navBarItem.title} 아이콘`} />
+            </IconWrapper>
+            <ButtonTitle current={String(isCurrentPage(navBarItem.path))}>
+              {navBarItem.title}
+            </ButtonTitle>
+          </IconButton>
         </NavBarItem>
       ))}
     </NavBar>
