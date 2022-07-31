@@ -25,11 +25,11 @@ const BreedList = ({ breeds, selectedBreed, setBreed }: IBreedList) => (
       <div key={breed.breedId} onClick={() => setBreed(breed)}>
         <p
           className={concatClasses(
-            selectedBreed?.breedId === breed.breedId ? 'bg-primary-100' : '',
+            selectedBreed?.breedId === breed.breedId ? 'bg-primary-light' : '',
             'py-2',
           )}
         >
-          <span className="inline-block text-primary-900 w-14">{breed.breedSize}</span>
+          <span className="inline-block text-primary-main w-14">{breed.breedSize}</span>
           <span>{breed.breedName}</span>
         </p>
       </div>
@@ -139,7 +139,7 @@ export default function Step3({ goNextStep }: any) {
                 className={concatClasses(
                   'py-1 px-2 text-sm rounded-lg whitespace-nowrap',
                   breedChip.breedId === breed?.breedId
-                    ? 'border border-primary-900 bg-primary-100 text-primary-900'
+                    ? 'border border-primary-main bg-primary-light text-primary-main'
                     : 'border',
                 )}
                 onClick={() => setBreed(breedChip)}

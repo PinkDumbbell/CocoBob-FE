@@ -6,4 +6,5 @@ export const ChildrenWrapper = styled.div<{ headerShown?: boolean; footerShown?:
   padding-bottom: ${({ footerShown }) => (footerShown ? '3rem' : '0')};
   height: 100%;
   width: 100%;
+  overflow: auto;
 `;
