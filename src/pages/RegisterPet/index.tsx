@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,7 +21,7 @@ export default function RegisterPet() {
     (state: RootState) => state.registerPet.registerInfo,
   );
   const [currentStep, setCurrentStep] = useState(1);
-  const [enrollPetMutation, { isLoading, isError, isSuccess }] = useSaveEnrollmentDataMutation();
+  const [enrollPetMutation, { isError, isSuccess }] = useSaveEnrollmentDataMutation();
 
   const goNextStep = async () => {
     setCurrentStep((step) => step + 1);
@@ -36,6 +35,17 @@ export default function RegisterPet() {
     else goPrevStep();
   };
 
+  const enrollPet = async () => {
+    const enrollData = {
+      ...currentPetInformation,
+      petImage: undefined as unknown as File,
+    };
+    if (currentPetInformation.petImage) {
+      enrollData.petImage = await getFileFromObjectURL(currentPetInformation.petImage);
+    }
+    enrollPetMutation(enrollData);
+  };
+
   // eslint-disable-next-line arrow-body-style
   useEffect(() => {
     return () => {
@@ -46,17 +56,6 @@ export default function RegisterPet() {
   useEffect(() => {
     if (currentStep <= MAX_STEP) return;
 
-    async function enrollPet() {
-      const enrollData = {
-        ...currentPetInformation,
-        petImage: undefined as unknown as File,
-      };
-      if (currentPetInformation.petImage) {
-        const imageFileObject = await getFileFromObjectURL(currentPetInformation.petImage);
-        enrollData.petImage = imageFileObject;
-      }
-      enrollPetMutation(enrollData);
-    }
     enrollPet();
   }, [currentStep]);
 
@@ -64,6 +63,7 @@ export default function RegisterPet() {
     if (!isSuccess) return;
     navigate('/');
   }, [isSuccess]);
+
   useEffect(() => {
     if (!isError) return;
     alert('등록에 실패하였습니다.');

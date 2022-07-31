@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { ActivityLevelType, PetSexType } from '@/@type/pet';
 import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
@@ -7,7 +6,7 @@ import { selectRegisterInfo, setRegisterInfo } from '@/store/slices/registerPetS
 import { concatClasses } from '@/utils/libs/concatClasses';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   PageContainer,
   QuestionText,
@@ -27,7 +26,7 @@ interface Step4Form {
 }
 
 const activityLevels: ActivityLevelType[] = [1, 2, 3, 4, 5];
-export default function Step5({ goPrevStep, goNextStep }: IPrevNextStep) {
+export default function Step5({ goNextStep }: IPrevNextStep) {
   const dispatch = useAppDispatch();
   const {
     register,
