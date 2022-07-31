@@ -1,12 +1,10 @@
 import { IBreeds } from '@/@type/pet';
 import { selectRegisterInfo } from '@/store/slices/registerPetSlice';
-import { breedsMock } from '@/utils/constants/enrollment';
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 interface UseSearchBreedReturn {
-  breeds: IBreeds[];
   selectedBreed: IBreeds | undefined;
   setSelectedBreed: Dispatch<SetStateAction<IBreeds | undefined>>;
   searchKeyword: string;
@@ -17,15 +15,15 @@ interface UseSearchBreedReturn {
   onSelectBreed: (breeds: IBreeds) => void;
   closeBreedBottomSheet: () => void;
 }
-export default function useSearchBreed(): UseSearchBreedReturn {
-  const { currentBottomSheet, closeBottomSheet } = useBottomSheet('findBreed');
+export default function useSearchBreed(breeds: IBreeds[]): UseSearchBreedReturn {
+  const { isBottomSheetOpen, closeBottomSheet } = useBottomSheet('findBreed');
 
   const registerInfo = useSelector(selectRegisterInfo);
 
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [selectedBreed, setSelectedBreed] = useState<IBreeds | undefined>(undefined);
+  const [selectedBreed, setSelectedBreed] = useState<IBreeds | undefined>();
 
-  const foundBreeds = breedsMock.filter((breed) => breed.breedName.includes(searchKeyword));
+  const foundBreeds = breeds.filter((breed) => breed.breedName.includes(searchKeyword)) ?? [];
 
   const onSelectBreed = (breed: IBreeds) => {
     setSelectedBreed(breed);
@@ -37,18 +35,18 @@ export default function useSearchBreed(): UseSearchBreedReturn {
     setSearchKeyword(e.target.value);
 
   useEffect(() => {
-    if (!registerInfo.breedId) return;
+    if (!registerInfo.breedId || !breeds || !Array.isArray(breeds)) return;
 
-    const currentBreed = breedsMock.find((v) => v.breedId === registerInfo.breedId);
+    const currentBreed = breeds.find((v) => v.breedId === registerInfo.breedId);
     setSelectedBreed(currentBreed);
-  }, []);
+  }, [breeds]);
 
+  // eslint-disable-next-line arrow-body-style
   useEffect(() => {
-    setSearchKeyword('');
-  }, [currentBottomSheet]);
+    return () => setSearchKeyword('');
+  }, [isBottomSheetOpen]);
 
   return {
-    breeds: breedsMock,
     setSelectedBreed,
     searchKeyword,
     onChangeSearchKeyword,

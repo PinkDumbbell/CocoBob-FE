@@ -75,7 +75,7 @@ export default function Step5({ goPrevStep, goNextStep }: IPrevNextStep) {
     <PageContainer>
       <div className="mb-4">
         <QuestionText>
-          <PetNameHighlight>{'코코'}</PetNameHighlight>에 대해서 더 알려주시겠어요?
+          <PetNameHighlight>{registerInfo.name}</PetNameHighlight>에 대해서 더 알려주시겠어요?
         </QuestionText>
       </div>
       <Form onSubmit={handleSubmit(saveFormInputs)}>

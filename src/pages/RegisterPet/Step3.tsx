@@ -3,6 +3,7 @@ import BottomSheet from '@/components/BottomSheet';
 import Button from '@/components/Button';
 import FormButton from '@/components/Form/FormButton';
 import { InputStyle } from '@/components/Form/FormInput';
+import { useGetBreedsQuery } from '@/store/api/petApi';
 import { useAppDispatch, useAppSelector } from '@/store/config';
 import { setRegisterInfo } from '@/store/slices/registerPetSlice';
 import { breedsMock, favBreedfsMock } from '@/utils/constants/enrollment';
@@ -44,15 +45,17 @@ const SearchBreedBottomSheet = ({
   isBottomSheetOpen: boolean;
   setBreed: Dispatch<SetStateAction<IBreeds | undefined>>;
 }) => {
+  const { isLoading, isSuccess, data } = useGetBreedsQuery();
+  const breeds = data ?? ([] as IBreeds[]);
+
   const {
-    breeds,
     closeBreedBottomSheet,
     foundBreeds,
     onChangeSearchKeyword,
     searchKeyword,
     selectedBreed,
     setSelectedBreed,
-  } = useSearchBreed();
+  } = useSearchBreed(breeds);
 
   const onClickSelectButton = () => {
     setBreed(selectedBreed);
@@ -68,18 +71,24 @@ const SearchBreedBottomSheet = ({
           onChange={onChangeSearchKeyword}
           placeholder="품종을 검색해보세요"
         />
-
-        <div className="h-[50vh] px-2 py-3 overflow-y-scroll">
-          {!searchKeyword ? (
-            <BreedList breeds={breeds} selectedBreed={selectedBreed} setBreed={setSelectedBreed} />
-          ) : (
-            <BreedList
-              breeds={foundBreeds}
-              selectedBreed={selectedBreed}
-              setBreed={setSelectedBreed}
-            />
-          )}
-        </div>
+        {isLoading && <div className="h-[50vh] px-2 py-3 overflow-y-scroll">로딩중...</div>}
+        {!isSuccess && (
+          <div className="h-[50vh] px-2 py-3 overflow-y-scroll">
+            {!searchKeyword ? (
+              <BreedList
+                breeds={breeds}
+                selectedBreed={selectedBreed}
+                setBreed={setSelectedBreed}
+              />
+            ) : (
+              <BreedList
+                breeds={foundBreeds}
+                selectedBreed={selectedBreed}
+                setBreed={setSelectedBreed}
+              />
+            )}
+          </div>
+        )}
         <Button label="선택" onClick={onClickSelectButton} />
       </div>
     </BottomSheet>

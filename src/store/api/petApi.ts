@@ -1,3 +1,4 @@
+import { IBreeds } from '@/@type/pet';
 import { apiSlice } from '../slices/apiSlice';
 import { RegisterInfoForm } from '../slices/registerPetSlice';
 import { IGenericResponse } from './types';
@@ -6,6 +7,10 @@ export const petApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getEnrollmentData: builder.query<any, void>({
       query: () => '/pets/enrollment',
+    }),
+    getBreeds: builder.query<IBreeds[], void>({
+      query: () => '/pets/breeds',
+      transformResponse: (response: IGenericResponse) => response.data as IBreeds[],
     }),
     saveEnrollmentData: builder.mutation<IGenericResponse, RegisterInfoForm<File>>({
       query: (data) => {
@@ -25,6 +30,7 @@ export const petApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetEnrollmentDataQuery, useSaveEnrollmentDataMutation } = petApiSlice;
+export const { useGetEnrollmentDataQuery, useSaveEnrollmentDataMutation, useGetBreedsQuery } =
+  petApiSlice;
 
 export const selectUserResult = petApiSlice.endpoints.getEnrollmentData.select();
