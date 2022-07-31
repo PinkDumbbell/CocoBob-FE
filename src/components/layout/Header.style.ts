@@ -32,4 +32,5 @@ export const BackButton = styled.button`
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
+  padding: 0.5rem;
 `;
