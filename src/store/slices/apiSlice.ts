@@ -1,6 +1,7 @@
 import { RootState } from '@/store/config';
 import { ThunkDispatch } from '@reduxjs/toolkit';
 import { createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { IGenericResponse } from '../api/types';
 import { logout, updateToken } from './authSlice';
 
 type BaseQueryApi = {
@@ -23,6 +24,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl,
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.accessToken;
+    console.log('set token in header');
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
     }
@@ -58,13 +60,14 @@ const baseQueryWithReAuth = async (
     console.log('accessToken expired');
     const { meta, data, error } = await refreshQuery('/users/token', api, extraOptions);
     console.log(meta, data, error);
-    if (data) {
+    if ((data as IGenericResponse).status === 202) {
       // store new token
       api.dispatch(
         updateToken({
-          ...(data as RefreshedTokenResult),
+          ...((data as IGenericResponse).data as RefreshedTokenResult),
         }),
       );
+
       // retry original query with new access token
       result = await baseQuery(args, api, extraOptions);
     } else if (error?.status === 401) {
