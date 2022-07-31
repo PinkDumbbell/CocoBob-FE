@@ -1,5 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 import 'tailwindcss/tailwind.css';
+import checkboxBg from '@/assets/icon/checkbox.png';
+import { theme } from './theme';
 
 const GlobalStyle = createGlobalStyle`
   // base setting
@@ -127,7 +129,7 @@ const GlobalStyle = createGlobalStyle`
   }
   input[type='date']::-webkit-calendar-picker-indicator{
     z-index:1;
-    position:abosulte;
+    position: absolute;
     left:0;
   }
 
@@ -139,8 +141,27 @@ const GlobalStyle = createGlobalStyle`
     border-radius: 100%;
   }
   input[type='radio']:checked{
-    outline: 3px solid var(--primary-main);
+    border: 1px solid ${theme.colors.primary.dark};
+    outline: 3px solid ${theme.colors.primary.main};
     outline-offset: -3.5px;
+  }
+
+  input[type='checkbox']{
+    appearance: none;
+    border:1px solid #555555;
+    border-radius: 4px;
+    width: 16px;
+    height: 16px;
+
+    transition: background-color 100ms linear;
+    &:checked{
+      border: 1px solid #114786;
+      background-image: url(${checkboxBg});
+      background-size: auto;
+      background-position:50%;
+      background-repeat: no-repeat;
+      background-color: ${theme.colors.primary.main}
+    }
   }
 `;
 
