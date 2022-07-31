@@ -4,11 +4,11 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import FormInput from '@/components/Form/FormInput';
-import useAlertMessage from '@/utils/hooks/useAlertMessage';
 import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
 import { useLoginMutation } from '@/store/api/userApi';
 import FormButton from '@/components/Form/FormButton';
 import { selectUserId } from '@/store/slices/authSlice';
+import useToastMessage from '@/utils/hooks/useToastMessage';
 import { ILoginForm } from '../types';
 import { LoginForm } from './EmailLoginForm.style';
 
@@ -27,7 +27,7 @@ export default function EmailLoginForm() {
   const onSubmitLoginForm = async (data: ILoginForm) => {
     await login(data);
   };
-  const { AlertMessage, openAlert } = useAlertMessage({ time: 2000 });
+  const openToast = useToastMessage();
   useEffect(() => {
     if (!error) return;
     const {
@@ -36,7 +36,7 @@ export default function EmailLoginForm() {
     } = error as { status: number; data: any };
 
     if (status === 404 && code === 'USER_NOT_FOUND') {
-      alert('이메일 또는 비밀번호를 확인해주세요.');
+      openToast('이메일 또는 비밀번호를 확인해주세요.');
       formReset();
       mutationReset();
     }
@@ -51,13 +51,6 @@ export default function EmailLoginForm() {
 
   return (
     <LoginForm onSubmit={handleSubmit(onSubmitLoginForm)}>
-      <button onClick={() => openAlert('정보를 제대로 입력해주세요')} type="button">
-        aa
-      </button>
-      <button onClick={() => openAlert('asdfasdfasdf')} type="button">
-        bb
-      </button>
-      <AlertMessage />
       <FormInput
         label="이메일"
         name="email"

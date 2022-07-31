@@ -8,16 +8,19 @@ import userSlice from './slices/userSlice';
 import authSlice from './slices/authSlice';
 import bottomSheetSlice from './slices/bottomSheetSlice';
 import { apiSlice } from './slices/apiSlice';
+import toastSlice from './slices/toastSlice';
 
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['registerPet', 'toast'],
 };
 
 const rootReducer = combineReducers({
   user: userSlice,
   auth: authSlice,
   bottomSheet: bottomSheetSlice,
+  toast: toastSlice,
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
