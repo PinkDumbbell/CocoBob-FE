@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-export const PageTransitionGroup = styled.div<{ timeout: number; type: string }>`
+export const PageTransitionGroup = styled.div<{ timeout?: number; type?: string }>`
   position: relative;
   width: 100%;
   height: 100%;
