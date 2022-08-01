@@ -25,7 +25,7 @@ export default function LoginPage() {
     <>
       <PageContainer>
         <LogoContainer>
-          <MockLogo>로고</MockLogo>
+          <MockLogo>슬라이드 사진</MockLogo>
         </LogoContainer>
         <FormContainer>
           <SocialLoginForm />

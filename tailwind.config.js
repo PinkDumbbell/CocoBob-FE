@@ -12,6 +12,7 @@ module.exports = {
         redf: 'rgb(206, 229, 255)',
         redt: '#1A70D2',
         'primary-light': 'rgb(206, 229, 255)',
+        'primary-bright': '#1f80ee',
         'primary-main': '#1A70D2',
         'primary-dark': '#114786',
         'secondary-light': '#AAC7E9',

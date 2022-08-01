@@ -43,6 +43,7 @@ const GlobalStyle = createGlobalStyle`
     --gutter: 1.25rem;
     --primary-light: rgb(206, 229, 255);
     --primary-main: #1A70D2;
+    --primary-bright: #1f80ee;
     --primary-dark: #114786;
     --secondary-light: #AAC7E9;
     --secondary-main: #72A2D8;

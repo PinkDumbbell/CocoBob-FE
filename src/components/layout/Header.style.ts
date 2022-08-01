@@ -7,7 +7,7 @@ export const HeaderWrapper = styled.header`
   justify-content: center;
   padding: 0 0.5rem;
   width: 100%;
-  height: 3rem;
+  height: 50px;
   position: absolute;
   top: 0;
   left: 0;
@@ -32,4 +32,5 @@ export const BackButton = styled.button`
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
+  padding: 0.5rem;
 `;
