@@ -1,8 +1,8 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import FoodIcon from '@/assets/icon/navbar_food.svg';
-import DailyIcon from '@/assets/icon/navbar_daily.svg';
-import ProfileIcon from '@/assets/icon/navbar_profile.svg';
-import HomeIcon from '@/assets/icon/navbar_home.svg';
+import { ReactComponent as FoodIcon } from '@/assets/icon/navbar_food.svg';
+import { ReactComponent as DailyIcon } from '@/assets/icon/navbar_daily.svg';
+import { ReactComponent as ProfileIcon } from '@/assets/icon/navbar_profile.svg';
+import { ReactComponent as HomeIcon } from '@/assets/icon/navbar_home.svg';
 import { ButtonTitle, IconButton, IconWrapper, NavBar, NavBarItem } from './Footer.style';
 
 const navBarItems = [
@@ -44,7 +44,13 @@ export default function Footer() {
         <NavBarItem key={navBarItem.path} current={String(isCurrentPage(navBarItem.path))}>
           <IconButton onClick={() => goPage(navBarItem.path)}>
             <IconWrapper>
-              <img src={navBarItem.iconSrc} alt={`${navBarItem.title} 아이콘`} />
+              {/* <img src={navBarItem.iconSrc} alt={`${navBarItem.title} 아이콘`} /> */}
+              <navBarItem.iconSrc
+                key={navBarItem.path}
+                stroke={isCurrentPage(navBarItem.path) ? '#fff' : '#999'}
+                height={24}
+                width={24}
+              />
             </IconWrapper>
             <ButtonTitle current={String(isCurrentPage(navBarItem.path))}>
               {navBarItem.title}
