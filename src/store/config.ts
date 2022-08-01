@@ -9,11 +9,12 @@ import authSlice from './slices/authSlice';
 import bottomSheetSlice from './slices/bottomSheetSlice';
 import registerPetSlice from './slices/registerPetSlice';
 import { apiSlice } from './slices/apiSlice';
+import toastSlice from './slices/toastSlice';
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['registerPet'],
+  blacklist: ['registerPet', 'toast'],
 };
 
 const appReducer = combineReducers({
@@ -21,6 +22,7 @@ const appReducer = combineReducers({
   auth: authSlice,
   registerPet: registerPetSlice,
   bottomSheet: bottomSheetSlice,
+  toast: toastSlice,
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
