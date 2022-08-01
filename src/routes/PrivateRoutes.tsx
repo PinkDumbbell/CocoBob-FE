@@ -15,7 +15,7 @@ function PrivateRoute() {
 function PrivateRoutes() {
   const location = useLocation();
   return (
-    <Routes location={location}>
+    <Routes location={location} key={location.pathname}>
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<MainPage />} />
         <Route path="/register" element={<RegisterPet />} />

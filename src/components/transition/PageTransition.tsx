@@ -28,26 +28,23 @@ const PageTransitionV2 = ({ transitionKey, children }: PageTransitionProps) => {
   const isPushBehavior = action === 'PUSH';
   const direction = isPushBehavior ? normalDirection : reverseDirection;
   const isDetailPage = isPushBehavior ? matchNextRoute : matchPreviousRoute;
-  const animationType = isDetailPage ? direction : '';
+  const animationType = isDetailPage ? direction : 'fade';
   const timeout = 250;
 
   return (
-    // <PageTransitionGroup timeout={timeout} type={animationType}>
-    //   <TransitionGroup
-    //     childFactory={(child) =>
-    //       React.cloneElement(child, {
-    //         classNames: animationType,
-    //         timeout,
-    //       })
-    //     }
-    //   >
-    //     <CSSTransition key={transitionKey} timeout={timeout} unmountOnExit>
-    //       <PageTransitionWrapper>{children}</PageTransitionWrapper>
-    //     </CSSTransition>
-    //   </TransitionGroup>
-    // </PageTransitionGroup>
-    <PageTransitionGroup>
-      <PageTransitionWrapper>{children}</PageTransitionWrapper>
+    <PageTransitionGroup timeout={timeout} type={animationType}>
+      <TransitionGroup
+        childFactory={(child) =>
+          React.cloneElement(child, {
+            classNames: animationType,
+            timeout,
+          })
+        }
+      >
+        <CSSTransition key={transitionKey} timeout={timeout} unmountOnExit>
+          <PageTransitionWrapper>{children}</PageTransitionWrapper>
+        </CSSTransition>
+      </TransitionGroup>
     </PageTransitionGroup>
   );
 };

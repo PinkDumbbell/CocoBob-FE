@@ -7,8 +7,8 @@ import NotFound from './pages/404';
 function App() {
   const location = useLocation();
   return (
-    <PageTransition transitionKey={location.key}>
-      <Routes location={location}>
+    <PageTransition transitionKey={location.pathname}>
+      <Routes key={location.pathname} location={location}>
         <Route element={<PrivateRoutes />} path="/*" />
         <Route element={<LoginPage />} path="/login" />
         <Route element={<NotFound />} path="*" />
