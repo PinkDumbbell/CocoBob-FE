@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import RegisterPet from '@/pages/RegisterPet';
 import React, { ReactNode } from 'react';
 import { useLocation, useNavigationType, matchRoutes } from 'react-router-dom';
@@ -27,7 +28,7 @@ const PageTransitionV2 = ({ transitionKey, children }: PageTransitionProps) => {
   const isPushBehavior = action === 'PUSH';
   const direction = isPushBehavior ? normalDirection : reverseDirection;
   const isDetailPage = isPushBehavior ? matchNextRoute : matchPreviousRoute;
-  const animationType = isDetailPage ? direction : 'scale';
+  const animationType = isDetailPage ? direction : 'fade';
   const timeout = 250;
 
   return (

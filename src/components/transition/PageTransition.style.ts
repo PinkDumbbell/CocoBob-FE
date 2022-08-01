@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-export const PageTransitionGroup = styled.div<{ timeout: number; type: string }>`
+export const PageTransitionGroup = styled.div<{ timeout?: number; type?: string }>`
   position: relative;
   width: 100%;
   height: 100%;
@@ -8,31 +8,27 @@ export const PageTransitionGroup = styled.div<{ timeout: number; type: string }>
 
   .container {
     height: 100%;
+    position: absolute;
   }
 
-  ${({ timeout = 300, type = 'scale' }) => {
-    if (type === 'scale') {
+  ${({ timeout = 300, type = 'fade' }) => {
+    if (type === 'fade') {
       return css`
-        .scale-enter {
+        .fade-enter {
           opacity: 0;
-          transform: scale(1.1);
         }
 
-        .scale-enter-active {
+        .fade-enter-active {
           opacity: 1;
-          transform: scale(1);
-          transition: opacity ${timeout}ms, transform ${timeout}ms;
+          transition: opacity ${timeout}ms ease;
         }
 
-        .scale-exit {
+        .fade-exit {
           opacity: 1;
-          transform: scale(1);
         }
 
-        .scale-exit-active {
+        .fade-exit-active {
           opacity: 0;
-          transform: scale(0.9);
-          transition: opacity ${timeout}ms, transform ${timeout}ms;
         }
       `;
     }
@@ -44,14 +40,13 @@ export const PageTransitionGroup = styled.div<{ timeout: number; type: string }>
       }
       .slideLeft-enter-active {
         transform: translateX(0%);
-        transition: opacity ${timeout}ms, transform ${timeout}ms;
+        transition: transform ${timeout}ms ease;
       }
       .slideLeft-exit {
         opacity: 1;
       }
       .slideLeft-exit-active {
         opacity: 0;
-        transition: opacity ${timeout}ms;
       }
 
       .slideRight-enter {
@@ -60,7 +55,7 @@ export const PageTransitionGroup = styled.div<{ timeout: number; type: string }>
       }
       .slideRight-enter-active {
         transform: translateX(0%);
-        transition: opacity ${timeout}ms, transform ${timeout}ms;
+        transition: transform ${timeout}ms ease;
       }
       .slideRight-exit {
         opacity: 1;
@@ -69,7 +64,6 @@ export const PageTransitionGroup = styled.div<{ timeout: number; type: string }>
       .slideRight-exit-active {
         opacity: 0;
         transform: translateX(0%);
-        transition: opacity ${timeout}ms;
       }
     `;
   }}
