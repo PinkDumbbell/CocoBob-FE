@@ -1,5 +1,35 @@
+import { IBreeds, PetSexType } from '@/@type/pet';
+import { concatClasses } from '@/utils/libs/concatClasses';
 import { Link } from 'react-router-dom';
+import PetSimpleInfo from './components/PetSimpleInfo';
 
+const mockPets = [
+  {
+    profilePath: 'https://blog.kakaocdn.net/dn/QdxpO/btrlDxijNFW/5aOuaUHFOfrzjohKUnynu1/img.jpg',
+    id: 1,
+    name: '코코',
+    breed: {
+      id: 20,
+      name: '골든 리트리버',
+      type: '대형',
+    } as unknown as IBreeds,
+    age: 40,
+    sex: 'FEMALE' as PetSexType,
+    bodyWeight: 17.2,
+  },
+  {
+    id: 2,
+    name: '로용',
+    breed: {
+      id: 87,
+      name: '포메라니안',
+      type: '초소형',
+    } as unknown as IBreeds,
+    age: 27,
+    sex: 'MALE' as PetSexType,
+    bodyWeight: 3.8,
+  },
+];
 export default function MypageMain() {
   return (
     <div className="w-full flex flex-col bg-gray-100 gap-4">
@@ -18,14 +48,17 @@ export default function MypageMain() {
           </div>
 
           <div className="w-full overflow-auto whitespace-nowrap py-2 space-x-4">
-            {Array(4)
-              .fill(0)
-              .map((_, idx) => (
-                <div
-                  key={idx}
-                  className="inline-flex w-48 h-28 rounded-lg border border-primary-main"
-                ></div>
-              ))}
+            {mockPets.map((pet, idx) => (
+              <div
+                className={concatClasses(
+                  'inline-flex w-60 p-4 rounded-lg border items-center gap-3 shadow-gray-300 shadow-md',
+                  idx === 0 ? 'border-primary-main' : '',
+                )}
+                key={idx}
+              >
+                <PetSimpleInfo {...pet} />
+              </div>
+            ))}
           </div>
         </div>
       </div>
