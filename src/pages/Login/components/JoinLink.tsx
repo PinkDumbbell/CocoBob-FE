@@ -9,6 +9,7 @@ const LinkWrapper = tw.div<JoinLinkProps>`
   flex
   gap-3
   text-sm
+  pt-4
   ${({ color }: JoinLinkProps) => (color === 'primary' ? 'text-black' : 'text-white')}
 `;
 const Link = tw.a<JoinLinkProps>`
