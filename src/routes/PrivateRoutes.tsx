@@ -19,7 +19,8 @@ function PrivateRoutes() {
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<MainPage />} />
         <Route path="/register" element={<RegisterPet />} />
-        <Route element={<NotFound />} path="*" />
+        <Route element={<NotFound />} path="/404" />
+        <Route element={<Navigate to="/404" />} path="*" />
       </Route>
     </Routes>
   );

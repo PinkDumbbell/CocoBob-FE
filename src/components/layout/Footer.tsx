@@ -35,7 +35,6 @@ export default function Footer() {
     if (location.pathname === path) return;
     navigate(path);
   };
-  console.log(location);
   const isCurrentPage = (path: string) => location.pathname === path;
 
   return (
