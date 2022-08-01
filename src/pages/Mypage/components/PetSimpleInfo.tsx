@@ -25,7 +25,7 @@ export default function PetSimpleCard({
 
   return (
     <>
-      <div className="relative h-16">
+      <div className="relative h-16 w-16">
         <img
           src={profilePath ?? PetDefaultImage}
           alt=""
