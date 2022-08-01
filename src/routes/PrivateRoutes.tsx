@@ -3,6 +3,7 @@ import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import useUser from '@/utils/hooks/useUser';
 import MainPage from '@/pages/Main';
 import RegisterPet from '@/pages/RegisterPet';
+import ProductsPage from '@/pages/Products';
 
 function PrivateRoute() {
   const { isLoggedIn } = useUser();
@@ -18,6 +19,7 @@ function PrivateRoutes() {
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<MainPage />} />
         <Route path="/register" element={<RegisterPet />} />
+        <Route path="/products" element={<ProductsPage />} />
       </Route>
     </Routes>
   );
