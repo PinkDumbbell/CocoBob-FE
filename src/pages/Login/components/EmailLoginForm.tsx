@@ -7,6 +7,7 @@ import FormInput from '@/components/Form/FormInput';
 import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
 import { useLoginMutation } from '@/store/api/userApi';
 import FormButton from '@/components/Form/FormButton';
+import useToastMessage from '@/utils/hooks/useToastMessage';
 import { selectIsLoggedIn } from '@/store/slices/authSlice';
 import { ILoginForm } from '../types';
 import { LoginForm } from './EmailLoginForm.style';
@@ -26,7 +27,7 @@ export default function EmailLoginForm() {
   const onSubmitLoginForm = async (data: ILoginForm) => {
     await login(data);
   };
-
+  const openToast = useToastMessage();
   useEffect(() => {
     if (!error) return;
     const {
@@ -35,7 +36,11 @@ export default function EmailLoginForm() {
     } = error as { status: number; data: any };
 
     if (status === 404 && code === 'USER_NOT_FOUND') {
-      alert(message);
+      openToast('이메일 또는 비밀번호를 확인해주세요.');
+      formReset();
+      mutationReset();
+    } else {
+      openToast(message);
       formReset();
       mutationReset();
     }
