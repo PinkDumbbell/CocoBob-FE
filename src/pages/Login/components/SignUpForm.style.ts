@@ -15,7 +15,7 @@ export const SignUpFooter = styled.div`
   align-self: center;
   a {
     margin-left: 0.5rem;
-    color: #e85354;
+    color: ${({ theme: { colors } }) => colors.primary.main};
   }
 `;
 

@@ -1,4 +1,4 @@
-import { IUser, IUserLoginResponse } from '@/@type/user';
+import { IAuthenticatedUser, IUser } from '@/@type/user';
 import { ILoginForm, ISignUpForm } from '@/pages/Login/types';
 
 import { apiSlice } from '../slices/apiSlice';
@@ -9,17 +9,18 @@ export const userApiSlice = apiSlice.injectEndpoints({
     getUser: builder.query<IUser, void>({
       query: () => '/users',
     }),
-    login: builder.mutation<IUserLoginResponse, ILoginForm>({
+    login: builder.mutation<IAuthenticatedUser, ILoginForm>({
       query: (credentials) => ({
         url: '/users',
         method: 'POST',
         body: credentials,
       }),
+      transformResponse: (loginResult: IGenericResponse) => loginResult.data as IAuthenticatedUser,
     }),
     logout: builder.mutation<IGenericResponse, void>({
       query: () => ({
         url: '/users',
-        method: 'POST',
+        method: 'DELETE',
       }),
     }),
     signUp: builder.mutation<IGenericResponse, ISignUpForm>({

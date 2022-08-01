@@ -1,6 +1,5 @@
 import BottomSheet from '@/components/BottomSheet';
-import { setBottomSheetAction } from '@/store/slices/bottomSheetSlice';
-import { useDispatch } from 'react-redux';
+import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import SignUpForm from './components/SignUpForm';
 import { SignUpFooter } from './components/SignUpForm.style';
 import { FormWrapper, SheetContent } from './index.style';
@@ -9,8 +8,7 @@ interface SignUpSheetProps {
   isOpen: boolean;
 }
 export default function SignUpSheet({ isOpen }: SignUpSheetProps) {
-  const dispatch = useDispatch();
-  const openEmailLoginSheet = () => dispatch(setBottomSheetAction('emailLogin'));
+  const { openBottomSheet: openEmailLoginBottomSheet } = useBottomSheet('emailLogin');
 
   return (
     <BottomSheet isOpen={isOpen}>
@@ -24,7 +22,7 @@ export default function SignUpSheet({ isOpen }: SignUpSheetProps) {
               className="font-bold"
               onClick={(e) => {
                 e.preventDefault();
-                openEmailLoginSheet();
+                openEmailLoginBottomSheet();
               }}
             >
               로그인

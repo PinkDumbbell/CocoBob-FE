@@ -1,18 +1,26 @@
-import { useDispatch, useSelector } from 'react-redux';
 import Button from '@/components/Button';
-import { selectBottomSheet, setBottomSheetAction } from '@/store/slices/bottomSheetSlice';
+import useBottomSheet from '@/utils/hooks/useBottomSheet';
+import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
+import { useEffect } from 'react';
+import { useAppDispatch } from '@/store/config';
 import JoinLink from './components/JoinLink';
 import SocialLoginForm from './components/SocialLoginForm';
-import EmailLoginSheet from './EmailLoginSheet';
 import { PageContainer, LogoContainer, FormContainer, MockLogo } from './index.style';
+import EmailLoginSheet from './EmailLoginSheet';
 import SignUpSheet from './SignUpSheet';
 
 export default function LoginPage() {
-  const bottomSheet = useSelector(selectBottomSheet);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const { isBottomSheetOpen: isEmailBottomSheetOpen, openBottomSheet: openEmailLoginSheet } =
+    useBottomSheet('emailLogin');
+  const { isBottomSheetOpen: isSignUpBottomSheetOpen } = useBottomSheet('signUp');
 
-  const openEmailLoginSheet = () => dispatch(setBottomSheetAction('emailLogin'));
-
+  useEffect(
+    () => () => {
+      dispatch(closeBottomSheetAction());
+    },
+    [],
+  );
   return (
     <>
       <PageContainer>
@@ -32,8 +40,8 @@ export default function LoginPage() {
           <JoinLink color="white" />
         </FormContainer>
       </PageContainer>
-      <EmailLoginSheet isOpen={bottomSheet === 'emailLogin'} />
-      <SignUpSheet isOpen={bottomSheet === 'signUp'} />
+      <EmailLoginSheet isOpen={isEmailBottomSheetOpen} />
+      <SignUpSheet isOpen={isSignUpBottomSheetOpen} />
     </>
   );
 }

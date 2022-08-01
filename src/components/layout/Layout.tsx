@@ -5,16 +5,26 @@ import { ChildrenWrapper } from './Layout.style';
 
 interface LayoutProps {
   canGoBack?: boolean;
+  onClickGoBack?: () => void;
   children: ReactNode;
   title?: string;
   header?: boolean;
   footer?: boolean;
 }
-export default function Layout({ canGoBack, title, header, footer, children }: LayoutProps) {
+export default function Layout({
+  canGoBack,
+  onClickGoBack,
+  title,
+  header,
+  footer,
+  children,
+}: LayoutProps) {
   return (
     <>
-      {header && <Header canGoBack={canGoBack} title={title} />}
-      <ChildrenWrapper headerShown={!!header}>{children}</ChildrenWrapper>
+      {header && <Header canGoBack={canGoBack} onClickGoBack={onClickGoBack} title={title} />}
+      <ChildrenWrapper headerShown={!!header} footerShown={!!footer}>
+        {children}
+      </ChildrenWrapper>
       {footer && <Footer />}
     </>
   );

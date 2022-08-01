@@ -8,10 +8,13 @@ export const NavBar = styled.nav`
   border-top: 1px solid #eee;
   position: fixed;
   bottom: 0;
-  left: 0;
-
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
+
+  @media (min-width: 425px) {
+    width: 425px;
+  }
 `;
 export const NavBarItem = styled.div`
   display: flex;
