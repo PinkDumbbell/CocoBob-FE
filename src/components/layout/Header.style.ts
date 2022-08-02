@@ -33,3 +33,7 @@ export const BackButton = styled.button`
   font-size: 1.2rem;
   cursor: pointer;
 `;
+export const RightMenuWrapper = styled.div`
+  position: absolute;
+  right: 1rem;
+`;

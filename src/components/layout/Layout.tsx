@@ -10,6 +10,7 @@ interface LayoutProps {
   title?: string;
   header?: boolean;
   footer?: boolean;
+  canSearch?: boolean;
 }
 export default function Layout({
   canGoBack,
@@ -21,7 +22,9 @@ export default function Layout({
 }: LayoutProps) {
   return (
     <>
-      {header && <Header canGoBack={canGoBack} onClickGoBack={onClickGoBack} title={title} />}
+      {header && (
+        <Header canGoBack={canGoBack} onClickGoBack={onClickGoBack} title={title} canSearch />
+      )}
       <ChildrenWrapper headerShown={!!header} footerShown={!!footer}>
         {children}
       </ChildrenWrapper>

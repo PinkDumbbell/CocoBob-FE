@@ -1,12 +1,20 @@
-import { useNavigate } from 'react-router-dom';
-import { BackButton, HeaderWrapper, LeftMenuWrapper, Title } from './Header.style';
+import { Link, useNavigate } from 'react-router-dom';
+import searchIcon from '@/assets/icon/search_btn.png';
+import {
+  BackButton,
+  HeaderWrapper,
+  LeftMenuWrapper,
+  RightMenuWrapper,
+  Title,
+} from './Header.style';
 
 interface HeaderProps {
   canGoBack?: boolean;
   onClickGoBack?: () => void;
   title?: string;
+  canSearch?: boolean;
 }
-export default function Header({ canGoBack, onClickGoBack, title }: HeaderProps) {
+export default function Header({ canGoBack, onClickGoBack, title, canSearch }: HeaderProps) {
   const navigator = useNavigate();
 
   const goBackPage = () => navigator(-1);
@@ -19,6 +27,13 @@ export default function Header({ canGoBack, onClickGoBack, title }: HeaderProps)
         </LeftMenuWrapper>
       )}
       <Title>{title}</Title>
+      {canSearch && (
+        <RightMenuWrapper>
+          <Link to="/search">
+            <img src={searchIcon} />
+          </Link>
+        </RightMenuWrapper>
+      )}
     </HeaderWrapper>
   );
 }
