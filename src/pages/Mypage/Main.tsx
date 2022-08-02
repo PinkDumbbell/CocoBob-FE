@@ -1,6 +1,7 @@
 import { IBreeds, PetSexType } from '@/@type/pet';
 import { concatClasses } from '@/utils/libs/concatClasses';
 import { Link } from 'react-router-dom';
+import AddPetBUtton from './components/AddPetButton';
 import PetSimpleInfo from './components/PetSimpleInfo';
 
 const mockPets = [
@@ -47,11 +48,11 @@ export default function MypageMain() {
             </Link>
           </div>
 
-          <div className="w-full flex items-center overflow-auto whitespace-nowrap py-2 space-x-4">
+          <div className="w-full flex items-center overflow-auto whitespace-nowrap py-2 space-x-4 px-1">
             {mockPets.map((pet, idx) => (
               <div
                 className={concatClasses(
-                  'flex w-60 p-4 rounded-lg border items-center gap-3 shadow-gray-300 shadow-md',
+                  'flex w-60 h-28 p-4 rounded-lg border items-center gap-3 shadow-gray-300 shadow-md',
                   idx === 0 ? 'border-primary-main' : '',
                 )}
                 key={idx}
@@ -59,15 +60,7 @@ export default function MypageMain() {
                 <PetSimpleInfo {...pet} />
               </div>
             ))}
-            <div className="flex w-60 p-5 rounded-lg border items-center gap-3 shadow-gray-300 shadow-md">
-              <div className="rounded-full h-16 w-16 bg-gray-200 flex justify-center items-center">
-                <span className="text-caption text-md">+</span>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <p>새로운 가족을</p>
-                <p>소개해 주세요!</p>
-              </div>
-            </div>
+            <AddPetBUtton />
           </div>
         </div>
       </div>
