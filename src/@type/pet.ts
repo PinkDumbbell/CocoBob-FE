@@ -21,3 +21,8 @@ export interface IPet {
   bodyWeight: number;
   activityLevel: ActivityLevelType;
 }
+export interface ISimplePet {
+  name: string;
+  petId: number;
+  thumbnailPath: string;
+}
