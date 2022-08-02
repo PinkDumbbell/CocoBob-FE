@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import AddPetBUtton from './components/AddPetButton';
 import PetSimpleInfo from './components/PetSimpleInfo';
 
-const mockPets = [
+export const mockPets = [
   {
     profilePath: 'https://blog.kakaocdn.net/dn/QdxpO/btrlDxijNFW/5aOuaUHFOfrzjohKUnynu1/img.jpg',
     id: 1,
