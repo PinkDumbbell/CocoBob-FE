@@ -10,7 +10,7 @@ export default function Main() {
   const onClickLogout = useLogout();
 
   return (
-    <Layout footer header title="메인">
+    <Layout footer header title="펫탈로그" menu search onClickSearch={() => alert('준비중입니다.')}>
       <div className="flex flex-col gap-4 p-4">
         <span>메인페이지</span>
         <span>{user?.name}</span>
