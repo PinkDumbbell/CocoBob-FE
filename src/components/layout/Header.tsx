@@ -4,7 +4,7 @@ import { ReactComponent as SearchIcon } from '@/assets/icon/search_icon.svg';
 import { ReactComponent as MenuIcon } from '@/assets/icon/menu_icon.svg';
 import DefaultProfile from '@/assets/icon/navbar_profile.svg';
 import { useState } from 'react';
-import { concatClasses } from '@/utils/libs/concatClasses';
+
 import {
   BackButton,
   HeaderContents,
@@ -12,6 +12,7 @@ import {
   LeftMenuWrapper,
   ProfileWrapper,
   RightMenuWrapper,
+  SideMenuWrapper,
   Title,
   TitleWrapper,
 } from './Header.style';
@@ -42,7 +43,6 @@ export default function Header({
 
   const openMenu = () => setMenu(true);
   const closeMenu = () => setMenu(false);
-  const menuStyleClasses = isMenuOpen ? 'translate-x-0' : '-translate-x-24';
 
   return (
     <HeaderWrapper>
@@ -54,23 +54,11 @@ export default function Header({
             </BackButton>
           )}
           {menu && (
-            <>
-              <div>
-                <button type="button" onClick={openMenu}>
-                  <MenuIcon />
-                </button>
-              </div>
-              <div
-                className={concatClasses(
-                  'fixed w-50 top-0 bottom-0 left-0 w-24 bg-white p-2 flex flex-col items-center shadow-md shadow-gray-300 transition-transform',
-                  menuStyleClasses,
-                )}
-              >
-                <button type="button" onClick={closeMenu}>
-                  닫기
-                </button>
-              </div>
-            </>
+            <div>
+              <button type="button" onClick={openMenu}>
+                <MenuIcon />
+              </button>
+            </div>
           )}
         </LeftMenuWrapper>
         <TitleWrapper isBigProfileHide={!!hideTitle}>
@@ -91,6 +79,12 @@ export default function Header({
           )}
         </RightMenuWrapper>
       </HeaderContents>
+
+      <SideMenuWrapper isOpen={isMenuOpen}>
+        <button type="button" onClick={closeMenu}>
+          닫기
+        </button>
+      </SideMenuWrapper>
     </HeaderWrapper>
   );
 }
