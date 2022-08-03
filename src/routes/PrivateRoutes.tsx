@@ -4,6 +4,7 @@ import useUser from '@/utils/hooks/useUser';
 import MainPage from '@/pages/Main';
 import RegisterPet from '@/pages/RegisterPet';
 import ProductsPage from '@/pages/Products';
+import SearchPage from '@/pages/Search';
 
 function PrivateRoute() {
   const { isLoggedIn } = useUser();
@@ -20,6 +21,7 @@ function PrivateRoutes() {
         <Route path="/" element={<MainPage />} />
         <Route path="/register" element={<RegisterPet />} />
         <Route path="/products" element={<ProductsPage />} />
+        <Route path="/search" element={<SearchPage />} />
       </Route>
     </Routes>
   );
