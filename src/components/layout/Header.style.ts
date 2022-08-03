@@ -20,11 +20,42 @@ export const HeaderContents = styled.div`
   height: 100%;
   border-bottom: 1px solid #eee;
 `;
-export const Title = styled.h2`
-  font-size: 1.1rem;
+export const TitleWrapper = styled.div<{ isBigProfileHide: boolean }>`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  & > img {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100%;
+    border: 1px solid ${({ theme: { colors } }) => colors.primary.main};
+    position: absolute;
+    left: calc(50% - 1rem);
+    opacity: ${({ isBigProfileHide }) => (isBigProfileHide ? 1 : 0)};
+    transform: ${({ isBigProfileHide }) => (isBigProfileHide ? 'scale(1)' : 'scale(0)')};
+    transition: all 200ms ease-in-out;
+  }
+`;
+export const ProfileWrapper = styled.div<{ isSmall: boolean }>`
+  border-radius: 100%;
+  width: 1rem;
+  height: 1rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(-50%);
+  transform: ${({ isSmall }) => (isSmall ? 'scale(0)' : 'scale(1)')};
+  opacity: ${({ isSmall }) => (isSmall ? 0 : 1)};
+  transition: all 200ms ease-in-out;
+`;
+export const Title = styled.h2<{ isHide: boolean }>`
+  font-size: 1.1rem;
   font-family: 'Noto Sans KR';
   font-style: normal;
   font-weight: 700;
@@ -32,8 +63,10 @@ export const Title = styled.h2`
   line-height: 23px;
   /* identical to box height, or 144% */
 
-  text-align: center;
   letter-spacing: -0.02em;
+  transform: ${({ isHide }) => (isHide ? 'scale(0)' : 'scale(1)')};
+  opacity: ${({ isHide }) => (isHide ? 0 : 1)};
+  transition: all 200ms ease-in-out;
 `;
 export const LeftMenuWrapper = styled.div`
   display: flex;

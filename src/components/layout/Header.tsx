@@ -1,7 +1,8 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import BackButtonImage from '@/assets/icon/header_back.png';
 import { ReactComponent as SearchIcon } from '@/assets/icon/search_icon.svg';
 import { ReactComponent as MenuIcon } from '@/assets/icon/menu_icon.svg';
+import DefaultProfile from '@/assets/icon/navbar_profile.svg';
 import { useState } from 'react';
 import { concatClasses } from '@/utils/libs/concatClasses';
 import {
@@ -9,8 +10,10 @@ import {
   HeaderContents,
   HeaderWrapper,
   LeftMenuWrapper,
+  ProfileWrapper,
   RightMenuWrapper,
   Title,
+  TitleWrapper,
 } from './Header.style';
 
 export interface HeaderProps {
@@ -18,6 +21,7 @@ export interface HeaderProps {
   canGoBack?: boolean;
   onClickGoBack?: () => void;
   title?: string;
+  hideTitle?: boolean;
   search?: boolean;
   onClickSearch?: () => void;
 }
@@ -26,9 +30,11 @@ export default function Header({
   canGoBack,
   onClickGoBack,
   title,
+  hideTitle,
   search,
   onClickSearch,
 }: HeaderProps) {
+  const location = useLocation();
   const navigator = useNavigate();
   const [isMenuOpen, setMenu] = useState(false);
 
@@ -67,7 +73,15 @@ export default function Header({
             </>
           )}
         </LeftMenuWrapper>
-        <Title>{title}</Title>
+        <TitleWrapper isBigProfileHide={!!hideTitle}>
+          {location.pathname === '/' && (
+            <ProfileWrapper isSmall={!!hideTitle}>
+              <img src={DefaultProfile} alt="작은 프로필사진" />
+            </ProfileWrapper>
+          )}
+          <Title isHide={!!hideTitle}>{title}</Title>
+          {location.pathname === '/' && <img src={DefaultProfile} alt="큰 프로필 사진" />}
+        </TitleWrapper>
 
         <RightMenuWrapper>
           {search && (
