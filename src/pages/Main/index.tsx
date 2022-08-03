@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import { useGetUserQuery } from '@/store/api/userApi';
 import useLogout from '@/utils/hooks/useLogout';
 import Layout from '@/components/layout/Layout';
 import ContentsContainer from '@/components/ContentsContainer';
 import doctor from '@/assets/image/main_doctor.png';
+import { Swiper, SwiperSlide } from 'swiper/react';
+// import required modules
+import { EffectCoverflow, Pagination } from 'swiper';
 
 import {
   ContentSection,
@@ -22,12 +24,11 @@ import {
 } from './index.style';
 
 import 'swiper/css';
-import 'swiper/css/navigation';
+import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
 
 const ProductItem = () => (
-  <div className="w-full h-48 aspect-[3/4]">
+  <div className="relative w-32 h-48">
     <ContentsContainer>
       <VerticalBox className="flex-1 justify-between">
         <div className="flex-1 bg-gray-200 rounded-md"></div>
@@ -92,11 +93,24 @@ export default function Main() {
         </MainContentSection>
         <VerticalBox>
           <SectionTitle className="px-4 py-2">{data?.name}에게 추천하는 사료에요!</SectionTitle>
-          <HorizontalBox>
+          <div className="w-full flex items-center">
             <Swiper
+              coverflowEffect={{
+                rotate: 30,
+                stretch: 0,
+                modifier: 1,
+                slideShadows: false,
+              }}
+              grabCursor={true}
+              effect={'coverflow'}
+              pagination={{
+                clickable: true,
+              }}
+              centeredSlides={true}
+              modules={[EffectCoverflow, Pagination]}
               spaceBetween={10}
               slidesPerView={3}
-              style={{ padding: '1rem 0.5rem', height: '15rem' }}
+              className="pt-4 pb-10"
             >
               {Array(8)
                 .fill(0)
@@ -106,7 +120,7 @@ export default function Main() {
                   </SwiperSlide>
                 ))}
             </Swiper>
-          </HorizontalBox>
+          </div>
         </VerticalBox>
 
         <ContentSection>
