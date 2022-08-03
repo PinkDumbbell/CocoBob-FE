@@ -1,10 +1,12 @@
-import Layout from '@/components/layout/Layout';
-import { useNavigate } from 'react-router-dom';
-import useLogout from '@/utils/hooks/useLogout';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { useGetUserQuery } from '@/store/api/userApi';
+import useLogout from '@/utils/hooks/useLogout';
+import Layout from '@/components/layout/Layout';
 import ContentsContainer from '@/components/ContentsContainer';
 import doctor from '@/assets/image/main_doctor.png';
+
 import {
   ContentSection,
   DoctorImageWrapper,
@@ -19,11 +21,36 @@ import {
   VerticalCenterBox,
 } from './index.style';
 
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+
+const ProductItem = () => (
+  <div className="w-full h-48 aspect-[3/4]">
+    <ContentsContainer>
+      <VerticalBox className="flex-1 justify-between">
+        <div className="flex-1 bg-gray-200 rounded-md"></div>
+        <div className="py-1 space-y-1">
+          <VerticalBox>
+            <p className="text-sm">로얄캐닌어덜트</p>
+            <p className="text-xs">미니인도어 애견사료</p>
+          </VerticalBox>
+          <div className="flex justify-between">
+            <span className="text-xs">88,740</span>
+            <span className="text-xs">+</span>
+          </div>
+        </div>
+      </VerticalBox>
+    </ContentsContainer>
+  </div>
+);
 export default function Main() {
   const navigate = useNavigate();
   const { data } = useGetUserQuery();
 
   const onClickLogout = useLogout();
+  const goRegisterPetPage = () => navigate('/register');
 
   useEffect(() => {
     if (data?.representativeAnimalId === null) {
@@ -65,36 +92,23 @@ export default function Main() {
         </MainContentSection>
         <VerticalBox>
           <SectionTitle className="px-4 py-2">{data?.name}에게 추천하는 사료에요!</SectionTitle>
-          <HorizontalBox className="gap-4 py-2">
-            <div className="w-28 h-32">
-              <ContentsContainer>
-                <div className=""></div>
-              </ContentsContainer>
-            </div>
-            <div className="w-1/2 aspect-[3/4]">
-              <ContentsContainer>
-                <VerticalBox className="flex-1 justify-between">
-                  <div className="flex-1 bg-gray-200 rounded-md"></div>
-                  <div className="py-1 space-y-1">
-                    <VerticalBox>
-                      <p className="text-sm">로얄캐닌어덜트</p>
-                      <p className="text-xs">미니인도어 애견사료</p>
-                    </VerticalBox>
-                    <div className="flex justify-between">
-                      <span className="text-xs">88,740</span>
-                      <span className="text-xs">+</span>
-                    </div>
-                  </div>
-                </VerticalBox>
-              </ContentsContainer>
-            </div>
-            <div className="w-28 h-32">
-              <ContentsContainer>
-                <div className=""></div>
-              </ContentsContainer>
-            </div>
+          <HorizontalBox>
+            <Swiper
+              spaceBetween={10}
+              slidesPerView={3}
+              style={{ padding: '1rem 0.5rem', height: '15rem' }}
+            >
+              {Array(8)
+                .fill(0)
+                .map((_, idx) => (
+                  <SwiperSlide key={idx}>
+                    <ProductItem />
+                  </SwiperSlide>
+                ))}
+            </Swiper>
           </HorizontalBox>
         </VerticalBox>
+
         <ContentSection>
           <ContentsContainer>
             <HorizontalBox className="w-full">
@@ -122,9 +136,9 @@ export default function Main() {
                 </span>
               </div>
               <div className="flex items-center w-full justify-evenly">
-                <div>
-                  <p className="text-sm">현재 사료는 잘 주고 계신가요?</p>
-                  <SectionSubtitle>영양분석하기</SectionSubtitle>
+                <div onClick={goRegisterPetPage}>
+                  <p className="text-sm">반려동물 등록 테스트 버튼</p>
+                  <SectionSubtitle>반려동물 등록하기</SectionSubtitle>
                 </div>
                 <div className="font-bold">{'>'}</div>
               </div>
