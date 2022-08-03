@@ -5,6 +5,12 @@ import MainPage from '@/pages/Main';
 import RegisterPet from '@/pages/RegisterPet';
 import NotFound from '@/pages/404';
 
+import Mypage from '@/pages/Mypage';
+import MypageMain from '@/pages/Mypage/Main';
+import ProfilePage from '@/pages/Mypage/Profile';
+import WishPage from '@/pages/Mypage/Wish';
+import PetsPage from '@/pages/Mypage/Pets';
+
 function PrivateRoute() {
   const { isLoggedIn } = useUser();
   const location = useLocation();
@@ -19,6 +25,12 @@ function PrivateRoutes() {
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<MainPage />} />
         <Route path="/register" element={<RegisterPet />} />
+        <Route path="/mypage" element={<Mypage />}>
+          <Route index element={<MypageMain />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="wish" element={<WishPage />} />
+          <Route path="pets" element={<PetsPage />} />
+        </Route>
         <Route element={<NotFound />} path="/404" />
         <Route element={<Navigate to="/404" />} path="*" />
       </Route>
