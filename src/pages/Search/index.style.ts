@@ -7,7 +7,7 @@ const StrongTagColor = styled.div`
   }
 `;
 
-export const RelatedWordContainer = tw(StrongTagColor)`
+export const RelatedSearchKeywordContainer = tw(StrongTagColor)`
 w-full
 h-full
 bg-gray-200

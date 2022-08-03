@@ -27,13 +27,13 @@ export default function Header({ canGoBack, onClickGoBack, title, canSearch }: H
         </LeftMenuWrapper>
       )}
       <Title>{title}</Title>
-      {canSearch && (
-        <RightMenuWrapper>
+      <RightMenuWrapper>
+        {canSearch && (
           <Link to="/search">
             <img src={searchIcon} />
           </Link>
-        </RightMenuWrapper>
-      )}
+        )}
+      </RightMenuWrapper>
     </HeaderWrapper>
   );
 }

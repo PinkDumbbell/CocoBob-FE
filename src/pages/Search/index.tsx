@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import goBackImg from '@/assets/icon/go_back_btn.png';
 import ProductItem from '@/components/Product';
 import { ChangeEvent, useState } from 'react';
-import { RelatedWordContainer } from './index.style';
+import { RelatedSearchKeywordContainer } from './index.style';
 
 export default function SearchPage() {
   const navigator = useNavigate();
@@ -13,18 +13,18 @@ export default function SearchPage() {
   const searchWordList = ['강아지 사료', '사료', '고양이', '영양제', ''];
 
   const sortFunction = (a: string, b: string) => {
-    const len = searchWord.length;
+    const lengthOfSearchKeyword = searchWord.length;
     const searchWordLowerCase = searchWord.toString().toLowerCase();
     if (
-      a.toLowerCase().substring(0, len) === searchWordLowerCase &&
-      b.toLowerCase().substring(0, len) === searchWordLowerCase
+      a.toLowerCase().substring(0, lengthOfSearchKeyword) === searchWordLowerCase &&
+      b.toLowerCase().substring(0, lengthOfSearchKeyword) === searchWordLowerCase
     ) {
       return 0;
     }
-    if (a.toLowerCase().substring(0, len) === searchWordLowerCase) {
+    if (a.toLowerCase().substring(0, lengthOfSearchKeyword) === searchWordLowerCase) {
       return -1;
     }
-    return b.toLowerCase().substring(0, len) === searchWordLowerCase ? 1 : 0;
+    return b.toLowerCase().substring(0, lengthOfSearchKeyword) === searchWordLowerCase ? 1 : 0;
   };
   const onChangeWord = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchedData([]);
@@ -79,7 +79,7 @@ export default function SearchPage() {
         )}
       </div>
       {searchWord !== '' && searchedData.length === 0 && (
-        <RelatedWordContainer>
+        <RelatedSearchKeywordContainer>
           {relatedWords.map((word) => (
             <span
               key={word}
@@ -87,7 +87,7 @@ export default function SearchPage() {
               onClick={() => onClickSearch(word)}
             />
           ))}
-        </RelatedWordContainer>
+        </RelatedSearchKeywordContainer>
       )}
       {searchedData.length !== 0 && (
         <div className="flex flex-col gap-1 h-full overflow-scroll">

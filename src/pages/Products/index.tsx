@@ -1,7 +1,6 @@
 import Layout from '@/components/layout/Layout';
 import ProductItem from '@/components/Product';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ProductsPage() {
   const categoryList = ['사료', '간식', '영양제'];
