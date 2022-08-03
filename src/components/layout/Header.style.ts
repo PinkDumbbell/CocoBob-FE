@@ -13,7 +13,6 @@ export const HeaderWrapper = styled.header`
 `;
 export const HeaderContents = styled.div`
   display: flex;
-  display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
