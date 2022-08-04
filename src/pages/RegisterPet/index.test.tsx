@@ -48,6 +48,27 @@ describe('반려동물 등록 Step5. 세부 정보', () => {
     fireEvent.click(maleButton);
     fireEvent.change(bodyWeightInput, { target: { value: 5.3 } });
 
-    expect(nextButton).not.toBeDisabled();
+    expect(nextButton).toBeEnabled();
+  });
+  test('성별 선택 X, 몸무게 입력 O', () => {
+    const bodyWeightInput = screen.getByTestId('bodyWeight');
+    const nextButton = screen.getByText('다음으로');
+
+    fireEvent.change(bodyWeightInput, { target: { value: 5.3 } });
+
+    expect(nextButton).toBeDisabled();
+  });
+  test('성별 선택 O, 몸무게 입력 X', () => {
+    const maleButton = screen.getByText('남자');
+    const nextButton = screen.getByText('다음으로');
+
+    fireEvent.click(maleButton);
+
+    expect(nextButton).toBeDisabled();
+  });
+  test('성별 선택 X, 몸무게 입력 X', () => {
+    const nextButton = screen.getByText('다음으로');
+
+    expect(nextButton).toBeDisabled();
   });
 });
