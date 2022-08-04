@@ -12,7 +12,7 @@ export const petApiSlice = apiSlice.injectEndpoints({
       query: () => '/pets/breeds',
       transformResponse: (response: IGenericResponse) => response.data as IBreeds[],
     }),
-    saveEnrollmentData: builder.mutation<IGenericResponse, RegisterInfoForm<File>>({
+    saveEnrollmentData: builder.mutation<{ petId: number }, RegisterInfoForm<File>>({
       query: (data) => {
         const formData = new FormData();
         // eslint-disable-next-line no-restricted-syntax
@@ -26,6 +26,7 @@ export const petApiSlice = apiSlice.injectEndpoints({
           body: formData,
         };
       },
+      transformResponse: (response: IGenericResponse) => response.data as { petId: number },
     }),
   }),
 });

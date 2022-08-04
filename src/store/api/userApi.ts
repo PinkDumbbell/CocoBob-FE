@@ -8,6 +8,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUser: builder.query<IUser, void>({
       query: () => '/users',
+      transformResponse: (response: IGenericResponse) => response.data as IUser,
     }),
     login: builder.mutation<IAuthenticatedUser, ILoginForm>({
       query: (credentials) => ({
