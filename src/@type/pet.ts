@@ -23,3 +23,8 @@ export interface IPet {
   bodyWeight: number;
   thumbnailPath?: string;
 }
+export interface ISimplePet {
+  name: string;
+  petId: number;
+  thumbnailPath: string;
+}
