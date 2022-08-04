@@ -5,8 +5,7 @@ import useLogout from '@/utils/hooks/useLogout';
 import Layout from '@/components/layout/Layout';
 import ContentsContainer from '@/components/ContentsContainer';
 import doctor from '@/assets/image/main_doctor.png';
-import { concatClasses } from '@/utils/libs/concatClasses';
-
+import productDummy from '@/assets/image/product_dummy.png';
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import required modules
 import { EffectCoverflow, Pagination } from 'swiper';
@@ -28,31 +27,8 @@ import {
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
+import SwiperProductItem from './components/SwiperProductItem';
 
-const ProductItem = ({ isActive }: { isActive: boolean }) => (
-  <div
-    className={concatClasses(
-      'relative w-32 h-48 transition-transform',
-      isActive ? 'scale-110' : 'scale-90',
-    )}
-  >
-    <ContentsContainer>
-      <VerticalBox className="flex-1 justify-between">
-        <div className="flex-1 bg-gray-200 rounded-md"></div>
-        <div className="py-1 space-y-1">
-          <VerticalBox>
-            <p className="text-sm">로얄캐닌어덜트</p>
-            <p className="text-xs">미니인도어 애견사료</p>
-          </VerticalBox>
-          <div className="flex justify-between">
-            <span className="text-xs">88,740</span>
-            <span className="text-xs">+</span>
-          </div>
-        </div>
-      </VerticalBox>
-    </ContentsContainer>
-  </div>
-);
 export default function Main() {
   const navigate = useNavigate();
   const { data } = useGetUserQuery();
@@ -124,7 +100,16 @@ export default function Main() {
                 .fill(0)
                 .map((_, idx) => (
                   <SwiperSlide key={idx}>
-                    <ProductItem isActive={activeIndex === idx} />
+                    <SwiperProductItem
+                      productId={idx}
+                      path={productDummy}
+                      brand="로얄캐닌"
+                      isActive={activeIndex === idx}
+                      isLiked={idx % 2 === 0}
+                      name="미니언도어 애견사료"
+                      price={84720}
+                      key={idx}
+                    />
                   </SwiperSlide>
                 ))}
             </Swiper>
