@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetUserQuery } from '@/store/api/userApi';
 import useLogout from '@/utils/hooks/useLogout';
 import Layout from '@/components/layout/Layout';
 import ContentsContainer from '@/components/ContentsContainer';
 import doctor from '@/assets/image/main_doctor.png';
+import { concatClasses } from '@/utils/libs/concatClasses';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import required modules
 import { EffectCoverflow, Pagination } from 'swiper';
@@ -27,8 +29,13 @@ import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 
-const ProductItem = () => (
-  <div className="relative w-32 h-48">
+const ProductItem = ({ isActive }: { isActive: boolean }) => (
+  <div
+    className={concatClasses(
+      'relative w-32 h-48 transition-transform',
+      isActive ? 'scale-110' : 'scale-90',
+    )}
+  >
     <ContentsContainer>
       <VerticalBox className="flex-1 justify-between">
         <div className="flex-1 bg-gray-200 rounded-md"></div>
@@ -49,6 +56,7 @@ const ProductItem = () => (
 export default function Main() {
   const navigate = useNavigate();
   const { data } = useGetUserQuery();
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const onClickLogout = useLogout();
   const goRegisterPetPage = () => navigate('/register');
@@ -92,12 +100,12 @@ export default function Main() {
           </ContentsContainer>
         </MainContentSection>
         <VerticalBox>
-          <SectionTitle className="px-4 py-2">{data?.name}에게 추천하는 사료에요!</SectionTitle>
+          <SectionTitle className="px-4">{data?.name}에게 추천하는 사료에요!</SectionTitle>
           <div className="w-full flex items-center">
             <Swiper
               coverflowEffect={{
-                rotate: 30,
-                stretch: 0,
+                rotate: 0,
+                stretch: -18,
                 modifier: 1,
                 slideShadows: false,
               }}
@@ -108,15 +116,15 @@ export default function Main() {
               }}
               centeredSlides={true}
               modules={[EffectCoverflow, Pagination]}
-              spaceBetween={10}
               slidesPerView={3}
-              className="pt-4 pb-10"
+              className="pt-4 pb-14"
+              onActiveIndexChange={(swiper) => setActiveIndex(swiper.activeIndex)}
             >
               {Array(8)
                 .fill(0)
                 .map((_, idx) => (
                   <SwiperSlide key={idx}>
-                    <ProductItem />
+                    <ProductItem isActive={activeIndex === idx} />
                   </SwiperSlide>
                 ))}
             </Swiper>
