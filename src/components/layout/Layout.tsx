@@ -9,6 +9,7 @@ interface LayoutProps extends HeaderProps {
   children: ReactNode;
   header?: boolean;
   footer?: boolean;
+  canSearch?: boolean;
 }
 
 const useHeaderWithScroll = () => {
@@ -47,8 +48,6 @@ export default function Layout({
   footer,
   children,
   menu,
-  onClickSearch,
-  search,
 }: LayoutProps) {
   const { pageRef, hideTitle } = useHeaderWithScroll();
 
@@ -61,10 +60,10 @@ export default function Layout({
           hideTitle={hideTitle}
           title={title}
           menu={menu}
-          search={search}
-          onClickSearch={onClickSearch}
+          canSearch
         />
       )}
+
       <ChildrenWrapper ref={pageRef} headerShown={!!header} footerShown={!!footer}>
         {children}
       </ChildrenWrapper>

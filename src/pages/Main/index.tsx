@@ -48,7 +48,7 @@ export default function Main() {
   }, [data]);
 
   return (
-    <Layout footer header title="펫탈로그" menu search onClickSearch={() => alert('준비중입니다.')}>
+    <Layout footer header title="펫탈로그" menu canSearch>
       <PageContainer>
         <MainContentSection>
           <DoctorImageWrapper>

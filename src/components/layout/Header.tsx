@@ -1,4 +1,5 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+
 import BackButtonImage from '@/assets/icon/header_back.png';
 import { ReactComponent as SearchIcon } from '@/assets/icon/search_icon.svg';
 import { ReactComponent as MenuIcon } from '@/assets/icon/menu_icon.svg';
@@ -22,9 +23,8 @@ export interface HeaderProps {
   canGoBack?: boolean;
   onClickGoBack?: () => void;
   title?: string;
+  canSearch?: boolean;
   hideTitle?: boolean;
-  search?: boolean;
-  onClickSearch?: () => void;
 }
 export default function Header({
   menu,
@@ -32,8 +32,7 @@ export default function Header({
   onClickGoBack,
   title,
   hideTitle,
-  search,
-  onClickSearch,
+  canSearch,
 }: HeaderProps) {
   const location = useLocation();
   const navigator = useNavigate();
@@ -70,12 +69,11 @@ export default function Header({
           <Title isHide={!!hideTitle}>{title}</Title>
           {location.pathname === '/' && <img src={DefaultProfile} alt="큰 프로필 사진" />}
         </TitleWrapper>
-
         <RightMenuWrapper>
-          {search && (
-            <button type="button" onClick={onClickSearch}>
+          {canSearch && (
+            <Link to="/search">
               <SearchIcon />
-            </button>
+            </Link>
           )}
         </RightMenuWrapper>
       </HeaderContents>

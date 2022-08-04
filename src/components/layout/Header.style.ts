@@ -100,3 +100,7 @@ export const SideMenuWrapper = styled.div<{ isOpen: boolean }>`
   transition: transform 200ms ease;
   transform: ${({ isOpen }) => (isOpen ? 'translateX(0)' : 'translateX(-100%)')};
 `;
+export const RightMenuWrapper = styled.div`
+  position: absolute;
+  right: 1rem;
+`;
