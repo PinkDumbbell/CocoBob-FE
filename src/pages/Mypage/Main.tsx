@@ -1,37 +1,12 @@
-import { IBreeds, PetSexType } from '@/@type/pet';
+import { useGetPetsQuery } from '@/store/api/petApi';
 import { concatClasses } from '@/utils/libs/concatClasses';
 import { Link } from 'react-router-dom';
 import AddPetBUtton from './components/AddPetButton';
 import PetSimpleInfo from './components/PetSimpleInfo';
 
-export const mockPets = [
-  {
-    profilePath: 'https://blog.kakaocdn.net/dn/QdxpO/btrlDxijNFW/5aOuaUHFOfrzjohKUnynu1/img.jpg',
-    id: 1,
-    name: '코코',
-    breed: {
-      id: 20,
-      name: '골든 리트리버',
-      type: '대형',
-    } as unknown as IBreeds,
-    age: 40,
-    sex: 'FEMALE' as PetSexType,
-    bodyWeight: 17.2,
-  },
-  {
-    id: 2,
-    name: '로용',
-    breed: {
-      id: 87,
-      name: '포메라니안',
-      type: '초소형',
-    } as unknown as IBreeds,
-    age: 27,
-    sex: 'MALE' as PetSexType,
-    bodyWeight: 3.8,
-  },
-];
 export default function MypageMain() {
+  const { data: pets, isSuccess } = useGetPetsQuery();
+
   return (
     <div className="w-full flex flex-col bg-gray-100 gap-4">
       <div className="p-5 flex flex-col gap-1 bg-white">
@@ -49,17 +24,18 @@ export default function MypageMain() {
           </div>
 
           <div className="w-full flex items-center overflow-auto whitespace-nowrap py-2 space-x-4 px-1">
-            {mockPets.map((pet, idx) => (
-              <div
-                className={concatClasses(
-                  'flex w-60 h-28 p-4 rounded-lg border items-center gap-3 shadow-gray-300 shadow-md',
-                  idx === 0 ? 'border-primary-main' : '',
-                )}
-                key={idx}
-              >
-                <PetSimpleInfo {...pet} />
-              </div>
-            ))}
+            {isSuccess &&
+              pets.map((pet, idx) => (
+                <div
+                  className={concatClasses(
+                    'flex w-60 h-28 p-4 rounded-lg border items-center gap-3 shadow-gray-300 shadow-md',
+                    idx === 0 ? 'border-primary-main' : '',
+                  )}
+                  key={idx}
+                >
+                  <PetSimpleInfo {...pet} />
+                </div>
+              ))}
             <AddPetBUtton />
           </div>
         </div>
