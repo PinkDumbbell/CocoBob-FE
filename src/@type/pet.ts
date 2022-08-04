@@ -8,16 +8,18 @@ export interface IBreeds {
 }
 
 export type PetSexType = 'FEMALE' | 'MALE' | '';
-export interface IPet {
+export interface ISimplePet {
+  name: string;
   petId: number;
-  petName: string;
-  petSex: PetSexType;
-  petAge: number;
-  petBirthday: string;
-  petAllergy: string[];
-  petBreed: IBreeds | null;
-  isSpayed: boolean;
-  isPregnant: boolean;
+  thumbnailPath: string;
+}
+export interface IPet {
+  id: number;
+  name: string;
+  sex: PetSexType;
+  breedName: string;
+  age: number;
+  birthday: string;
   bodyWeight: number;
-  activityLevel: ActivityLevelType;
+  thumbnailPath?: string;
 }

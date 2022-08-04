@@ -2,7 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '@/@type/user';
 import { IGenericResponse } from '@/store/api/types';
-import { IPet } from '@/@type/pet';
+import { ISimplePet } from '@/@type/pet';
 
 export type UserState = {
   user: IUser | null;
@@ -26,7 +26,7 @@ export const userSlice = createSlice({
       const { payload } = action;
       state.user = payload;
     },
-    setRepresentativePet(state: UserState, action: PayloadAction<IPet>) {
+    setRepresentativePet(state: UserState, action: PayloadAction<ISimplePet>) {
       if (state.user) {
         state.user.representativePet = action.payload;
       }
