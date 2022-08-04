@@ -13,9 +13,8 @@ import PetsPage from '@/pages/Mypage/Pets';
 
 function PrivateRoute() {
   const { isLoggedIn } = useUser();
-  const location = useLocation();
 
-  return isLoggedIn ? <Outlet /> : <Navigate to="/login" state={{ from: location }} />;
+  return isLoggedIn ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
 function PrivateRoutes() {
