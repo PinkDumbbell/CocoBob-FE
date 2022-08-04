@@ -1,12 +1,14 @@
 import { IGenericResponse } from '@/store/api/types';
-import { IPet } from './pet';
+import { ISimplePet } from './pet';
 
 export interface IUser {
   userId: number | null;
   name: string | null;
   email: string | null;
-  representativePet: IPet | null;
+  representativeAnimalId: number | null;
+  pets: ISimplePet[];
 }
+
 export interface IAuthenticatedUser {
   isLoggedIn: boolean;
   accessToken: string | null;
