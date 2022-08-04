@@ -15,7 +15,7 @@ function PrivateRoute() {
   const { isLoggedIn } = useUser();
   const location = useLocation();
 
-  return isLoggedIn ? <Outlet /> : <Navigate to="/login" state={{ from: location }} replace />;
+  return isLoggedIn ? <Outlet /> : <Navigate to="/login" state={{ from: location }} />;
 }
 
 function PrivateRoutes() {
