@@ -1,6 +1,7 @@
 import { RootState } from '@/store/config';
 import { ThunkDispatch } from '@reduxjs/toolkit';
 import { createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { IGenericResponse } from '../api/types';
 import { logout, updateToken } from './authSlice';
 
 type BaseQueryApi = {
@@ -23,6 +24,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl,
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.accessToken;
+    console.log('set token in header');
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
     }
@@ -33,11 +35,12 @@ const baseQuery = fetchBaseQuery({
 const refreshQuery = fetchBaseQuery({
   baseUrl,
   prepareHeaders: (headers, { getState }) => {
-    const { accessToken } = (getState() as RootState).auth;
-    const { refreshToken } = (getState() as RootState).auth;
+    const { accessToken, refreshToken } = (getState() as RootState).auth;
 
-    if (accessToken && refreshToken) {
+    if (accessToken) {
       headers.set('authorization', `Bearer ${accessToken}`);
+    }
+    if (refreshToken) {
       headers.set('refresh-token', `Bearer ${refreshToken}`);
     }
 
@@ -55,21 +58,21 @@ const baseQueryWithReAuth = async (
   // token expired
   if (result?.error?.status === 401) {
     console.log('accessToken expired');
-    const refreshResult = await refreshQuery('/users/token', api, extraOptions);
-    console.log(refreshResult);
-    if (refreshResult?.data) {
+    const { meta, data, error } = await refreshQuery('/users/token', api, extraOptions);
+    console.log(meta, data, error);
+    if (!data || error?.status === 401 || (data && (data as IGenericResponse).status === 401)) {
+      // error occured
+      alert('로그인이 필요합니다.');
+      api.dispatch(logout());
+    } else if (data && (data as IGenericResponse).status === 202) {
       // store new token
       api.dispatch(
         updateToken({
-          ...(refreshResult.data as RefreshedTokenResult),
+          ...((data as IGenericResponse).data as RefreshedTokenResult),
         }),
       );
       // retry original query with new access token
       result = await baseQuery(args, api, extraOptions);
-    } else {
-      // token expired
-      alert('인증 정보가 만료되었습니다. 재로그인이 필요합니다.');
-      api.dispatch(logout());
     }
   }
   return result;

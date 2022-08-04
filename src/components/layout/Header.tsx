@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import BackButtonImage from '@/assets/icon/header_back.png';
 import { BackButton, HeaderWrapper, LeftMenuWrapper, Title } from './Header.style';
 
 interface HeaderProps {
@@ -15,7 +16,9 @@ export default function Header({ canGoBack, onClickGoBack, title }: HeaderProps)
     <HeaderWrapper>
       {canGoBack && (
         <LeftMenuWrapper>
-          <BackButton onClick={onClickGoBack ?? goBackPage}>Back</BackButton>
+          <BackButton onClick={onClickGoBack ?? goBackPage}>
+            <img src={BackButtonImage} />
+          </BackButton>
         </LeftMenuWrapper>
       )}
       <Title>{title}</Title>

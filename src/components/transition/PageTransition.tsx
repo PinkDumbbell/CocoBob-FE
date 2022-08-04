@@ -1,3 +1,7 @@
+/* eslint-disable no-unused-vars */
+import PetsPage from '@/pages/Mypage/Pets';
+import ProfilePage from '@/pages/Mypage/Profile';
+import WishPage from '@/pages/Mypage/Wish';
 import RegisterPet from '@/pages/RegisterPet';
 import React, { ReactNode } from 'react';
 import { useLocation, useNavigationType, matchRoutes } from 'react-router-dom';
@@ -16,7 +20,21 @@ type DetailPageType = {
 
 const normalDirection = 'slideLeft';
 const reverseDirection = 'slideRight';
-const detailPages: DetailPageType[] = [{ path: '/register', component: <RegisterPet /> }];
+const detailPages: DetailPageType[] = [
+  { path: '/register', component: <RegisterPet /> },
+  {
+    path: '/mypage/profile',
+    component: <ProfilePage />,
+  },
+  {
+    path: '/mypage/wish',
+    component: <WishPage />,
+  },
+  {
+    path: '/mypage/pets',
+    component: <PetsPage />,
+  },
+];
 const PageTransitionV2 = ({ transitionKey, children }: PageTransitionProps) => {
   const action = useNavigationType();
   const location = useLocation();
@@ -27,13 +45,12 @@ const PageTransitionV2 = ({ transitionKey, children }: PageTransitionProps) => {
   const isPushBehavior = action === 'PUSH';
   const direction = isPushBehavior ? normalDirection : reverseDirection;
   const isDetailPage = isPushBehavior ? matchNextRoute : matchPreviousRoute;
-  const animationType = isDetailPage ? direction : 'scale';
+  const animationType = isDetailPage ? direction : 'fade';
   const timeout = 250;
 
   return (
     <PageTransitionGroup timeout={timeout} type={animationType}>
       <TransitionGroup
-        className="container"
         childFactory={(child) =>
           React.cloneElement(child, {
             classNames: animationType,

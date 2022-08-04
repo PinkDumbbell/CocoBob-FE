@@ -15,7 +15,7 @@ export const SignUpFooter = styled.div`
   align-self: center;
   a {
     margin-left: 0.5rem;
-    color: #e85354;
+    color: ${({ theme: { colors } }) => colors.primary.main};
   }
 `;
 
@@ -25,4 +25,4 @@ export const EmailInputWrapper = tw.div`
 export const EmailInputStyle = tw.div`w-10/12`;
 export const EmailCheckButtonWrapper = tw.div`w-2/12 h-12 flex justify-center items-center pt-7`;
 export const EmailChecked = tw.div`h-12 w-12 bg-green-400 text-white flex items-center justify-center text-2xl rounded-full`;
-export const CheckEmailButton = tw.button`h-12 w-12 border border-red-500 rounded-lg `;
+export const CheckEmailButton = tw.button`h-12 w-12 border border-primary-main rounded-full `;

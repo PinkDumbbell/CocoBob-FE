@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { ActivityLevelType, PetSexType } from '@/@type/pet';
 import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
@@ -7,7 +6,7 @@ import { selectRegisterInfo, setRegisterInfo } from '@/store/slices/registerPetS
 import { concatClasses } from '@/utils/libs/concatClasses';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   PageContainer,
   QuestionText,
@@ -27,7 +26,7 @@ interface Step4Form {
 }
 
 const activityLevels: ActivityLevelType[] = [1, 2, 3, 4, 5];
-export default function Step5({ goPrevStep, goNextStep }: IPrevNextStep) {
+export default function Step5({ goNextStep }: IPrevNextStep) {
   const dispatch = useAppDispatch();
   const {
     register,
@@ -75,7 +74,7 @@ export default function Step5({ goPrevStep, goNextStep }: IPrevNextStep) {
     <PageContainer>
       <div className="mb-4">
         <QuestionText>
-          <PetNameHighlight>{'코코'}</PetNameHighlight>에 대해서 더 알려주시겠어요?
+          <PetNameHighlight>{registerInfo.name}</PetNameHighlight>에 대해서 더 알려주시겠어요?
         </QuestionText>
       </div>
       <Form onSubmit={handleSubmit(saveFormInputs)}>
@@ -93,8 +92,8 @@ export default function Step5({ goPrevStep, goNextStep }: IPrevNextStep) {
                 <label
                   htmlFor="pet-sex-man"
                   className={concatClasses(
-                    'border border-primary-900 rounded-md w-full block',
-                    watch('sex') === 'MALE' ? 'bg-primary-100 text-primary-900' : '',
+                    'border border-primary-main rounded-md w-full block',
+                    watch('sex') === 'MALE' ? 'bg-primary-light text-primary-main' : '',
                   )}
                 >
                   남자
@@ -111,15 +110,15 @@ export default function Step5({ goPrevStep, goNextStep }: IPrevNextStep) {
                 <label
                   htmlFor="pet-sex-woman"
                   className={concatClasses(
-                    'border border-primary-900 rounded-md w-full block',
-                    watch('sex') === 'FEMALE' ? 'bg-primary-100 text-primary-900' : '',
+                    'border border-primary-main rounded-md w-full block',
+                    watch('sex') === 'FEMALE' ? 'bg-primary-light text-primary-main' : '',
                   )}
                 >
                   여자
                 </label>
               </div>
             </div>
-            <p className="text-primary-900 text-sm">{errors.sex?.message}</p>
+            <p className="text-primary-main text-sm">{errors.sex?.message}</p>
           </div>
           <FormInput
             label="몸무게"
@@ -164,7 +163,7 @@ export default function Step5({ goPrevStep, goNextStep }: IPrevNextStep) {
           </div>
         </div>
         <ButtonWrapper>
-          <FormButton name="다음으로" disabled={isButtonDisabled} />
+          <FormButton name="등록완료" disabled={isButtonDisabled} />
         </ButtonWrapper>
       </Form>
     </PageContainer>

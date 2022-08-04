@@ -9,11 +9,12 @@ const LinkWrapper = tw.div<JoinLinkProps>`
   flex
   gap-3
   text-sm
+  pt-4
   ${({ color }: JoinLinkProps) => (color === 'primary' ? 'text-black' : 'text-white')}
 `;
 const Link = tw.a<JoinLinkProps>`
   font-bold
-  ${({ color }: JoinLinkProps) => (color === 'primary' ? 'text-[#E85354]' : 'text-white')}
+  ${({ color }: JoinLinkProps) => (color === 'primary' ? 'text-primary-main' : 'text-white')}
 `;
 
 export default function JoinLink({ color }: JoinLinkProps) {

@@ -119,28 +119,28 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
         <div className="flex flex-col gap-1">
           <div className="flex flex-col">
             <button
-              className="text-left p-1 border border-primary-900 rounded-md font-semibold"
+              className="text-left p-1 border border-primary-main rounded-md font-semibold"
               type="button"
               onClick={openExactDateBottomSheet}
             >
               생년월일을 알고 있어요
             </button>
             {selectedMode === 'exact' && !currentBottomSheet && (
-              <div className="py-2 px-3 w-full bg-primary-100 rounded-md">
+              <div className="py-2 px-3 w-full bg-primary-light rounded-md">
                 <p>{getKoreanStringDateFromDate(age.birthday ?? '')}</p>
               </div>
             )}
           </div>
           <div className="flex flex-col">
             <button
-              className="text-left p-1 border border-primary-900 rounded-md font-semibold"
+              className="text-left p-1 border border-primary-main rounded-md font-semibold"
               type="button"
               onClick={openAmbiguousDateBottomSheet}
             >
               대략적인 나이만 알고 있어요
             </button>
             {selectedMode === 'ambiguous' && !currentBottomSheet && (
-              <div className="py-2 px-3 w-full bg-primary-100 rounded-md">
+              <div className="py-2 px-3 w-full bg-primary-light rounded-md">
                 <p>
                   {Math.floor(age.months! / 12)}년 {age.months! % 12}개월
                 </p>
@@ -160,10 +160,10 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
               <input
                 type="date"
                 defaultValue={age.birthday}
-                className="text-gray-600 relative w-full text-center bg-primary-100 rounded-md text-md py-1"
+                className="text-gray-600 relative w-full text-center bg-primary-light rounded-md text-md py-1"
                 onChange={(e) => setAge((prev) => ({ ...prev, birthday: e.target.value }))}
               />
-              {age.birthday && <p className="text-sm text-primary-900">{`나이 : ${ageString}`}</p>}
+              {age.birthday && <p className="text-sm text-primary-main">{`나이 : ${ageString}`}</p>}
             </div>
             <Button label="선택완료" onClick={saveBirthday} />
           </div>
