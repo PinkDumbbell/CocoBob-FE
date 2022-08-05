@@ -37,5 +37,6 @@ export default function useSelectImage({
     previewUrl,
     imageFile,
     handleChangeImage,
+    setPreviewUrl,
   };
 }

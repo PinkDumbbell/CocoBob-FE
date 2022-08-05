@@ -3,8 +3,10 @@ import { ReactComponent as EditIcon } from '@/assets/icon/edit_icon.svg';
 import { ReactComponent as MaleIcon } from '@/assets/icon/male_icon.svg';
 import { ReactComponent as FemaleIcon } from '@/assets/icon/female_icon.svg';
 import { IPet } from '@/@type/pet';
+import { Link } from 'react-router-dom';
 
 export default function PetSimpleCard({
+  id,
   name,
   age,
   bodyWeight,
@@ -23,9 +25,12 @@ export default function PetSimpleCard({
           alt=""
           className="h-16 w-16 bg-gray-300 rounded-full overflow-hidden"
         />
-        <button className="absolute right-0 bottom-0 w-5 h-5 bg-white border border-secondary-main rounded-md">
+        <Link
+          to={`/mypage/pets/${id}`}
+          className="absolute right-0 bottom-0 w-5 h-5 bg-white border border-secondary-main rounded-md"
+        >
           <EditIcon />
-        </button>
+        </Link>
       </div>
       <div className="flex flex-col gap-1.5">
         <div className="flex items-center gap-2">

@@ -23,3 +23,17 @@ export interface IPet {
   bodyWeight: number;
   thumbnailPath?: string;
 }
+export interface IPetInformation {
+  id: number;
+  name: string;
+  thumbnailPath: string;
+  sex: PetSexType;
+  isSpayed: boolean; // 중성화
+  isPregnant: boolean;
+  birthday?: string;
+  age: number; // months
+  bodyWeight: number;
+  activityLevel: ActivityLevelType; // 1~5
+  fatLevel?: number;
+  breedInfo: IBreeds;
+}
