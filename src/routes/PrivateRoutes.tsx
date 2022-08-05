@@ -5,7 +5,6 @@ import MainPage from '@/pages/Main';
 import RegisterPet from '@/pages/RegisterPet';
 import ProductsPage from '@/pages/Products';
 import SearchPage from '@/pages/Search';
-import NotFound from '@/pages/404';
 
 import Mypage from '@/pages/Mypage';
 import MypageMain from '@/pages/Mypage/Main';
