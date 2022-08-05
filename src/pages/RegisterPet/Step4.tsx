@@ -19,19 +19,19 @@ type ageType = {
   months: number;
   birthday?: string;
 };
-type AgeModeType = 'exact' | 'ambiguous' | '';
+type AgeModeType = 'birthday' | 'monthsAge' | '';
 
 export default function Step4({ goNextStep }: IPrevNextStep) {
   const {
     currentBottomSheet,
-    isBottomSheetOpen: isExactDateBottomSheetOpen,
-    openBottomSheet: openExactDateBottomSheet,
+    isBottomSheetOpen: isBirthdayBottomSheetOpen,
+    openBottomSheet: openBirthdayBottomSheet,
     closeBottomSheet,
-  } = useBottomSheet('exact');
+  } = useBottomSheet('birthday');
   const {
-    isBottomSheetOpen: isAmbiguousDateBottomSheetOpen,
-    openBottomSheet: openAmbiguousDateBottomSheet,
-  } = useBottomSheet('ambiguous');
+    isBottomSheetOpen: isMonthsAgeBottomSheetOpen,
+    openBottomSheet: openMonthsAgeBottomSheet,
+  } = useBottomSheet('monthsAge');
 
   const dispatch = useDispatch();
   const registerInfo = useSelector(selectRegisterInfo);
@@ -42,19 +42,19 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
   });
 
   const [selectedMode, setSelectedMode] = useState<AgeModeType>('');
-  const [ambiguousDate, setAmbiguousDate] = useState<{ year: number; month: number }>({
+  const [monthsAge, setMonthsAge] = useState<{ year: number; month: number }>({
     year: 0,
     month: 0,
   });
 
   const { handleSubmit } = useForm();
 
-  const saveAmbiguousAge = () => {
-    if (ambiguousDate.year === 0 && ambiguousDate.month === 0) return;
-    setSelectedMode('ambiguous');
+  const saveMonthsAge = () => {
+    if (monthsAge.year === 0 && monthsAge.month === 0) return;
+    setSelectedMode('monthsAge');
     setAge({
       birthday: '',
-      months: getTotalMonthWithYearAndMonth(ambiguousDate.year, ambiguousDate.month),
+      months: getTotalMonthWithYearAndMonth(monthsAge.year, monthsAge.month),
     });
     closeBottomSheet();
   };
@@ -62,7 +62,7 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
   const saveBirthday = () => {
     if (!age.birthday) return;
 
-    setSelectedMode('exact');
+    setSelectedMode('birthday');
     setAge((prevAge) => ({ ...prevAge, months: getDateDiff(age.birthday!, 'month') }));
     closeBottomSheet();
   };
@@ -100,8 +100,8 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
       birthday: registerInfo.birthday,
       months: registerInfo.age,
     });
-    if (registerInfo.birthday) setSelectedMode('exact');
-    else setSelectedMode('ambiguous');
+    if (registerInfo.birthday) setSelectedMode('birthday');
+    else setSelectedMode('monthsAge');
     return () => {
       closeBottomSheet();
     };
@@ -121,11 +121,11 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
             <button
               className="text-left p-1 border border-primary-main rounded-md font-semibold"
               type="button"
-              onClick={openExactDateBottomSheet}
+              onClick={openBirthdayBottomSheet}
             >
               생년월일을 알고 있어요
             </button>
-            {selectedMode === 'exact' && !currentBottomSheet && (
+            {selectedMode === 'birthday' && !currentBottomSheet && (
               <div className="py-2 px-3 w-full bg-primary-light rounded-md">
                 <p>{getKoreanStringDateFromDate(age.birthday ?? '')}</p>
               </div>
@@ -135,11 +135,11 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
             <button
               className="text-left p-1 border border-primary-main rounded-md font-semibold"
               type="button"
-              onClick={openAmbiguousDateBottomSheet}
+              onClick={openMonthsAgeBottomSheet}
             >
               대략적인 나이만 알고 있어요
             </button>
-            {selectedMode === 'ambiguous' && !currentBottomSheet && (
+            {selectedMode === 'monthsAge' && !currentBottomSheet && (
               <div className="py-2 px-3 w-full bg-primary-light rounded-md">
                 <p>
                   {Math.floor(age.months! / 12)}년 {age.months! % 12}개월
@@ -152,7 +152,7 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
           <FormButton name="다음으로" disabled={false} />
         </ButtonWrapper>
       </Form>
-      <BottomSheet isOpen={isExactDateBottomSheetOpen}>
+      <BottomSheet isOpen={isBirthdayBottomSheetOpen}>
         <div className="p-4">
           <div className="flex flex-col gap-2">
             <h4 className="text-lg font-bold">언제 태어났나요?</h4>
@@ -169,7 +169,7 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
           </div>
         </div>
       </BottomSheet>
-      <BottomSheet isOpen={isAmbiguousDateBottomSheetOpen}>
+      <BottomSheet isOpen={isMonthsAgeBottomSheetOpen}>
         <div className="p-4">
           <div className="flex flex-col gap-2">
             <h4 className="text-lg font-bold">추정 나이는 몇 살인가요?</h4>
@@ -181,7 +181,7 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
                   id=""
                   defaultValue={Math.floor(age.months / 12)}
                   onChange={(e) =>
-                    setAmbiguousDate((prev) => ({ ...prev, year: Number(e.target.value) }))
+                    setMonthsAge((prev) => ({ ...prev, year: Number(e.target.value) }))
                   }
                 >
                   {Array(51)
@@ -200,7 +200,7 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
                   id=""
                   defaultValue={age.months % 12}
                   onChange={(e) =>
-                    setAmbiguousDate((prev) => ({ ...prev, month: Number(e.target.value) }))
+                    setMonthsAge((prev) => ({ ...prev, month: Number(e.target.value) }))
                   }
                 >
                   {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((value) => (
@@ -212,7 +212,7 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
                 <span>개월</span>
               </div>
             </div>
-            <Button label="선택완료" onClick={saveAmbiguousAge} />
+            <Button label="선택완료" onClick={saveMonthsAge} />
           </div>
         </div>
       </BottomSheet>
