@@ -3,7 +3,8 @@ import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import useUser from '@/utils/hooks/useUser';
 import MainPage from '@/pages/Main';
 import RegisterPet from '@/pages/RegisterPet';
-import NotFound from '@/pages/404';
+import ProductsPage from '@/pages/Products';
+import SearchPage from '@/pages/Search';
 
 import Mypage from '@/pages/Mypage';
 import MypageMain from '@/pages/Mypage/Main';
@@ -13,9 +14,8 @@ import PetsPage from '@/pages/Mypage/Pets';
 
 function PrivateRoute() {
   const { isLoggedIn } = useUser();
-  const location = useLocation();
 
-  return isLoggedIn ? <Outlet /> : <Navigate to="/login" state={{ from: location }} replace />;
+  return isLoggedIn ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
 function PrivateRoutes() {
@@ -25,14 +25,14 @@ function PrivateRoutes() {
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<MainPage />} />
         <Route path="/register" element={<RegisterPet />} />
+        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/mypage" element={<Mypage />}>
           <Route index element={<MypageMain />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="wish" element={<WishPage />} />
           <Route path="pets" element={<PetsPage />} />
         </Route>
-        <Route element={<NotFound />} path="/404" />
-        <Route element={<Navigate to="/404" />} path="*" />
       </Route>
     </Routes>
   );

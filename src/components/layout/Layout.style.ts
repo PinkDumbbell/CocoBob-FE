@@ -7,4 +7,8 @@ export const ChildrenWrapper = styled.div<{ headerShown?: boolean; footerShown?:
   height: 100%;
   width: 100%;
   overflow: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;

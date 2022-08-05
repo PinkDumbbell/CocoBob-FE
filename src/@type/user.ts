@@ -5,8 +5,10 @@ export interface IUser {
   userId: number | null;
   name: string | null;
   email: string | null;
-  representativePet: ISimplePet | null;
+  representativeAnimalId: number | null;
+  pets: ISimplePet[];
 }
+
 export interface IAuthenticatedUser {
   isLoggedIn: boolean;
   accessToken: string | null;
