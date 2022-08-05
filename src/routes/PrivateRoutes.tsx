@@ -34,8 +34,6 @@ function PrivateRoutes() {
           <Route path="wish" element={<WishPage />} />
           <Route path="pets" element={<PetsPage />} />
         </Route>
-        <Route element={<NotFound />} path="/404" />
-        <Route element={<Navigate to="/404" />} path="*" />
       </Route>
     </Routes>
   );
