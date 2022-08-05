@@ -42,6 +42,7 @@ const useHeaderWithScroll = () => {
 };
 export default function Layout({
   canGoBack,
+  canSearch,
   onClickGoBack,
   title,
   header,
@@ -60,7 +61,7 @@ export default function Layout({
           hideTitle={hideTitle}
           title={title}
           menu={menu}
-          canSearch
+          canSearch={canSearch}
         />
       )}
 
