@@ -75,7 +75,7 @@ export const LeftMenuWrapper = styled.div`
   left: 16px;
 `;
 export const RightMenuWrapper = styled.div`
-  display: flex;
+  display: flex;ßß
   align-items: center;
   gap: 0.3rem;
   position: absolute;
@@ -99,8 +99,4 @@ export const SideMenuWrapper = styled.div<{ isOpen: boolean }>`
   background: white;
   transition: transform 200ms ease;
   transform: ${({ isOpen }) => (isOpen ? 'translateX(0)' : 'translateX(-100%)')};
-`;
-export const RightMenuWrapper = styled.div`
-  position: absolute;
-  right: 1rem;
 `;
