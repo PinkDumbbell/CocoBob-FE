@@ -75,7 +75,7 @@ export const LeftMenuWrapper = styled.div`
   left: 16px;
 `;
 export const RightMenuWrapper = styled.div`
-  display: flex;
+  display: flex;ßß
   align-items: center;
   gap: 0.3rem;
   position: absolute;
