@@ -21,6 +21,7 @@ import useAgeBottomSheet from '@/components/BottomSheet/hooks/useAgeBottomSheet'
 
 import AddPhotoImage from '@/assets/icon/btn_add_photo.png';
 import { ReactComponent as TrashIcon } from '@/assets/icon/trash_icon.svg';
+import { ReactComponent as EditIcon } from '@/assets/icon/edit_icon.svg';
 import PetDefault from '@/assets/image/pet_default.png';
 import { RegisterInfoForm } from '@/store/slices/registerPetSlice';
 import { getFileFromObjectURL } from '@/utils/libs/getFileFromObjectURL';
@@ -134,10 +135,11 @@ export default function PetDetail() {
                 <div className="flex flex-col justify-center items-center w-full">
                   <div className="relative w-32 h-32 bg-white">
                     <label
-                      className="absolute opacity-4 bottom-0 right-0 rounded-full w-10 h-10"
+                      className="absolute opacity-4 bottom-1 right-0 rounded-full w-8 h-8 bg-white flex justify-center items-center border border-gray-400"
                       htmlFor="pet-thumbnail"
                     >
-                      <img src={AddPhotoImage} alt="" />
+                      <EditIcon />
+                      {/* <img src={AddPhotoImage} alt="" /> */}
                     </label>
                     <input
                       type="file"
@@ -148,7 +150,7 @@ export default function PetDetail() {
                     />
                     {previewUrl && (
                       <button
-                        className="absolute opacity-4 bottom-0 left-0 rounded-full w-10 h-10 bg-white p-2 border border-gray-400"
+                        className="absolute opacity-4 bottom-1 left-0 rounded-full w-8 h-8 bg-white p-1 border border-gray-400"
                         onClick={deleteProfileImage}
                         type="button"
                       >
