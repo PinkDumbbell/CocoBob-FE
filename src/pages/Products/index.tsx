@@ -1,12 +1,15 @@
 import Layout from '@/components/layout/Layout';
 import ProductItem from '@/components/Product';
+import { useGetProductQuery } from '@/store/api/productApi';
 import { useEffect, useState } from 'react';
 
 export default function ProductsPage() {
   const categoryList = ['사료', '간식', '영양제'];
   // eslint-disable-next-line no-unused-vars
   const [category, setCategory] = useState<string>('');
-
+  const { data } = useGetProductQuery();
+  // todo: 검색 가능한 키워드 선정하기
+  const productList = data?.productList;
   useEffect(() => {});
   return (
     <Layout footer header title="사료" canSearch>
@@ -47,13 +50,11 @@ export default function ProductsPage() {
           </div>
         </div>
         <div className="pt-20 flex flex-col gap-1">
-          {Array(12)
-            .fill(0)
-            .map((_, idx) => (
-              <div key={idx} className="px-2">
-                <ProductItem />
-              </div>
-            ))}
+          {productList?.map((product) => (
+            <div key={product.productId} className="px-2">
+              <ProductItem product={product} />
+            </div>
+          ))}
         </div>
       </div>
     </Layout>
