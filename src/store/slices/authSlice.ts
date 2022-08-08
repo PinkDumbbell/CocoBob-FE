@@ -31,7 +31,6 @@ const authSlice = createSlice({
       state,
       { payload }: PayloadAction<{ accessToken: string; refreshToken: string }>,
     ) => {
-      console.log('set new tokens');
       const { accessToken, refreshToken } = payload;
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
@@ -48,7 +47,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(userApiSlice.endpoints.login.matchFulfilled, (state, response) => {
-      console.log('login fulfilled', response);
       authSlice.caseReducers.setCredentials(state, response);
     });
   },

@@ -62,7 +62,6 @@ export const registerPetSlice = createSlice({
         ...state.registerInfo,
         ...payload,
       };
-      console.log('in redux store', state.registerInfo);
     },
     clearRegisterInfo(state) {
       state.registerInfo = initialState.registerInfo;

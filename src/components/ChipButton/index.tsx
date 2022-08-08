@@ -13,7 +13,7 @@ export default function ChipButton({
   border = true,
 }: ChipButtonProps) {
   return (
-    <ChipButtonWrapper theme={theme} filled={filled} border={border}>
+    <ChipButtonWrapper theme={theme} $filled={filled} $border={border}>
       {content}
     </ChipButtonWrapper>
   );

@@ -19,7 +19,6 @@ export default function useBottomSheet(bottomSheetName: BottomSheetType): UseBot
   const isBottomSheetOpen = currentBottomSheet === bottomSheetName;
 
   const openBottomSheet = () => {
-    console.log(bottomSheetName);
     dispatch(setBottomSheetAction(bottomSheetName));
   };
   const closeBottomSheet = () => dispatch(closeBottomSheetAction());
