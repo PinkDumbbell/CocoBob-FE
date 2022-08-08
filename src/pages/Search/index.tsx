@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import goBackImg from '@/assets/icon/go_back_btn.png';
 import ProductItem from '@/components/Product';
 import { ChangeEvent, useState } from 'react';
+import { IProduct } from '@/@type/product';
 import { RelatedSearchKeywordContainer } from './index.style';
 
 export default function SearchPage() {
@@ -95,7 +96,7 @@ export default function SearchPage() {
             .fill(0)
             .map((_, idx) => (
               <div key={idx} className="px-2">
-                <ProductItem />
+                <ProductItem product={{} as IProduct} />
               </div>
             ))}
         </div>
