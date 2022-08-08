@@ -16,6 +16,11 @@ export default function useLogout() {
     }
   }, [isSuccess]);
 
-  const onClickLogout = () => logoutMutation();
+  const onClickLogout = () => {
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm('로그아웃을 하시겠습니까?')) {
+      logoutMutation();
+    }
+  };
   return onClickLogout;
 }

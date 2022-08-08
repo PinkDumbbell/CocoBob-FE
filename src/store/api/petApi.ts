@@ -49,7 +49,7 @@ export const petApiSlice = apiSlice.injectEndpoints({
     >({
       query: ({ formInput, petId, isImageJustDeleted }) => {
         const formData = new FormData();
-        formData.append('isImageJustDeleted', isImageJustDeleted);
+        formData.append('isImageJustDeleted', JSON.stringify(isImageJustDeleted));
         // eslint-disable-next-line no-restricted-syntax
         for (const [key, value] of Object.entries(formInput)) {
           if (value !== undefined) {

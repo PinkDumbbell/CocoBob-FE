@@ -1,5 +1,6 @@
 import Layout from '@/components/layout/Layout';
 import { useGetPetsQuery } from '@/store/api/petApi';
+import useLogout from '@/utils/hooks/useLogout';
 import { concatClasses } from '@/utils/libs/concatClasses';
 import { Link } from 'react-router-dom';
 import AddPetBUtton from './components/AddPetButton';
@@ -7,7 +8,7 @@ import PetSimpleInfo from './components/PetSimpleInfo';
 
 export default function MypageMain() {
   const { data: pets, isSuccess } = useGetPetsQuery();
-
+  const onClickLogout = useLogout();
   return (
     <Layout header title="마이페이지" footer>
       <div className="w-full flex flex-col bg-gray-100 gap-4">
@@ -53,6 +54,11 @@ export default function MypageMain() {
               </Link>
             </div>
           ))}
+          <div className="p-4 border-b border-gray-200">
+            <div onClick={onClickLogout}>
+              <h5>로그아웃</h5>
+            </div>
+          </div>
         </div>
       </div>
     </Layout>
