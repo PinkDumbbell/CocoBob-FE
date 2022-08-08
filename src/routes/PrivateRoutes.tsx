@@ -13,6 +13,8 @@ import WishPage from '@/pages/Mypage/Wish';
 import PetsPage from '@/pages/Mypage/pets/index';
 import PetEdit from '@/pages/Mypage/pets/[id]';
 
+import NotFound from '@/pages/404';
+
 function PrivateRoute() {
   const { isLoggedIn } = useUser();
 
@@ -36,6 +38,7 @@ function PrivateRoutes() {
           <Route path="pets/:id" element={<PetEdit />} />
         </Route>
       </Route>
+      <Route element={<NotFound />} path="*" />
     </Routes>
   );
 }
