@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import { QuestionWrapper } from '@/pages/RegisterPet/index.style';
@@ -8,9 +8,8 @@ import ContentsContainer from '@/components/ContentsContainer';
 import Layout from '@/components/layout/Layout';
 import FormInput, { InputStyle, Label } from '@/components/Form/FormInput';
 import FormButton from '@/components/Form/FormButton';
-import BottomSheet from '@/components/BottomSheet';
 
-import { ActivityLevelType, IBreeds, PetSexType } from '@/@type/pet';
+import { ActivityLevelType, IBreeds, IPetInformation, PetSexType } from '@/@type/pet';
 import { useGetPetsDetailQuery, useUpdatePetDataMutation } from '@/store/api/petApi';
 import { concatClasses } from '@/utils/libs/concatClasses';
 import useSelectImage from '@/utils/hooks/useSelectImage';
@@ -20,15 +19,18 @@ import BirthdayBottomSheet from '@/components/BottomSheet/BirthdayBottomSheet';
 import MonthsAgeBottomSheet from '@/components/BottomSheet/MonthsAgeBottomSheet';
 import useAgeBottomSheet from '@/components/BottomSheet/hooks/useAgeBottomSheet';
 
+import AddPhotoImage from '@/assets/icon/btn_add_photo.png';
+import { ReactComponent as TrashIcon } from '@/assets/icon/trash_icon.svg';
+import PetDefault from '@/assets/image/pet_default.png';
+import { RegisterInfoForm } from '@/store/slices/registerPetSlice';
+import { getFileFromObjectURL } from '@/utils/libs/getFileFromObjectURL';
+
 interface IPetEditForm {
   name: string;
   bodyWeight: number;
   sex: PetSexType;
   isSpayed: boolean;
   isPregnant: boolean;
-  age: number;
-  birthday?: string;
-  activityLevel: ActivityLevelType;
 }
 const activityLevels: ActivityLevelType[] = [1, 2, 3, 4, 5];
 export default function PetDetail() {
@@ -42,39 +44,14 @@ export default function PetDetail() {
     setValue,
     handleSubmit,
   } = useForm<IPetEditForm>();
-  const [updatePetData] = useUpdatePetDataMutation();
+  const navigate = useNavigate();
+  const [updatePetData, { data: mutationResult }] = useUpdatePetDataMutation();
   const { isSuccess, isLoading, data: petData } = useGetPetsDetailQuery(+id);
-  const { imageFile, previewUrl, handleChangeImage } = useSelectImage({
+  const { imageFile, previewUrl, handleChangeImage, setPreviewUrl } = useSelectImage({
     initPreviewUrl: petData?.thumbnailPath,
   });
-  const {
-    openBottomSheet: openBreedBottomSheet,
-    isBottomSheetOpen: isBreedBottomSheetOpen,
-    closeBottomSheet,
-  } = useBottomSheet('findBreed');
-
-  const [selectedActivityLevel, setSelectedActivityLevel] = useState<ActivityLevelType>(3);
-  const [breed, setBreed] = useState<IBreeds | undefined>();
-
-  useEffect(() => {
-    console.log(petData);
-    if (petData) {
-      setValue('name', petData.name);
-      setValue('bodyWeight', petData.bodyWeight);
-      setValue('sex', petData.sex);
-      setValue('isPregnant', petData.isPregnant);
-      setValue('isSpayed', petData.isSpayed);
-      setValue('age', petData.age);
-      setValue('birthday', petData.birthday);
-      setSelectedActivityLevel(petData.activityLevel);
-      setBreed(petData.breedInfo);
-    }
-  }, [petData]);
-
-  const onSubmit = (data: IPetEditForm) => {
-    console.log(data);
-  };
-
+  const { openBottomSheet: openBreedBottomSheet, isBottomSheetOpen: isBreedBottomSheetOpen } =
+    useBottomSheet('findBreed');
   const {
     months,
     birthday,
@@ -86,9 +63,63 @@ export default function PetDetail() {
     openBirthdayBottomSheet,
   } = useAgeBottomSheet({ petAge: petData?.age ?? 0, petBirthday: petData?.birthday ?? '' });
 
+  const [selectedActivityLevel, setSelectedActivityLevel] = useState<ActivityLevelType>(3);
+  const [breed, setBreed] = useState<IBreeds | undefined>();
+  const [isImageDeleted, setIsImageDeleted] = useState(false); // 사진을 삭제했을 때 true, 변경하거나 그대로 유지 : false
+
+  const deleteProfileImage = () => {
+    // eslint-disable-next-line no-alert, no-restricted-globals
+    if (previewUrl && confirm('프로필 사진을 삭제하시겠습니까?')) {
+      setPreviewUrl('');
+      setIsImageDeleted(true);
+    }
+  };
+  const onSubmit = async (data: IPetEditForm) => {
+    if ((!months && !birthday) || !breed?.id) return;
+    const updateParams = {
+      petId: +id,
+      isImageJustDeleted: isImageDeleted,
+      formInput: {
+        ...data,
+        age: months,
+        birthday,
+        activityLevel: selectedActivityLevel,
+        breedId: breed?.id,
+      } as RegisterInfoForm<File>,
+    };
+    if (imageFile) {
+      updateParams.formInput.petImage = await getFileFromObjectURL(imageFile);
+    }
+    updatePetData(updateParams);
+  };
+
+  const initForm = (data: IPetInformation) => {
+    setValue('name', data.name);
+    setValue('bodyWeight', data.bodyWeight);
+    setValue('sex', data.sex);
+    setValue('isPregnant', data.isPregnant);
+    setValue('isSpayed', data.isSpayed);
+    setSelectedActivityLevel(data.activityLevel);
+    setBreed(data.breedInfo);
+    setPreviewUrl(data.thumbnailPath);
+  };
+
   useEffect(() => {
-    console.log('나이 변경', months, '개월 또는', birthday);
-  }, [months, birthday]);
+    if (petData) {
+      initForm(petData);
+    }
+  }, [petData]);
+  useEffect(() => {
+    if (imageFile) {
+      setIsImageDeleted(false);
+    }
+  }, [imageFile]);
+  useEffect(() => {
+    if (!mutationResult) return;
+    navigate('/mypage/pets');
+    alert('성공적으로 정보를 수정하였습니다.');
+  }, [mutationResult]);
+
   return (
     <Layout header title="우리아이 정보 수정" canGoBack>
       {isLoading && <div>Loading...</div>}
@@ -101,8 +132,34 @@ export default function PetDetail() {
             >
               <ContentsContainer>
                 <div className="flex flex-col justify-center items-center w-full">
-                  <div className="w-32 h-32 rounded-full bg-slate-100 overflow-hidden">
-                    <img src={previewUrl} alt="" />
+                  <div className="relative w-32 h-32 bg-white">
+                    <label
+                      className="absolute opacity-4 bottom-0 right-0 rounded-full w-10 h-10"
+                      htmlFor="pet-thumbnail"
+                    >
+                      <img src={AddPhotoImage} alt="" />
+                    </label>
+                    <input
+                      type="file"
+                      id="pet-thumbnail"
+                      className="hidden"
+                      accept="image/jpg, image/png, image/jpeg"
+                      onChange={handleChangeImage}
+                    />
+                    {previewUrl && (
+                      <button
+                        className="absolute opacity-4 bottom-0 left-0 rounded-full w-10 h-10 bg-white p-2 border border-gray-400"
+                        onClick={deleteProfileImage}
+                        type="button"
+                      >
+                        <TrashIcon />
+                      </button>
+                    )}
+                    <img
+                      src={previewUrl || PetDefault}
+                      alt=""
+                      className="rounded-full overflow-hidden"
+                    />
                   </div>
                 </div>
               </ContentsContainer>
@@ -236,7 +293,6 @@ export default function PetDetail() {
                   </div>
                 </div>
               </ContentsContainer>
-
               <div className="p-3 fixed mx-auto bottom-0 w-full max-w-[425px] bg-white rounded-t-lg left-1/2 -translate-x-[50%]">
                 <FormButton name="저장" />
               </div>

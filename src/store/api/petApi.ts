@@ -17,7 +17,14 @@ export const petApiSlice = apiSlice.injectEndpoints({
         const formData = new FormData();
         // eslint-disable-next-line no-restricted-syntax
         for (const [key, value] of Object.entries(data)) {
-          if (value !== undefined) formData.append(key, value);
+          if (value !== undefined) {
+            if (key === 'age' || key === 'birthday') {
+              const newKey = key === 'age' ? 'months' : key;
+              formData.append(`age.${newKey}`, value);
+            } else {
+              formData.append(key, value);
+            }
+          }
         }
 
         return {
@@ -36,11 +43,15 @@ export const petApiSlice = apiSlice.injectEndpoints({
       query: (id: number) => `/pets/${id}`,
       transformResponse: (response: IGenericResponse) => response.data as IPetInformation,
     }),
-    updatePetData: builder.mutation<{ petId: number }, RegisterInfoForm<File>>({
-      query: (data) => {
+    updatePetData: builder.mutation<
+      { petId: number },
+      { formInput: RegisterInfoForm<File>; petId: number; isImageJustDeleted: boolean }
+    >({
+      query: ({ formInput, petId, isImageJustDeleted }) => {
         const formData = new FormData();
+        formData.append('isImageJustDeleted', isImageJustDeleted);
         // eslint-disable-next-line no-restricted-syntax
-        for (const [key, value] of Object.entries(data)) {
+        for (const [key, value] of Object.entries(formInput)) {
           if (value !== undefined) {
             if (key === 'age' || key === 'birthday') {
               const newKey = key === 'age' ? 'months' : key;
@@ -52,9 +63,9 @@ export const petApiSlice = apiSlice.injectEndpoints({
         }
 
         return {
-          url: '/pets',
+          url: `/pets/${petId}`,
           method: 'PUT',
-          body: FormData,
+          body: formData,
         };
       },
     }),
