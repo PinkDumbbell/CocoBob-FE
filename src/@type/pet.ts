@@ -8,21 +8,32 @@ export interface IBreeds {
 }
 
 export type PetSexType = 'FEMALE' | 'MALE' | '';
-export interface IPet {
-  petId: number;
-  petName: string;
-  petSex: PetSexType;
-  petAge: number;
-  petBirthday: string;
-  petAllergy: string[];
-  petBreed: IBreeds | null;
-  isSpayed: boolean;
-  isPregnant: boolean;
-  bodyWeight: number;
-  activityLevel: ActivityLevelType;
-}
 export interface ISimplePet {
   name: string;
   petId: number;
   thumbnailPath: string;
+}
+export interface IPet {
+  id: number;
+  name: string;
+  sex: PetSexType;
+  breedName: string;
+  age: number;
+  birthday: string;
+  bodyWeight: number;
+  thumbnailPath?: string;
+}
+export interface IPetInformation {
+  id: number;
+  name: string;
+  thumbnailPath: string;
+  sex: PetSexType;
+  isSpayed: boolean; // 중성화
+  isPregnant: boolean;
+  birthday?: string;
+  age: number; // months
+  bodyWeight: number;
+  activityLevel: ActivityLevelType; // 1~5
+  fatLevel?: number;
+  breedInfo: IBreeds;
 }

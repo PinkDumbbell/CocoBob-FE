@@ -12,7 +12,7 @@ import { concatClasses } from '@/utils/libs/concatClasses';
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
 import { useForm } from 'react-hook-form';
-import useSearchBreed from './hooks/useSearchBreed';
+import useSearchBreed from '@/utils/hooks/useSearchBreed';
 import { ButtonWrapper, Form, PageContainer, PetNameHighlight, QuestionText } from './index.style';
 
 interface IBreedList {
@@ -38,7 +38,7 @@ const BreedList = ({ breeds, selectedBreed, setBreed }: IBreedList) => (
   </>
 );
 
-const SearchBreedBottomSheet = ({
+export const SearchBreedBottomSheet = ({
   isBottomSheetOpen,
   setBreed,
 }: {
@@ -139,6 +139,7 @@ export default function Step3({ goNextStep }: any) {
             isError={false}
             className="text-gray-400 text-left p-2 border-b border-b-gray-400"
             onClick={openBottomSheet}
+            onChange={(e) => e.preventDefault()}
             placeholder={breed?.id ? breed.name : '품종을 검색해보세요'}
           />
 

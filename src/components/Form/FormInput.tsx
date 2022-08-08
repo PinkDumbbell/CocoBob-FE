@@ -18,7 +18,7 @@ const InputContainer = styled.div`
     margin-bottom: 0.5rem;
   }
 `;
-const Label = styled.label<{ isError: boolean | undefined }>`
+export const Label = styled.label<{ isError: boolean | undefined }>`
   display: block;
   font-size: 14px;
   line-height: 20px;

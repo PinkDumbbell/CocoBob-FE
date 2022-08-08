@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-import PetsPage from '@/pages/Mypage/Pets';
+import PetsPage from '@/pages/Mypage/pets/index';
+import PetDetail from '@/pages/Mypage/pets/[id]';
 import ProfilePage from '@/pages/Mypage/Profile';
 import WishPage from '@/pages/Mypage/Wish';
 import RegisterPet from '@/pages/RegisterPet';
@@ -33,6 +34,10 @@ const detailPages: DetailPageType[] = [
   {
     path: '/mypage/pets',
     component: <PetsPage />,
+  },
+  {
+    path: '/mypage/pets/:id',
+    component: <PetDetail />,
   },
 ];
 const PageTransitionV2 = ({ transitionKey, children }: PageTransitionProps) => {

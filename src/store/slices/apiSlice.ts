@@ -78,8 +78,11 @@ const baseQueryWithReAuth = async (
   return result;
 };
 
-export const apiSlice = createApi({
+const apiSliceWithoutTag = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReAuth,
   endpoints: () => ({}),
+});
+export const apiSlice = apiSliceWithoutTag.enhanceEndpoints({
+  addTagTypes: ['Pet', 'Breed', 'User'],
 });

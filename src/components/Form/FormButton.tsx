@@ -6,6 +6,7 @@ interface ButtonProps {
   disabled?: boolean;
   // eslint-disable-next-line no-unused-vars
   onClick?: Function;
+  className?: string;
 }
 
 const FormButtonContainer = styled.button<{ disabled: boolean }>`
@@ -26,12 +27,12 @@ const FormButtonContainer = styled.button<{ disabled: boolean }>`
   }
 `;
 export default function FormButton(props: ButtonProps) {
-  const { name, disabled, onClick } = props;
+  const { name, disabled, onClick, className } = props;
 
   const onClickButton = useCallback(() => !disabled && onClick && onClick(), [onClick]);
 
   return (
-    <FormButtonContainer onClick={onClickButton} disabled={disabled ?? false}>
+    <FormButtonContainer className={className} onClick={onClickButton} disabled={disabled ?? false}>
       {name}
     </FormButtonContainer>
   );
