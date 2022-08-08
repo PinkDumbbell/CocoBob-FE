@@ -11,6 +11,10 @@ export const petApiSlice = apiSlice.injectEndpoints({
     getBreeds: builder.query<IBreeds[], void>({
       query: () => '/pets/breeds',
       transformResponse: (response: IGenericResponse) => response.data as IBreeds[],
+      providesTags: (result) =>
+        result
+          ? [...result.map((value) => ({ type: 'Breed' as const, id: value.id }))]
+          : [{ type: 'Breed' as const, id: 'LIST' }],
     }),
     saveEnrollmentData: builder.mutation<{ petId: number }, RegisterInfoForm<File>>({
       query: (data) => {
@@ -38,10 +42,18 @@ export const petApiSlice = apiSlice.injectEndpoints({
     getPets: builder.query<IPet[], void>({
       query: () => '/pets',
       transformResponse: (response: IGenericResponse) => response.data as IPet[],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map((value) => ({ type: 'Pet' as const, id: value.id })),
+              { type: 'Pet', id: 'LIST' },
+            ]
+          : [{ type: 'Pet' as const, id: 'LIST' }],
     }),
     getPetsDetail: builder.query<IPetInformation, number>({
       query: (id: number) => `/pets/${id}`,
       transformResponse: (response: IGenericResponse) => response.data as IPetInformation,
+      providesTags: (result) => [{ type: 'Pet' as const, id: result?.id }],
     }),
     updatePetData: builder.mutation<
       { petId: number },
@@ -68,6 +80,7 @@ export const petApiSlice = apiSlice.injectEndpoints({
           body: formData,
         };
       },
+      invalidatesTags: (result, error, arg) => [{ type: 'Pet' as const, id: arg.petId }],
     }),
   }),
 });

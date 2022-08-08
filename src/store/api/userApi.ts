@@ -9,6 +9,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
     getUser: builder.query<IUser, void>({
       query: () => '/users',
       transformResponse: (response: IGenericResponse) => response.data as IUser,
+      providesTags: ['User'],
     }),
     login: builder.mutation<IAuthenticatedUser, ILoginForm>({
       query: (credentials) => ({
@@ -23,6 +24,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         url: '/users',
         method: 'DELETE',
       }),
+      invalidatesTags: ['User'],
     }),
     signUp: builder.mutation<IGenericResponse, ISignUpForm>({
       query: (data) => ({
