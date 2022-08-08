@@ -24,7 +24,6 @@ const baseQuery = fetchBaseQuery({
   baseUrl,
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.accessToken;
-    console.log('set token in header');
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
     }
@@ -57,9 +56,7 @@ const baseQueryWithReAuth = async (
 
   // token expired
   if (result?.error?.status === 401) {
-    console.log('accessToken expired');
-    const { meta, data, error } = await refreshQuery('/users/token', api, extraOptions);
-    console.log(meta, data, error);
+    const { data, error } = await refreshQuery('/users/token', api, extraOptions);
     if (!data || error?.status === 401 || (data && (data as IGenericResponse).status === 401)) {
       // error occured
       alert('로그인이 필요합니다.');

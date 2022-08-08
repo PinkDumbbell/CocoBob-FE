@@ -34,10 +34,6 @@ const useHeaderWithScroll = () => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log(hideTitle);
-  }, [hideTitle]);
-
   return { pageRef, hideTitle };
 };
 export default function Layout({

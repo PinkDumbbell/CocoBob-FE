@@ -38,7 +38,6 @@ export const userSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addMatcher(userApiSlice.endpoints.getUser.matchFulfilled, (state, response) => {
-      console.log('get user fulfilled');
       userSlice.caseReducers.setUserAction(state, response);
     });
   },
