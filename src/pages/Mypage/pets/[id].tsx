@@ -19,9 +19,10 @@ import BirthdayBottomSheet from '@/components/BottomSheet/BirthdayBottomSheet';
 import MonthsAgeBottomSheet from '@/components/BottomSheet/MonthsAgeBottomSheet';
 import useAgeBottomSheet from '@/components/BottomSheet/hooks/useAgeBottomSheet';
 
-import AddPhotoImage from '@/assets/icon/btn_add_photo.png';
 import { ReactComponent as TrashIcon } from '@/assets/icon/trash_icon.svg';
 import { ReactComponent as EditIcon } from '@/assets/icon/edit_icon.svg';
+import { ReactComponent as CalendarIcon } from '@/assets/icon/calendar_icon.svg';
+
 import PetDefault from '@/assets/image/pet_default.png';
 import { RegisterInfoForm } from '@/store/slices/registerPetSlice';
 import { getFileFromObjectURL } from '@/utils/libs/getFileFromObjectURL';
@@ -191,24 +192,44 @@ export default function PetDetail() {
                   </div>
                   <div className="space-y-2">
                     <Label isError={false}>나이</Label>
-                    <div className="flex flex-col gap-1">
-                      <div className="flex flex-col">
+                    <div className="flex flex-col gap-2">
+                      <div className="flex flex-col gap-1">
                         <button
-                          className="text-left p-1 border border-primary-main rounded-md text-sm"
+                          className={concatClasses(
+                            'text-left p-1 border rounded-md text-sm',
+                            birthday ? 'border-primary-main' : 'border-gray-300',
+                          )}
                           type="button"
                           onClick={openBirthdayBottomSheet}
                         >
                           생년월일을 알고 있어요
                         </button>
+                        {birthday && (
+                          <p className="text-primary-bright flex gap-2 items-center">
+                            <CalendarIcon className="w-5 h-5" />
+                            {birthday}
+                          </p>
+                        )}
                       </div>
-                      <div className="flex flex-col">
+                      <div className="flex flex-col gap-1">
                         <button
-                          className="text-left p-1 border border-primary-main rounded-md text-sm"
+                          className={concatClasses(
+                            'text-left p-1 border border-primary-main rounded-md text-sm',
+                            birthday ? 'border-gray-300' : 'border-primary-main',
+                          )}
                           type="button"
                           onClick={openMonthsAgeBottomSheet}
                         >
                           대략적인 나이만 알고 있어요
                         </button>
+                        {!birthday && (
+                          <p className="text-primary-bright flex gap-2 items-center">
+                            <CalendarIcon className="w-5 h-5" />
+                            {months >= 12
+                              ? `${Math.floor(months / 12)}년 ${months % 12}개월`
+                              : `${months}개월`}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>

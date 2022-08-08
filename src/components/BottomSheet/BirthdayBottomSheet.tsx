@@ -34,7 +34,7 @@ export default function BirthdayBottomSheet({
   // eslint-disable-next-line arrow-body-style
   useEffect(() => {
     return () => {
-      setDate(birthday);
+      setDate('');
     };
   }, [isOpen]);
   return (
@@ -49,7 +49,7 @@ export default function BirthdayBottomSheet({
               className="text-gray-600 relative w-full text-center bg-primary-light rounded-md text-md py-1"
               onChange={(e) => setDate(e.target.value)}
             />
-            {birthday && <p className="text-sm text-primary-main">{`나이 : ${ageString}`}</p>}
+            {ageString && <p className="text-sm text-primary-main">{`나이 : ${ageString}`}</p>}
           </div>
           <Button label="선택완료" onClick={saveDate} />
         </div>
