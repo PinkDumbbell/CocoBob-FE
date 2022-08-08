@@ -1,7 +1,13 @@
 import { getDateDiff } from '@/utils/libs/date';
-import { useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import BottomSheet from '.';
 import Button from '../Button';
+import {
+  BottomSheetContentWrapper,
+  DatePicker,
+  SelectDateWrapper,
+  Title,
+} from './BottomSheet.style';
 
 interface BirthdayBottomSheetProps {
   isOpen: boolean;
@@ -33,27 +39,26 @@ export default function BirthdayBottomSheet({
   };
   // eslint-disable-next-line arrow-body-style
   useEffect(() => {
+    setDate(birthday);
     return () => {
       setDate('');
     };
   }, [isOpen]);
+
   return (
     <BottomSheet isOpen={isOpen}>
-      <div className="p-4">
-        <div className="flex flex-col gap-2">
-          <h4 className="text-lg font-bold">언제 태어났나요?</h4>
-          <div className="py-3 w-full flex flex-col items-center justify-center gap-3">
-            <input
-              type="date"
-              defaultValue={date}
-              className="text-gray-600 relative w-full text-center bg-primary-light rounded-md text-md py-1"
-              onChange={(e) => setDate(e.target.value)}
-            />
-            {ageString && <p className="text-sm text-primary-main">{`나이 : ${ageString}`}</p>}
-          </div>
-          <Button label="선택완료" onClick={saveDate} />
-        </div>
-      </div>
+      <BottomSheetContentWrapper>
+        <Title>언제 태어났나요?</Title>
+        <SelectDateWrapper className="flex-col">
+          <DatePicker
+            type="date"
+            defaultValue={date}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setDate(e.target.value)}
+          />
+          {ageString && <p className="text-sm text-primary-main">{`나이 : ${ageString}`}</p>}
+        </SelectDateWrapper>
+        <Button label="선택완료" onClick={saveDate} />
+      </BottomSheetContentWrapper>
     </BottomSheet>
   );
 }

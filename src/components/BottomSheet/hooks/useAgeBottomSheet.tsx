@@ -27,6 +27,11 @@ export default function useAgeBottomSheet({
     };
   }, []);
 
+  useEffect(() => {
+    setMonths(petAge);
+    setBirthday(petBirthday);
+  }, [petAge, petBirthday]);
+
   const onSaveBirthday = (date: string) => {
     setBirthday(date);
     setMonths(getDateDiff(date, 'month'));

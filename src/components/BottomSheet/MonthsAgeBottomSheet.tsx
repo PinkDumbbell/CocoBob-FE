@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import BottomSheet from '.';
 import Button from '../Button';
+import {
+  BottomSheetContentWrapper,
+  Description,
+  SelectDateWrapper,
+  Title,
+} from './BottomSheet.style';
 
 interface MonthsAgeBottomSheetProps {
   isOpen: boolean;
@@ -36,47 +42,43 @@ export default function MonthsAgeBottomSheet({
   }, [isOpen]);
   return (
     <BottomSheet isOpen={isOpen}>
-      <div className="p-4">
-        <div className="flex flex-col gap-2">
-          <h4 className="text-lg font-bold">추정 나이는 몇 살인가요?</h4>
-          <h6 className="text-md">맞춤형 정보를 위해 나이 정보는 꼭 필요해요</h6>
-          <div className="py-3 w-full flex  items-center justify-center gap-3">
-            <div className="flex gap-1">
-              <select
-                name=""
-                id=""
-                defaultValue={year}
-                onChange={(e) => setYear(Number(e.target.value))}
-              >
-                {Array(31)
-                  .fill(0)
-                  .map((_, idx) => (
-                    <option key={String(idx)} value={idx}>
-                      {idx}
-                    </option>
-                  ))}
-              </select>
-              <span>년</span>
-            </div>
-            <div className="flex gap-1">
-              <select
-                name=""
-                id=""
-                defaultValue={month}
-                onChange={(e) => setMonth(Number(e.target.value))}
-              >
-                {monthsData.map((value) => (
-                  <option key={String(value)} value={value}>
-                    {value}
+      <BottomSheetContentWrapper>
+        <Title>추정 나이는 몇 살인가요?</Title>
+        <Description>맞춤형 정보를 위해 나이 정보는 꼭 필요해요</Description>
+        <SelectDateWrapper>
+          <div className="flex gap-1">
+            <select
+              name="year-picker"
+              defaultValue={year}
+              onChange={(e) => setYear(Number(e.target.value))}
+            >
+              {Array(31)
+                .fill(0)
+                .map((_, idx) => (
+                  <option key={String(idx)} value={idx}>
+                    {idx}
                   </option>
                 ))}
-              </select>
-              <span>개월</span>
-            </div>
+            </select>
+            <span>년</span>
           </div>
-          <Button label="선택완료" onClick={onSaveAge} />
-        </div>
-      </div>
+          <div className="flex gap-1">
+            <select
+              name="month-picker"
+              defaultValue={month}
+              onChange={(e) => setMonth(Number(e.target.value))}
+            >
+              {monthsData.map((value) => (
+                <option key={String(value)} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+            <span>개월</span>
+          </div>
+        </SelectDateWrapper>
+        <Button label="선택완료" onClick={onSaveAge} />
+      </BottomSheetContentWrapper>
     </BottomSheet>
   );
 }

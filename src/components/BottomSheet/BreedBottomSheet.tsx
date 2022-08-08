@@ -6,6 +6,7 @@ import { concatClasses } from '@/utils/libs/concatClasses';
 import { InputStyle } from '../Form/FormInput';
 import BottomSheet from '.';
 import Button from '../Button';
+import { BottomSheetContentWrapper, BreedListContainer } from './BottomSheet.style';
 
 interface IBreedList {
   breeds: IBreeds[];
@@ -56,16 +57,16 @@ export default function BreedBottomSheet({
 
   return (
     <BottomSheet isOpen={isOpen}>
-      <div className="p-4 flex flex-col gap-2">
+      <BottomSheetContentWrapper>
         <InputStyle
           isError={false}
           value={searchKeyword}
           onChange={onChangeSearchKeyword}
           placeholder="품종을 검색해보세요"
         />
-        {isLoading && <div className="h-[50vh] px-2 py-3 overflow-y-scroll">로딩중...</div>}
+        {isLoading && <BreedListContainer>로딩중...</BreedListContainer>}
         {isSuccess && (
-          <div className="h-[50vh] px-2 py-3 overflow-y-scroll">
+          <BreedListContainer>
             {
               <BreedList
                 breeds={!searchKeyword ? breeds : foundBreeds}
@@ -73,10 +74,10 @@ export default function BreedBottomSheet({
                 setBreed={setSelectedBreed}
               />
             }
-          </div>
+          </BreedListContainer>
         )}
         <Button label="선택" onClick={onClickSelectButton} />
-      </div>
+      </BottomSheetContentWrapper>
     </BottomSheet>
   );
 }

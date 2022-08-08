@@ -1,25 +1,23 @@
 import Layout from '@/components/layout/Layout';
 import { useGetPetsQuery } from '@/store/api/petApi';
-import AddPetBUtton from '../components/AddPetButton';
+import AddPetButton from '../components/AddPetButton';
 import PetSimpleCard from '../components/PetSimpleInfo';
+import { FlexColumn, MainContentsContainer, PetListContainer, PetCard } from '../index.style';
 
 export default function PetsPage() {
   const { data: pets, isSuccess } = useGetPetsQuery();
 
   return (
     <Layout header title="우리 아이 목록" canGoBack>
-      <div className="w-full h-full p-4 bg-gray-100 space-y-4">
+      <MainContentsContainer className="px-2">
         <div className="flex">
-          <AddPetBUtton />
+          <AddPetButton />
         </div>
-        <div className="flex flex-col gap-4">
+        <FlexColumn className="gap-4">
           {isSuccess &&
             pets.map((pet) => (
-              <div
-                key={pet.id}
-                className="w-full flex flex-col px-4 bg-white rounded-lg shadow-md shadow-gray-300"
-              >
-                <div className="flex py-4 gap-5 border-b border-gray-200">
+              <PetListContainer key={pet.id}>
+                <PetCard>
                   <PetSimpleCard
                     id={pet.id}
                     birthday={pet.birthday}
@@ -30,12 +28,12 @@ export default function PetsPage() {
                     sex={pet.sex}
                     thumbnailPath={pet.thumbnailPath}
                   />
-                </div>
-                <div className="py-4 ">세부정보</div>
-              </div>
+                </PetCard>
+                <div className="pt-4">세부정보</div>
+              </PetListContainer>
             ))}
-        </div>
-      </div>
+        </FlexColumn>
+      </MainContentsContainer>
     </Layout>
   );
 }

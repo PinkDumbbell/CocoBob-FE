@@ -11,7 +11,6 @@ import FormButton from '@/components/Form/FormButton';
 
 import { ActivityLevelType, IBreeds, IPetInformation, PetSexType } from '@/@type/pet';
 import { useGetPetsDetailQuery, useUpdatePetDataMutation } from '@/store/api/petApi';
-import { concatClasses } from '@/utils/libs/concatClasses';
 import useSelectImage from '@/utils/hooks/useSelectImage';
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import BreedBottomSheet from '@/components/BottomSheet/BreedBottomSheet';
@@ -26,6 +25,19 @@ import { ReactComponent as CalendarIcon } from '@/assets/icon/calendar_icon.svg'
 import PetDefault from '@/assets/image/pet_default.png';
 import { RegisterInfoForm } from '@/store/slices/registerPetSlice';
 import { getFileFromObjectURL } from '@/utils/libs/getFileFromObjectURL';
+import {
+  AgeDescription,
+  AgeSelectButton,
+  EditProfileLabel,
+  FlexColumn,
+  FlexColumnCenter,
+  Form,
+  RemoveProfileButton,
+  SaveButtonContainer,
+  SexTypeButton,
+  SexTypeContainer,
+  SexTypeLabel,
+} from '../index.style';
 
 interface IPetEditForm {
   name: string;
@@ -128,20 +140,14 @@ export default function PetDetail() {
       {isSuccess && (
         <>
           <div className="p-2 px-3 relative">
-            <form
-              className="pb-16 flex flex-col gap-4 relative w-full"
-              onSubmit={handleSubmit(onSubmit)}
-            >
+            <Form onSubmit={handleSubmit(onSubmit)}>
               <ContentsContainer>
-                <div className="flex flex-col justify-center items-center w-full">
+                <FlexColumnCenter className="w-full">
                   <div className="relative w-32 h-32 bg-white">
-                    <label
-                      className="absolute opacity-4 bottom-1 right-0 rounded-full w-8 h-8 bg-white flex justify-center items-center border border-gray-400"
-                      htmlFor="pet-thumbnail"
-                    >
+                    <EditProfileLabel htmlFor="pet-thumbnail">
                       <EditIcon />
                       {/* <img src={AddPhotoImage} alt="" /> */}
-                    </label>
+                    </EditProfileLabel>
                     <input
                       type="file"
                       id="pet-thumbnail"
@@ -150,13 +156,9 @@ export default function PetDetail() {
                       onChange={handleChangeImage}
                     />
                     {previewUrl && (
-                      <button
-                        className="absolute opacity-4 bottom-1 left-0 rounded-full w-8 h-8 bg-white p-1 border border-gray-400"
-                        onClick={deleteProfileImage}
-                        type="button"
-                      >
+                      <RemoveProfileButton onClick={deleteProfileImage} type="button">
                         <TrashIcon />
-                      </button>
+                      </RemoveProfileButton>
                     )}
                     <img
                       src={previewUrl || PetDefault}
@@ -164,10 +166,10 @@ export default function PetDetail() {
                       className="rounded-full overflow-hidden"
                     />
                   </div>
-                </div>
+                </FlexColumnCenter>
               </ContentsContainer>
               <ContentsContainer>
-                <div className="w-full flex flex-col p-2 gap-5">
+                <FlexColumn className="w-full p-2 gap-5">
                   <FormInput
                     label="이름"
                     name="pet-name"
@@ -192,46 +194,40 @@ export default function PetDetail() {
                   </div>
                   <div className="space-y-2">
                     <Label isError={false}>나이</Label>
-                    <div className="flex flex-col gap-2">
-                      <div className="flex flex-col gap-1">
-                        <button
-                          className={concatClasses(
-                            'text-left p-1 border rounded-md text-sm',
-                            birthday ? 'border-primary-main' : 'border-gray-300',
-                          )}
+                    <FlexColumn className="gap-2">
+                      <FlexColumn className="gap-1">
+                        <AgeSelectButton
+                          className={birthday ? 'border-primary-main' : 'border-gray-300'}
                           type="button"
                           onClick={openBirthdayBottomSheet}
                         >
                           생년월일을 알고 있어요
-                        </button>
+                        </AgeSelectButton>
                         {birthday && (
-                          <p className="text-primary-bright flex gap-2 items-center">
+                          <AgeDescription>
                             <CalendarIcon className="w-5 h-5" />
                             {birthday}
-                          </p>
+                          </AgeDescription>
                         )}
-                      </div>
+                      </FlexColumn>
                       <div className="flex flex-col gap-1">
-                        <button
-                          className={concatClasses(
-                            'text-left p-1 border border-primary-main rounded-md text-sm',
-                            birthday ? 'border-gray-300' : 'border-primary-main',
-                          )}
+                        <AgeSelectButton
+                          className={birthday ? 'border-gray-300' : 'border-primary-main'}
                           type="button"
                           onClick={openMonthsAgeBottomSheet}
                         >
                           대략적인 나이만 알고 있어요
-                        </button>
+                        </AgeSelectButton>
                         {!birthday && (
-                          <p className="text-primary-bright flex gap-2 items-center">
+                          <AgeDescription>
                             <CalendarIcon className="w-5 h-5" />
                             {months >= 12
                               ? `${Math.floor(months / 12)}년 ${months % 12}개월`
                               : `${months}개월`}
-                          </p>
+                          </AgeDescription>
                         )}
                       </div>
-                    </div>
+                    </FlexColumn>
                   </div>
                   <FormInput
                     label="몸무게"
@@ -249,8 +245,8 @@ export default function PetDetail() {
                   />
                   <div className="space-y-2">
                     <Label isError={false}>성별</Label>
-                    <div className="flex gap-1 items-center mb-2">
-                      <div className="flex-1 text-center w-1/2">
+                    <SexTypeContainer>
+                      <SexTypeButton>
                         <input
                           type="radio"
                           className="hidden"
@@ -258,17 +254,16 @@ export default function PetDetail() {
                           id="pet-sex-man"
                           {...register('sex', { required: '성별을 선택해주세요' })}
                         />
-                        <label
+                        <SexTypeLabel
                           htmlFor="pet-sex-man"
-                          className={concatClasses(
-                            'border border-primary-main rounded-md w-full block',
-                            watch('sex') === 'MALE' ? 'bg-primary-light text-primary-main' : '',
-                          )}
+                          className={
+                            watch('sex') === 'MALE' ? 'bg-primary-light text-primary-main' : ''
+                          }
                         >
                           남자
-                        </label>
-                      </div>
-                      <div className="flex-1 text-center w-1/2">
+                        </SexTypeLabel>
+                      </SexTypeButton>
+                      <SexTypeButton>
                         <input
                           type="radio"
                           className="hidden"
@@ -276,17 +271,16 @@ export default function PetDetail() {
                           id="pet-sex-woman"
                           {...register('sex', { required: '성별을 선택해주세요' })}
                         />
-                        <label
+                        <SexTypeLabel
                           htmlFor="pet-sex-woman"
-                          className={concatClasses(
-                            'border border-primary-main rounded-md w-full block',
-                            watch('sex') === 'FEMALE' ? 'bg-primary-light text-primary-main' : '',
-                          )}
+                          className={
+                            watch('sex') === 'FEMALE' ? 'bg-primary-light text-primary-main' : ''
+                          }
                         >
                           여자
-                        </label>
-                      </div>
-                    </div>
+                        </SexTypeLabel>
+                      </SexTypeButton>
+                    </SexTypeContainer>
                   </div>
                   <div>
                     <QuestionWrapper>
@@ -298,7 +292,7 @@ export default function PetDetail() {
                       <label htmlFor="pregnant">임신/수유 중인가요?</label>
                     </QuestionWrapper>
                   </div>
-                  <div className="flex flex-col gap-2">
+                  <FlexColumn className="gap-2">
                     <p>활동수준</p>
                     <div className="flex gap-4">
                       {activityLevels.map((value) => (
@@ -313,13 +307,13 @@ export default function PetDetail() {
                         />
                       ))}
                     </div>
-                  </div>
-                </div>
+                  </FlexColumn>
+                </FlexColumn>
               </ContentsContainer>
-              <div className="p-3 fixed mx-auto bottom-0 w-full max-w-[425px] bg-white rounded-t-lg left-1/2 -translate-x-[50%]">
+              <SaveButtonContainer>
                 <FormButton name="저장" />
-              </div>
-            </form>
+              </SaveButtonContainer>
+            </Form>
           </div>
           <BreedBottomSheet isOpen={isBreedBottomSheetOpen} setBreed={setBreed} />
           <BirthdayBottomSheet
