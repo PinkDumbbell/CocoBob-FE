@@ -1,21 +1,19 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
 import FormInput from '@/components/Form/FormInput';
-import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
 import { useLoginMutation } from '@/store/api/userApi';
 import FormButton from '@/components/Form/FormButton';
 import useToastMessage from '@/utils/hooks/useToastMessage';
-import { selectIsLoggedIn } from '@/store/slices/authSlice';
 import { ILoginForm } from '../types';
 import { LoginForm } from './EmailLoginForm.style';
 
-export default function EmailLoginForm() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const isLoggedIn = useSelector(selectIsLoggedIn);
+interface EmailLoginFormProps {
+  // eslint-disable-next-line no-unused-vars
+  onSubmitCredentials: (data: ILoginForm) => void;
+}
+export default function EmailLoginForm({ onSubmitCredentials }: EmailLoginFormProps) {
+  // eslint-disable-next-line no-unused-vars
   const [login, { isLoading, error, reset: mutationReset }] = useLoginMutation();
   const {
     handleSubmit,
@@ -24,9 +22,6 @@ export default function EmailLoginForm() {
     reset: formReset,
   } = useForm<ILoginForm>();
 
-  const onSubmitLoginForm = async (data: ILoginForm) => {
-    await login(data);
-  };
   const openToast = useToastMessage();
   useEffect(() => {
     if (!error) return;
@@ -46,15 +41,8 @@ export default function EmailLoginForm() {
     }
   }, [error]);
 
-  useEffect(() => {
-    if (!isLoggedIn) return;
-
-    dispatch(closeBottomSheetAction);
-    navigate('/');
-  }, [isLoggedIn]);
-
   return (
-    <LoginForm onSubmit={handleSubmit(onSubmitLoginForm)}>
+    <LoginForm data-testid="login-form" onSubmit={handleSubmit(onSubmitCredentials)}>
       <FormInput
         label="이메일"
         name="email"

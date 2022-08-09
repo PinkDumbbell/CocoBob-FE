@@ -22,7 +22,7 @@ describe('반려동물 등록 Step1. 이름', () => {
   });
 
   test('input 입력 시 버튼 활성화', () => {
-    const nameInputEl = screen.getByTestId('pet-name');
+    const nameInputEl = screen.getByPlaceholderText('반려동물의 이름을 입력해주세요');
     const submitButton = screen.getByRole('button');
 
     fireEvent.change(nameInputEl, { target: { value: '코코' } });
@@ -42,7 +42,7 @@ describe('반려동물 등록 Step5. 세부 정보', () => {
 
   test('모든 입력 유효', () => {
     const maleButton = screen.getByText('남자');
-    const bodyWeightInput = screen.getByTestId('bodyWeight');
+    const bodyWeightInput = screen.getByLabelText('몸무게');
     const nextButton = screen.getByText('등록완료');
 
     fireEvent.click(maleButton);
@@ -51,7 +51,7 @@ describe('반려동물 등록 Step5. 세부 정보', () => {
     expect(nextButton).toBeEnabled();
   });
   test('성별 선택 X, 몸무게 입력 O', () => {
-    const bodyWeightInput = screen.getByTestId('bodyWeight');
+    const bodyWeightInput = screen.getByLabelText('몸무게');
     const nextButton = screen.getByText('등록완료');
 
     fireEvent.change(bodyWeightInput, { target: { value: 5.3 } });
