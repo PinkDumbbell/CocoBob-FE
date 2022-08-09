@@ -1,9 +1,12 @@
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { act } from 'react-dom/test-utils';
+import { ThemeProvider } from 'styled-components';
+
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 
+import { theme } from '@/styles/theme';
 import store from '@/store/config';
 import EmailLoginForm from './EmailLoginForm';
 
@@ -29,9 +32,11 @@ describe('<EmailLoginForm />', () => {
     onSubmitCredentials.mockReturnValue(1);
     render(
       <Provider store={store}>
-        <BrowserRouter>
-          <EmailLoginForm onSubmitCredentials={onSubmitCredentials} />
-        </BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <BrowserRouter>
+            <EmailLoginForm onSubmitCredentials={onSubmitCredentials} />
+          </BrowserRouter>
+        </ThemeProvider>
       </Provider>,
     );
   });
