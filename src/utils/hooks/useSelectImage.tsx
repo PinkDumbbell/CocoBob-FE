@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from 'react';
+import useToastMessage from './useToastMessage';
 
 export default function useSelectImage({
   initPreviewUrl,
@@ -9,6 +10,7 @@ export default function useSelectImage({
 }) {
   const [previewUrl, setPreviewUrl] = useState(initPreviewUrl);
   const [imageFile, setImageFile] = useState<string | undefined>(initImageFile);
+  const openToast = useToastMessage();
 
   const handleChangeImage = (event: ChangeEvent<HTMLInputElement>) => {
     const {
@@ -18,7 +20,7 @@ export default function useSelectImage({
 
     const image = files[0];
     if (!image.type.includes('image/')) {
-      alert('사진을 선택해주세요.');
+      openToast('사진을 선택해주세요.');
       return;
     }
     setImageFile(URL.createObjectURL(image));

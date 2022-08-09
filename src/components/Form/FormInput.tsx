@@ -23,7 +23,7 @@ export const Label = styled.label<{ isError: boolean | undefined }>`
   font-size: 14px;
   line-height: 20px;
   font-weight: 500;
-  color: ${({ isError }) => (isError ? '#E85354' : '#1d1d1d')};
+  color: ${({ isError, theme: { colors } }) => (isError ? colors.error : '#1d1d1d')};
 `;
 const InputWrapper = styled.div`
   display: flex;
@@ -41,7 +41,7 @@ export const InputStyle = styled.input<{ isError: boolean | undefined }>`
   height: 46px;
   padding: 0 0.5rem;
   background: #fffdfd;
-  border: 1px solid ${({ isError }) => (isError ? '#E85354' : '#EDEDED')};
+  border: 1px solid ${({ isError, theme: { colors } }) => (isError ? colors.error : '#EDEDED')};
   border-radius: 10px;
 
   ::placeholder {

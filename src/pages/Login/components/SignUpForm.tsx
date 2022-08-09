@@ -6,6 +6,7 @@ import FormInput from '@/components/Form/FormInput';
 import { useSignUpMutation } from '@/store/api/userApi';
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
 
+import useToastMessage from '@/utils/hooks/useToastMessage';
 import { checkEmailDuplicated } from '../api';
 import {
   CheckEmailButton,
@@ -19,7 +20,7 @@ import { ISignUpForm } from '../types';
 
 export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
   const { openBottomSheet: openEmailLoginBottomSheet } = useBottomSheet('emailLogin');
-
+  const openToast = useToastMessage();
   const {
     register,
     handleSubmit,
@@ -40,7 +41,7 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
 
   const onClickSignUp = async (data: ISignUpForm) => {
     if (!emailChecked || data.email !== emailChecked) {
-      alert('이메일 중복체크가 필요합니다.');
+      openToast('이메일 중복체크가 필요합니다.');
       return;
     }
     await signUp(data);
@@ -56,7 +57,7 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
 
     const fetchResult = await checkEmailDuplicated(emailValue);
     if (!fetchResult) {
-      alert('에러가 발생하였습니다.');
+      openToast('에러가 발생하였습니다.');
       return;
     }
 

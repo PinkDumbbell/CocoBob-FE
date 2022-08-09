@@ -9,7 +9,7 @@ export const HeaderWrapper = styled.header`
   left: 0;
   color: #222;
   background: white;
-  z-index: 9999;
+  z-index: 1000;
 `;
 export const HeaderContents = styled.div`
   display: flex;

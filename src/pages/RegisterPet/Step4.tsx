@@ -12,6 +12,7 @@ import {
   getTotalMonthWithYearAndMonth,
 } from '@/utils/libs/date';
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
+import useToastMessage from '@/utils/hooks/useToastMessage';
 import { ButtonWrapper, PageContainer, QuestionText, Form, PetNameHighlight } from './index.style';
 import { IPrevNextStep } from './type';
 
@@ -32,7 +33,7 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
     isBottomSheetOpen: isMonthsAgeBottomSheetOpen,
     openBottomSheet: openMonthsAgeBottomSheet,
   } = useBottomSheet('monthsAge');
-
+  const openToast = useToastMessage();
   const dispatch = useDispatch();
   const registerInfo = useSelector(selectRegisterInfo);
 
@@ -77,7 +78,7 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
 
   const onValidSubmit = () => {
     if (!age.birthday && !age.months) {
-      alert('나이를 입력해주세요');
+      openToast('나이를 입력해주세요');
       return;
     }
     saveAgeInStore();

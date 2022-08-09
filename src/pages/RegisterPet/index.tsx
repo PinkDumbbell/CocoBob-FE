@@ -7,6 +7,7 @@ import { RootState, useAppDispatch, useAppSelector } from '@/store/config';
 import { useSaveEnrollmentDataMutation } from '@/store/api/petApi';
 import { clearRegisterInfo } from '@/store/slices/registerPetSlice';
 import { getFileFromObjectURL } from '@/utils/libs/getFileFromObjectURL';
+import useToastMessage from '@/utils/hooks/useToastMessage';
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
@@ -22,6 +23,7 @@ export default function RegisterPet() {
   );
   const [currentStep, setCurrentStep] = useState(1);
   const [enrollPetMutation, { isError, isSuccess }] = useSaveEnrollmentDataMutation();
+  const openToast = useToastMessage();
 
   const goNextStep = async () => {
     setCurrentStep((step) => step + 1);
@@ -67,7 +69,7 @@ export default function RegisterPet() {
 
   useEffect(() => {
     if (!isError) return;
-    alert('등록에 실패하였습니다.');
+    openToast('등록에 실패하였습니다.');
     setCurrentStep((step) => step - 1);
   }, [isError]);
 

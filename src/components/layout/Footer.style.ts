@@ -12,7 +12,7 @@ export const NavBar = styled.nav`
   display: flex;
   justify-content: space-between;
   box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.05);
-  z-index: 9999;
+  z-index: 1000;
   @media (min-width: 425px) {
     width: 425px;
   }

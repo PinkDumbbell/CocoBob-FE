@@ -59,7 +59,6 @@ const baseQueryWithReAuth = async (
     const { data, error } = await refreshQuery('/users/token', api, extraOptions);
     if (!data || error?.status === 401 || (data && (data as IGenericResponse).status === 401)) {
       // error occured
-      alert('로그인이 필요합니다.');
       api.dispatch(logout());
     } else if (data && (data as IGenericResponse).status === 202) {
       // store new token

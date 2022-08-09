@@ -1,4 +1,6 @@
-export const theme = {
+import { DefaultTheme } from 'styled-components';
+
+export const theme: DefaultTheme = {
   colors: {
     primary: {
       dark: '#114786',
@@ -15,5 +17,7 @@ export const theme = {
       default: '#333333',
       caption: '#999999',
     },
+    error: '#e85354',
+    success: '#3abb67',
   },
 };
