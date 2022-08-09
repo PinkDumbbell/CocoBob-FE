@@ -80,7 +80,6 @@ export default function Input({
           type={type}
           placeholder={placeholder}
           isError={isError}
-          data-testid={name}
           {...rules}
         />
         {errorMessage && <p className="text-red-500 text-sm pt-1">{errorMessage}</p>}
