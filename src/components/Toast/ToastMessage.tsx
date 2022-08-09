@@ -31,14 +31,17 @@ const Container = styled.div`
     }
   }
 `;
-const ToastMessageItem = styled.div`
+const ToastMessageItem = styled.div<{ type: 'success' | 'error' }>`
   position: fixed;
+  z-index: 9999;
   left: 0;
   right: 0;
+  top: 16px;
   margin: auto;
   width: 358px;
   height: 46px;
-  background: #e85354;
+  background: ${({ type, theme: { colors } }) =>
+    type === 'error' ? colors.error : colors.success};
   /* Shadow/default */
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
@@ -55,7 +58,7 @@ const ToastMessageItem = styled.div`
 export default function ToastMessage() {
   const [animationName, setAnimationName] = useState<string>('fade-in');
   const toastMessage = useSelector(getToast);
-  const { id, content, time } = toastMessage;
+  const { id, content, time, type } = toastMessage;
   const dispatch = useDispatch();
   const timeoutId = useRef<null | ReturnType<typeof setTimeout>>(null);
   const removeToast = () => {
@@ -76,7 +79,7 @@ export default function ToastMessage() {
   return (
     <Container>
       {content !== '' && (
-        <ToastMessageItem onClick={removeToast} className={animationName}>
+        <ToastMessageItem onClick={removeToast} className={animationName} type={type}>
           <h3>{content}</h3>
         </ToastMessageItem>
       )}

@@ -13,6 +13,7 @@ import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
 import { useForm } from 'react-hook-form';
 import useSearchBreed from '@/utils/hooks/useSearchBreed';
+import useToastMessage from '@/utils/hooks/useToastMessage';
 import { ButtonWrapper, Form, PageContainer, PetNameHighlight, QuestionText } from './index.style';
 
 interface IBreedList {
@@ -91,7 +92,7 @@ export const SearchBreedBottomSheet = ({
 
 export default function Step3({ goNextStep }: any) {
   const { isBottomSheetOpen, openBottomSheet, closeBottomSheet } = useBottomSheet('findBreed');
-
+  const openToast = useToastMessage();
   const { isSuccess, data: breeds } = useGetBreedsQuery();
   const [breed, setBreed] = useState<IBreeds | undefined>();
 
@@ -101,7 +102,7 @@ export default function Step3({ goNextStep }: any) {
 
   const onValidSubmit = () => {
     if (!breed) {
-      alert('견종을 선택해주세요');
+      openToast('견종을 선택해주세요');
       return;
     }
     dispatch(

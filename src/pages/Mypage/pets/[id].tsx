@@ -25,6 +25,8 @@ import { ReactComponent as CalendarIcon } from '@/assets/icon/calendar_icon.svg'
 import PetDefault from '@/assets/image/pet_default.png';
 import { RegisterInfoForm } from '@/store/slices/registerPetSlice';
 import { getFileFromObjectURL } from '@/utils/libs/getFileFromObjectURL';
+import useToastMessage from '@/utils/hooks/useToastMessage';
+import useToastConfirm from '@/utils/hooks/useToastConfirm';
 import {
   AgeDescription,
   AgeSelectButton,
@@ -64,6 +66,7 @@ export default function PetDetail() {
   const { imageFile, previewUrl, handleChangeImage, setPreviewUrl } = useSelectImage({
     initPreviewUrl: petData?.thumbnailPath,
   });
+  const openToast = useToastMessage();
   const { openBottomSheet: openBreedBottomSheet, isBottomSheetOpen: isBreedBottomSheetOpen } =
     useBottomSheet('findBreed');
   const {
@@ -81,13 +84,17 @@ export default function PetDetail() {
   const [breed, setBreed] = useState<IBreeds | undefined>();
   const [isImageDeleted, setIsImageDeleted] = useState(false); // 사진을 삭제했을 때 true, 변경하거나 그대로 유지 : false
 
-  const deleteProfileImage = () => {
-    // eslint-disable-next-line no-alert, no-restricted-globals
-    if (previewUrl && confirm('프로필 사진을 삭제하시겠습니까?')) {
-      setPreviewUrl('');
-      setIsImageDeleted(true);
-    }
+  const initProfileImage = () => {
+    setPreviewUrl('');
+    setIsImageDeleted(true);
   };
+  const confirmDeleteProfile = useToastConfirm(initProfileImage);
+
+  const deleteProfileImage = () => {
+    if (!previewUrl) return;
+    confirmDeleteProfile('프로필 사진을 삭제하시겠습니까?');
+  };
+
   const onSubmit = async (data: IPetEditForm) => {
     if ((!months && !birthday) || !breed?.id) return;
     const updateParams = {
@@ -123,15 +130,17 @@ export default function PetDetail() {
       initForm(petData);
     }
   }, [petData]);
+
   useEffect(() => {
     if (imageFile) {
       setIsImageDeleted(false);
     }
   }, [imageFile]);
+
   useEffect(() => {
     if (!mutationResult) return;
     navigate('/mypage/pets');
-    alert('성공적으로 정보를 수정하였습니다.');
+    openToast('성공적으로 정보를 수정하였습니다.', 'success');
   }, [mutationResult]);
 
   return (

@@ -9,8 +9,10 @@ interface ToastProps {
 
 export default function useToastMessage(option?: ToastProps) {
   const dispatch = useDispatch();
-  const openToast = useCallback((content: string) => {
-    dispatch(addToastAction({ id: uuidv4(), content, time: option?.time ?? 3000 }));
+  const openToast = useCallback((content: string, type?: 'success' | 'error') => {
+    dispatch(
+      addToastAction({ id: uuidv4(), content, time: option?.time ?? 3000, type: type ?? 'error' }),
+    );
   }, []);
 
   return openToast;
