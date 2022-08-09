@@ -3,11 +3,13 @@ import { useAppDispatch } from '@/store/config';
 import { logout } from '@/store/slices/authSlice';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useToastConfirm from './useToastConfirm';
 
 export default function useLogout() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [logoutMutation, { isSuccess }] = useLogoutMutation();
+  const logoutConfirm = useToastConfirm(() => logoutMutation());
 
   useEffect(() => {
     if (isSuccess) {
@@ -17,10 +19,7 @@ export default function useLogout() {
   }, [isSuccess]);
 
   const onClickLogout = () => {
-    // eslint-disable-next-line no-restricted-globals
-    if (confirm('로그아웃을 하시겠습니까?')) {
-      logoutMutation();
-    }
+    logoutConfirm('로그아웃을 하시겠습니까?');
   };
   return onClickLogout;
 }
