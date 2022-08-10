@@ -14,6 +14,11 @@ import PetsPage from '@/pages/Mypage/pets/index';
 import PetEdit from '@/pages/Mypage/pets/[id]';
 
 import NotFound from '@/pages/404';
+import Daily from '@/pages/Daily';
+import DailyMain from '@/pages/Daily/Daily';
+import DailyWalk from '@/pages/Daily/Walk';
+import DailyFeeds from '@/pages/Daily/Feeds';
+import DailyBodyWeight from '@/pages/Daily/BodyWeight';
 
 function PrivateRoute() {
   const { isLoggedIn } = useUser();
@@ -36,6 +41,12 @@ function PrivateRoutes() {
           <Route path="wish" element={<WishPage />} />
           <Route path="pets" element={<PetsPage />} />
           <Route path="pets/:id" element={<PetEdit />} />
+        </Route>
+        <Route path="/daily" element={<Daily />}>
+          <Route index element={<DailyMain />} />
+          <Route path="walk" element={<DailyWalk />} />
+          <Route path="feeds" element={<DailyFeeds />} />
+          <Route path="bodyWeight" element={<DailyBodyWeight />} />
         </Route>
       </Route>
       <Route element={<NotFound />} path="*" />
