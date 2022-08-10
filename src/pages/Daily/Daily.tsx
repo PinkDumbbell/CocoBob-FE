@@ -3,7 +3,7 @@ import Calendar from 'react-calendar';
 import Layout from '@/components/layout/Layout';
 import 'react-calendar/dist/Calendar.css';
 import dayjs from 'dayjs';
-import './index.style.css';
+import './calendar.css';
 import { Link } from 'react-router-dom';
 
 const CalendarWrapper = ({
@@ -16,7 +16,7 @@ const CalendarWrapper = ({
   <div>
     <div
       className={
-        'overflow-hidden transition-all flex items-start justify-center rounded-t-lg w-full '
+        'overflow-hidden transition-all flex items-start justify-center rounded-[10px] w-full '
       }
     >
       <Calendar
