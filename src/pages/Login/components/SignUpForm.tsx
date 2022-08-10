@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
-import { useSignUpMutation } from '@/store/api/userApi';
-import useBottomSheet from '@/utils/hooks/useBottomSheet';
 
 import useToastMessage from '@/utils/hooks/useToastMessage';
 import { checkEmailDuplicated } from '../api';
@@ -18,8 +16,13 @@ import {
 } from './SignUpForm.style';
 import { ISignUpForm } from '../types';
 
-export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
-  const { openBottomSheet: openEmailLoginBottomSheet } = useBottomSheet('emailLogin');
+export default function SignUpForm({
+  isOpen,
+  signUp,
+}: {
+  isOpen: boolean;
+  signUp: (data: ISignUpForm) => void;
+}) {
   const openToast = useToastMessage();
   const {
     register,
@@ -32,28 +35,28 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
     watch,
   } = useForm<ISignUpForm>();
 
-  const [signUp] = useSignUpMutation();
-
   const [emailChecked, setEmailChecked] = useState<string>('');
 
   const password = watch('password');
   const passwordConfirm = watch('passwordConfirm');
 
-  const onClickSignUp = async (data: ISignUpForm) => {
-    if (!emailChecked || data.email !== emailChecked) {
+  const isEmailDuplicatedChecked = (submitEmail: string) => {
+    if (!emailChecked || submitEmail !== emailChecked) {
       openToast('이메일 중복체크가 필요합니다.');
-      return;
+      return false;
     }
-    await signUp(data);
+    return true;
+  };
 
-    openEmailLoginBottomSheet();
+  const onClickSignUp = async (data: ISignUpForm) => {
+    if (!isEmailDuplicatedChecked(data.email)) return;
+    signUp(data);
   };
 
   const checkEmail = async () => {
     const emailValue = getValues('email');
-    if (!emailValue) return;
     const result = await trigger('email');
-    if (!result) return;
+    if (!emailValue || !result) return;
 
     const fetchResult = await checkEmailDuplicated(emailValue);
     if (!fetchResult) {
@@ -77,7 +80,7 @@ export default function SignUpForm({ isOpen }: { isOpen: boolean }) {
   }, [isOpen]);
 
   return (
-    <FormContainer onSubmit={handleSubmit(onClickSignUp)}>
+    <FormContainer data-testid="signup-form" onSubmit={handleSubmit(onClickSignUp)}>
       <FormInput
         label="이름"
         name="signup-username"
