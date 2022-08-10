@@ -21,7 +21,7 @@
   background-color: #f8f8fa;
 }
 .react-calendar__navigation button[disabled] {
-  background-color: #f0f0f0;
+  background-color: white;
 }
 abbr[title] {
   text-decoration: none;
