@@ -123,6 +123,7 @@ export default function Step5({ goNextStep }: IPrevNextStep) {
           <FormInput
             label="몸무게"
             name="bodyWeight"
+            unit="KG"
             placeholder="몸무게를 입력해주세요"
             rules={register('bodyWeight', {
               required: true,

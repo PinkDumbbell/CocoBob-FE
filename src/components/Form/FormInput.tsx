@@ -10,6 +10,7 @@ interface InputProps {
   placeholder?: string;
   isError?: boolean | undefined;
   errorMessage?: string;
+  unit?: string;
 }
 
 const InputContainer = styled.div`
@@ -33,13 +34,14 @@ const InputWrapper = styled.div`
   border-radius: 10px;
   width: 100%;
 `;
-export const InputStyle = styled.input<{ isError: boolean | undefined }>`
+export const InputStyle = styled.input<{ isError: boolean | undefined; unit?: boolean }>`
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
   height: 46px;
   padding: 0 0.5rem;
+  padding-right: ${({ unit }) => (unit ? '3rem' : '0.5rem')};
   background: #fffdfd;
   border: 1px solid ${({ isError, theme: { colors } }) => (isError ? colors.error : '#EDEDED')};
   border-radius: 10px;
@@ -63,6 +65,7 @@ export default function Input({
   name,
   rules,
   type,
+  unit,
   required,
   placeholder,
   isError,
@@ -80,8 +83,14 @@ export default function Input({
           type={type}
           placeholder={placeholder}
           isError={isError}
+          unit={!!unit}
           {...rules}
         />
+        {!!unit && (
+          <div className="font-light text-gray-500 text-sm bg-slate-100 h-[46px] rounded-r-[10px] absolute right-0 flex items-center justify-center w-[3rem]">
+            {unit}
+          </div>
+        )}
         {errorMessage && <p className="text-red-500 text-sm pt-1">{errorMessage}</p>}
       </InputWrapper>
     </InputContainer>
