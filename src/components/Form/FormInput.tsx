@@ -10,6 +10,7 @@ interface InputProps {
   placeholder?: string;
   isError?: boolean | undefined;
   errorMessage?: string;
+  disabled?: boolean;
 }
 
 const InputContainer = styled.div`
@@ -65,6 +66,7 @@ export default function Input({
   type,
   required,
   placeholder,
+  disabled,
   isError,
   errorMessage,
 }: InputProps) {
@@ -81,6 +83,7 @@ export default function Input({
           placeholder={placeholder}
           isError={isError}
           {...rules}
+          disabled={disabled}
         />
         {errorMessage && (
           <p aria-errormessage={errorMessage} className="text-red-500 text-sm pt-1">
