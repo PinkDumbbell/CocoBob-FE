@@ -2,7 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from '@/store/config';
 
-export type BottomSheetType = '' | 'emailLogin' | 'signUp' | 'birthday' | 'monthsAge' | 'findBreed';
+export type BottomSheetType =
+  | ''
+  | 'emailLogin'
+  | 'signUp'
+  | 'birthday'
+  | 'monthsAge'
+  | 'findBreed'
+  | 'walkSelector';
 export type BottomSheetState = {
   bottomSheet: BottomSheetType;
 };

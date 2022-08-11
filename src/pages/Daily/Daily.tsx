@@ -1,10 +1,13 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import Layout from '@/components/layout/Layout';
 import 'react-calendar/dist/Calendar.css';
 import dayjs from 'dayjs';
 import './calendar.css';
 import { Link } from 'react-router-dom';
+import useBottomSheet from '@/utils/hooks/useBottomSheet';
+import BottomSheet from '@/components/BottomSheet';
+import useToastMessage from '@/utils/hooks/useToastMessage';
 
 const CalendarWrapper = ({
   currentDate,
@@ -52,24 +55,30 @@ const CalendarWrapper = ({
   </div>
 );
 
+const menus = [
+  {
+    title: '급여량 기록',
+    path: '/daily/feeds',
+  },
+  {
+    title: '몸무게 기록',
+    path: '/daily/bodyWeight',
+  },
+];
 export default function DailyMain() {
+  const toastMessage = useToastMessage();
   const [calendarDate, setCalendarDate] = useState(new Date());
+  const { closeBottomSheet, isBottomSheetOpen, openBottomSheet } = useBottomSheet('walkSelector');
 
-  const menus = [
-    {
-      title: '산책하기',
-      path: '/daily/walk',
-    },
-    {
-      title: '급여량 기록',
-      path: '/daily/feeds',
-    },
-    {
-      title: '몸무게 기록',
-      path: '/daily/bodyWeight',
-    },
-  ];
-
+  const saveWalkDirectly = () => {
+    closeBottomSheet();
+    toastMessage('죄송합니다. 현재 해당 기능을 준비중입니다!');
+  };
+  useEffect(() => {
+    return () => {
+      closeBottomSheet();
+    };
+  }, []);
   return (
     <Layout header footer title="데일리 기록">
       <div className="py-4 bg-white">
@@ -77,6 +86,11 @@ export default function DailyMain() {
           <CalendarWrapper currentDate={calendarDate} onChangeDate={setCalendarDate} />
         </div>
         <div>
+          <div className="w-full py-3 px-4 border-b-slate-200 border-b">
+            <button type="button" className="w-full text-left" onClick={openBottomSheet}>
+              산책하기
+            </button>
+          </div>
           {menus.map((menu) => (
             <div key={menu.title} className="w-full py-3 px-4 border-b-slate-200 border-b">
               <Link to={menu.path} className="block">
@@ -86,6 +100,16 @@ export default function DailyMain() {
           ))}
         </div>
       </div>
+      <BottomSheet isOpen={isBottomSheetOpen}>
+        <div className="py-2">
+          <div className="text-lg text-center p-3 text-primary-main border-b">
+            <Link to="/daily/walk">산책 하기</Link>
+          </div>
+          <div className="text-lg text-center p-3 text-gray-400" onClick={saveWalkDirectly}>
+            바로 입력
+          </div>
+        </div>
+      </BottomSheet>
     </Layout>
   );
 }
