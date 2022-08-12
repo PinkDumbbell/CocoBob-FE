@@ -1,3 +1,4 @@
+import { IAuthenticatedUser } from '@/@type/user';
 import axios from '@/utils/api';
 
 export async function checkEmailDuplicated(email: string) {
@@ -13,4 +14,12 @@ export async function checkEmailDuplicated(email: string) {
 
     return { isAvailable: false, message: '알 수 없는 에러가 발생하였습니다.' };
   }
+}
+export async function googleLogin(): Promise<IAuthenticatedUser> {
+  const { data } = await axios.get('/users/google', { headers: { mode: 'no-cors' } });
+  return data;
+}
+export async function kakaoLogin(): Promise<IAuthenticatedUser> {
+  const { data } = await axios.get('/users/kakao');
+  return data;
 }
