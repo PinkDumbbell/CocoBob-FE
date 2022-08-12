@@ -1,4 +1,5 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as FoodIcon } from '@/assets/icon/navbar_food.svg';
 import { ReactComponent as DailyIcon } from '@/assets/icon/navbar_daily.svg';
 import { ReactComponent as ProfileIcon } from '@/assets/icon/navbar_profile.svg';
@@ -27,15 +28,14 @@ const navBarItems = [
     iconSrc: ProfileIcon,
   },
 ];
-export default function Footer() {
-  const location = useLocation();
+function Footer({ currentPath }: { currentPath: string }) {
   const navigate = useNavigate();
 
   const goPage = (path: string) => {
-    if (location.pathname === path) return;
+    if (currentPath === path) return;
     navigate(path);
   };
-  const isCurrentPage = (path: string) => location.pathname === path;
+  const isCurrentPage = (path: string) => currentPath === path;
 
   return (
     <NavBar>
@@ -43,7 +43,6 @@ export default function Footer() {
         <NavBarItem key={navBarItem.path} current={String(isCurrentPage(navBarItem.path))}>
           <IconButton onClick={() => goPage(navBarItem.path)}>
             <IconWrapper>
-              {/* <img src={navBarItem.iconSrc} alt={`${navBarItem.title} 아이콘`} /> */}
               <navBarItem.iconSrc
                 key={navBarItem.path}
                 stroke={isCurrentPage(navBarItem.path) ? '#fff' : '#999'}
@@ -60,3 +59,4 @@ export default function Footer() {
     </NavBar>
   );
 }
+export default React.memo(Footer);

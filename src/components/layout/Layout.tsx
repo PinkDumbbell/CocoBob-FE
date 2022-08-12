@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { useLocation } from 'react-router-dom';
 import Footer from './Footer';
@@ -47,7 +47,7 @@ export default function Layout({
   menu,
 }: LayoutProps) {
   const { pageRef, hideTitle } = useHeaderWithScroll();
-
+  const location = useLocation();
   return (
     <>
       {header && (
@@ -64,7 +64,7 @@ export default function Layout({
       <ChildrenWrapper ref={pageRef} headerShown={!!header} footerShown={!!footer}>
         {children}
       </ChildrenWrapper>
-      {footer && <Footer />}
+      {footer && <Footer currentPath={location.pathname} />}
     </>
   );
 }
