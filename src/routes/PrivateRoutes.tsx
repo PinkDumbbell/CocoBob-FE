@@ -14,6 +14,7 @@ import PetsPage from '@/pages/Mypage/pets/index';
 import PetEdit from '@/pages/Mypage/pets/[id]';
 
 import NotFound from '@/pages/404';
+import ProductDetailPage from '@/pages/Products/ProductDetail';
 
 function PrivateRoute() {
   const { isLoggedIn } = useUser();
@@ -30,6 +31,7 @@ function PrivateRoutes() {
         <Route path="/register" element={<RegisterPet />} />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/mypage" element={<Mypage />}>
           <Route index element={<MypageMain />} />
           <Route path="profile" element={<ProfilePage />} />
