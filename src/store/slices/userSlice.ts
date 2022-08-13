@@ -1,13 +1,10 @@
-/* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '@/@type/user';
-import { IGenericResponse } from '@/store/api/types';
 import { userApiSlice } from '../api/userApi';
 
 export type UserState = {
   user: IUser | null;
 };
-export interface UserPayload extends IGenericResponse, IUser {}
 
 const initialState: UserState = {
   user: {
