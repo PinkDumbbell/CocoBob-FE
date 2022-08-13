@@ -7,7 +7,10 @@ import { useAppDispatch } from '@/store/config';
 import { setCredentials } from '@/store/slices/authSlice';
 import Layout from '@/components/layout/Layout';
 
-export default function useRedirect(children: ReactNode, socialLoginType: 'kakao' | 'google') {
+export default function useRedirect(
+  children: ReactNode,
+  socialLoginType: 'kakao' | 'google' | 'apple',
+) {
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(true);

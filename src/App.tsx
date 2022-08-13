@@ -6,6 +6,7 @@ import ToastMessage from './components/Toast/ToastMessage';
 import ToastConfirm from './components/Toast/ToastConfirm';
 import GoogleRedirectHandler from './pages/Redirect/google';
 import KakaoRedirectHandler from './pages/Redirect/kakao';
+import AppleRedirectHandler from './pages/Redirect/apple';
 
 function App() {
   const location = useLocation();
@@ -18,6 +19,7 @@ function App() {
         <Route element={<LoginPage />} path="/login" />
         <Route element={<GoogleRedirectHandler />} path="/auth/google/callback" />
         <Route element={<KakaoRedirectHandler />} path="/auth/kakao/callback" />
+        <Route element={<AppleRedirectHandler />} path="/auth/apple/callback" />
       </Routes>
     </PageTransition>
   );
