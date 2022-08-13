@@ -1,4 +1,3 @@
-import { IGenericResponse } from '@/store/api/types';
 import { ISimplePet } from './pet';
 
 export interface IUser {
@@ -18,4 +17,3 @@ export interface IAuthenticatedUser {
   userId: number | null;
   username: string;
 }
-export interface IUserLoginResponse extends IGenericResponse, IAuthenticatedUser {}
