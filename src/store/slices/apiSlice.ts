@@ -57,14 +57,18 @@ const baseQueryWithReAuth = async (
   // token expired
   if (result?.error?.status === 401) {
     const { data, error } = await refreshQuery('/users/token', api, extraOptions);
-    if (!data || error?.status === 401 || (data && (data as IGenericResponse).status === 401)) {
+    if (
+      !data ||
+      error?.status === 401 ||
+      (data && (data as IGenericResponse<any>).status === 401)
+    ) {
       // error occured
       api.dispatch(logout());
-    } else if (data && (data as IGenericResponse).status === 202) {
+    } else if (data && (data as IGenericResponse<any>).status === 202) {
       // store new token
       api.dispatch(
         updateToken({
-          ...((data as IGenericResponse).data as RefreshedTokenResult),
+          ...((data as IGenericResponse<any>).data as RefreshedTokenResult),
         }),
       );
       // retry original query with new access token
