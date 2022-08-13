@@ -8,7 +8,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUser: builder.query<IUser, void>({
       query: () => '/users',
-      transformResponse: (response: IGenericResponse) => response.data as IUser,
+      transformResponse: (response: IGenericResponse<IUser>) => response.data,
       providesTags: ['User'],
     }),
     login: builder.mutation<IAuthenticatedUser, ILoginForm>({
@@ -17,16 +17,16 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: credentials,
       }),
-      transformResponse: (loginResult: IGenericResponse) => loginResult.data as IAuthenticatedUser,
+      transformResponse: (loginResult: IGenericResponse<IAuthenticatedUser>) => loginResult.data,
     }),
-    logout: builder.mutation<IGenericResponse, void>({
+    logout: builder.mutation<IGenericResponse<void>, void>({
       query: () => ({
         url: '/users',
         method: 'DELETE',
       }),
       invalidatesTags: ['User'],
     }),
-    signUp: builder.mutation<IGenericResponse, ISignUpForm>({
+    signUp: builder.mutation<IGenericResponse<{ userId: number }>, ISignUpForm>({
       query: (data) => ({
         url: '/users/new',
         method: 'POST',
