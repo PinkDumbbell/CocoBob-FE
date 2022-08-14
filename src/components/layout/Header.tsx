@@ -71,7 +71,7 @@ export default function Header({
         </TitleWrapper>
         <RightMenuWrapper>
           {canSearch && (
-            <Link to="/search">
+            <Link to="/products" state={{ childrenElement: 3 }}>
               <SearchIcon />
             </Link>
           )}
