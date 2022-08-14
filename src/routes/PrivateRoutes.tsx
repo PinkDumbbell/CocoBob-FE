@@ -4,7 +4,6 @@ import useUser from '@/utils/hooks/useUser';
 import MainPage from '@/pages/Main';
 import RegisterPet from '@/pages/RegisterPet';
 import ProductsPage from '@/pages/Products';
-import SearchPage from '@/pages/Search';
 
 import Mypage from '@/pages/Mypage';
 import MypageMain from '@/pages/Mypage/Main';
@@ -30,7 +29,6 @@ function PrivateRoutes() {
         <Route path="/" element={<MainPage />} />
         <Route path="/register" element={<RegisterPet />} />
         <Route path="/products" element={<ProductsPage />} />
-        <Route path="/search" element={<SearchPage />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/mypage" element={<Mypage />}>
           <Route index element={<MypageMain />} />
