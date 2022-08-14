@@ -31,6 +31,7 @@ export default function ProductsPage() {
   const navigate = useNavigate();
 
   const goBack = () => {
+    setSearchWord('');
     if (childrenElement === 3) navigate(-1);
     else setChildrenElement(0);
   };
@@ -57,9 +58,6 @@ export default function ProductsPage() {
     const { childrenElement: childrenElementState } = state;
     if (childrenElementState) setChildrenElement(childrenElementState);
   }, []);
-  useEffect(() => {
-    console.log(childrenElement);
-  }, [childrenElement]);
   return (
     <div className="w-full h-full overflow-scroll">
       {childrenElement === 0 ? (
