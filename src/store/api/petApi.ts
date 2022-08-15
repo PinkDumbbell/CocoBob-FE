@@ -38,6 +38,7 @@ export const petApiSlice = apiSlice.injectEndpoints({
         };
       },
       transformResponse: (response: IGenericResponse<{ petId: number }>) => response.data,
+      invalidatesTags: ['User', { type: 'Pet' as const, id: 'LIST' }],
     }),
     getPets: builder.query<IPet[], void>({
       query: () => '/pets',
