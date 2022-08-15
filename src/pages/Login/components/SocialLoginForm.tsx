@@ -1,4 +1,5 @@
 import { SocialLoginButton, FormWrapper } from './SocialLoginForm.style';
+import AppleLoginButton from './AppleLoginButton';
 
 export default function SocialLoginForm() {
   return (
@@ -9,9 +10,7 @@ export default function SocialLoginForm() {
       <SocialLoginButton className="kakao">
         <a href={`${import.meta.env.VITE_API_BASE_URL}/v1/users/kakao`}>카카오 계정으로 로그인</a>
       </SocialLoginButton>
-      <SocialLoginButton className="apple">
-        <a href={`${import.meta.env.VITE_API_BASE_URL}/v1/users/apple`}>애플 계정으로 로그인</a>
-      </SocialLoginButton>
+      <AppleLoginButton />
     </FormWrapper>
   );
 }
