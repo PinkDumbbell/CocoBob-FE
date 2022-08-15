@@ -1,6 +1,6 @@
-export interface IGenericResponse {
+export interface IGenericResponse<T> {
   status: number;
   message: string;
   code: string;
-  data: unknown;
+  data: T;
 }

@@ -91,7 +91,11 @@ export default function Input({
             {unit}
           </div>
         )}
-        {errorMessage && <p className="text-red-500 text-sm pt-1">{errorMessage}</p>}
+        {errorMessage && (
+          <p aria-errormessage={errorMessage} className="text-red-500 text-sm pt-1">
+            {errorMessage}
+          </p>
+        )}
       </InputWrapper>
     </InputContainer>
   );
