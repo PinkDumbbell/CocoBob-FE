@@ -9,19 +9,21 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import SearchPage from './components/Search';
 import SearchHeader from './components/Search/header';
 
+const MainContent = {
+  AllProducts: 'AllProducts',
+  Search: 'Search',
+  SearchProducts: 'SearchProducts',
+  OnlySearch: 'OnlySearch',
+} as const;
+type MainContentType = typeof MainContent[keyof typeof MainContent]; // 'AllProducts' | 'Search' | 'SearchProducts' | 'OnlySearch'
 interface ILocation {
-  childrenElement: number;
+  MainContent: MainContentType;
 }
 export default function ProductsPage() {
   const categoryList = ['사료', '간식', '영양제'];
   // eslint-disable-next-line no-unused-vars
   const [category, setCategory] = useState<string>('');
-  // childrenElement
-  // 0 : 초기상태
-  // 1 : 검색창
-  // 2 : 검색결과
-  // 3 : 다른 메뉴에서의 검색창
-  const [childrenElement, setChildrenElement] = useState<number>(0);
+  const [mainContent, setMainContent] = useState<MainContentType>('AllProducts');
   const [searchWord, setSearchWord] = useState<string>('');
   const [searchedData, setSearchedData] = useState<any[] | undefined>([]);
   // todo: 검색 가능한 키워드 선정하기
@@ -32,42 +34,42 @@ export default function ProductsPage() {
 
   const goBack = () => {
     setSearchWord('');
-    if (childrenElement === 3) navigate(-1);
-    else setChildrenElement(0);
+    if (mainContent === 'OnlySearch') navigate(-1);
+    else setMainContent('AllProducts');
   };
   const onClickSearch = (name?: string) => {
-    if (searchWord === '') setChildrenElement(0);
+    if (searchWord === '') setMainContent('AllProducts');
     else if (name) {
       // api요청 추가
       setSearchWord(name);
       setSearchedData(productList);
-      setChildrenElement(2);
+      setMainContent('SearchProducts');
     } else {
       // searchWord로 api 요청
       setSearchedData(productList);
-      setChildrenElement(2);
+      setMainContent('SearchProducts');
     }
   };
   useEffect(() => {
-    if (childrenElement === 2 || childrenElement === 0) return;
+    if (mainContent === 'SearchProducts' || mainContent === 'AllProducts') return;
     setSearchedData([]);
-    setChildrenElement(1);
+    setMainContent('Search');
   }, [searchWord]);
   useEffect(() => {
     if (!state) return;
-    const { childrenElement: childrenElementState } = state;
-    if (childrenElementState) setChildrenElement(childrenElementState);
+    const { MainContent: MainContentState } = state;
+    if (MainContentState) setMainContent(MainContentState);
   }, []);
   return (
     <div className="w-full h-full overflow-scroll">
-      {childrenElement === 0 ? (
+      {mainContent === 'AllProducts' ? (
         <HeaderWrapper>
           <HeaderContents>
             <Title isHide={false}>사료</Title>
             <div
               className="absolute right-4 flex items-center"
               onClick={() => {
-                setChildrenElement(1);
+                setMainContent('Search');
               }}
             >
               <SearchIcon />
@@ -79,20 +81,20 @@ export default function ProductsPage() {
           setSearchWord={(word: string) => setSearchWord(word)}
           searchWord={searchWord}
           onClickSearch={onClickSearch}
-          setChildrenElement={setChildrenElement}
+          setMainContent={setMainContent}
           onClick={() => {
             goBack();
           }}
         />
       )}
-      {childrenElement !== 1 && childrenElement !== 3 && (
+      {mainContent !== 'Search' && mainContent !== 'OnlySearch' && (
         <div className="px-4 fixed flex flex-col w-[inherit] max-w-[425px] bg-white pt-[50px]">
           <div className="h-12 w-full flex justify-between items-center overflow-x-scroll">
             {categoryList.map((categoryName) =>
               categoryName === category ? (
                 <div
                   key={categoryName}
-                  className="box-border h-12 w-[33%] text-center leading-[3rem] border-b border-red-500 text-red-500"
+                  className="box-border h-12 w-[1/3] text-center leading-[3rem] border-b border-red-500 text-red-500"
                   onClick={() => {
                     setCategory(categoryName);
                   }}
@@ -102,7 +104,7 @@ export default function ProductsPage() {
               ) : (
                 <div
                   key={categoryName}
-                  className="text-center leading-[3rem] w-[33%]"
+                  className="text-center leading-[3rem] w-[1/3]"
                   onClick={() => {
                     setCategory(categoryName);
                   }}
@@ -122,9 +124,9 @@ export default function ProductsPage() {
           </div>
         </div>
       )}
-      {childrenElement !== 1 && childrenElement !== 3 && (
+      {mainContent !== 'Search' && mainContent !== 'OnlySearch' && (
         <div className="pt-32 flex flex-col gap-1 pb-20">
-          {(childrenElement === 0 ? productList : searchedData)?.map((product) => (
+          {(mainContent === 'AllProducts' ? productList : searchedData)?.map((product) => (
             <div
               key={product.productId}
               className="px-2"
@@ -135,7 +137,7 @@ export default function ProductsPage() {
           ))}
         </div>
       )}
-      {(childrenElement === 1 || childrenElement === 3) && (
+      {(mainContent === 'Search' || mainContent === 'OnlySearch') && (
         <SearchPage onClickSearch={onClickSearch} searchWord={searchWord} />
       )}
       <Footer />

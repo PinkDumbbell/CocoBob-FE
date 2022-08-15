@@ -6,11 +6,11 @@ interface ISearch {
   onClick: any;
   searchWord: string;
   onClickSearch: any;
-  setChildrenElement: any;
+  setMainContent: any;
 }
 
 export default function SearchHeader(props: ISearch) {
-  const { setSearchWord, searchWord, onClick, onClickSearch, setChildrenElement } = props;
+  const { setSearchWord, searchWord, onClick, onClickSearch, setMainContent } = props;
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -21,7 +21,7 @@ export default function SearchHeader(props: ISearch) {
       <input
         className="w-64 ml-8 bg-slate-400 p-1 pl-2 rounded-[10px]"
         onChange={(e) => {
-          setChildrenElement(1);
+          setMainContent('Search');
           setSearchWord(e.target.value);
         }}
         value={searchWord}
