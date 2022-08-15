@@ -1,12 +1,13 @@
 import Button from '@/components/Button';
 import Layout from '@/components/layout/Layout';
 import { useGetProductDetailQuery } from '@/store/api/productApi';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import Nutrient from './components/Nutrient';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
-  const { data: product } = useGetProductDetailQuery(parseInt(id ?? '1', 10));
+  const { data: product, error } = useGetProductDetailQuery(parseInt(id ?? '1', 10));
+  if (error) return <Navigate to="/404" replace />;
   const nutrientList = [
     { name: '단백질', key: 'amountOfProteinPerMcal' },
     { name: '지방', key: 'amountOfFatPerMcal' },
@@ -37,7 +38,7 @@ export default function ProductDetailPage() {
             {nutrientList.map((nutrient, index) => {
               if (index % 2 !== 0) return <></>;
               return (
-                <div className="border-b h-14 flex" key={index}>
+                <div className="border-b h-14 flex" key={`${nutrient}-${index}`}>
                   <Nutrient
                     name={nutrient.name}
                     amount={product ? product[nutrient.key as keyof typeof product] : ''}
