@@ -19,6 +19,8 @@ import DailyMain from '@/pages/Daily/Daily';
 import DailyWalk from '@/pages/Daily/Walk';
 import DailyFeeds from '@/pages/Daily/Feeds';
 import DailyBodyWeight from '@/pages/Daily/BodyWeight';
+import WalkRecordList from '@/pages/Daily/Walk/WalkRecordList';
+import WalkRecordMap from '@/pages/Daily/Walk/WalkRecordMap';
 
 function PrivateRoute() {
   const { isLoggedIn } = useUser();
@@ -44,7 +46,10 @@ function PrivateRoutes() {
         </Route>
         <Route path="/daily" element={<Daily />}>
           <Route index element={<DailyMain />} />
-          <Route path="walk" element={<DailyWalk />} />
+          <Route path="walk" element={<DailyWalk />}>
+            <Route index element={<WalkRecordList />} />
+            <Route path="record" element={<WalkRecordMap />}></Route>
+          </Route>
           <Route path="feeds" element={<DailyFeeds />} />
           <Route path="bodyWeight" element={<DailyBodyWeight />} />
         </Route>

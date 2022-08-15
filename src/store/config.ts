@@ -18,6 +18,7 @@ import bottomSheetSlice from './slices/bottomSheetSlice';
 import registerPetSlice from './slices/registerPetSlice';
 import { apiSlice } from './slices/apiSlice';
 import toastSlice from './slices/toastSlice';
+import dailySlice from './slices/dailySlice';
 
 const persistConfig = {
   key: 'root',
@@ -31,6 +32,7 @@ const appReducer = combineReducers({
   registerPet: registerPetSlice,
   bottomSheet: bottomSheetSlice,
   toast: toastSlice,
+  daily: dailySlice,
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
@@ -54,6 +56,7 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        ignoredPaths: ['payload.date'],
       },
     }).concat(apiSlice.middleware),
   preloadedState: initialState,
