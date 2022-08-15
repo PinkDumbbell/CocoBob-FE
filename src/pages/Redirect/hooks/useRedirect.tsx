@@ -18,10 +18,12 @@ export default function useRedirect(
   useEffect(() => {
     async function redirect() {
       const code = searchParams.get('code');
+      const user = searchParams.get('user');
+
       const {
         data: { data },
       } = await axios.get<IGenericResponse<IAuthenticatedUser>>(
-        `/users/login/oauth/${socialLoginType}?code=${code}`,
+        `/users/login/oauth/${socialLoginType}?code=${code}${user ? `&user=${user}` : ''}`,
       );
       if (data.userId) {
         dispatch(setCredentials(data));
