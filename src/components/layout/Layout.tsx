@@ -36,7 +36,7 @@ const useHeaderWithScroll = () => {
 
   return { pageRef, hideTitle };
 };
-export default function Layout({
+function Layout({
   canGoBack,
   canSearch,
   onClickGoBack,
@@ -47,6 +47,12 @@ export default function Layout({
   menu,
 }: LayoutProps) {
   const { pageRef, hideTitle } = useHeaderWithScroll();
+  const location = useLocation();
+  const [pathname, setPathname] = useState('');
+
+  useEffect(() => {
+    setPathname(location.pathname);
+  }, [location.pathname]);
 
   return (
     <>
@@ -64,7 +70,8 @@ export default function Layout({
       <ChildrenWrapper ref={pageRef} headerShown={!!header} footerShown={!!footer}>
         {children}
       </ChildrenWrapper>
-      {footer && <Footer />}
+      {footer && <Footer currentPath={pathname} />}
     </>
   );
 }
+export default React.memo(Layout);
