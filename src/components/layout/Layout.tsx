@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { useLocation } from 'react-router-dom';
 import Footer from './Footer';
@@ -36,7 +36,7 @@ const useHeaderWithScroll = () => {
 
   return { pageRef, hideTitle };
 };
-export default function Layout({
+function Layout({
   canGoBack,
   canSearch,
   onClickGoBack,
@@ -48,6 +48,12 @@ export default function Layout({
 }: LayoutProps) {
   const { pageRef, hideTitle } = useHeaderWithScroll();
   const location = useLocation();
+  const [pathname, setPathname] = useState('');
+
+  useEffect(() => {
+    setPathname(location.pathname);
+  }, [location.pathname]);
+
   return (
     <>
       {header && (
@@ -64,7 +70,8 @@ export default function Layout({
       <ChildrenWrapper ref={pageRef} headerShown={!!header} footerShown={!!footer}>
         {children}
       </ChildrenWrapper>
-      {footer && <Footer currentPath={location.pathname} />}
+      {footer && <Footer currentPath={pathname} />}
     </>
   );
 }
+export default React.memo(Layout);
