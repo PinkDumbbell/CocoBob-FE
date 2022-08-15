@@ -16,7 +16,7 @@ const GlobalStyle = createGlobalStyle`
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    height: var(--vh);
     min-width: 280px; // galaxy fold width
     margin: 0 auto;
 
@@ -30,13 +30,14 @@ const GlobalStyle = createGlobalStyle`
 
   #root{
     width:100%;
-    height:100vh;
+    height:var(--vh);
     background-color:white;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   }
   // Variables
   :root {
     // Color
+    --vh: 100%;
     --t-title : #1d1d1d;
     --t-default : #333333;
     --t-caption : #999999;

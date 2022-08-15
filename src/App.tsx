@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import LoginPage from '@/pages/Login';
 import PrivateRoutes from './routes/PrivateRoutes';
@@ -10,6 +11,17 @@ import AppleRedirectHandler from './pages/Redirect/apple';
 
 function App() {
   const location = useLocation();
+  const setVh = () => {
+    document.documentElement.style.setProperty('--vh', `${window.innerHeight}px`);
+  };
+  // fix mobile 100vh error
+  useEffect(() => {
+    window.addEventListener('resize', setVh);
+    setVh();
+    return () => {
+      window.removeEventListener('resize', setVh);
+    };
+  }, []);
   return (
     <PageTransition transitionKey={location.pathname}>
       <ToastMessage />
