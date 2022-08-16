@@ -152,7 +152,7 @@ export default function PetDetail() {
             <Form onSubmit={handleSubmit(onSubmit)}>
               <ContentsContainer>
                 <FlexColumnCenter className="w-full">
-                  <div className="relative w-32 h-32 bg-white">
+                  <div className="relative w-32 h-32 bg-white flex items-center justify-center">
                     <EditProfileLabel htmlFor="pet-thumbnail">
                       <EditIcon />
                       {/* <img src={AddPhotoImage} alt="" /> */}
@@ -169,11 +169,9 @@ export default function PetDetail() {
                         <TrashIcon />
                       </RemoveProfileButton>
                     )}
-                    <img
-                      src={previewUrl || PetDefault}
-                      alt=""
-                      className="rounded-full overflow-hidden"
-                    />
+                    <div className="rounded-full overflow-hidden h-full w-full">
+                      <img src={previewUrl || PetDefault} alt="" className="w-full" />
+                    </div>
                   </div>
                 </FlexColumnCenter>
               </ContentsContainer>
