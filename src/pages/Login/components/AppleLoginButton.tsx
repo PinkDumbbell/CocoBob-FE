@@ -21,7 +21,7 @@ const AppleLoginButton = () => (
       authOptions={{
         clientId: 'us.petalog.services',
         scope: 'email name',
-        redirectURI: `https://petalog.us/auth/apple/callback`,
+        redirectURI: `${import.meta.env.VITE_API_BASE_URL}/v1/users/apple`,
       }}
       uiType="dark"
       className="apple-auth-btn"
