@@ -250,6 +250,7 @@ export default function PetDetail() {
                         message: '숫자를 입력해주세요',
                       },
                     })}
+                    unit="KG"
                     type="text"
                   />
                   <div className="space-y-2">

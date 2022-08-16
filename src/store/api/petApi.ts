@@ -10,7 +10,7 @@ export const petApiSlice = apiSlice.injectEndpoints({
     }),
     getBreeds: builder.query<IBreeds[], void>({
       query: () => '/pets/breeds',
-      transformResponse: (response: IGenericResponse) => response.data as IBreeds[],
+      transformResponse: (response: IGenericResponse<IBreeds[]>) => response.data,
       providesTags: (result) =>
         result
           ? [...result.map((value) => ({ type: 'Breed' as const, id: value.id }))]
@@ -37,11 +37,12 @@ export const petApiSlice = apiSlice.injectEndpoints({
           body: formData,
         };
       },
-      transformResponse: (response: IGenericResponse) => response.data as { petId: number },
+      transformResponse: (response: IGenericResponse<{ petId: number }>) => response.data,
+      invalidatesTags: ['User', { type: 'Pet' as const, id: 'LIST' }],
     }),
     getPets: builder.query<IPet[], void>({
       query: () => '/pets',
-      transformResponse: (response: IGenericResponse) => response.data as IPet[],
+      transformResponse: (response: IGenericResponse<IPet[]>) => response.data,
       providesTags: (result) =>
         result
           ? [
@@ -52,7 +53,7 @@ export const petApiSlice = apiSlice.injectEndpoints({
     }),
     getPetsDetail: builder.query<IPetInformation, number>({
       query: (id: number) => `/pets/${id}`,
-      transformResponse: (response: IGenericResponse) => response.data as IPetInformation,
+      transformResponse: (response: IGenericResponse<IPetInformation>) => response.data,
       providesTags: (result) => [{ type: 'Pet' as const, id: result?.id }],
     }),
     updatePetData: builder.mutation<

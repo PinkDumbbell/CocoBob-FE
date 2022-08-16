@@ -47,8 +47,10 @@ jobs:
       - name: Generate Application Environment File
         run: |
           echo "VITE_API_BASE_URL=$VITE_API_BASE_URL" >> .env
+          echo "VITE_KAKAO_KEY=$VITE_KAKAO_KEY" >> .env
         env:
           VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_KAKAO_KEY: ${{ secrets.VITE_KAKAO_KEY }}
 
       - name: Install Dependencies
         run: npm install --frozen-lockfile

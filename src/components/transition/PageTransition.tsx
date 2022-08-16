@@ -1,9 +1,13 @@
 /* eslint-disable no-unused-vars */
+import DailyBodyWeight from '@/pages/Daily/BodyWeight';
+import DailyFeeds from '@/pages/Daily/Feeds';
+import DailyWalk from '@/pages/Daily/Walk';
 import PetsPage from '@/pages/Mypage/pets/index';
 import PetDetail from '@/pages/Mypage/pets/[id]';
 import ProfilePage from '@/pages/Mypage/Profile';
 import WishPage from '@/pages/Mypage/Wish';
 import RegisterPet from '@/pages/RegisterPet';
+import SearchPage from '@/pages/Search';
 import React, { ReactNode } from 'react';
 import { useLocation, useNavigationType, matchRoutes } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
@@ -38,6 +42,22 @@ const detailPages: DetailPageType[] = [
   {
     path: '/mypage/pets/:id',
     component: <PetDetail />,
+  },
+  {
+    path: '/search',
+    component: <SearchPage />,
+  },
+  {
+    path: '/daily/walk',
+    component: <DailyWalk />,
+  },
+  {
+    path: '/daily/feeds',
+    component: <DailyFeeds />,
+  },
+  {
+    path: '/daily/bodyWeight',
+    component: <DailyBodyWeight />,
   },
 ];
 const PageTransitionV2 = ({ transitionKey, children }: PageTransitionProps) => {

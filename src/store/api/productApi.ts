@@ -6,11 +6,11 @@ export const productApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProduct: builder.query<IProductList, void>({
       query: () => '/products/search',
-      transformResponse: (response: IGenericResponse) => response.data as IProductList,
+      transformResponse: (response: IGenericResponse<IProductList>) => response.data,
     }),
     getProductDetail: builder.query<IProductDetail, number>({
       query: (id) => `/products/${id}`,
-      transformResponse: (response: IGenericResponse) => response.data as IProductDetail,
+      transformResponse: (response: IGenericResponse<IProductDetail>) => response.data,
     }),
   }),
 });

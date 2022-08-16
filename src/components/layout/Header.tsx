@@ -4,7 +4,7 @@ import BackButtonImage from '@/assets/icon/header_back.png';
 import { ReactComponent as SearchIcon } from '@/assets/icon/search_icon.svg';
 import { ReactComponent as MenuIcon } from '@/assets/icon/menu_icon.svg';
 import DefaultProfile from '@/assets/icon/navbar_profile.svg';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import {
   BackButton,
@@ -26,15 +26,7 @@ export interface HeaderProps {
   canSearch?: boolean;
   hideTitle?: boolean;
 }
-export default function Header({
-  menu,
-  canGoBack,
-  onClickGoBack,
-  title,
-  hideTitle,
-  canSearch,
-}: HeaderProps) {
-  const location = useLocation();
+const LeftChild = React.memo(({ canGoBack, onClickGoBack, menu }: HeaderProps) => {
   const navigator = useNavigate();
   const [isMenuOpen, setMenu] = useState(false);
 
@@ -44,22 +36,53 @@ export default function Header({
   const closeMenu = () => setMenu(false);
 
   return (
+    <>
+      <LeftMenuWrapper>
+        {canGoBack && (
+          <BackButton onClick={onClickGoBack ?? goBackPage}>
+            <img src={BackButtonImage} />
+          </BackButton>
+        )}
+        {menu && (
+          <div>
+            <button type="button" onClick={openMenu}>
+              <MenuIcon />
+            </button>
+          </div>
+        )}
+      </LeftMenuWrapper>
+
+      <SideMenuWrapper isOpen={isMenuOpen}>
+        <button type="button" onClick={closeMenu}>
+          닫기
+        </button>
+      </SideMenuWrapper>
+    </>
+  );
+});
+LeftChild.displayName = 'HeaderLeftChild';
+
+// eslint-disable-next-line arrow-body-style
+const RightChild = React.memo(({ canSearch }: { canSearch?: boolean }) => {
+  return (
+    <RightMenuWrapper>
+      {canSearch && (
+        <Link to="/products" state={{ childrenElement: 3 }}>
+          <SearchIcon />
+        </Link>
+      )}
+    </RightMenuWrapper>
+  );
+});
+RightChild.displayName = 'HeaderRightChild';
+
+function Header({ menu, canGoBack, onClickGoBack, title, hideTitle, canSearch }: HeaderProps) {
+  const location = useLocation();
+
+  return (
     <HeaderWrapper>
       <HeaderContents>
-        <LeftMenuWrapper>
-          {canGoBack && (
-            <BackButton onClick={onClickGoBack ?? goBackPage}>
-              <img src={BackButtonImage} />
-            </BackButton>
-          )}
-          {menu && (
-            <div>
-              <button type="button" onClick={openMenu}>
-                <MenuIcon />
-              </button>
-            </div>
-          )}
-        </LeftMenuWrapper>
+        <LeftChild menu={menu} onClickGoBack={onClickGoBack} canGoBack={canGoBack} />
         <TitleWrapper isBigProfileHide={!!hideTitle}>
           {location.pathname === '/' && (
             <ProfileWrapper isSmall={!!hideTitle}>
@@ -69,20 +92,9 @@ export default function Header({
           <Title isHide={!!hideTitle}>{title}</Title>
           {location.pathname === '/' && <img src={DefaultProfile} alt="큰 프로필 사진" />}
         </TitleWrapper>
-        <RightMenuWrapper>
-          {canSearch && (
-            <Link to="/products" state={{ childrenElement: 3 }}>
-              <SearchIcon />
-            </Link>
-          )}
-        </RightMenuWrapper>
+        <RightChild canSearch={canSearch} />
       </HeaderContents>
-
-      <SideMenuWrapper isOpen={isMenuOpen}>
-        <button type="button" onClick={closeMenu}>
-          닫기
-        </button>
-      </SideMenuWrapper>
     </HeaderWrapper>
   );
 }
+export default React.memo(Header);

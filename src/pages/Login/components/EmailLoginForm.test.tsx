@@ -34,7 +34,11 @@ describe('<EmailLoginForm />', () => {
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <BrowserRouter>
-            <EmailLoginForm onSubmitCredentials={onSubmitCredentials} />
+            <EmailLoginForm
+              onSubmitCredentials={onSubmitCredentials}
+              isError={false}
+              isLoading={false}
+            />
           </BrowserRouter>
         </ThemeProvider>
       </Provider>,

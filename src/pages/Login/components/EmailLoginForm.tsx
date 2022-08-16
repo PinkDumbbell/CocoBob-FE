@@ -1,45 +1,32 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-
 import FormInput from '@/components/Form/FormInput';
-import { useLoginMutation } from '@/store/api/userApi';
 import FormButton from '@/components/Form/FormButton';
-import useToastMessage from '@/utils/hooks/useToastMessage';
 import { ILoginForm } from '../types';
 import { LoginForm } from './EmailLoginForm.style';
 
 interface EmailLoginFormProps {
   // eslint-disable-next-line no-unused-vars
   onSubmitCredentials: (data: ILoginForm) => void;
+  isError: boolean;
+  isLoading: boolean;
 }
-export default function EmailLoginForm({ onSubmitCredentials }: EmailLoginFormProps) {
-  // eslint-disable-next-line no-unused-vars
-  const [login, { isLoading, error, reset: mutationReset }] = useLoginMutation();
+export default function EmailLoginForm({
+  onSubmitCredentials,
+  isError,
+  isLoading,
+}: EmailLoginFormProps) {
   const {
     handleSubmit,
     register,
     formState: { errors },
-    reset: formReset,
+    reset,
   } = useForm<ILoginForm>();
 
-  const openToast = useToastMessage();
   useEffect(() => {
-    if (!error) return;
-    const {
-      status,
-      data: { code, message },
-    } = error as { status: number; data: any };
-
-    if (status === 404 && code === 'USER_NOT_FOUND') {
-      openToast('이메일 또는 비밀번호를 확인해주세요.');
-      formReset();
-      mutationReset();
-    } else {
-      openToast(message);
-      formReset();
-      mutationReset();
-    }
-  }, [error]);
+    if (!isError) return;
+    reset();
+  }, [isError]);
 
   return (
     <LoginForm data-testid="login-form" onSubmit={handleSubmit(onSubmitCredentials)}>

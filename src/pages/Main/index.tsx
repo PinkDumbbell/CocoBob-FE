@@ -52,7 +52,7 @@ export default function Main() {
       <PageContainer>
         <MainContentSection>
           <DoctorImageWrapper>
-            <img src={doctor} alt="메인 배경 이미지 1" />
+            <img src={doctor} alt="메인 배경 이미지 1" className="w-full" />
           </DoctorImageWrapper>
           <VerticalBox className="z-10">
             <SectionTitle>
