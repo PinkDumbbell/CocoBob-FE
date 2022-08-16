@@ -5,12 +5,15 @@ export default function SocialLoginForm() {
   return (
     <FormWrapper>
       <SocialLoginButton>
-        <a href={`${import.meta.env.VITE_API_BASE_URL}/v1/users/google`}>구글 계정으로 로그인</a>
+        <a href={`${import.meta.env.VITE_API_BASE_URL}/v1/users/google`}>Google로 로그인</a>
       </SocialLoginButton>
       <SocialLoginButton className="kakao">
-        <a href={`${import.meta.env.VITE_API_BASE_URL}/v1/users/kakao`}>카카오 계정으로 로그인</a>
+        <a href={`${import.meta.env.VITE_API_BASE_URL}/v1/users/kakao`}>카카오로 로그인</a>
       </SocialLoginButton>
       <AppleLoginButton />
+      <SocialLoginButton className="apple">
+        <a href={`${import.meta.env.VITE_API_BASE_URL}/v1/users/apple`}>Apple로 로그인</a>
+      </SocialLoginButton>
     </FormWrapper>
   );
 }
