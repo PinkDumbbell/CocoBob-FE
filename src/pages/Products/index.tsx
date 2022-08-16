@@ -20,6 +20,7 @@ interface ILocation {
   MainContent: MainContentType;
 }
 export default function ProductsPage() {
+  const location = useLocation();
   const categoryList = ['사료', '간식', '영양제'];
   // eslint-disable-next-line no-unused-vars
   const [category, setCategory] = useState<string>('');
@@ -140,7 +141,7 @@ export default function ProductsPage() {
       {(mainContent === 'Search' || mainContent === 'OnlySearch') && (
         <SearchPage onClickSearch={onClickSearch} searchWord={searchWord} />
       )}
-      <Footer />
+      <Footer currentPath={location.pathname} />
     </div>
   );
 }
