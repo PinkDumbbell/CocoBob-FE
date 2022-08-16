@@ -27,6 +27,9 @@ const AppleLoginButton = () => (
       className="apple-auth-btn"
       noDefaultStyle={false}
       buttonExtraChildren="Apple로 로그인"
+      onSuccess={(response: any) => {
+        console.log('onSuccess', response);
+      }}
     />
   </ButtonWrap>
 );
