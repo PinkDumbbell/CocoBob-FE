@@ -22,11 +22,15 @@ const AppleLoginButton = () => (
         clientId: 'us.petalog.services',
         scope: 'email name',
         redirectURI: 'https://petalog.us/auth/apple/callback',
+        usePopup: true,
       }}
       uiType="dark"
       className="apple-auth-btn"
       noDefaultStyle={false}
       buttonExtraChildren="Apple로 로그인"
+      onSuccess={(response: any) => {
+        console.log('after popup', response);
+      }}
     />
   </ButtonWrap>
 );

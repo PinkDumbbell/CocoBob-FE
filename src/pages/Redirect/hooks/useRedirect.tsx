@@ -19,10 +19,7 @@ export default function useRedirect(
     async function redirect() {
       const code = searchParams.get('code');
       const user = searchParams.get('user');
-      console.log(searchParams);
-      console.log(searchParams.getAll);
-      console.log(code);
-      console.log(user);
+
       const {
         data: { data },
       } = await axios.get<IGenericResponse<IAuthenticatedUser>>(
