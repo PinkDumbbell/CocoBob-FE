@@ -15,7 +15,6 @@ import storage from 'redux-persist/lib/storage';
 import userSlice from './slices/userSlice';
 import authSlice from './slices/authSlice';
 import bottomSheetSlice from './slices/bottomSheetSlice';
-import registerPetSlice from './slices/registerPetSlice';
 import { apiSlice } from './slices/apiSlice';
 import toastSlice from './slices/toastSlice';
 import dailySlice from './slices/dailySlice';
@@ -23,13 +22,12 @@ import dailySlice from './slices/dailySlice';
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['registerPet', 'toast'],
+  blacklist: ['toast'],
 };
 
 const appReducer = combineReducers({
   user: userSlice,
   auth: authSlice,
-  registerPet: registerPetSlice,
   bottomSheet: bottomSheetSlice,
   toast: toastSlice,
   daily: dailySlice,

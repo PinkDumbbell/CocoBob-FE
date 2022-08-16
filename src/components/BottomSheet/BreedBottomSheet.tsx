@@ -34,9 +34,11 @@ const BreedList = ({ breeds, selectedBreed, setBreed }: IBreedList) => (
 export default function BreedBottomSheet({
   isOpen,
   setBreed,
+  currentBreedId,
 }: {
   isOpen: boolean;
   setBreed: Dispatch<SetStateAction<IBreeds | undefined>>;
+  currentBreedId?: number;
 }) {
   const { isLoading, isSuccess, data } = useGetBreedsQuery();
   const breeds = data ?? ([] as IBreeds[]);
@@ -48,7 +50,7 @@ export default function BreedBottomSheet({
     searchKeyword,
     selectedBreed,
     setSelectedBreed,
-  } = useSearchBreed(breeds);
+  } = useSearchBreed(breeds, currentBreedId);
 
   const onClickSelectButton = () => {
     setBreed(selectedBreed);

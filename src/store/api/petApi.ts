@@ -1,6 +1,5 @@
-import { IBreeds, IPet, IPetInformation } from '@/@type/pet';
+import { IBreeds, IPet, IPetInformation, PetInfoForm } from '@/@type/pet';
 import { apiSlice } from '../slices/apiSlice';
-import { RegisterInfoForm } from '../slices/registerPetSlice';
 import { IGenericResponse } from './types';
 
 export const petApiSlice = apiSlice.injectEndpoints({
@@ -16,7 +15,7 @@ export const petApiSlice = apiSlice.injectEndpoints({
           ? [...result.map((value) => ({ type: 'Breed' as const, id: value.id }))]
           : [{ type: 'Breed' as const, id: 'LIST' }],
     }),
-    saveEnrollmentData: builder.mutation<{ petId: number }, RegisterInfoForm<File>>({
+    saveEnrollmentData: builder.mutation<{ petId: number }, PetInfoForm<File>>({
       query: (data) => {
         const formData = new FormData();
         // eslint-disable-next-line no-restricted-syntax
@@ -58,7 +57,7 @@ export const petApiSlice = apiSlice.injectEndpoints({
     }),
     updatePetData: builder.mutation<
       { petId: number },
-      { formInput: RegisterInfoForm<File>; petId: number; isImageJustDeleted: boolean }
+      { formInput: PetInfoForm<File>; petId: number; isImageJustDeleted: boolean }
     >({
       query: ({ formInput, petId, isImageJustDeleted }) => {
         const formData = new FormData();

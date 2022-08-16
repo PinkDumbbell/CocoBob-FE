@@ -1,6 +1,4 @@
 import FormButton from '@/components/Form/FormButton';
-import { useAppDispatch, useAppSelector } from '@/store/config';
-import { selectRegisterInfo, setRegisterInfo } from '@/store/slices/registerPetSlice';
 import useSelectImage from '@/utils/hooks/useSelectImage';
 import { useForm } from 'react-hook-form';
 import {
@@ -13,18 +11,17 @@ import {
 } from './index.style';
 
 import AddPhotoImage from '../../assets/icon/btn_add_photo.png';
+import { StepPageProps } from './type';
 
-export default function Step2({ goNextStep }: any) {
-  const dispatch = useAppDispatch();
-  const registerInfo = useAppSelector(selectRegisterInfo);
+export default function Step2({ goNextStep, enrollPetData, setEnrollData }: StepPageProps) {
   const { imageFile: petImage, handleChangeImage } = useSelectImage({
-    initImageFile: registerInfo.petImage,
+    initImageFile: enrollPetData.petImage,
   });
   const { handleSubmit } = useForm();
   const isButtonDisabled = !petImage;
 
   const savePhoto = () => {
-    dispatch(setRegisterInfo({ petImage }));
+    setEnrollData('petImage', petImage);
     goNextStep();
   };
 
@@ -34,7 +31,7 @@ export default function Step2({ goNextStep }: any) {
         <div className="flex flex-col gap-20">
           <div className="space-y-[10px]">
             <h3 className="text-[24px] leading-[35px]">
-              <PetNameHighlight>{registerInfo.name}</PetNameHighlight>!
+              <PetNameHighlight>{enrollPetData.name}</PetNameHighlight>!
             </h3>
             <div>
               <QuestionText>정말 사랑스러운 이름이네요! </QuestionText>

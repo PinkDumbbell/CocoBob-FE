@@ -4,6 +4,7 @@ import {
   selectBottomSheet,
   setBottomSheetAction,
 } from '@/store/slices/bottomSheetSlice';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 interface UseBottomSheetReturn {
@@ -24,4 +25,11 @@ export default function useBottomSheet(bottomSheetName: BottomSheetType): UseBot
   const closeBottomSheet = () => dispatch(closeBottomSheetAction());
 
   return { currentBottomSheet, isBottomSheetOpen, openBottomSheet, closeBottomSheet };
+}
+export function useSingleBottomSheet() {
+  const [isOpen, setIsOpen] = useState(false);
+  const openBottomSheet = () => setIsOpen(true);
+  const closeBottomSheet = () => setIsOpen(false);
+
+  return { isOpen, openBottomSheet, closeBottomSheet };
 }

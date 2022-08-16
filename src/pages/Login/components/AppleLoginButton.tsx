@@ -59,10 +59,9 @@ const AppleLoginButton = () => {
           }
           const {
             data: { data },
-          } = await axios.post<IGenericResponse<IAuthenticatedUser>>(
-            `/users/login/oauth/apple`,
-            payload,
-          );
+          } = await axios
+            .post<IGenericResponse<IAuthenticatedUser>>(`/users/login/oauth/apple`, payload)
+            .catch(() => openToast('로그인 중 에러가 발생하였습니다. 잠시 후 다시 시도해주세요'));
           if (data.userId) {
             dispatch(setCredentials(data));
             setLogin(true);
