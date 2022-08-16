@@ -11,9 +11,6 @@ export default function SocialLoginForm() {
         <a href={`${import.meta.env.VITE_API_BASE_URL}/v1/users/kakao`}>카카오로 로그인</a>
       </SocialLoginButton>
       <AppleLoginButton />
-      <SocialLoginButton className="apple">
-        <a href={`${import.meta.env.VITE_API_BASE_URL}/v1/users/apple`}>Apple로 로그인</a>
-      </SocialLoginButton>
     </FormWrapper>
   );
 }
