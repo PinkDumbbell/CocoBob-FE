@@ -71,7 +71,7 @@ const PageTransitionV2 = ({ transitionKey, children }: PageTransitionProps) => {
   const direction = isPushBehavior ? normalDirection : reverseDirection;
   const isDetailPage = isPushBehavior ? matchNextRoute : matchPreviousRoute;
   const animationType = isDetailPage ? direction : 'fade';
-  const timeout = 250;
+  const timeout = 0;
 
   return (
     <PageTransitionGroup timeout={timeout} type={animationType}>

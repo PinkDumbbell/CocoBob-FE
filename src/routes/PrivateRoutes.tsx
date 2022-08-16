@@ -4,7 +4,6 @@ import useUser from '@/utils/hooks/useUser';
 import MainPage from '@/pages/Main';
 import RegisterPet from '@/pages/RegisterPet';
 import ProductsPage from '@/pages/Products';
-import SearchPage from '@/pages/Search';
 
 import Mypage from '@/pages/Mypage';
 import MypageMain from '@/pages/Mypage/Main';
@@ -14,6 +13,7 @@ import PetsPage from '@/pages/Mypage/pets/index';
 import PetEdit from '@/pages/Mypage/pets/[id]';
 
 import NotFound from '@/pages/404';
+import ProductDetailPage from '@/pages/Products/ProductDetail';
 import Daily from '@/pages/Daily';
 import DailyMain from '@/pages/Daily/Daily';
 import DailyWalk from '@/pages/Daily/Walk';
@@ -36,7 +36,7 @@ function PrivateRoutes() {
         <Route path="/" element={<MainPage />} />
         <Route path="/register" element={<RegisterPet />} />
         <Route path="/products" element={<ProductsPage />} />
-        <Route path="/search" element={<SearchPage />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/mypage" element={<Mypage />}>
           <Route index element={<MypageMain />} />
           <Route path="profile" element={<ProfilePage />} />
