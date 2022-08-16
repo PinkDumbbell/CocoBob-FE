@@ -17,3 +17,19 @@ export interface IAuthenticatedUser {
   userId: number | null;
   username: string;
 }
+export type AppleUserNameType = {
+  firstName: string;
+  lastName: string;
+};
+export type AppleAuthorizationType = {
+  code: string;
+  id_token: string;
+};
+export type AppleUserType = {
+  email: string;
+  name: AppleUserNameType;
+};
+export interface AppleSignInResponse {
+  authorization: AppleAuthorizationType;
+  user?: AppleUserType;
+}
