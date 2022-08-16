@@ -139,7 +139,7 @@ export default function PetDetail() {
 
   useEffect(() => {
     if (!mutationResult) return;
-    navigate('/mypage/pets');
+    navigate('/mypage/pets', { replace: true });
     openToast('성공적으로 정보를 수정하였습니다.', 'success');
   }, [mutationResult]);
 
