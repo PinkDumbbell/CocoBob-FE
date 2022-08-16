@@ -80,7 +80,10 @@ export const petApiSlice = apiSlice.injectEndpoints({
           body: formData,
         };
       },
-      invalidatesTags: (result, error, arg) => [{ type: 'Pet' as const, id: arg.petId }],
+      invalidatesTags: (result, error, arg) => [
+        { type: 'Pet' as const, id: arg.petId },
+        { type: 'Pet' as const, id: 'LIST' },
+      ],
     }),
   }),
 });
