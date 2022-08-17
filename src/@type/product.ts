@@ -6,6 +6,13 @@ export interface IProduct {
   price: number;
   productId: number;
   thumbnail: string;
+  aged: boolean;
+  isAFFCOSatisfied: boolean;
+  growing: boolean;
+  likes: number;
+  obesity: boolean;
+  pregnant: false;
+  userLike: false;
 }
 
 export interface IProductList {
