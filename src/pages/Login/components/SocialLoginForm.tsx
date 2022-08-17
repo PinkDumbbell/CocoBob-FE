@@ -1,10 +1,9 @@
-import { useAppSelector } from '@/store/config';
-import { getPlatform } from '@/store/slices/platformSlice';
+import usePlatform from '@/utils/hooks/usePlatform';
 import { SocialLoginButton, FormWrapper } from './SocialLoginForm.style';
 import AppleLoginButton from './AppleLoginButton';
 
 export default function SocialLoginForm() {
-  const platform = useAppSelector(getPlatform);
+  const platform = usePlatform();
 
   return (
     <FormWrapper>

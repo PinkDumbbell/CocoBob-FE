@@ -19,16 +19,14 @@ import registerPetSlice from './slices/registerPetSlice';
 import { apiSlice } from './slices/apiSlice';
 import toastSlice from './slices/toastSlice';
 import dailySlice from './slices/dailySlice';
-import platformSlice from './slices/platformSlice';
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['registerPet', 'toast', 'platform'],
+  blacklist: ['registerPet', 'toast'],
 };
 
 const appReducer = combineReducers({
-  platform: platformSlice,
   user: userSlice,
   auth: authSlice,
   registerPet: registerPetSlice,
