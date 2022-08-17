@@ -8,15 +8,36 @@ import ToastConfirm from './components/Toast/ToastConfirm';
 import GoogleRedirectHandler from './pages/Redirect/google';
 import KakaoRedirectHandler from './pages/Redirect/kakao';
 import AppleRedirectHandler from './pages/Redirect/apple';
+import { useAppDispatch } from './store/config';
+import { setPlatform } from './store/slices/platformSlice';
+
+declare global {
+  // eslint-disable-next-line no-unused-vars
+  interface Window {
+    flutter_inappwebview: {
+      // eslint-disable-next-line no-unused-vars
+      callHandler: (handlerName: string, args?: any[]) => any;
+    };
+  }
+}
 
 function App() {
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const setVh = () => {
     document.documentElement.style.setProperty('--vh', `${window.innerHeight}px`);
   };
+
+  const getPlatform = async () => {
+    if (window?.flutter_inappwebview) {
+      const data = await window.flutter_inappwebview.callHandler('platformHandler');
+      dispatch(setPlatform(data.platform));
+    }
+  };
   // fix mobile 100vh error
   useEffect(() => {
     window.addEventListener('resize', setVh);
+    getPlatform();
     setVh();
     return () => {
       window.removeEventListener('resize', setVh);

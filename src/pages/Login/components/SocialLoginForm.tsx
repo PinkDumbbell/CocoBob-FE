@@ -1,7 +1,11 @@
+import { useAppSelector } from '@/store/config';
+import { getPlatform } from '@/store/slices/platformSlice';
 import { SocialLoginButton, FormWrapper } from './SocialLoginForm.style';
 import AppleLoginButton from './AppleLoginButton';
 
 export default function SocialLoginForm() {
+  const platform = useAppSelector(getPlatform);
+
   return (
     <FormWrapper>
       <SocialLoginButton>
@@ -10,7 +14,7 @@ export default function SocialLoginForm() {
       <SocialLoginButton className="kakao">
         <a href={`${import.meta.env.VITE_API_BASE_URL}/v1/users/kakao`}>카카오로 로그인</a>
       </SocialLoginButton>
-      <AppleLoginButton />
+      {platform !== 'android' && <AppleLoginButton />}
     </FormWrapper>
   );
 }
