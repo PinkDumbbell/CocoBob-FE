@@ -1,16 +1,12 @@
 /* eslint-disable no-nested-ternary */
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGetUserQuery } from '@/store/api/userApi';
 import useLogout from '@/utils/hooks/useLogout';
 import useCurrentPet from '@/utils/hooks/useCurrentPet';
 import Layout from '@/components/layout/Layout';
 import ContentsContainer from '@/components/ContentsContainer';
 import doctor from '@/assets/image/main_doctor.png';
-import productDummy from '@/assets/image/product_dummy.png';
-import { Swiper, SwiperSlide } from 'swiper/react';
-// import required modules
-import { EffectCoverflow, Pagination } from 'swiper';
 
 import {
   ContentSection,
@@ -27,17 +23,16 @@ import {
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
-import SwiperProductItem from './components/SwiperProductItem';
 import MainContentButton from './components/MainContentButton';
 
 export default function Main() {
   const navigate = useNavigate();
   const { data: pet } = useCurrentPet();
   const { data } = useGetUserQuery();
-  const [activeIndex, setActiveIndex] = useState(0);
 
   const onClickLogout = useLogout();
   const goRegisterPetPage = () => navigate('/register');
+  const goProductsRecommendPage = () => navigate('/products/recommend');
 
   useEffect(() => {
     if (data?.representativeAnimalId === null) {
@@ -78,61 +73,18 @@ export default function Main() {
             </div>
           </ContentsContainer>
         </MainContentSection>
-        <VerticalBox>
-          <div className="flex items-end justify-between px-4">
-            <SectionTitle>{pet?.name}에게 추천하는 사료에요!</SectionTitle>
-            <Link to="/products/recommend">더보기</Link>
-          </div>
-          <div className="w-full flex items-center">
-            <Swiper
-              coverflowEffect={{
-                rotate: 0,
-                stretch: -18,
-                modifier: 1,
-                slideShadows: false,
-              }}
-              grabCursor={true}
-              effect={'coverflow'}
-              pagination={{
-                clickable: true,
-              }}
-              centeredSlides={true}
-              modules={[EffectCoverflow, Pagination]}
-              slidesPerView={3}
-              className="pt-4 pb-14"
-              onActiveIndexChange={(swiper) => setActiveIndex(swiper.activeIndex)}
-            >
-              {Array(8)
-                .fill(0)
-                .map((_, idx) => (
-                  <SwiperSlide key={idx}>
-                    <SwiperProductItem
-                      productId={idx}
-                      path={productDummy}
-                      brand="로얄캐닌"
-                      isActive={activeIndex === idx}
-                      isLiked={idx % 2 === 0}
-                      name="미니언도어 애견사료"
-                      price={84720}
-                      key={idx}
-                    />
-                  </SwiperSlide>
-                ))}
-            </Swiper>
-          </div>
-        </VerticalBox>
-
         <ContentSection>
+          <MainContentButton
+            label="반려동물 맞춤 제품을 추천해드려요!"
+            title="추천 제품 보러가기"
+            onClick={goProductsRecommendPage}
+          />
           <MainContentButton title="로그아웃하기" onClick={onClickLogout} />
-        </ContentSection>
-        <ContentSection>
           <MainContentButton
             label="소중한 가족을 소개해주세요"
             title="반려동물 등록하기"
             onClick={goRegisterPetPage}
           />
-        </ContentSection>
-        <ContentSection>
           <MainContentButton label="현재 사료는 잘 주고 계신가요?" title="영양분석하기" />
         </ContentSection>
       </PageContainer>
