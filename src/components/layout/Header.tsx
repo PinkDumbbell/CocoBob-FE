@@ -1,10 +1,11 @@
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+import useCurrentPet from '@/utils/hooks/useCurrentPet';
 import BackButtonImage from '@/assets/icon/header_back.png';
 import { ReactComponent as SearchIcon } from '@/assets/icon/search_icon.svg';
 import { ReactComponent as MenuIcon } from '@/assets/icon/menu_icon.svg';
 import DefaultProfile from '@/assets/icon/navbar_profile.svg';
-import React, { useState } from 'react';
 
 import {
   BackButton,
@@ -78,6 +79,7 @@ RightChild.displayName = 'HeaderRightChild';
 
 function Header({ menu, canGoBack, onClickGoBack, title, hideTitle, canSearch }: HeaderProps) {
   const location = useLocation();
+  const { data: pet } = useCurrentPet();
 
   return (
     <HeaderWrapper>
@@ -86,11 +88,13 @@ function Header({ menu, canGoBack, onClickGoBack, title, hideTitle, canSearch }:
         <TitleWrapper isBigProfileHide={!!hideTitle}>
           {location.pathname === '/' && (
             <ProfileWrapper isSmall={!!hideTitle}>
-              <img src={DefaultProfile} alt="작은 프로필사진" />
+              <img src={pet?.thumbnailPath ?? DefaultProfile} alt="작은 프로필사진" />
             </ProfileWrapper>
           )}
           <Title isHide={!!hideTitle}>{title}</Title>
-          {location.pathname === '/' && <img src={DefaultProfile} alt="큰 프로필 사진" />}
+          {location.pathname === '/' && (
+            <img src={pet?.thumbnailPath ?? DefaultProfile} alt="큰 프로필 사진" />
+          )}
         </TitleWrapper>
         <RightChild canSearch={canSearch} />
       </HeaderContents>

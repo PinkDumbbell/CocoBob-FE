@@ -1,7 +1,9 @@
+/* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useGetUserQuery } from '@/store/api/userApi';
 import useLogout from '@/utils/hooks/useLogout';
+import useCurrentPet from '@/utils/hooks/useCurrentPet';
 import Layout from '@/components/layout/Layout';
 import ContentsContainer from '@/components/ContentsContainer';
 import doctor from '@/assets/image/main_doctor.png';
@@ -14,8 +16,6 @@ import {
   ContentSection,
   DoctorImageWrapper,
   HighlightText,
-  HorizontalBox,
-  HorizontalCenterBox,
   MainContentSection,
   PageContainer,
   SectionSubtitle,
@@ -28,9 +28,11 @@ import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import SwiperProductItem from './components/SwiperProductItem';
+import MainContentButton from './components/MainContentButton';
 
 export default function Main() {
   const navigate = useNavigate();
+  const { data: pet } = useCurrentPet();
   const { data } = useGetUserQuery();
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -43,6 +45,7 @@ export default function Main() {
         state: {
           isRepresentative: true,
         },
+        replace: true,
       });
     }
   }, [data]);
@@ -56,7 +59,7 @@ export default function Main() {
           </DoctorImageWrapper>
           <VerticalBox className="z-10">
             <SectionTitle>
-              <HighlightText>{data?.name}</HighlightText>
+              <HighlightText>{pet?.name ?? '반려동물 불러오기 실패'}</HighlightText>
             </SectionTitle>
             <SectionSubtitle>어떻게 지내고 있을까요?</SectionSubtitle>
           </VerticalBox>
@@ -76,7 +79,10 @@ export default function Main() {
           </ContentsContainer>
         </MainContentSection>
         <VerticalBox>
-          <SectionTitle className="px-4">{data?.name}에게 추천하는 사료에요!</SectionTitle>
+          <div className="flex items-end justify-between px-4">
+            <SectionTitle>{pet?.name}에게 추천하는 사료에요!</SectionTitle>
+            <Link to="/products/recommend">더보기</Link>
+          </div>
           <div className="w-full flex items-center">
             <Swiper
               coverflowEffect={{
@@ -117,58 +123,17 @@ export default function Main() {
         </VerticalBox>
 
         <ContentSection>
-          <ContentsContainer>
-            <HorizontalBox className="w-full">
-              <HorizontalCenterBox className="h-full aspect-square p-4">
-                <span className="text-3xl rounded-full bg-primary-bright text-white aspect-square w-full items-center flex justify-center">
-                  -
-                </span>
-              </HorizontalCenterBox>
-              <div className="flex items-center w-full justify-evenly">
-                <div onClick={onClickLogout}>
-                  <p className="text-sm">로그아웃 테스트용 버튼</p>
-                  <SectionSubtitle>로그아웃</SectionSubtitle>
-                </div>
-                <div className="font-bold">{'>'}</div>
-              </div>
-            </HorizontalBox>
-          </ContentsContainer>
+          <MainContentButton title="로그아웃하기" onClick={onClickLogout} />
         </ContentSection>
         <ContentSection>
-          <ContentsContainer>
-            <div className="flex w-full items-center">
-              <div className="flex items-center justify-center h-full aspect-square p-4">
-                <span className="text-3xl rounded-full bg-primary-bright text-white aspect-square w-full items-center flex justify-center">
-                  +
-                </span>
-              </div>
-              <div className="flex items-center w-full justify-evenly">
-                <div onClick={goRegisterPetPage}>
-                  <p className="text-sm">반려동물 등록 테스트 버튼</p>
-                  <SectionSubtitle>반려동물 등록하기</SectionSubtitle>
-                </div>
-                <div className="font-bold">{'>'}</div>
-              </div>
-            </div>
-          </ContentsContainer>
+          <MainContentButton
+            label="소중한 가족을 소개해주세요"
+            title="반려동물 등록하기"
+            onClick={goRegisterPetPage}
+          />
         </ContentSection>
         <ContentSection>
-          <ContentsContainer>
-            <div className="flex w-full items-center">
-              <HorizontalCenterBox className=" h-full aspect-square p-4">
-                <HorizontalCenterBox className="text-3xl rounded-full bg-primary-bright text-white aspect-square w-full">
-                  +
-                </HorizontalCenterBox>
-              </HorizontalCenterBox>
-              <HorizontalBox className="w-full justify-evenly">
-                <div>
-                  <p className="text-sm">현재 사료는 잘 주고 계신가요?</p>
-                  <SectionSubtitle>영양분석하기</SectionSubtitle>
-                </div>
-                <div className="font-bold">{'>'}</div>
-              </HorizontalBox>
-            </div>
-          </ContentsContainer>
+          <MainContentButton label="현재 사료는 잘 주고 계신가요?" title="영양분석하기" />
         </ContentSection>
       </PageContainer>
     </Layout>
