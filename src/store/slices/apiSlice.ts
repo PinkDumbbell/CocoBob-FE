@@ -84,5 +84,5 @@ const apiSliceWithoutTag = createApi({
   endpoints: () => ({}),
 });
 export const apiSlice = apiSliceWithoutTag.enhanceEndpoints({
-  addTagTypes: ['Pet', 'Breed', 'User', 'Daily'],
+  addTagTypes: ['Pet', 'Breed', 'User', 'Daily', 'RecommendProduct'],
 });

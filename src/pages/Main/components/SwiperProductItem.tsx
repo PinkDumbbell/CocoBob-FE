@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import ContentsContainer from '@/components/ContentsContainer';
 import { concatClasses } from '@/utils/libs/concatClasses';
 import { ReactComponent as LikeIcon } from '@/assets/icon/heart.svg';
@@ -12,8 +13,10 @@ interface SwiperProductItemProps {
 }
 
 export default function SwiperProductItem({ product, isActive }: SwiperProductItemProps) {
-  const { name, productId, thumbnail, price, userLike } = product;
+  const navigate = useNavigate();
+  const { name, brand, productId, thumbnail, price, userLike } = product;
   const onClickLike = () => console.log(productId);
+  const goProductDetailPage = () => navigate(`/products/${productId}`);
   return (
     <div
       className={concatClasses(
@@ -26,14 +29,14 @@ export default function SwiperProductItem({ product, isActive }: SwiperProductIt
           <button type="button" onClick={onClickLike} className="absolute right-0 top-0">
             <LikeIcon fill={userLike ? theme.colors.primary.main : '#eeeeee'} />
           </button>
-          <VerticalCenterBox className="flex-2 bg-white rounded-md">
+          <VerticalCenterBox className="flex-2 bg-white rounded-md" onClick={goProductDetailPage}>
             <img src={thumbnail} alt={name} />
           </VerticalCenterBox>
           <div className="flex flex-col flex-1 justify-between">
-            <VerticalBox className="overflow-hidden py-1">
-              {/* <p className="text-[11px] leading-[11px]">{brand}</p> */}
+            <VerticalBox className="overflow-hidden py-1" onClick={goProductDetailPage}>
+              <p className="text-[11px] leading-[11px]">{brand}</p>
               <p className="text-[12px] leading-[12px] w-full whitespace-pre-line">
-                {`${name.slice(0, 40)}${name.length > 40 ? '...' : ''}`}
+                {`${name.slice(0, 35)}${name.length > 35 ? '...' : ''}`}
               </p>
             </VerticalBox>
             <div className="flex justify-between items-center">
