@@ -131,7 +131,7 @@ export default function ProductsPage() {
             <div
               key={product.productId}
               className="px-2"
-              onClick={() => navigate(`/product/${product.productId}`)}
+              onClick={() => navigate(`/products/${product.productId}`)}
             >
               <ProductItem product={product} />
             </div>

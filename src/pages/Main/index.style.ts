@@ -5,7 +5,7 @@ export const PageContainer = tw.div`
 `;
 
 export const ContentSection = tw.section`
-	px-4 py-2
+	px-4 py-2 space-y-4
 `;
 
 export const MainContentSection = tw(ContentSection)`

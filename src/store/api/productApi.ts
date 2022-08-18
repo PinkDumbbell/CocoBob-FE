@@ -12,7 +12,13 @@ export const productApiSlice = apiSlice.injectEndpoints({
       query: (id) => `/products/${id}`,
       transformResponse: (response: IGenericResponse<IProductDetail>) => response.data,
     }),
+    getRecommendProduct: builder.query<IProductList, any>({
+      query: ({ petId, type }: { petId: number; type: 'aged' | 'pregnancy' }) =>
+        `/products/recommendation/${type}?petId=${petId}`,
+      transformResponse: (response: IGenericResponse<IProductList>) => response.data,
+    }),
   }),
 });
 
-export const { useGetProductQuery, useGetProductDetailQuery } = productApiSlice;
+export const { useGetProductQuery, useGetProductDetailQuery, useGetRecommendProductQuery } =
+  productApiSlice;

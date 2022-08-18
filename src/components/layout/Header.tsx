@@ -79,7 +79,7 @@ RightChild.displayName = 'HeaderRightChild';
 
 function Header({ menu, canGoBack, onClickGoBack, title, hideTitle, canSearch }: HeaderProps) {
   const location = useLocation();
-  const { data: pet } = useCurrentPet();
+  const { data: pet } = useCurrentPet(location.pathname === '/');
 
   return (
     <HeaderWrapper>

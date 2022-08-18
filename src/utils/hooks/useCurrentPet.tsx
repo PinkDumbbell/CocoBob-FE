@@ -4,10 +4,10 @@ import { useAppSelector } from '@/store/config';
 import { getCurrentPet } from '@/store/slices/userSlice';
 import { useEffect } from 'react';
 
-export default function useCurrentPet() {
+export default function useCurrentPet(doFetch: boolean = true) {
   const currentPetId = useAppSelector(getCurrentPet);
   const query = useGetPetsDetailQuery(currentPetId as number, {
-    skip: !!!currentPetId,
+    skip: !!!currentPetId || !doFetch,
   });
 
   useEffect(() => {
