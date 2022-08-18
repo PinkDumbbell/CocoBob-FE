@@ -14,6 +14,7 @@ function App() {
   const setVh = () => {
     document.documentElement.style.setProperty('--vh', `${window.innerHeight}px`);
   };
+
   // fix mobile 100vh error
   useEffect(() => {
     window.addEventListener('resize', setVh);
@@ -22,6 +23,7 @@ function App() {
       window.removeEventListener('resize', setVh);
     };
   }, []);
+
   return (
     <PageTransition transitionKey={location.pathname}>
       <ToastMessage />
