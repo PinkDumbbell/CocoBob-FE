@@ -13,19 +13,18 @@ declare global {
 }
 
 export default function usePlatform() {
-  const [platform, setPlatform] = useState<PlatformType>('os');
+  const [currentPlatform, setCurrentPlatform] = useState<PlatformType>('os');
 
   const getPlatform = async () => {
     if (window?.flutter_inappwebview) {
-      const data: { platform: PlatformType } = await window.flutter_inappwebview.callHandler(
-        'platformHandler',
-      );
-      setPlatform(data.platform);
+      const { platform }: { platform: PlatformType } =
+        await window.flutter_inappwebview.callHandler('platformHandler');
+      setCurrentPlatform(platform);
     }
   };
   useEffect(() => {
     getPlatform();
   }, []);
 
-  return platform;
+  return currentPlatform;
 }
