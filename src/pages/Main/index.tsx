@@ -1,21 +1,17 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable no-nested-ternary */
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetUserQuery } from '@/store/api/userApi';
 import useLogout from '@/utils/hooks/useLogout';
+import useCurrentPet from '@/utils/hooks/useCurrentPet';
 import Layout from '@/components/layout/Layout';
 import ContentsContainer from '@/components/ContentsContainer';
 import doctor from '@/assets/image/main_doctor.png';
-import productDummy from '@/assets/image/product_dummy.png';
-import { Swiper, SwiperSlide } from 'swiper/react';
-// import required modules
-import { EffectCoverflow, Pagination } from 'swiper';
 
 import {
   ContentSection,
   DoctorImageWrapper,
   HighlightText,
-  HorizontalBox,
-  HorizontalCenterBox,
   MainContentSection,
   PageContainer,
   SectionSubtitle,
@@ -27,15 +23,16 @@ import {
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
-import SwiperProductItem from './components/SwiperProductItem';
+import MainContentButton from './components/MainContentButton';
 
 export default function Main() {
   const navigate = useNavigate();
+  const { data: pet } = useCurrentPet();
   const { data } = useGetUserQuery();
-  const [activeIndex, setActiveIndex] = useState(0);
 
   const onClickLogout = useLogout();
   const goRegisterPetPage = () => navigate('/register');
+  const goProductsRecommendPage = () => navigate('/products/recommend');
 
   useEffect(() => {
     if (data?.representativeAnimalId === null) {
@@ -43,6 +40,7 @@ export default function Main() {
         state: {
           isRepresentative: true,
         },
+        replace: true,
       });
     }
   }, [data]);
@@ -56,7 +54,7 @@ export default function Main() {
           </DoctorImageWrapper>
           <VerticalBox className="z-10">
             <SectionTitle>
-              <HighlightText>{data?.name}</HighlightText>
+              <HighlightText>{pet?.name ?? '반려동물 불러오기 실패'}</HighlightText>
             </SectionTitle>
             <SectionSubtitle>어떻게 지내고 있을까요?</SectionSubtitle>
           </VerticalBox>
@@ -75,100 +73,19 @@ export default function Main() {
             </div>
           </ContentsContainer>
         </MainContentSection>
-        <VerticalBox>
-          <SectionTitle className="px-4">{data?.name}에게 추천하는 사료에요!</SectionTitle>
-          <div className="w-full flex items-center">
-            <Swiper
-              coverflowEffect={{
-                rotate: 0,
-                stretch: -18,
-                modifier: 1,
-                slideShadows: false,
-              }}
-              grabCursor={true}
-              effect={'coverflow'}
-              pagination={{
-                clickable: true,
-              }}
-              centeredSlides={true}
-              modules={[EffectCoverflow, Pagination]}
-              slidesPerView={3}
-              className="pt-4 pb-14"
-              onActiveIndexChange={(swiper) => setActiveIndex(swiper.activeIndex)}
-            >
-              {Array(8)
-                .fill(0)
-                .map((_, idx) => (
-                  <SwiperSlide key={idx}>
-                    <SwiperProductItem
-                      productId={idx}
-                      path={productDummy}
-                      brand="로얄캐닌"
-                      isActive={activeIndex === idx}
-                      isLiked={idx % 2 === 0}
-                      name="미니언도어 애견사료"
-                      price={84720}
-                      key={idx}
-                    />
-                  </SwiperSlide>
-                ))}
-            </Swiper>
-          </div>
-        </VerticalBox>
-
         <ContentSection>
-          <ContentsContainer>
-            <HorizontalBox className="w-full">
-              <HorizontalCenterBox className="h-full aspect-square p-4">
-                <span className="text-3xl rounded-full bg-primary-bright text-white aspect-square w-full items-center flex justify-center">
-                  -
-                </span>
-              </HorizontalCenterBox>
-              <div className="flex items-center w-full justify-evenly">
-                <div onClick={onClickLogout}>
-                  <p className="text-sm">로그아웃 테스트용 버튼</p>
-                  <SectionSubtitle>로그아웃</SectionSubtitle>
-                </div>
-                <div className="font-bold">{'>'}</div>
-              </div>
-            </HorizontalBox>
-          </ContentsContainer>
-        </ContentSection>
-        <ContentSection>
-          <ContentsContainer>
-            <div className="flex w-full items-center">
-              <div className="flex items-center justify-center h-full aspect-square p-4">
-                <span className="text-3xl rounded-full bg-primary-bright text-white aspect-square w-full items-center flex justify-center">
-                  +
-                </span>
-              </div>
-              <div className="flex items-center w-full justify-evenly">
-                <div onClick={goRegisterPetPage}>
-                  <p className="text-sm">반려동물 등록 테스트 버튼</p>
-                  <SectionSubtitle>반려동물 등록하기</SectionSubtitle>
-                </div>
-                <div className="font-bold">{'>'}</div>
-              </div>
-            </div>
-          </ContentsContainer>
-        </ContentSection>
-        <ContentSection>
-          <ContentsContainer>
-            <div className="flex w-full items-center">
-              <HorizontalCenterBox className=" h-full aspect-square p-4">
-                <HorizontalCenterBox className="text-3xl rounded-full bg-primary-bright text-white aspect-square w-full">
-                  +
-                </HorizontalCenterBox>
-              </HorizontalCenterBox>
-              <HorizontalBox className="w-full justify-evenly">
-                <div>
-                  <p className="text-sm">현재 사료는 잘 주고 계신가요?</p>
-                  <SectionSubtitle>영양분석하기</SectionSubtitle>
-                </div>
-                <div className="font-bold">{'>'}</div>
-              </HorizontalBox>
-            </div>
-          </ContentsContainer>
+          <MainContentButton
+            label="반려동물 맞춤 제품을 추천해드려요!"
+            title="추천 제품 보러가기"
+            onClick={goProductsRecommendPage}
+          />
+          <MainContentButton title="로그아웃하기" onClick={onClickLogout} />
+          <MainContentButton
+            label="소중한 가족을 소개해주세요"
+            title="반려동물 등록하기"
+            onClick={goRegisterPetPage}
+          />
+          <MainContentButton label="현재 사료는 잘 주고 계신가요?" title="영양분석하기" />
         </ContentSection>
       </PageContainer>
     </Layout>
