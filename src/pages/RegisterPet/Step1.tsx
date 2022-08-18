@@ -2,16 +2,13 @@ import { useForm } from 'react-hook-form';
 import FormInput from '@/components/Form/FormInput';
 import FormButton from '@/components/Form/FormButton';
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@/store/config';
-import { selectRegisterInfo, setRegisterInfo } from '@/store/slices/registerPetSlice';
 import { ButtonWrapper, Form, PageContainer, QuestionText, SubQuestionText } from './index.style';
+import { StepPageProps } from './type';
 
 interface Step1Form {
   name: string;
 }
-export default function Step1({ goNextStep }: any) {
-  const dispatch = useAppDispatch();
-  const registerInfo = useAppSelector(selectRegisterInfo);
+export default function Step1({ goNextStep, enrollPetData, setEnrollData }: StepPageProps) {
   const {
     register,
     handleSubmit,
@@ -22,13 +19,13 @@ export default function Step1({ goNextStep }: any) {
 
   const isButtonDisabled = !watch('name');
   const onSubmitForm = ({ name }: Step1Form) => {
-    dispatch(setRegisterInfo({ name }));
+    setEnrollData('name', name);
     goNextStep();
   };
 
   useEffect(() => {
-    if (!registerInfo) return;
-    setValue('name', registerInfo.name);
+    if (!enrollPetData.name) return;
+    setValue('name', enrollPetData.name);
   }, []);
 
   return (

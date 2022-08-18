@@ -12,7 +12,7 @@ export const FlexColumnCenter = tw(FlexColumn)`
 `;
 
 export const EditProfileLabel = tw.label`
-  right-0 absolute opacity-4 bottom-1 bg-white flex justify-center items-center border border-gray-400 rounded-full w-8 h-8 
+  z-1 right-0 absolute opacity-4 bottom-1 bg-white flex justify-center items-center border border-gray-400 rounded-full w-8 h-8 
 `;
 export const RemoveProfileButton = tw.button`
   left-0 absolute opacity-4 bottom-1 bg-white flex justify-center items-center border border-gray-400 rounded-full w-8 h-8 
@@ -61,5 +61,5 @@ export const MainPetListContainer = tw.div`
 w-full flex items-center overflow-auto whitespace-nowrap py-2 space-x-4 px-1
 `;
 export const MainPetListItem = tw.div`
-flex w-60 h-28 p-4 rounded-lg border items-center gap-3 shadow-gray-300 shadow-md
+  flex min-w-[15rem] h-28 p-4 rounded-lg border items-center gap-3 shadow-gray-300 shadow-md overflow-hidden
 `;

@@ -1,12 +1,9 @@
 import { ActivityLevelType, PetSexType } from '@/@type/pet';
 import FormButton from '@/components/Form/FormButton';
 import FormInput from '@/components/Form/FormInput';
-import { useAppDispatch } from '@/store/config';
-import { selectRegisterInfo, setRegisterInfo } from '@/store/slices/registerPetSlice';
 import { concatClasses } from '@/utils/libs/concatClasses';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
 import {
   PageContainer,
   QuestionText,
@@ -15,7 +12,7 @@ import {
   ButtonWrapper,
   QuestionWrapper,
 } from './index.style';
-import { IPrevNextStep } from './type';
+import { StepPageProps } from './type';
 
 interface Step4Form {
   activityLevel: number;
@@ -26,8 +23,7 @@ interface Step4Form {
 }
 
 const activityLevels: ActivityLevelType[] = [1, 2, 3, 4, 5];
-export default function Step5({ goNextStep }: IPrevNextStep) {
-  const dispatch = useAppDispatch();
+export default function Step5({ goNextStep, enrollPetData, setEnrollData }: StepPageProps) {
   const {
     register,
     handleSubmit,
@@ -35,10 +31,9 @@ export default function Step5({ goNextStep }: IPrevNextStep) {
     watch,
     formState: { errors },
   } = useForm<Step4Form>();
-  const registerInfo = useSelector(selectRegisterInfo);
 
   const [selectedActivityLevel, setSelectedActivityLevel] = useState(
-    registerInfo?.activityLevel ?? 3,
+    enrollPetData?.activityLevel ?? 3,
   );
 
   const isButtonDisabled = !watch(['bodyWeight', 'sex']).every((value) => value);
@@ -46,25 +41,22 @@ export default function Step5({ goNextStep }: IPrevNextStep) {
   const saveFormInputs = (formInputs: any) => {
     const { bodyWeight, sex, isSpayed, isPregnant } = formInputs;
 
-    const detailData = {
-      bodyWeight,
-      activityLevel: selectedActivityLevel,
-      sex,
-      isSpayed,
-      isPregnant,
-    };
-    dispatch(setRegisterInfo(detailData));
+    setEnrollData('bodyWeight', bodyWeight);
+    setEnrollData('activityLevel', selectedActivityLevel);
+    setEnrollData('sex', sex);
+    setEnrollData('isSpayed', isSpayed);
+    setEnrollData('isPregnant', isPregnant);
     goNextStep();
   };
 
   useEffect(() => {
-    if (registerInfo) {
-      setValue('sex', registerInfo.sex);
-      setValue('isSpayed', registerInfo.isSpayed);
-      setValue('isPregnant', registerInfo.isPregnant);
-      setValue('bodyWeight', registerInfo.bodyWeight);
+    if (enrollPetData) {
+      setValue('sex', enrollPetData.sex);
+      setValue('isSpayed', enrollPetData.isSpayed);
+      setValue('isPregnant', enrollPetData.isPregnant);
+      setValue('bodyWeight', enrollPetData.bodyWeight);
     }
-  }, [registerInfo]);
+  }, [enrollPetData]);
 
   const handleSelectActivityLevel = (level: ActivityLevelType) => {
     setSelectedActivityLevel(level);
@@ -74,7 +66,7 @@ export default function Step5({ goNextStep }: IPrevNextStep) {
     <PageContainer>
       <div className="mb-4">
         <QuestionText>
-          <PetNameHighlight>{registerInfo.name}</PetNameHighlight>에 대해서 더 알려주시겠어요?
+          <PetNameHighlight>{enrollPetData.name}</PetNameHighlight>에 대해서 더 알려주시겠어요?
         </QuestionText>
       </div>
       <Form onSubmit={handleSubmit(saveFormInputs)}>
