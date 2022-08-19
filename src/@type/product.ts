@@ -8,7 +8,7 @@ export interface IProduct {
   productId: number;
   thumbnail: string;
   aged: boolean;
-  isAFFCOSatisfied: boolean;
+  isAAFCOSatisfied: boolean;
   growing: boolean;
   likes: number;
   obesity: boolean;

@@ -6,7 +6,7 @@ import ChipButton from '../ChipButton';
  * - 상품명
  * - 제조사
  * - 가격
- * - AFFCO 만족/불만족
+ * - AAFCO 만족/불만족
  * - 유아/성견/노견
  */
 interface IProductItem {
@@ -26,7 +26,7 @@ export default function ProductItem(props: IProductItem) {
         </div>
         <div className="flex gap-1 items-center">
           <ChipButton content="성견" filled={false} border />
-          <ChipButton content="AFFCO" filled />
+          <ChipButton content="AAFCO" filled />
         </div>
       </div>
     </div>

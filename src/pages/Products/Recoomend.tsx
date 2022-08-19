@@ -57,7 +57,7 @@ export default function RecommendProducts() {
     () =>
       pet?.isPregnant
         ? `임신 중인 ${pet.name}에게 적합한 사료에요!`
-        : 'AFFCO 기준을 만족하는 사료에요!',
+        : 'AAFCO 기준을 만족하는 사료에요!',
     [pet?.isPregnant],
   );
 
