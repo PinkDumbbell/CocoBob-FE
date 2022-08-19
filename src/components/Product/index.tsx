@@ -1,3 +1,4 @@
+import React from 'react';
 import { IProduct } from '@/@type/product';
 import ChipButton from '../ChipButton';
 
@@ -12,7 +13,7 @@ import ChipButton from '../ChipButton';
 interface IProductItem {
   product: IProduct;
 }
-export default function ProductItem(props: IProductItem) {
+function ProductItem(props: IProductItem) {
   const { product } = props;
   return (
     <div className="flex w-full h-36 border-b border-gray-200">
@@ -32,3 +33,4 @@ export default function ProductItem(props: IProductItem) {
     </div>
   );
 }
+export default React.memo(ProductItem);

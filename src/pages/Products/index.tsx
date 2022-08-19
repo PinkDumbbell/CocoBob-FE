@@ -3,24 +3,24 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 
 import Layout from '@/components/layout/Layout';
-import { HeaderContents, HeaderWrapper, Title } from '@/components/layout/Header.style';
 import ProductItem from '@/components/Product';
-
-import { useGetProductQuery } from '@/store/api/productApi';
+import { useLazyGetProductQuery } from '@/store/api/productApi';
 import { concatClasses } from '@/utils/libs/concatClasses';
-import { ReactComponent as SearchIcon } from '@/assets/icon/search_icon.svg';
 import { IProduct } from '@/@type/product';
-import SearchHeader from './components/Search/header';
+import Header from './components/Header';
 import SearchPage from './components/Search';
+import SearchHeader from './components/Search/header';
+
+import CategoryTabButton from './components/CategoryTabButton';
 
 const MainContent = {
   AllProducts: 'AllProducts',
   Search: 'Search',
-  SearchProducts: 'SearchProducts',
+  SearchResults: 'SearchResults',
   OnlySearch: 'OnlySearch',
 } as const;
 
-type MainContentType = typeof MainContent[keyof typeof MainContent]; // 'AllProducts' | 'Search' | 'SearchProducts' | 'OnlySearch'
+type MainContentType = typeof MainContent[keyof typeof MainContent]; // 'AllProducts' | 'Search' | 'SearchResults' | 'OnlySearch'
 interface LocationState {
   MainContent: MainContentType;
 }
@@ -29,19 +29,21 @@ type CategoryType = '사료' | '간식' | '영양제';
 const categoryList: CategoryType[] = ['사료', '간식', '영양제'];
 
 export default function ProductsPage() {
-  const { state } = useLocation();
+  const state = useLocation().state as LocationState;
   const navigate = useNavigate();
   const [category, setCategory] = useState<CategoryType>('사료');
   const [mainContent, setMainContent] = useState<MainContentType>('AllProducts');
 
   const ref = useRef<HTMLDivElement>();
-  const { ref: inViewRef, inView } = useInView({ rootMargin: '100px 0px 0px 0px', threshold: 0 });
+  const { ref: inViewRef, inView } = useInView({ threshold: 0, rootMargin: '150px' });
+
   const [page, setPage] = useState<number>(0);
-  const { data, isLoading } = useGetProductQuery({ page });
+  const [name, setName] = useState('');
+  const [trigger, { isLoading, data, isSuccess }] = useLazyGetProductQuery();
   const [productList, setProductList] = useState<IProduct[]>([]);
 
-  const [searchKeyword, setSearchKeyword] = useState<string>('');
-  const [searchResults, setSearchResults] = useState<any[] | undefined>([]);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [searchResults, setSearchResults] = useState<IProduct[]>([]);
 
   const setInViewRef = useCallback(
     (node: HTMLDivElement) => {
@@ -50,110 +52,88 @@ export default function ProductsPage() {
     },
     [inViewRef],
   );
-  const getProducts = useCallback(() => {
-    setProductList((prev) => [...prev, ...(data?.productList || [])]);
-  }, [data]);
 
-  const goBack = () => {
+  const showAllProducts = () => {
     setSearchKeyword('');
     if (mainContent === 'OnlySearch') navigate(-1);
-    else setMainContent('AllProducts');
+    else {
+      setPage(0);
+      setName('');
+      setMainContent('AllProducts');
+    }
+    trigger({ name, page });
+  };
+
+  const onClickSearch = () => {
+    setProductList([]);
+    setSearchResults([]);
+    if (searchKeyword === '') setMainContent('AllProducts');
+    else setMainContent('SearchResults');
+    setPage(0);
+    setName(searchKeyword);
   };
 
   useEffect(() => {
-    getProducts();
-  }, [getProducts]);
-
-  useEffect(() => {
-    if (inView && !isLoading) {
-      setPage((prevState) => prevState + 1);
+    console.log('is in view?', inView);
+    if (!data?.last && inView) {
+      trigger({ name, page });
     }
   }, [inView, isLoading]);
 
-  const onClickSearch = (name?: string) => {
-    if (searchKeyword === '') setMainContent('AllProducts');
-    else if (name) {
-      // api요청 추가
-      setSearchKeyword(name);
-      setSearchResults(productList);
-      setMainContent('SearchProducts');
-    } else {
-      // searchWord로 api 요청
-      setSearchResults(productList);
-      setMainContent('SearchProducts');
-    }
-  };
   useEffect(() => {
-    if (mainContent === 'SearchProducts' || mainContent === 'AllProducts') return;
+    if (mainContent === 'SearchResults' || mainContent === 'AllProducts') return;
     setSearchResults([]);
     setMainContent('Search');
   }, [searchKeyword]);
 
   useEffect(() => {
+    if (!isSuccess) return;
+
+    const setter = (prevList: IProduct[]) => [...prevList, ...(data?.productList ?? [])];
+    if (mainContent === 'AllProducts') setProductList(setter);
+    else setSearchResults(setter);
+    setPage((prevState) => prevState + 1);
+  }, [data, isSuccess]);
+
+  useEffect(() => {
     if (!state) return;
-    const { MainContent: MainContentState } = state as LocationState;
-    if (MainContentState) setMainContent(MainContentState);
+    setPage(0);
+    setName('');
+    const { MainContent: MainContentState } = state;
+    if (state) setMainContent(MainContentState);
+    trigger({ name, page });
   }, []);
 
   return (
     <Layout footer>
       <div className="fixed top-0 left-0 right-0 mx-auto flex flex-col w-full max-w-[425px]">
         {mainContent === 'AllProducts' ? (
-          <HeaderWrapper>
-            <HeaderContents>
-              <Title isHide={false}>사료</Title>
-              <div
-                className="absolute right-4 flex items-center"
-                onClick={() => {
-                  setMainContent('Search');
-                }}
-              >
-                <SearchIcon />
-              </div>
-            </HeaderContents>
-          </HeaderWrapper>
+          <Header title={'제품목록'} goSearchPage={() => setMainContent('Search')} />
         ) : (
           <SearchHeader
-            setSearchWord={(word: string) => setSearchKeyword(word)}
-            searchWord={searchKeyword}
+            setSearchInputValue={(word: string) => setSearchKeyword(word)}
+            searchInputValue={searchKeyword}
             onClickSearch={onClickSearch}
             setMainContent={setMainContent}
-            onClick={() => {
-              goBack();
-            }}
+            goBack={showAllProducts}
           />
         )}
         {mainContent !== 'Search' && mainContent !== 'OnlySearch' && (
           <div
             className={concatClasses(
               'flex flex-col w-full max-w-[425px] bg-white',
-              mainContent !== 'SearchProducts' ? 'pt-[50px]' : '',
+              mainContent !== 'SearchResults' ? 'pt-[50px]' : '',
             )}
           >
             <div className="h-12 w-full flex justify-between items-center">
-              {categoryList.map((categoryName) =>
-                categoryName === category ? (
-                  <button
-                    key={categoryName}
-                    className="flex justify-center items-center box-border h-12 flex-1 border-b border-red-500 text-red-500"
-                    onClick={() => {
-                      setCategory(categoryName);
-                    }}
-                  >
-                    {categoryName}
-                  </button>
-                ) : (
-                  <button
-                    key={categoryName}
-                    className="flex justify-center items-center flex-1"
-                    onClick={() => {
-                      setCategory(categoryName);
-                    }}
-                  >
-                    {categoryName}
-                  </button>
-                ),
-              )}
+              {categoryList.map((categoryName) => (
+                <CategoryTabButton
+                  key={categoryName}
+                  name={categoryName}
+                  onClick={() => setCategory(categoryName)}
+                  isOn={category === categoryName}
+                />
+              ))}
             </div>
             <div className="w-full px-3 h-8 border-t border-b border-gray-200 flex items-center justify-end">
               <div className="flex items-center gap-2">
@@ -168,7 +148,7 @@ export default function ProductsPage() {
       </div>
       <div className="w-full h-full">
         {mainContent !== 'Search' && mainContent !== 'OnlySearch' && (
-          <div className="mt-[150px]">
+          <div className="pt-[150px] pb-[60px]">
             {(mainContent === 'AllProducts' ? productList : searchResults)?.map((product) => (
               <div
                 key={product.productId}
@@ -178,18 +158,17 @@ export default function ProductsPage() {
                 <ProductItem product={product} />
               </div>
             ))}
-            {!isLoading && (
-              <div ref={setInViewRef} className="block w-full h-24">
+            {!isLoading && !data?.last && (
+              <div ref={setInViewRef} className="w-full h-20 flex items-center justify-center">
                 LoadMore
               </div>
             )}
           </div>
         )}
         {(mainContent === 'Search' || mainContent === 'OnlySearch') && (
-          <SearchPage onClickSearch={onClickSearch} searchWord={searchKeyword} />
+          <SearchPage onClickSearch={onClickSearch} searchKeyword={searchKeyword} />
         )}
-
-        {isLoading && <p>로딩중</p>}
+        {isLoading && <p>로딩중</p>}{' '}
       </div>
     </Layout>
   );
