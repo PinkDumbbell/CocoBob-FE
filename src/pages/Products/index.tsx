@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 
 import Layout from '@/components/layout/Layout';
@@ -28,7 +28,13 @@ interface LocationState {
 type CategoryType = '사료' | '간식' | '영양제';
 const categoryList: CategoryType[] = ['사료', '간식', '영양제'];
 
+interface IFilter {
+  name?: string;
+  aafco?: boolean;
+}
+
 export default function ProductsPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const state = useLocation().state as LocationState;
   const navigate = useNavigate();
   const [category, setCategory] = useState<CategoryType>('사료');
@@ -38,7 +44,10 @@ export default function ProductsPage() {
   const { ref: inViewRef, inView } = useInView({ threshold: 0, rootMargin: '150px' });
 
   const [page, setPage] = useState<number>(0);
-  const [name, setName] = useState('');
+  const [filters, setFilters] = useState<IFilter>({
+    name: '',
+    aafco: false,
+  });
   const [trigger, { isLoading, data, isSuccess }] = useLazyGetProductQuery();
   const [productList, setProductList] = useState<IProduct[]>([]);
 
@@ -58,35 +67,73 @@ export default function ProductsPage() {
     if (mainContent === 'OnlySearch') navigate(-1);
     else {
       setPage(0);
-      setName('');
+      setFilters({ name: '' });
       setMainContent('AllProducts');
+      setSearchParams({});
     }
-    trigger({ name, page });
   };
 
   const onClickSearch = () => {
+    setPage(0);
     setProductList([]);
     setSearchResults([]);
     if (searchKeyword === '') setMainContent('AllProducts');
     else setMainContent('SearchResults');
-    setPage(0);
-    setName(searchKeyword);
+    setSearchParams({ ...searchParams, name: searchKeyword });
   };
 
   useEffect(() => {
-    console.log('is in view?', inView);
-    if (!data?.last && inView) {
-      trigger({ name, page });
-    }
-  }, [inView, isLoading]);
+    console.log('useEffect []');
+    if (!state) return;
+    setPage(0);
+
+    const { MainContent: MainContentState } = state;
+    if (state) setMainContent(MainContentState);
+  }, []);
 
   useEffect(() => {
-    if (mainContent === 'SearchResults' || mainContent === 'AllProducts') return;
+    console.log('useEffect [searchParams]');
+    const nameParam = searchParams.get('name');
+    const aafcoParam = searchParams.get('aafco');
+    console.log('name, aafco', nameParam, aafcoParam);
+    if (nameParam) {
+      setSearchKeyword(nameParam);
+      setFilters((currentFilter) => ({
+        ...currentFilter,
+        name: nameParam ?? '',
+      }));
+    }
+    if (aafcoParam) {
+      setFilters((currentFilter) => ({ ...currentFilter, aafco: aafcoParam === 'true' }));
+    }
+
+    if (nameParam || aafcoParam) setMainContent('SearchResults');
+    else setMainContent('AllProducts');
+    setPage(0);
+
+    trigger({
+      aafco: aafcoParam === null ? undefined : aafcoParam === 'true',
+      name: nameParam ?? '',
+      page,
+    });
+  }, [searchParams]);
+
+  useEffect(() => {
+    console.log('useEffect [searchKeyword]');
+    if (filters.name === searchKeyword || mainContent === 'AllProducts') return;
     setSearchResults([]);
     setMainContent('Search');
   }, [searchKeyword]);
 
   useEffect(() => {
+    console.log('useEffect [inView, isLoading]');
+    if (!data?.last && inView) {
+      trigger({ name: filters.name, page });
+    }
+  }, [inView, isLoading]);
+
+  useEffect(() => {
+    console.log('useEffect [data, isSuccess]');
     if (!isSuccess) return;
 
     const setter = (prevList: IProduct[]) => [...prevList, ...(data?.productList ?? [])];
@@ -94,15 +141,6 @@ export default function ProductsPage() {
     else setSearchResults(setter);
     setPage((prevState) => prevState + 1);
   }, [data, isSuccess]);
-
-  useEffect(() => {
-    if (!state) return;
-    setPage(0);
-    setName('');
-    const { MainContent: MainContentState } = state;
-    if (state) setMainContent(MainContentState);
-    trigger({ name, page });
-  }, []);
 
   return (
     <Layout footer>
