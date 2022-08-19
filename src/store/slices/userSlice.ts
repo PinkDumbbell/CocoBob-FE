@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '@/@type/user';
 import { userApiSlice } from '../api/userApi';
+import { RootState } from '../config';
 
 export type UserState = {
   user: IUser | null;
+  currentPet: number | null;
 };
 
 const initialState: UserState = {
@@ -14,6 +16,7 @@ const initialState: UserState = {
     representativeAnimalId: null,
     pets: [],
   },
+  currentPet: null,
 };
 
 export const userSlice = createSlice({
@@ -23,6 +26,7 @@ export const userSlice = createSlice({
     setUserAction(state: UserState, action: PayloadAction<IUser>) {
       const { payload } = action;
       state.user = payload;
+      state.currentPet = payload.representativeAnimalId;
     },
     setRepresentativePet(state: UserState, action: PayloadAction<{ petId: number }>) {
       if (state.user) {
@@ -31,6 +35,12 @@ export const userSlice = createSlice({
     },
     logoutAction() {
       return initialState;
+    },
+    setCurrentPet(state: UserState, action: PayloadAction<{ petId: number }>) {
+      const {
+        payload: { petId },
+      } = action;
+      state.currentPet = petId;
     },
   },
   extraReducers(builder) {
@@ -41,5 +51,6 @@ export const userSlice = createSlice({
 });
 
 const { reducer, actions } = userSlice;
-export const { setUserAction, logoutAction, setRepresentativePet } = actions;
+export const getCurrentPet = (state: RootState) => state.user.currentPet;
+export const { setUserAction, logoutAction, setRepresentativePet, setCurrentPet } = actions;
 export default reducer;

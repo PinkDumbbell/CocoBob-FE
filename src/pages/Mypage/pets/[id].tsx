@@ -9,7 +9,7 @@ import Layout from '@/components/layout/Layout';
 import FormInput, { InputStyle, Label } from '@/components/Form/FormInput';
 import FormButton from '@/components/Form/FormButton';
 
-import { ActivityLevelType, IBreeds, IPetInformation, PetSexType } from '@/@type/pet';
+import { ActivityLevelType, IBreeds, IPetInformation, PetSexType, PetInfoForm } from '@/@type/pet';
 import { useGetPetsDetailQuery, useUpdatePetDataMutation } from '@/store/api/petApi';
 import useSelectImage from '@/utils/hooks/useSelectImage';
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
@@ -23,7 +23,7 @@ import { ReactComponent as EditIcon } from '@/assets/icon/edit_icon.svg';
 import { ReactComponent as CalendarIcon } from '@/assets/icon/calendar_icon.svg';
 
 import PetDefault from '@/assets/image/pet_default.png';
-import { RegisterInfoForm } from '@/store/slices/registerPetSlice';
+
 import { getFileFromObjectURL } from '@/utils/libs/getFileFromObjectURL';
 import useToastMessage from '@/utils/hooks/useToastMessage';
 import useToastConfirm from '@/utils/hooks/useToastConfirm';
@@ -106,7 +106,7 @@ export default function PetDetail() {
         birthday,
         activityLevel: selectedActivityLevel,
         breedId: breed?.id,
-      } as RegisterInfoForm<File>,
+      } as PetInfoForm<File>,
     };
     if (imageFile) {
       updateParams.formInput.petImage = await getFileFromObjectURL(imageFile);
@@ -139,7 +139,7 @@ export default function PetDetail() {
 
   useEffect(() => {
     if (!mutationResult) return;
-    navigate('/mypage/pets');
+    navigate('/mypage/pets', { replace: true });
     openToast('성공적으로 정보를 수정하였습니다.', 'success');
   }, [mutationResult]);
 
@@ -152,7 +152,7 @@ export default function PetDetail() {
             <Form onSubmit={handleSubmit(onSubmit)}>
               <ContentsContainer>
                 <FlexColumnCenter className="w-full">
-                  <div className="relative w-32 h-32 bg-white">
+                  <div className="relative w-32 h-32 bg-white flex items-center justify-center">
                     <EditProfileLabel htmlFor="pet-thumbnail">
                       <EditIcon />
                       {/* <img src={AddPhotoImage} alt="" /> */}
@@ -169,11 +169,9 @@ export default function PetDetail() {
                         <TrashIcon />
                       </RemoveProfileButton>
                     )}
-                    <img
-                      src={previewUrl || PetDefault}
-                      alt=""
-                      className="rounded-full overflow-hidden"
-                    />
+                    <div className="rounded-full overflow-hidden h-full w-full">
+                      <img src={previewUrl || PetDefault} alt="" className="w-full" />
+                    </div>
                   </div>
                 </FlexColumnCenter>
               </ContentsContainer>
@@ -325,7 +323,11 @@ export default function PetDetail() {
               </SaveButtonContainer>
             </Form>
           </div>
-          <BreedBottomSheet isOpen={isBreedBottomSheetOpen} setBreed={setBreed} />
+          <BreedBottomSheet
+            isOpen={isBreedBottomSheetOpen}
+            setBreed={setBreed}
+            currentBreedId={petData.breedInfo.id}
+          />
           <BirthdayBottomSheet
             isOpen={isBirthdayBottomSheetOpen}
             birthday={birthday}

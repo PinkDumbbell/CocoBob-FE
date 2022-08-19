@@ -1,11 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-
 import BottomSheet from '@/components/BottomSheet';
 import Button from '@/components/Button';
 import FormButton from '@/components/Form/FormButton';
-import { selectRegisterInfo, setRegisterInfo } from '@/store/slices/registerPetSlice';
 import {
   getKoreanStringDateFromDate,
   getDateDiff,
@@ -14,7 +11,7 @@ import {
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import useToastMessage from '@/utils/hooks/useToastMessage';
 import { ButtonWrapper, PageContainer, QuestionText, Form, PetNameHighlight } from './index.style';
-import { IPrevNextStep } from './type';
+import { StepPageProps } from './type';
 
 type ageType = {
   months: number;
@@ -22,7 +19,7 @@ type ageType = {
 };
 type AgeModeType = 'birthday' | 'monthsAge' | '';
 
-export default function Step4({ goNextStep }: IPrevNextStep) {
+export default function Step4({ goNextStep, enrollPetData, setEnrollData }: StepPageProps) {
   const {
     currentBottomSheet,
     isBottomSheetOpen: isBirthdayBottomSheetOpen,
@@ -34,8 +31,6 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
     openBottomSheet: openMonthsAgeBottomSheet,
   } = useBottomSheet('monthsAge');
   const openToast = useToastMessage();
-  const dispatch = useDispatch();
-  const registerInfo = useSelector(selectRegisterInfo);
 
   const [age, setAge] = useState<ageType>({
     months: 0,
@@ -68,20 +63,17 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
     closeBottomSheet();
   };
 
-  const saveAgeInStore = () =>
-    dispatch(
-      setRegisterInfo({
-        age: age.months,
-        birthday: age.birthday,
-      }),
-    );
+  const saveAge = () => {
+    setEnrollData('age', age.months);
+    setEnrollData('birthday', age.birthday);
+  };
 
   const onValidSubmit = () => {
     if (!age.birthday && !age.months) {
       openToast('나이를 입력해주세요');
       return;
     }
-    saveAgeInStore();
+    saveAge();
     goNextStep();
   };
 
@@ -98,10 +90,10 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
 
   useEffect(() => {
     setAge({
-      birthday: registerInfo.birthday,
-      months: registerInfo.age,
+      birthday: enrollPetData.birthday,
+      months: enrollPetData.age,
     });
-    if (registerInfo.birthday) setSelectedMode('birthday');
+    if (enrollPetData.birthday) setSelectedMode('birthday');
     else setSelectedMode('monthsAge');
     return () => {
       closeBottomSheet();
@@ -112,7 +104,7 @@ export default function Step4({ goNextStep }: IPrevNextStep) {
     <PageContainer>
       <div className="mb-2">
         <QuestionText>
-          <PetNameHighlight>{registerInfo.name}!</PetNameHighlight>
+          <PetNameHighlight>{enrollPetData.name}!</PetNameHighlight>
         </QuestionText>
         <QuestionText>귀여운 이름이네요. 나이는요?</QuestionText>
       </div>

@@ -88,14 +88,14 @@ export default function DailyMain() {
     if (queryStringDate === 'Invalid Date') navigate('/404');
     if (!queryStringDate) {
       dispatch(setToday());
-      navigate(`/daily?date=${currentDateString}`);
+      navigate(`/daily?date=${currentDateString}`, { replace: true });
       return;
     }
     if (queryStringDate !== currentDateString) {
       const newDate = new Date(queryStringDate.toString());
       if (Number.isNaN(newDate.getTime())) navigate('/404');
       dispatch(setDate({ date: getDateString(newDate) }));
-      navigate(`/daily?date=${getDateString(newDate)}`);
+      navigate(`/daily?date=${getDateString(newDate)}`, { replace: true });
     }
   }, [queryStringDate]);
 
