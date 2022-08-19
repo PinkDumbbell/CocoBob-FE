@@ -18,7 +18,7 @@ const MainContent = {
   OnlySearch: 'OnlySearch',
 } as const;
 type MainContentType = typeof MainContent[keyof typeof MainContent]; // 'AllProducts' | 'Search' | 'SearchProducts' | 'OnlySearch'
-interface ILocation {
+interface LocationState {
   MainContent: MainContentType;
 }
 export default function ProductsPage() {
@@ -30,16 +30,16 @@ export default function ProductsPage() {
   const [searchWord, setSearchWord] = useState<string>('');
   const [searchedData, setSearchedData] = useState<any[] | undefined>([]);
   const [page, setPage] = useState<number>(0);
-  const [productList, setProductList] = useState<IProduct[]>();
+  const [productList, setProductList] = useState<IProduct[]>([]);
   // todo: 검색 가능한 키워드 선정하기
   const [viewRef, inView] = useInView();
-  const state = useLocation().state as ILocation;
+  const { MainContent: MainContentState } = useLocation().state as LocationState;
   const { data, isLoading } = useGetProductQuery({ page });
   const navigate = useNavigate();
 
   const getProducts = useCallback(() => {
     // eslint-disable-next-line no-unsafe-optional-chaining
-    setProductList((prev) => [...(prev || []), ...(data?.productList || [])]);
+    setProductList((prev) => [...prev, ...(data?.productList || [])]);
   }, [data]);
 
   useEffect(() => {
@@ -78,8 +78,7 @@ export default function ProductsPage() {
   }, [searchWord]);
 
   useEffect(() => {
-    if (!state) return;
-    const { MainContent: MainContentState } = state;
+    if (!MainContentState) return;
     if (MainContentState) setMainContent(MainContentState);
   }, []);
   return (
