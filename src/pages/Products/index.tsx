@@ -3,7 +3,9 @@ import { HeaderContents, HeaderWrapper, Title } from '@/components/layout/Header
 import ProductItem from '@/components/Product';
 import { useGetProductQuery } from '@/store/api/productApi';
 import { ReactComponent as SearchIcon } from '@/assets/icon/search_icon.svg';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { IProduct } from '@/@type/product';
+import { useInView } from 'react-intersection-observer';
 import Footer from '@/components/layout/Footer';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SearchPage from './components/Search';
@@ -27,17 +29,35 @@ export default function ProductsPage() {
   const [mainContent, setMainContent] = useState<MainContentType>('AllProducts');
   const [searchWord, setSearchWord] = useState<string>('');
   const [searchedData, setSearchedData] = useState<any[] | undefined>([]);
+  const [page, setPage] = useState<number>(0);
+  const [productList, setProductList] = useState<IProduct[]>();
   // todo: 검색 가능한 키워드 선정하기
-  const { data } = useGetProductQuery();
+  const [viewRef, inView] = useInView();
   const state = useLocation().state as ILocation;
-  const productList = data?.productList;
+  const { data, isLoading } = useGetProductQuery({ page });
   const navigate = useNavigate();
+
+  const getProducts = useCallback(() => {
+    // eslint-disable-next-line no-unsafe-optional-chaining
+    setProductList((prev) => [...(prev || []), ...(data?.productList || [])]);
+  }, [data]);
+
+  useEffect(() => {
+    getProducts();
+  }, [getProducts]);
+
+  useEffect(() => {
+    if (inView && !isLoading) {
+      setPage((prevState) => prevState + 1);
+    }
+  }, [inView, isLoading]);
 
   const goBack = () => {
     setSearchWord('');
     if (mainContent === 'OnlySearch') navigate(-1);
     else setMainContent('AllProducts');
   };
+
   const onClickSearch = (name?: string) => {
     if (searchWord === '') setMainContent('AllProducts');
     else if (name) {
@@ -56,6 +76,7 @@ export default function ProductsPage() {
     setSearchedData([]);
     setMainContent('Search');
   }, [searchWord]);
+
   useEffect(() => {
     if (!state) return;
     const { MainContent: MainContentState } = state;
@@ -141,6 +162,8 @@ export default function ProductsPage() {
       {(mainContent === 'Search' || mainContent === 'OnlySearch') && (
         <SearchPage onClickSearch={onClickSearch} searchWord={searchWord} />
       )}
+      {isLoading && <p>로딩중</p>}
+      {!isLoading && <div ref={viewRef} />}
       <Footer currentPath={location.pathname} />
     </div>
   );
