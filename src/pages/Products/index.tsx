@@ -47,7 +47,7 @@ export default function ProductsPage() {
   }, [getProducts]);
 
   useEffect(() => {
-    if (inView && !isLoading) {
+    if (inView && !isLoading && page < (data?.totalPages ?? 0)) {
       setPage((prevState) => prevState + 1);
     }
   }, [inView, isLoading]);
