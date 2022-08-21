@@ -1,5 +1,6 @@
 import Layout from '@/components/layout/Layout';
 import { useGetPetsQuery } from '@/store/api/petApi';
+import { useNavigate } from 'react-router-dom';
 import AddPetButton from '../components/AddPetButton';
 import PetSimpleCard from '../components/PetSimpleInfo';
 import { FlexColumn, MainContentsContainer, PetListContainer, PetCard } from '../index.style';
@@ -7,8 +8,13 @@ import { FlexColumn, MainContentsContainer, PetListContainer, PetCard } from '..
 export default function PetsPage() {
   const { data: pets, isSuccess } = useGetPetsQuery();
 
+  const navigate = useNavigate();
+  const onClickGoBack = () => {
+    navigate('/mypage');
+  };
+
   return (
-    <Layout header title="우리 아이 목록" canGoBack>
+    <Layout header title="우리 아이 목록" canGoBack onClickGoBack={onClickGoBack}>
       <MainContentsContainer className="px-2">
         <div className="flex">
           <AddPetButton />
