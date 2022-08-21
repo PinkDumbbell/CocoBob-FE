@@ -1,10 +1,11 @@
 import goBackImg from '@/assets/icon/go_back_btn.png';
 import { ReactComponent as SearchIcon } from '@/assets/icon/search_icon.svg';
-import { useEffect, useRef } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 interface ISearch {
   searchInputValue: string;
-  setSearchInputValue: any;
+  setSearchInputValue: Dispatch<SetStateAction<string>>;
   setMainContent: any;
   goBack: () => void;
   onClickSearch: any;
@@ -12,6 +13,7 @@ interface ISearch {
 
 export default function SearchHeader(props: ISearch) {
   const { searchInputValue, setSearchInputValue, goBack, onClickSearch, setMainContent } = props;
+  const [searchParams] = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const clearSearchKeyword = () => {
@@ -24,6 +26,8 @@ export default function SearchHeader(props: ISearch) {
   };
 
   useEffect(() => {
+    const nameParam = searchParams.get('name') ?? '';
+    setSearchInputValue(nameParam);
     inputRef.current?.focus();
   }, []);
   return (
