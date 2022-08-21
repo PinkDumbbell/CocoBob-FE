@@ -6,7 +6,10 @@ export const productApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProduct: builder.query<ProductListType, SearchFilterType | void>({
       query: (arg) => {
-        return { url: '/products/search', params: { ...arg, size: arg?.size ?? 20 } };
+        return {
+          url: '/products/search',
+          params: { ...arg, size: arg?.size ?? 20 },
+        };
       },
       transformResponse: (response: IGenericResponse<ProductListType>) => response.data,
     }),

@@ -5,15 +5,17 @@ interface ChipButtonProps {
   theme?: 'primary' | 'black';
   filled?: boolean;
   border?: boolean;
+  onClick?: () => void;
 }
 export default function ChipButton({
   content,
   theme = 'primary',
   filled,
   border = true,
+  onClick,
 }: ChipButtonProps) {
   return (
-    <ChipButtonWrapper theme={theme} $filled={filled} $border={border}>
+    <ChipButtonWrapper theme={theme} $filled={filled} $border={border} onClick={onClick}>
       {content}
     </ChipButtonWrapper>
   );

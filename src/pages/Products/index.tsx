@@ -7,13 +7,12 @@ import ProductItem from '@/components/Product';
 import { useLazyGetProductQuery } from '@/store/api/productApi';
 import { concatClasses } from '@/utils/libs/concatClasses';
 import { ProductPreviewType } from '@/@type/product';
-import { ReactComponent as CloseIcon } from '@/assets/icon/close_icon.svg';
-import { ReactComponent as CheckIcon } from '@/assets/icon/check_icon.svg';
 import Header from './components/Header';
 import SearchPage from './components/Search';
 import SearchHeader from './components/Search/header';
 
 import CategoryTabButton from './components/CategoryTabButton';
+import FilterModal from './components/Filter/FilterModal';
 
 const MainContent = {
   AllProducts: 'AllProducts',
@@ -47,27 +46,6 @@ function useFilterModal() {
   };
 }
 
-function FilterModal({ close, saveFilter }: { close: () => void; saveFilter: () => void }) {
-  const onClickSaveFilter = () => {
-    saveFilter();
-    close();
-  };
-  return (
-    <div className="fixed bottom-0 z-[9000] w-full max-w-[425px] h-3/4 rounded-t-[10px] bg-white shadow-sm">
-      <div className="flex flex-col w-full h-full p-2">
-        <div className="flex items-center justify-between p-1 h-10 border-b boder-b-gray-800">
-          <button onClick={close}>
-            <CloseIcon />
-          </button>
-          <button onClick={onClickSaveFilter}>
-            <CheckIcon />
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 const MemoizedProductItem = React.memo(({ product }: { product: ProductPreviewType }) => {
   const navigate = useNavigate();
   return (
@@ -79,6 +57,7 @@ const MemoizedProductItem = React.memo(({ product }: { product: ProductPreviewTy
 MemoizedProductItem.displayName = 'ProductItem';
 
 export default function ProductsPage() {
+  const firstTrigger = useRef(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [category, setCategory] = useState<CategoryType>('사료');
@@ -93,6 +72,7 @@ export default function ProductsPage() {
   const [name, setName] = useState('');
   // eslint-disable-next-line no-unused-vars
   const [sort, setSort] = useState();
+  const [aafco, setAafco] = useState(false);
   const [filters, setFilters] = useState<any>([]);
   const [trigger, { isFetching, data, isSuccess }] = useLazyGetProductQuery();
   const [productList, setProductList] = useState<ProductPreviewType[]>([]);
@@ -111,6 +91,7 @@ export default function ProductsPage() {
   const showAllProducts = () => {
     if (mainContent === 'OnlySearch') navigate(-1);
     else {
+      setPage(0);
       setMainContent('AllProducts');
       setSearchParams({});
     }
@@ -120,41 +101,59 @@ export default function ProductsPage() {
     setSearchParams({ ...searchParams, name: searchInputValue });
   };
 
+  // const onSaveFilter = (aafco?:boolean, )=>{
+
+  // }
+
   useEffect(() => {
+    firstTrigger.current = true;
     setSearchResults([]);
     setProductList([]);
+    setAafco(false);
+    setName('');
+    if (searchParams.toString().length === 0) {
+      setMainContent('AllProducts');
+      return;
+    }
 
-    const newFilters: { [key: string]: string } = {};
+    const newFilters: { [key: string]: string | boolean } = {};
     const entries = searchParams.entries();
+
     // eslint-disable-next-line no-restricted-syntax
     for (const entry of entries) {
       const [key, value] = entry;
-      if (mainContent !== 'SearchResults') setMainContent('SearchResults');
+      if (key === 'aafco') setAafco(value === 'true');
+      if (key === 'name') {
+        if (!value) setMainContent('AllProducts');
+        else setMainContent('SearchResults');
+        setName(value);
+      }
       newFilters[key] = value;
     }
+
     setFilters(newFilters);
   }, [searchParams]);
 
   useEffect(() => {
+    if (!firstTrigger.current) return;
     if (isFetching) return;
     setPage(0);
     trigger({ ...filters, page: 0 });
   }, [filters]);
 
   useEffect(() => {
+    if (!firstTrigger.current) return;
     if (!isFetching && !data?.last && inView) {
       trigger({ ...filters, page: page + 1 });
       setPage((prevState) => prevState + 1);
     }
   }, [inView, isFetching, data]);
 
-  const setter = useCallback(
-    (prevList: ProductPreviewType[]) => {
-      const newList = prevList.concat(data?.productList ?? []);
-      return newList;
-    },
-    [data?.productList],
-  );
+  const setter = (prevList: ProductPreviewType[]) => {
+    const newList = prevList.concat(data?.productList ?? []);
+    return newList;
+  };
+
   useEffect(() => {
     if (!isSuccess) return;
 
@@ -196,19 +195,42 @@ export default function ProductsPage() {
               ))}
             </div>
             <div className="w-full px-3 py-1 border-t border-b border-gray-200 flex items-center justify-between">
-              <div>
+              <div className="flex gap-3">
                 <button
                   className="rounded-lg border border-gray-700 px-4"
                   onClick={openFilterModal}
                 >
                   필터
                 </button>
+                {(filters.length > 0 || aafco || name) && (
+                  <button
+                    className="px-2 rounded-[10px] border border-gray-700"
+                    onClick={() => {
+                      setFilters([]);
+                      setSearchParams({});
+                    }}
+                  >
+                    reset
+                  </button>
+                )}
               </div>
               <div className="flex items-center gap-2">
                 <label htmlFor="aafco-filter" className="text-gray-700 text-[0.8rem]">
                   AAFCO 만족 상품
                 </label>
-                <input type="checkbox" name="" id="aafco-filter" />
+                <input
+                  type="checkbox"
+                  name=""
+                  id="aafco-filter"
+                  checked={aafco}
+                  onChange={(e) => {
+                    const {
+                      target: { checked },
+                    } = e;
+                    setAafco(checked);
+                    setSearchParams({ ...searchParams, aafco: String(checked) });
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -231,13 +253,13 @@ export default function ProductsPage() {
           <SearchPage searchInputValue={searchInputValue} onClickSearch={onClickSearch} />
         )}
         {isFetching && <p>로딩중</p>}
-        {filterModal && (
-          <FilterModal
-            close={closeFilterModal}
-            saveFilter={() => setSearchParams({ ...searchParams, name })}
-          />
-        )}
       </div>
+      {filterModal && (
+        <>
+          <FilterModal setPage={setPage} close={closeFilterModal} />
+          <div className="z-[8000] bg-[#00000029] fixed top-0 w-full h-full"></div>
+        </>
+      )}
     </Layout>
   );
 }

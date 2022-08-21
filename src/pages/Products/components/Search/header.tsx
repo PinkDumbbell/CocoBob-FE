@@ -28,7 +28,7 @@ export default function SearchHeader(props: ISearch) {
   useEffect(() => {
     const nameParam = searchParams.get('name') ?? '';
     setSearchInputValue(nameParam);
-    inputRef.current?.focus();
+    if (nameParam) inputRef.current?.focus();
   }, []);
   return (
     <div className="px-[8px] flex space-between items-center h-[50px] border-b border-gray-200 w-full z-[1000] bg-white">
