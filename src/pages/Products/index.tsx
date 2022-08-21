@@ -110,7 +110,6 @@ export default function ProductsPage() {
     setSearchResults([]);
     setProductList([]);
     setAafco(false);
-    setName('');
     if (searchParams.toString().length === 0) {
       setMainContent('AllProducts');
       return;
@@ -128,6 +127,7 @@ export default function ProductsPage() {
         else setMainContent('SearchResults');
         setName(value);
       }
+      console.log(key, value);
       newFilters[key] = value;
     }
 
@@ -206,6 +206,7 @@ export default function ProductsPage() {
                   <button
                     className="px-2 rounded-[10px] border border-gray-700"
                     onClick={() => {
+                      setName('');
                       setFilters([]);
                       setSearchParams({});
                     }}
@@ -228,7 +229,8 @@ export default function ProductsPage() {
                       target: { checked },
                     } = e;
                     setAafco(checked);
-                    setSearchParams({ ...searchParams, aafco: String(checked) });
+                    console.log(name);
+                    setSearchParams({ ...searchParams, name, aafco: String(checked) });
                   }}
                 />
               </div>
