@@ -50,7 +50,7 @@ type NullableExtraFilterType = {
 export type NutritionType = NonNullable<NullableNutritionType>;
 export type IngredientType = NonNullable<NullableIngredientType>;
 export type ExtraFilterType = NonNullable<NullableExtraFilterType>;
-export type KeyofNutritionType = keyof IngredientType;
+export type KeyofNutritionType = keyof NutritionType;
 export type KeyofIngredientType = keyof IngredientType;
 export type KeyofExtraFilterType = keyof NullableExtraFilterType;
 
