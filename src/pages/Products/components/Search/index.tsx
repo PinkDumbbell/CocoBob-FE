@@ -20,7 +20,7 @@ export default function Search(props: ISearch) {
   //   return '';
   // };
   return (
-    <div className="w-full h-full pt-[50px]">
+    <div className="w-full h-full">
       {searchInputValue !== '' && (
         <RelatedSearchKeywordContainer>
           {relatedWords.map((word, idx) => (
@@ -34,7 +34,7 @@ export default function Search(props: ISearch) {
           ))}
         </RelatedSearchKeywordContainer>
       )}
-      {searchInputValue === '' && <div>추천검색어</div>}
+      <div>추천검색어</div>
     </div>
   );
 }
