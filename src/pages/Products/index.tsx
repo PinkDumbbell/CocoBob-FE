@@ -66,6 +66,7 @@ export default function ProductsPage() {
     [inViewRef],
   );
 
+  const isAafco = (key) => key === 'aafco';
   const combineList = (nextList: ProductPreviewType[]) => (prevList: ProductPreviewType[]) =>
     prevList.concat(nextList);
 
@@ -90,7 +91,8 @@ export default function ProductsPage() {
     const entries = searchParams.entries();
     const newFilters = Array.from(entries).reduce((filterObject, [key, value]) => {
       if (key === 'name') setSearchKeyword(value);
-      return { ...filterObject, [key]: key === 'aafco' ? value === 'true' : value };
+      const entryValue = isAafco(key) ? value === 'true' : value;
+      return { ...filterObject, [key]: entryValue };
     }, {});
 
     setFilters(newFilters);
