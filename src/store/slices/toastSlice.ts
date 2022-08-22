@@ -4,12 +4,16 @@ import { RootState } from '../config';
 
 export type ToastMessageType = 'error' | 'success';
 
+export type ToastType = 'withdrawal' | 'logout' | '';
+
 export type ToastState = {
   id: string;
   content: string;
   time: number;
   type: ToastMessageType;
+  toastType: ToastType;
 };
+
 export type ToastConfirmState = {
   confirmMessage: string;
   executeCallback: boolean;
@@ -23,7 +27,8 @@ const initialState: IToastSlice = {
   time: 3000,
   type: 'error',
   confirmMessage: '',
-  executeCallback: false,
+  toastType: '',
+  executeCallback: true,
 };
 const toastSlice = createSlice({
   name: 'toast',
@@ -38,8 +43,12 @@ const toastSlice = createSlice({
     deleteToastAction: (state) => {
       state.content = '';
     },
-    addConfirmAction: (state, { payload }: PayloadAction<{ confirmMessage: string }>) => {
+    addConfirmAction: (
+      state,
+      { payload }: PayloadAction<{ confirmMessage: string; toastType: ToastType }>,
+    ) => {
       state.confirmMessage = payload.confirmMessage;
+      state.toastType = payload.toastType;
     },
     executeConfirmCallbackAction: (state) => {
       state.executeCallback = true;

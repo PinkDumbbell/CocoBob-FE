@@ -9,7 +9,7 @@ export default function useLogout() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [logoutMutation, { isSuccess }] = useLogoutMutation();
-  const logoutConfirm = useToastConfirm(() => logoutMutation());
+  const logoutConfirm = useToastConfirm('logout', () => logoutMutation());
 
   useEffect(() => {
     if (isSuccess) {
