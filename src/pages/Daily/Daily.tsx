@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-// import Calendar from 'react-calendar';
+import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import Layout from '@/components/layout/Layout';
@@ -10,57 +9,10 @@ import { ReactComponent as PencilIcon } from '@/assets/icon/pencil_icon.svg';
 import { ReactComponent as CalendarPlusIcon } from '@/assets/icon/calendar_plus.svg';
 import { ReactComponent as CalendarPrimary } from '@/assets/icon/calendar_plus_primary.svg';
 import { ReactComponent as DogIcon } from '@/assets/icon/dog_icon.svg';
-
-import 'react-calendar/dist/Calendar.css';
-import './calendar.css';
-
-// const CalendarWrapper = ({ currentDate }: { currentDate: Date }) => {
-//   const dispatch = useAppDispatch();
-//   const navigate = useNavigate();
-//   const changeDate = (selectedDate: Date) => {
-//     const dateString = getDateString(selectedDate);
-//     dispatch(setDate({ date: dateString }));
-//     navigate(`/daily?date=${dateString}`);
-//   };
-//   return (
-//     <div>
-//       <div
-//         className={
-//           'overflow-hidden transition-all flex items-start justify-center rounded-[10px] w-full'
-//         }
-//       >
-//         <Calendar
-//           value={currentDate}
-//           defaultValue={currentDate}
-//           onChange={changeDate}
-//           formatDay={(locale, date) => dayjs(date).format('DD')}
-//           minDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정
-//           maxDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정
-//           tileContent={({ date }) => {
-//             // 날짜 타일에 컨텐츠 추가하기 (html 태그)
-//             // 추가할 html 태그를 변수 초기화
-//             const html = [];
-//             if (dayjs(date).format('YYYY/MM/DD') <= dayjs(new Date()).format('YYYY/MM/DD')) {
-//               html.push(
-//                 <div
-//                   key={dayjs(date).format('YYYY/MM/DD')}
-//                   className="z-0 opacity-50 rounded-full absolute w-10 h-10 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2  bg-primary-light"
-//                 ></div>,
-//               );
-//             }
-//             // 다른 조건을 주어서 html.push 에 추가적인 html 태그를 적용할 수 있음.
-//             return (
-//               <>
-//                 <div className="h-full flex flex-col justify-around items-center">{html}</div>
-//               </>
-//             );
-//           }}
-//         />
-//       </div>
-//       <div className="mt-2 text-sm">{dayjs(currentDate).format('YYYY년 MM월 DD일')}</div>
-//     </div>
-//   );
-// };
+import DailyCalendar from './components/DailyCalendar';
+import DailyAddWalkModal from './components/DailyAddWalk';
+import DailyAddFeed from './components/DailyAddFeed';
+import DailyBodyWeight from './components/DailyAddBodyWeight';
 
 export default function DailyMain() {
   const dispatch = useAppDispatch();
@@ -71,6 +23,8 @@ export default function DailyMain() {
   const currentDateString = useAppSelector(getDailyDateString);
   const queryStringDate = searchParams.get('date');
 
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState<'' | 'walk' | 'feed' | 'bodyWeight'>('');
   /**
    * url 접속 시, getDateString(currentDate) !== queryStringDate, queryStringDate로 날짜 설정
    */
@@ -89,16 +43,23 @@ export default function DailyMain() {
     }
   }, [queryStringDate]);
 
+  const openDateSelector = () => setCalendarOpen(true);
+  const closeDateSelector = () => setCalendarOpen(false);
+  const openModal = (content: 'walk' | 'feed' | 'bodyWeight') => setModalOpen(content);
+  const closeModal = () => setModalOpen('');
+
   return (
     <Layout header footer title="데일리 기록">
       <div className="p-4 bg-white flex flex-col items-center justify-center gap-8 w-full h-full">
         <div className="flex flex-col border rounded-[10px] h-3/4 max-h-[600px] w-full bg-white shadow-lg rounded-[10px]">
           <div className="w-full h-16 bg-primary-dark shadow-md rounded-t-[10px] flex items-center justify-center">
-            <h4 className="text-white font-[400] text-lg">
-              {dayjs(currentDate).format('YYYY. MM. DD')}
-            </h4>
+            <button onClick={openDateSelector}>
+              <h4 className="text-white font-[400] text-lg">
+                {dayjs(currentDate).format('YYYY. MM. DD')}
+              </h4>
+            </button>
           </div>
-          <div className="bg-white flex-1 flex flex-col p-2 px-10">
+          <div className="bg-white flex-1 flex flex-col p-2 px-10 relative">
             <div className="flex py-8 border-b flex-col items-start w-full gap-2">
               <h5 className="text-left w-full">안녕하세요 오늘의 기록입니다.</h5>
               <p className="text-gray-500 text-sm">
@@ -136,20 +97,56 @@ export default function DailyMain() {
                 </div>
               </div>
             </div>
+            {calendarOpen && (
+              <DailyCalendar currentDate={currentDate} closeCalendar={closeDateSelector} />
+            )}
           </div>
         </div>
         <div className="flex gap-4 items-center w-full justify-center">
-          <button className="rounded-[10px] shadow-md w-12 h-12 flex items-center justify-center bg-primary-dark">
+          <button
+            className="rounded-[10px] shadow-md w-12 h-12 flex items-center justify-center bg-primary-dark"
+            onClick={() => openModal('bodyWeight')}
+          >
             <PencilIcon />
           </button>
-          <button className="rounded-[10px] shadow-md w-12 h-12 flex items-center justify-center bg-primary-dark">
+          <button
+            className="rounded-[10px] shadow-md w-12 h-12 flex items-center justify-center bg-primary-dark"
+            onClick={() => openModal('feed')}
+          >
             <CalendarPlusIcon />
           </button>
-          <button className="rounded-[10px] shadow-md w-12 h-12 flex items-center justify-center bg-primary-dark">
+          <button
+            className="rounded-[10px] shadow-md w-12 h-12 flex items-center justify-center bg-primary-dark"
+            onClick={() => openModal('walk')}
+          >
             <DogIcon />
           </button>
         </div>
       </div>
+      {modalOpen === 'walk' && (
+        <DailyAddWalkModal
+          closeModal={closeModal}
+          onSubmit={() => {
+            closeModal();
+          }}
+        />
+      )}
+      {modalOpen === 'feed' && (
+        <DailyAddFeed
+          closeModal={closeModal}
+          onSubmit={() => {
+            closeModal();
+          }}
+        />
+      )}
+      {modalOpen === 'bodyWeight' && (
+        <DailyBodyWeight
+          closeModal={closeModal}
+          onSubmit={() => {
+            closeModal();
+          }}
+        />
+      )}
     </Layout>
   );
 }
