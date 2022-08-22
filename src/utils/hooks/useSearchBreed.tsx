@@ -1,8 +1,6 @@
 import { IBreeds } from '@/@type/pet';
-import { selectRegisterInfo } from '@/store/slices/registerPetSlice';
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 interface UseSearchBreedReturn {
   selectedBreed: IBreeds | undefined;
@@ -15,10 +13,11 @@ interface UseSearchBreedReturn {
   onSelectBreed: (breeds: IBreeds) => void;
   closeBreedBottomSheet: () => void;
 }
-export default function useSearchBreed(breeds: IBreeds[]): UseSearchBreedReturn {
+export default function useSearchBreed(
+  breeds: IBreeds[],
+  currentBreedId?: number,
+): UseSearchBreedReturn {
   const { isBottomSheetOpen, closeBottomSheet } = useBottomSheet('findBreed');
-
-  const registerInfo = useSelector(selectRegisterInfo);
 
   const [searchKeyword, setSearchKeyword] = useState('');
   const [selectedBreed, setSelectedBreed] = useState<IBreeds | undefined>();
@@ -35,9 +34,9 @@ export default function useSearchBreed(breeds: IBreeds[]): UseSearchBreedReturn 
     setSearchKeyword(e.target.value);
 
   useEffect(() => {
-    if (!registerInfo.breedId || !Array.isArray(breeds)) return;
+    if (!currentBreedId || !Array.isArray(breeds)) return;
 
-    const currentBreed = breeds.find((v) => v.id === registerInfo.breedId);
+    const currentBreed = breeds.find((v) => v.id === currentBreedId);
     setSelectedBreed(currentBreed);
   }, [breeds]);
 
@@ -46,6 +45,11 @@ export default function useSearchBreed(breeds: IBreeds[]): UseSearchBreedReturn 
     return () => setSearchKeyword('');
   }, [isBottomSheetOpen]);
 
+  useEffect(() => {
+    if (!currentBreedId) return;
+    const currentBreed = foundBreeds.find((breed) => breed.id === currentBreedId);
+    setSelectedBreed(currentBreed);
+  }, [currentBreedId]);
   return {
     setSelectedBreed,
     searchKeyword,

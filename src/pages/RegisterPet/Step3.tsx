@@ -1,103 +1,24 @@
 import { IBreeds } from '@/@type/pet';
-import BottomSheet from '@/components/BottomSheet';
-import Button from '@/components/Button';
 import FormButton from '@/components/Form/FormButton';
 import { InputStyle } from '@/components/Form/FormInput';
 import { useGetBreedsQuery } from '@/store/api/petApi';
-import { useAppDispatch, useAppSelector } from '@/store/config';
-import { setRegisterInfo } from '@/store/slices/registerPetSlice';
 import { favBreeds } from '@/utils/constants/enrollment';
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { concatClasses } from '@/utils/libs/concatClasses';
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useForm } from 'react-hook-form';
-import useSearchBreed from '@/utils/hooks/useSearchBreed';
 import useToastMessage from '@/utils/hooks/useToastMessage';
+import BreedBottomSheet from '@/components/BottomSheet/BreedBottomSheet';
 import { ButtonWrapper, Form, PageContainer, PetNameHighlight, QuestionText } from './index.style';
+import { StepPageProps } from './type';
 
-interface IBreedList {
-  breeds: IBreeds[];
-  selectedBreed?: IBreeds;
-  setBreed: Dispatch<SetStateAction<IBreeds | undefined>>;
-}
-const BreedList = ({ breeds, selectedBreed, setBreed }: IBreedList) => (
-  <>
-    {breeds.map((breed) => (
-      <div key={breed.id} onClick={() => setBreed(breed)}>
-        <p
-          className={concatClasses(
-            selectedBreed?.id === breed.id ? 'bg-primary-light' : '',
-            'py-2',
-          )}
-        >
-          <span className="inline-block text-primary-main w-14">{breed.size}</span>
-          <span>{breed.name}</span>
-        </p>
-      </div>
-    ))}
-  </>
-);
-
-export const SearchBreedBottomSheet = ({
-  isBottomSheetOpen,
-  setBreed,
-}: {
-  isBottomSheetOpen: boolean;
-  setBreed: Dispatch<SetStateAction<IBreeds | undefined>>;
-}) => {
-  const { isLoading, isSuccess, data } = useGetBreedsQuery();
-  const breeds = data ?? ([] as IBreeds[]);
-
-  const {
-    closeBreedBottomSheet,
-    foundBreeds,
-    onChangeSearchKeyword,
-    searchKeyword,
-    selectedBreed,
-    setSelectedBreed,
-  } = useSearchBreed(breeds);
-
-  const onClickSelectButton = () => {
-    setBreed(selectedBreed);
-    closeBreedBottomSheet();
-  };
-
-  return (
-    <BottomSheet isOpen={isBottomSheetOpen}>
-      <div className="p-4 flex flex-col gap-2">
-        <InputStyle
-          isError={false}
-          value={searchKeyword}
-          onChange={onChangeSearchKeyword}
-          placeholder="품종을 검색해보세요"
-        />
-        {isLoading && <div className="h-[50vh] px-2 py-3 overflow-y-scroll">로딩중...</div>}
-        {isSuccess && (
-          <div className="h-[50vh] px-2 py-3 overflow-y-scroll">
-            {
-              <BreedList
-                breeds={!searchKeyword ? breeds : foundBreeds}
-                selectedBreed={selectedBreed}
-                setBreed={setSelectedBreed}
-              />
-            }
-          </div>
-        )}
-        <Button label="선택" onClick={onClickSelectButton} />
-      </div>
-    </BottomSheet>
-  );
-};
-
-export default function Step3({ goNextStep }: any) {
+export default function Step3({ goNextStep, enrollPetData, setEnrollData }: StepPageProps) {
   const { isBottomSheetOpen, openBottomSheet, closeBottomSheet } = useBottomSheet('findBreed');
   const openToast = useToastMessage();
   const { isSuccess, data: breeds } = useGetBreedsQuery();
   const [breed, setBreed] = useState<IBreeds | undefined>();
 
-  const dispatch = useAppDispatch();
-  const registerInfo = useAppSelector((state) => state.registerPet.registerInfo);
   const { handleSubmit } = useForm();
 
   const onValidSubmit = () => {
@@ -105,11 +26,7 @@ export default function Step3({ goNextStep }: any) {
       openToast('견종을 선택해주세요');
       return;
     }
-    dispatch(
-      setRegisterInfo({
-        breedId: breed.id,
-      }),
-    );
+    setEnrollData('breedId', breed.id);
     goNextStep();
   };
 
@@ -119,10 +36,13 @@ export default function Step3({ goNextStep }: any) {
       closeBottomSheet();
     };
   }, []);
+  useEffect(() => {
+    setEnrollData('breedId', breed?.id);
+  }, [breed]);
 
   useEffect(() => {
     if (isSuccess) {
-      const currentBreed = breeds.find((value) => value.id === registerInfo.breedId);
+      const currentBreed = breeds.find((value) => value.id === enrollPetData.breedId);
       setBreed(currentBreed);
     }
   }, [isSuccess]);
@@ -131,7 +51,7 @@ export default function Step3({ goNextStep }: any) {
     <PageContainer>
       <div className="mb-4">
         <QuestionText>
-          <PetNameHighlight>{registerInfo.name}</PetNameHighlight>에 대해서 더 알려주세요
+          <PetNameHighlight>{enrollPetData.name}</PetNameHighlight>에 대해서 더 알려주세요
         </QuestionText>
       </div>
       <Form onSubmit={handleSubmit(onValidSubmit)}>
@@ -165,7 +85,11 @@ export default function Step3({ goNextStep }: any) {
           <FormButton name="다음으로" disabled={false} />
         </ButtonWrapper>
       </Form>
-      <SearchBreedBottomSheet isBottomSheetOpen={isBottomSheetOpen} setBreed={setBreed} />
+      <BreedBottomSheet
+        isOpen={isBottomSheetOpen}
+        setBreed={setBreed}
+        currentBreedId={enrollPetData.breedId}
+      />
     </PageContainer>
   );
 }

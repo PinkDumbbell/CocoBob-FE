@@ -37,3 +37,23 @@ export interface IPetInformation {
   fatLevel?: number;
   breedInfo: IBreeds;
 }
+
+export interface PetInfoForm<T> {
+  /* step 1 */
+  petImage?: T;
+  name?: string;
+  sex?: PetSexType;
+  isSpayed?: boolean;
+  isPregnant?: boolean;
+
+  /* step 2 */
+  age?: number;
+  birthday?: string;
+
+  /* step3 */
+  breedId?: number;
+
+  /* step4 */
+  bodyWeight?: number;
+  activityLevel?: ActivityLevelType;
+}

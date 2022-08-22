@@ -4,15 +4,33 @@ import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import NameForm from './Step1';
 import DetailForm from './Step5';
+import { IEnrollData } from '.';
 
-const goPrevStep = jest.fn();
 const goNextStep = jest.fn();
+const setEnrollData = jest.fn();
+
+const initEnrollData: IEnrollData = {
+  name: '',
+  breedId: undefined,
+  petImage: undefined,
+  sex: '',
+  isPregnant: false,
+  isSpayed: false,
+  age: 0,
+  birthday: undefined,
+  activityLevel: 3,
+  bodyWeight: 0,
+};
 
 describe('반려동물 등록 Step1. 이름', () => {
   beforeEach(() => {
     render(
       <Provider store={store}>
-        <NameForm />
+        <NameForm
+          goNextStep={goNextStep}
+          enrollPetData={initEnrollData}
+          setEnrollData={setEnrollData}
+        />
       </Provider>,
     );
   });
@@ -35,7 +53,11 @@ describe('반려동물 등록 Step5. 세부 정보', () => {
   beforeEach(() => {
     render(
       <Provider store={store}>
-        <DetailForm goPrevStep={goPrevStep} goNextStep={goNextStep} />
+        <DetailForm
+          goNextStep={goNextStep}
+          enrollPetData={initEnrollData}
+          setEnrollData={setEnrollData}
+        />
       </Provider>,
     );
   });

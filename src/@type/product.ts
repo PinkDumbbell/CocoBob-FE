@@ -2,12 +2,48 @@ export interface IProduct {
   category: string;
   code: string;
   description: string;
+  brand: string;
   name: string;
   price: number;
   productId: number;
   thumbnail: string;
+  aged: boolean;
+  isAFFCOSatisfied: boolean;
+  growing: boolean;
+  likes: number;
+  obesity: boolean;
+  pregnant: false;
+  userLike: false;
 }
-
+export interface IProductSearch {
+  aafco?: boolean;
+  aged?: boolean;
+  beef?: boolean;
+  brand?: string;
+  chicken?: boolean;
+  code?: string;
+  description?: string;
+  duck?: boolean;
+  growing?: boolean;
+  hydrolyticBeef?: boolean;
+  hydrolyticChicken?: boolean;
+  hydrolyticDuck?: boolean;
+  hydrolyticMeat?: boolean;
+  hydrolyticMutton?: boolean;
+  hydrolyticSalmon?: boolean;
+  hydrolyticTurkey?: boolean;
+  meet?: boolean;
+  mutton?: boolean;
+  name?: string;
+  obesity?: boolean;
+  page?: number;
+  pregnant?: boolean;
+  salmon?: boolean;
+  size?: number;
+  sort?: 'ASC' | 'DESC';
+  sortCriteria?: string;
+  turkey?: boolean;
+}
 export interface IProductList {
   empty: boolean;
   first: boolean;

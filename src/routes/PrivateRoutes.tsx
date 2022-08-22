@@ -21,6 +21,7 @@ import DailyFeeds from '@/pages/Daily/Feeds';
 import DailyBodyWeight from '@/pages/Daily/BodyWeight';
 import WalkRecordList from '@/pages/Daily/Walk/WalkRecordList';
 import WalkRecordMap from '@/pages/Daily/Walk/WalkRecordMap';
+import RecommendProducts from '@/pages/Products/Recoomend';
 
 function PrivateRoute() {
   const { isLoggedIn } = useUser();
@@ -36,7 +37,8 @@ function PrivateRoutes() {
         <Route path="/" element={<MainPage />} />
         <Route path="/register" element={<RegisterPet />} />
         <Route path="/products" element={<ProductsPage />} />
-        <Route path="/product/:id" element={<ProductDetailPage />} />
+        <Route path="/products/:id" element={<ProductDetailPage />} />
+        <Route path="/products/recommend" element={<RecommendProducts />} />
         <Route path="/mypage" element={<Mypage />}>
           <Route index element={<MypageMain />} />
           <Route path="profile" element={<ProfilePage />} />
