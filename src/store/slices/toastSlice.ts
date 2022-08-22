@@ -11,12 +11,12 @@ export type ToastState = {
   content: string;
   time: number;
   type: ToastMessageType;
-  toastType: ToastType;
 };
 
 export type ToastConfirmState = {
   confirmMessage: string;
   executeCallback: boolean;
+  toastType: ToastType;
 };
 
 interface IToastSlice extends ToastState, ToastConfirmState {}
