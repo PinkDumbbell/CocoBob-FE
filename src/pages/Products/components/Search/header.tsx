@@ -6,13 +6,12 @@ import { useSearchParams } from 'react-router-dom';
 interface ISearch {
   searchInputValue: string;
   setSearchInputValue: Dispatch<SetStateAction<string>>;
-  setMainContent: any;
   goBack: () => void;
   onClickSearch: any;
 }
 
 export default function SearchHeader(props: ISearch) {
-  const { searchInputValue, setSearchInputValue, goBack, onClickSearch, setMainContent } = props;
+  const { searchInputValue, setSearchInputValue, goBack, onClickSearch } = props;
   const [searchParams] = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -39,7 +38,6 @@ export default function SearchHeader(props: ISearch) {
         <input
           className="w-full bg-slate-200 p-1 px-3 rounded-[10px]"
           onChange={(e) => {
-            setMainContent('Search');
             setSearchInputValue(e.target.value);
           }}
           value={searchInputValue}

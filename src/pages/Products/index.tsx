@@ -4,27 +4,13 @@ import { useInView } from 'react-intersection-observer';
 
 import Layout from '@/components/layout/Layout';
 import ProductItem from '@/components/Product';
+import ProductSearchModal from '@/pages/Products/components/Search/modal';
 import { useLazyGetProductQuery } from '@/store/api/productApi';
-import { concatClasses } from '@/utils/libs/concatClasses';
 import { ProductPreviewType } from '@/@type/product';
 import Header from './components/Header';
-import SearchPage from './components/Search';
-import SearchHeader from './components/Search/header';
 
 import CategoryTabButton from './components/CategoryTabButton';
 import FilterModal from './components/Filter/FilterModal';
-
-const MainContent = {
-  AllProducts: 'AllProducts',
-  Search: 'Search',
-  SearchResults: 'SearchResults',
-  OnlySearch: 'OnlySearch', // todo: 네이밍 좀 더 명확하게
-} as const;
-
-type MainContentType = typeof MainContent[keyof typeof MainContent]; // 'AllProducts' | 'Search' | 'SearchResults' | 'OnlySearch'
-// interface LocationState {
-//   MainContent: MainContentType;
-// }
 
 type CategoryType = '사료' | '간식' | '영양제';
 const categoryList: CategoryType[] = ['사료', '간식', '영양제'];
@@ -58,26 +44,18 @@ MemoizedProductItem.displayName = 'ProductItem';
 
 export default function ProductsPage() {
   const firstTrigger = useRef(false);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const [category, setCategory] = useState<CategoryType>('사료');
-  const [mainContent, setMainContent] = useState<MainContentType>('AllProducts');
-
   const ref = useRef<HTMLDivElement>();
-  const { ref: inViewRef, inView } = useInView({ threshold: 0, rootMargin: '150px 0px 0px 0px' });
-  const [searchInputValue, setSearchInputValue] = useState('');
 
+  const [category, setCategory] = useState<CategoryType>('사료');
+  const [onSearch, setOnSearch] = useState<boolean>(false);
+  const [searchKeyword, setSearchKeyword] = useState('');
   const [page, setPage] = useState<number>(0);
-  // eslint-disable-next-line no-unused-vars
-  const [name, setName] = useState('');
-  // eslint-disable-next-line no-unused-vars
-  const [sort, setSort] = useState();
-  const [aafco, setAafco] = useState(false);
-  const [filters, setFilters] = useState<any>([]);
-  const [trigger, { isFetching, data, isSuccess }] = useLazyGetProductQuery();
-  const [productList, setProductList] = useState<ProductPreviewType[]>([]);
+  const [filters, setFilters] = useState<any>({ aafco: false });
   const [searchResults, setSearchResults] = useState<ProductPreviewType[]>([]);
 
+  const { ref: inViewRef, inView } = useInView({ threshold: 0, rootMargin: '150px 0px 0px 0px' });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [trigger, { isFetching, data, isSuccess }] = useLazyGetProductQuery();
   const { filterModal, openFilterModal, closeFilterModal } = useFilterModal();
 
   const setInViewRef = useCallback(
@@ -88,48 +66,34 @@ export default function ProductsPage() {
     [inViewRef],
   );
 
+  const isAafco = (key) => key === 'aafco';
+  const combineList = (nextList: ProductPreviewType[]) => (prevList: ProductPreviewType[]) =>
+    prevList.concat(nextList);
+
   const showAllProducts = () => {
-    if (mainContent === 'OnlySearch') navigate(-1);
-    else {
-      setPage(0);
-      setMainContent('AllProducts');
-      setSearchParams({});
-    }
+    setOnSearch(false);
+    setSearchParams({ aafco: false });
   };
 
-  const onClickSearch = () => {
-    setSearchParams({ ...searchParams, name: searchInputValue });
-  };
-
-  // const onSaveFilter = (aafco?:boolean, )=>{
-
-  // }
+  const onClickSearch = () => setSearchParams({ ...searchParams, name: searchKeyword });
 
   useEffect(() => {
+    setPage(0);
     firstTrigger.current = true;
     setSearchResults([]);
-    setProductList([]);
-    setAafco(false);
+    setSearchKeyword('');
     if (searchParams.toString().length === 0) {
-      setMainContent('AllProducts');
+      setFilters({ aafco: false });
+      trigger({ page: 0 });
       return;
     }
 
-    const newFilters: { [key: string]: string | boolean } = {};
     const entries = searchParams.entries();
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const entry of entries) {
-      const [key, value] = entry;
-      if (key === 'aafco') setAafco(value === 'true');
-      if (key === 'name') {
-        if (!value) setMainContent('AllProducts');
-        else setMainContent('SearchResults');
-        setName(value);
-      }
-      console.log(key, value);
-      newFilters[key] = value;
-    }
+    const newFilters = Array.from(entries).reduce((filterObject, [key, value]) => {
+      if (key === 'name') setSearchKeyword(value);
+      const entryValue = isAafco(key) ? value === 'true' : value;
+      return { ...filterObject, [key]: entryValue };
+    }, {});
 
     setFilters(newFilters);
   }, [searchParams]);
@@ -143,125 +107,89 @@ export default function ProductsPage() {
 
   useEffect(() => {
     if (!firstTrigger.current) return;
-    if (!isFetching && !data?.last && inView) {
-      trigger({ ...filters, page: page + 1 });
-      setPage((prevState) => prevState + 1);
-    }
+    if (isFetching || data?.last || !inView) return;
+    trigger({ ...filters, page: page + 1 });
+    setPage((prevState) => prevState + 1);
   }, [inView, isFetching, data]);
-
-  const setter = (prevList: ProductPreviewType[]) => {
-    const newList = prevList.concat(data?.productList ?? []);
-    return newList;
-  };
 
   useEffect(() => {
     if (!isSuccess) return;
-
-    if (mainContent === 'AllProducts') setProductList(setter);
-    else {
-      setSearchResults(setter);
-    }
+    const productList = data?.productList ?? [];
+    setSearchResults(combineList(productList));
   }, [data]);
 
   return (
     <Layout footer>
+      {onSearch && (
+        <ProductSearchModal
+          onClose={() => showAllProducts()}
+          onClickSearch={onClickSearch}
+          searchInputValue={searchKeyword}
+          setSearchInputValue={setSearchKeyword}
+        />
+      )}
       <div className="fixed top-0 left-0 right-0 mx-auto flex flex-col w-full max-w-[425px]">
-        {mainContent === 'AllProducts' ? (
-          <Header title={'제품목록'} goSearchPage={() => setMainContent('Search')} />
-        ) : (
-          <SearchHeader
-            searchInputValue={searchInputValue}
-            setSearchInputValue={setSearchInputValue}
-            onClickSearch={onClickSearch}
-            setMainContent={setMainContent}
-            goBack={showAllProducts}
-          />
-        )}
-        {mainContent !== 'Search' && mainContent !== 'OnlySearch' && (
-          <div
-            className={concatClasses(
-              'flex flex-col w-full max-w-[425px] bg-white',
-              mainContent !== 'SearchResults' ? 'pt-[50px]' : '',
-            )}
-          >
-            <div className="h-12 w-full flex justify-between items-center">
-              {categoryList.map((categoryName) => (
-                <CategoryTabButton
-                  key={categoryName}
-                  name={categoryName}
-                  onClick={() => setCategory(categoryName)}
-                  isOn={category === categoryName}
-                />
-              ))}
-            </div>
-            <div className="w-full px-3 py-1 border-t border-b border-gray-200 flex items-center justify-between">
-              <div className="flex gap-3">
+        <Header title={'제품목록'} goSearchPage={() => setOnSearch(true)} />
+        <div className={'flex flex-col w-full max-w-[425px] bg-white pt-[50px]'}>
+          <div className="h-12 w-full flex justify-between items-center">
+            {categoryList.map((categoryName) => (
+              <CategoryTabButton
+                key={categoryName}
+                name={categoryName}
+                onClick={() => setCategory(categoryName)}
+                isOn={category === categoryName}
+              />
+            ))}
+          </div>
+          <div className="w-full px-3 py-1 border-t border-b border-gray-200 flex items-center justify-between">
+            <div className="flex gap-3">
+              <button className="rounded-lg border border-gray-700 px-4" onClick={openFilterModal}>
+                필터
+              </button>
+              {(filters?.aafco || searchKeyword) && (
                 <button
-                  className="rounded-lg border border-gray-700 px-4"
-                  onClick={openFilterModal}
+                  className="px-2 rounded-[10px] border border-gray-700"
+                  onClick={() => setSearchParams({ aafco: false })}
                 >
-                  필터
+                  reset
                 </button>
-                {(filters.length > 0 || aafco || name) && (
-                  <button
-                    className="px-2 rounded-[10px] border border-gray-700"
-                    onClick={() => {
-                      setName('');
-                      setFilters([]);
-                      setSearchParams({});
-                    }}
-                  >
-                    reset
-                  </button>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <label htmlFor="aafco-filter" className="text-gray-700 text-[0.8rem]">
-                  AAFCO 만족 상품
-                </label>
-                <input
-                  type="checkbox"
-                  name=""
-                  id="aafco-filter"
-                  checked={aafco}
-                  onChange={(e) => {
-                    const {
-                      target: { checked },
-                    } = e;
-                    setAafco(checked);
-                    console.log(name);
-                    setSearchParams({ ...searchParams, name, aafco: String(checked) });
-                  }}
-                />
-              </div>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              <label htmlFor="aafco-filter" className="text-gray-700 text-[0.8rem]">
+                AAFCO 만족 상품
+              </label>
+              <input
+                type="checkbox"
+                name=""
+                id="aafco-filter"
+                checked={filters?.aafco}
+                onChange={({ target: { checked } }) =>
+                  setSearchParams({
+                    ...searchParams,
+                    name: searchKeyword,
+                    aafco: checked,
+                  })
+                }
+              />
             </div>
           </div>
-        )}
+        </div>
       </div>
       <div className="w-full h-full">
-        {mainContent !== 'Search' && mainContent !== 'OnlySearch' && (
-          <div className="pt-[150px] pb-[60px]">
-            {(mainContent === 'AllProducts' ? productList : searchResults)?.map((product) => (
-              <MemoizedProductItem key={product.productId} product={product} />
-            ))}
-            {!isFetching && !data?.last && (
-              <div ref={setInViewRef} className="w-full h-20 flex items-center justify-center">
-                LoadMore
-              </div>
-            )}
-          </div>
-        )}
-        {(mainContent === 'Search' || mainContent === 'OnlySearch') && (
-          <SearchPage searchInputValue={searchInputValue} onClickSearch={onClickSearch} />
-        )}
+        <div className="pt-[150px] pb-[60px]">
+          {searchResults?.map((product) => (
+            <MemoizedProductItem key={product.productId} product={product} />
+          ))}
+          {!isFetching && !data?.last && (
+            <div ref={setInViewRef} className="w-full h-20 flex items-center justify-center">
+              LoadMore
+            </div>
+          )}
+        </div>
         {isFetching && <p>로딩중</p>}
       </div>
-      {filterModal && (
-        <>
-          <FilterModal setPage={setPage} close={closeFilterModal} />
-          <div className="z-[8000] bg-[#00000029] fixed top-0 w-full h-full"></div>
-        </>
-      )}
+      {filterModal && <FilterModal setPage={setPage} close={closeFilterModal} />}
     </Layout>
   );
 }

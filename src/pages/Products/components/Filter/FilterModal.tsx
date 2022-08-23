@@ -59,26 +59,29 @@ export default function FilterModal({ setPage, close }: FilterModalProps) {
   };
 
   return (
-    <div className="fixed bottom-0 z-[9000] w-full max-w-[425px] h-4/5 rounded-t-[10px] bg-white shadow-sm">
-      <div className="flex flex-col w-full h-full p-2">
-        {filterType === 'all' && (
-          <FilterAllContent
-            close={close}
-            selectedFilters={selectedFilters}
-            setFilter={setFilter}
-            onClickSave={onClickSave}
-            onClickShowMore={showMoreFilters}
-          />
-        )}
-        {filterType !== 'all' && (
-          <FilterDetailContent
-            filterType={filterType}
-            currentSelectedFilters={selectedFilters}
-            showAllFilters={showAllFilters}
-            saveDetailFilter={setFilters}
-          />
-        )}
+    <>
+      <div className="fixed bottom-0 z-[9000] w-full max-w-[425px] h-4/5 rounded-t-[10px] bg-white shadow-sm">
+        <div className="flex flex-col w-full h-full p-2">
+          {filterType === 'all' && (
+            <FilterAllContent
+              close={close}
+              selectedFilters={selectedFilters}
+              setFilter={setFilter}
+              onClickSave={onClickSave}
+              onClickShowMore={showMoreFilters}
+            />
+          )}
+          {filterType !== 'all' && (
+            <FilterDetailContent
+              filterType={filterType}
+              currentSelectedFilters={selectedFilters}
+              showAllFilters={showAllFilters}
+              saveDetailFilter={setFilters}
+            />
+          )}
+        </div>
       </div>
-    </div>
+      <div className="z-[8000] bg-[#00000029] fixed top-0 w-full h-full" />
+    </>
   );
 }
