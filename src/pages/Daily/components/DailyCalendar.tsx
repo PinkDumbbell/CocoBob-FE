@@ -7,12 +7,18 @@ import { setDate } from '@/store/slices/dailySlice';
 
 import 'react-calendar/dist/Calendar.css';
 import '../calendar.css';
+import { DailyListItemType } from '@/store/api/dailyApi';
 
 type DailyCalendarProps = {
   currentDate: Date;
+  dailyList: DailyListItemType[];
   closeCalendar: () => void;
 };
-export default function DailyCalendar({ currentDate, closeCalendar }: DailyCalendarProps) {
+export default function DailyCalendar({
+  currentDate,
+  closeCalendar,
+  dailyList,
+}: DailyCalendarProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const changeDate = (selectedDate: Date) => {
@@ -37,13 +43,15 @@ export default function DailyCalendar({ currentDate, closeCalendar }: DailyCalen
           minDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정
           maxDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정
           tileContent={({ date }) => {
+            const dateString = getDateString(date);
+            const isExist = dailyList.find((daily) => daily.date === dateString);
             // 날짜 타일에 컨텐츠 추가하기 (html 태그)
             // 추가할 html 태그를 변수 초기화
             const html = [];
-            if (dayjs(date).format('YYYY/MM/DD') <= dayjs(new Date()).format('YYYY/MM/DD')) {
+            if (isExist) {
               html.push(
                 <div
-                  key={dayjs(date).format('YYYY/MM/DD')}
+                  key={dateString}
                   className="z-0 opacity-50 rounded-full absolute w-10 h-10 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2  bg-primary-light"
                 ></div>,
               );
