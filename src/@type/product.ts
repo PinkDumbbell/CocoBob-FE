@@ -1,100 +1,104 @@
-export interface IProduct {
-  category: string;
-  code: string;
-  description: string;
-  brand: string;
-  name: string;
-  price: number;
-  productId: number;
-  thumbnail: string;
-  aged: boolean;
-  isAFFCOSatisfied: boolean;
-  growing: boolean;
-  likes: number;
-  obesity: boolean;
-  pregnant: false;
-  userLike: false;
-}
-export interface IProductSearch {
-  aafco?: boolean;
-  aged?: boolean;
-  beef?: boolean;
+type NullableIngredientType = {
+  hydrolyticBeef?: boolean | null;
+  hydrolyticChicken?: boolean | null;
+  hydrolyticDuck?: boolean | null;
+  hydrolyticMeat?: boolean | null;
+  hydrolyticMutton?: boolean | null;
+  hydrolyticSalmon?: boolean | null;
+  hydrolyticTurkey?: boolean | null;
+  salmon?: boolean | null;
+  mutton?: boolean | null;
+  beef?: boolean | null;
+  chicken?: boolean | null;
+  pork?: boolean | null;
+  turkey?: boolean | null;
+  duck?: boolean | null;
+};
+
+type NullableNutritionType = {
+  amountOfCalciumPerMcal?: number | null;
+  amountOfFatPerMcal?: number | null;
+  amountOfFiberPerMcal?: number | null;
+  amountOfMineralPerMcal?: number | null;
+  amountOfPhosphorusPerMcal?: number | null;
+  amountOfProteinPerMcal?: number | null;
+  mineral?: number | null;
+  moisture?: number | null;
+  protein?: number | null;
+  calcium?: number | null;
+  fat?: number | null;
+  fiber?: number | null;
+  kcalPerKg?: number | null;
+  phosphorus?: number | null;
+};
+type NullableExtraFilterType = {
+  aafco?: boolean | null;
+  aged?: boolean | null;
   brand?: string;
-  chicken?: boolean;
   code?: string;
   description?: string;
-  duck?: boolean;
-  growing?: boolean;
-  hydrolyticBeef?: boolean;
-  hydrolyticChicken?: boolean;
-  hydrolyticDuck?: boolean;
-  hydrolyticMeat?: boolean;
-  hydrolyticMutton?: boolean;
-  hydrolyticSalmon?: boolean;
-  hydrolyticTurkey?: boolean;
-  meet?: boolean;
-  mutton?: boolean;
+  growing?: boolean | null;
   name?: string;
-  obesity?: boolean;
+  obesity?: boolean | null;
   page?: number;
-  pregnant?: boolean;
-  salmon?: boolean;
+  pregnant?: boolean | null;
   size?: number;
   sort?: 'ASC' | 'DESC';
   sortCriteria?: string;
-  turkey?: boolean;
-}
-export interface IProductList {
+};
+
+export type NutritionType = NonNullable<NullableNutritionType>;
+export type IngredientType = NonNullable<NullableIngredientType>;
+export type ExtraFilterType = NonNullable<NullableExtraFilterType>;
+export type KeyofNutritionType = keyof NutritionType;
+export type KeyofIngredientType = keyof IngredientType;
+export type KeyofExtraFilterType = keyof NullableExtraFilterType;
+
+export type SearchFilterType = NullableNutritionType &
+  NullableIngredientType &
+  NullableExtraFilterType;
+export type KeyofSearchFilterType = KeyofExtraFilterType | KeyofNutritionType | KeyofIngredientType;
+
+export type ProductPreviewType = {
+  aged: boolean;
+  brand: string;
+  category: string;
+  code: string;
+  description: string;
+  growing: boolean;
+  isAAFCOSatisfied: boolean;
+  likes: number;
+  name: string;
+  obesity: boolean;
+  pregnant: boolean;
+  price: number;
+  productId: number;
+  thumbnail: string;
+  userLike: boolean;
+};
+
+export type ProductListType = {
   empty: boolean;
   first: boolean;
   last: boolean;
   pageNumber: number;
   pageSize: number;
-  productList: IProduct[];
+  productList: ProductPreviewType[];
   totalElements: number;
   totalPages: number;
-}
+};
+
 export interface IPetProperties {
   property: string;
 }
-export interface IProductDetail {
-  amountOfCalciumPerMcal: number;
-  amountOfFatPerMcal: number;
-  amountOfFiberPerMcal: number;
-  amountOfMineralPerMcal: number;
-  amountOfPhosphorusPerMcal: number;
-  amountOfProteinPerMcal: number;
-  beef: boolean;
-  calcium: number;
-  category: string;
-  chicken: boolean;
-  code: string;
-  description: string;
-  duck: boolean;
-  fat: number;
-  fiber: number;
-  hydrolyticBeef: boolean;
-  hydrolyticChicken: boolean;
-  hydrolyticDuck: boolean;
-  hydrolyticMeat: boolean;
-  hydrolyticMutton: boolean;
-  hydrolyticSalmon: boolean;
-  hydrolyticTurkey: boolean;
-  isAAFCOSatisfied: boolean;
-  kcalPerKg: number;
-  likeCount: number;
-  meat: boolean;
-  mineral: number;
-  moisture: number;
-  mutton: boolean;
-  name: string;
-  petProperties: IPetProperties[];
-  phosphorus: number;
-  price: number;
-  productDetailImage: string;
-  productId: number;
-  productImage: string;
-  protein: number;
-  salmon: boolean;
-  turkey: boolean;
-}
+
+type ProductPreviewTypeWithoutThumbnail = Exclude<ProductPreviewType, 'thumbnail'>;
+
+export type ProductType = ProductPreviewTypeWithoutThumbnail &
+  NutritionType &
+  IngredientType & {
+    likeCount: number;
+    petProperties: IPetProperties[];
+    productDetailImage: string;
+    productImage: string;
+  };

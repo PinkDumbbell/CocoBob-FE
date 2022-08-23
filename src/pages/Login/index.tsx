@@ -3,9 +3,10 @@ import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/store/config';
+import PetalogMain from '@/assets/image/petalog_main.png';
 import JoinLink from './components/JoinLink';
 import SocialLoginForm from './components/SocialLoginForm';
-import { PageContainer, LogoContainer, FormContainer, MockLogo } from './index.style';
+import { PageContainer, LogoContainer, FormContainer } from './index.style';
 import EmailLoginSheet from './EmailLoginSheet';
 import SignUpSheet from './SignUpSheet';
 
@@ -25,7 +26,7 @@ export default function LoginPage() {
     <>
       <PageContainer>
         <LogoContainer>
-          <MockLogo>슬라이드 사진</MockLogo>
+          <img src={PetalogMain} alt="petalog_main_image" className="max-w-[425px] w-60" />
         </LogoContainer>
         <FormContainer>
           <SocialLoginForm />

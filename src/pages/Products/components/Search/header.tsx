@@ -1,48 +1,65 @@
 import goBackImg from '@/assets/icon/go_back_btn.png';
-import { useRef } from 'react';
+import { ReactComponent as SearchIcon } from '@/assets/icon/search_icon.svg';
+import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 interface ISearch {
-  setSearchWord: any;
-  onClick: any;
-  searchWord: string;
+  searchInputValue: string;
+  setSearchInputValue: Dispatch<SetStateAction<string>>;
+  goBack: () => void;
   onClickSearch: any;
-  setMainContent: any;
 }
 
 export default function SearchHeader(props: ISearch) {
-  const { setSearchWord, searchWord, onClick, onClickSearch, setMainContent } = props;
+  const { searchInputValue, setSearchInputValue, goBack, onClickSearch } = props;
+  const [searchParams] = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const clearSearchKeyword = () => {
+    setSearchInputValue('');
+  };
+
+  const search = () => {
+    onClickSearch();
+    inputRef.current?.blur();
+  };
+
+  useEffect(() => {
+    const nameParam = searchParams.get('name') ?? '';
+    setSearchInputValue(nameParam);
+    if (nameParam) inputRef.current?.focus();
+  }, []);
   return (
-    <div className="h-[50px] border-b border-gray-200 align-middle fixed w-full z-[1000]">
-      <button onClick={() => onClick()} className="h-14 ml-3">
+    <div className="px-[8px] flex space-between items-center h-[50px] border-b border-gray-200 w-full z-[1000] bg-white">
+      <button onClick={goBack} className="h-full flex items-center justify-center px-3">
         <img src={goBackImg} />
       </button>
-      <input
-        className="w-64 ml-8 bg-slate-400 p-1 pl-2 rounded-[10px]"
-        onChange={(e) => {
-          setMainContent('Search');
-          setSearchWord(e.target.value);
-        }}
-        value={searchWord}
-        ref={inputRef}
-        onKeyPress={(e) => {
-          if (e.key === 'Enter') {
-            onClickSearch();
-            inputRef.current?.blur();
-          }
-        }}
-      />
-      {searchWord !== '' && (
-        <button
-          className="w-8 left-[-30px] relative"
-          onClick={() => {
-            setSearchWord('');
+      <div className="relative flex items-center flex-1 px-1">
+        <input
+          className="w-full bg-slate-200 p-1 px-3 rounded-[10px]"
+          onChange={(e) => {
+            setSearchInputValue(e.target.value);
           }}
-        >
-          x
-        </button>
-      )}
+          value={searchInputValue}
+          ref={inputRef}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              search();
+            }
+          }}
+        />
+        {searchInputValue !== '' && (
+          <button
+            className="absolute right-1 px-3 h-full font-medium text-sm leading-3"
+            onClick={clearSearchKeyword}
+          >
+            x
+          </button>
+        )}
+      </div>
+      <button className="h-full flex items-center justify-center px-2" onClick={search}>
+        <SearchIcon />
+      </button>
     </div>
   );
 }
