@@ -66,13 +66,13 @@ export default function ProductsPage() {
     [inViewRef],
   );
 
-  const isAafco = (key) => key === 'aafco';
+  const isAafco = (key: string) => key === 'aafco';
   const combineList = (nextList: ProductPreviewType[]) => (prevList: ProductPreviewType[]) =>
     prevList.concat(nextList);
 
   const showAllProducts = () => {
     setOnSearch(false);
-    setSearchParams({ aafco: false });
+    setSearchParams({ aafco: 'false' });
   };
 
   const onClickSearch = () => setSearchParams({ ...searchParams, name: searchKeyword });
@@ -149,7 +149,7 @@ export default function ProductsPage() {
               {(filters?.aafco || searchKeyword) && (
                 <button
                   className="px-2 rounded-[10px] border border-gray-700"
-                  onClick={() => setSearchParams({ aafco: false })}
+                  onClick={() => setSearchParams({ aafco: 'false' })}
                 >
                   reset
                 </button>
@@ -168,7 +168,7 @@ export default function ProductsPage() {
                   setSearchParams({
                     ...searchParams,
                     name: searchKeyword,
-                    aafco: checked,
+                    aafco: String(checked),
                   })
                 }
               />
