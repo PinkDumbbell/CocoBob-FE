@@ -30,4 +30,5 @@ export const {
   useLazyGetProductQuery,
   useGetProductDetailQuery,
   useGetRecommendProductQuery,
+  useLazyGetRecommendProductQuery,
 } = productApiSlice;
