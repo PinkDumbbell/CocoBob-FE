@@ -25,17 +25,19 @@ function App() {
   }, []);
 
   return (
-    <PageTransition transitionKey={location.pathname}>
+    <>
       <ToastMessage />
       <ToastConfirm />
-      <Routes key={location.pathname} location={location}>
-        <Route element={<PrivateRoutes />} path="/*" />
-        <Route element={<LoginPage />} path="/login" />
-        <Route element={<GoogleRedirectHandler />} path="/auth/google/callback" />
-        <Route element={<KakaoRedirectHandler />} path="/auth/kakao/callback" />
-        <Route element={<AppleRedirectHandler />} path="/auth/apple/callback" />
-      </Routes>
-    </PageTransition>
+      <PageTransition transitionKey={location.pathname}>
+        <Routes key={location.pathname} location={location}>
+          <Route element={<PrivateRoutes />} path="/*" />
+          <Route element={<LoginPage />} path="/login" />
+          <Route element={<GoogleRedirectHandler />} path="/auth/google/callback" />
+          <Route element={<KakaoRedirectHandler />} path="/auth/kakao/callback" />
+          <Route element={<AppleRedirectHandler />} path="/auth/apple/callback" />
+        </Routes>
+      </PageTransition>
+    </>
   );
 }
 

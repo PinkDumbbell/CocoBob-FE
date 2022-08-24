@@ -11,6 +11,7 @@ interface InputProps {
   isError?: boolean | undefined;
   errorMessage?: string;
   unit?: string;
+  disabled?: boolean;
 }
 
 const InputContainer = styled.div`
@@ -68,6 +69,7 @@ export default function Input({
   unit,
   required,
   placeholder,
+  disabled,
   isError,
   errorMessage,
 }: InputProps) {
@@ -85,6 +87,7 @@ export default function Input({
           isError={isError}
           unit={!!unit}
           {...rules}
+          disabled={disabled}
         />
         {!!unit && (
           <div className="font-light text-gray-500 text-sm bg-slate-100 h-[46px] rounded-r-[10px] absolute right-0 flex items-center justify-center w-[3rem]">

@@ -2,6 +2,7 @@ import Layout from '@/components/layout/Layout';
 import { useGetPetsQuery } from '@/store/api/petApi';
 import { useGetUserQuery } from '@/store/api/userApi';
 import useLogout from '@/utils/hooks/useLogout';
+import useWithdrawal from '@/utils/hooks/useWithdrawal';
 import { Link } from 'react-router-dom';
 import AddPetBUtton from './components/AddPetButton';
 import PetSimpleInfo from './components/PetSimpleInfo';
@@ -18,6 +19,8 @@ export default function MypageMain() {
   const { data: user } = useGetUserQuery();
   const { data: pets, isLoading, isSuccess } = useGetPetsQuery();
   const onClickLogout = useLogout();
+  const onClickWithdrawal = useWithdrawal();
+
   return (
     <Layout header title="마이페이지" footer>
       <MainContentsContainer>
@@ -40,7 +43,7 @@ export default function MypageMain() {
 
                 <MainPetListContainer>
                   {isSuccess &&
-                    pets.map((pet, idx) => (
+                    pets?.map((pet, idx) => (
                       <MainPetListItem className={idx === 0 ? 'border-primary-main' : ''} key={idx}>
                         <PetSimpleInfo {...pet} />
                       </MainPetListItem>
@@ -61,9 +64,14 @@ export default function MypageMain() {
                 </MypageMenuItem>
               ))}
               <MypageMenuItem>
-                <div onClick={onClickLogout}>
+                <button onClick={onClickLogout}>
                   <h5>로그아웃</h5>
-                </div>
+                </button>
+              </MypageMenuItem>
+              <MypageMenuItem>
+                <button onClick={onClickWithdrawal}>
+                  <h5>회원탈퇴</h5>
+                </button>
               </MypageMenuItem>
             </FlexColumn>
           </>

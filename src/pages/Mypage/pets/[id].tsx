@@ -170,7 +170,7 @@ export default function PetDetail() {
                       </RemoveProfileButton>
                     )}
                     <div className="rounded-full overflow-hidden h-full w-full">
-                      <img src={previewUrl || PetDefault} alt="" className="w-full" />
+                      <img src={previewUrl || PetDefault} alt="" className="w-full h-full" />
                     </div>
                   </div>
                 </FlexColumnCenter>

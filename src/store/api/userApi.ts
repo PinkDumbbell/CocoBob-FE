@@ -37,10 +37,21 @@ export const userApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    withdrawal: builder.mutation<IGenericResponse<void>, void>({
+      query: () => ({
+        url: '/users/withdrawal',
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
-export const { useGetUserQuery, useLoginMutation, useLogoutMutation, useSignUpMutation } =
-  userApiSlice;
+export const {
+  useGetUserQuery,
+  useLoginMutation,
+  useLogoutMutation,
+  useSignUpMutation,
+  useWithdrawalMutation,
+} = userApiSlice;
 
 export const selectUserResult = userApiSlice.endpoints.getUser.select();
