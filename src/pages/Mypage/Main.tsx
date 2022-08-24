@@ -64,14 +64,14 @@ export default function MypageMain() {
                 </MypageMenuItem>
               ))}
               <MypageMenuItem>
-                <div onClick={onClickLogout}>
+                <button onClick={onClickLogout}>
                   <h5>로그아웃</h5>
-                </div>
+                </button>
               </MypageMenuItem>
               <MypageMenuItem>
-                <div onClick={onClickWithdrawal}>
+                <button onClick={onClickWithdrawal}>
                   <h5>회원탈퇴</h5>
-                </div>
+                </button>
               </MypageMenuItem>
             </FlexColumn>
           </>

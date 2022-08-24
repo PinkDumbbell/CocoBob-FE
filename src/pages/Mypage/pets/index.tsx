@@ -9,12 +9,12 @@ export default function PetsPage() {
   const { data: pets, isSuccess } = useGetPetsQuery();
 
   const navigate = useNavigate();
-  const onClickGoBack = () => {
+  const goMypage = () => {
     navigate('/mypage');
   };
 
   return (
-    <Layout header title="우리 아이 목록" canGoBack onClickGoBack={onClickGoBack}>
+    <Layout header title="우리 아이 목록" canGoBack onClickGoBack={goMypage}>
       <MainContentsContainer className="px-2">
         <div className="flex">
           <AddPetButton />
