@@ -9,6 +9,7 @@ const Background = styled.div`
   background: rgb(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
+  max-width: 425px;
 `;
 const ToastMessageItem = styled.div`
   position: fixed;
@@ -37,7 +38,6 @@ const ToastMessageItem = styled.div`
     line-height: 46px;
     letter-spacing: -0.02em;
     text-align: center;
-    color: ${({ theme: { colors } }) => colors.primary.bright};
   }
 `;
 const ToastConfirmButton = styled.button`
@@ -50,7 +50,7 @@ const CancelButton = styled(ToastConfirmButton)`
   border: 1px solid ${({ theme: { colors } }) => colors.text.caption};
 `;
 const ConfirmButton = styled(ToastConfirmButton)`
-  background: ${({ theme: { colors } }) => colors.success};
+  background: ${({ theme: { colors } }) => colors.primary.bright};
   border-radius: 10px;
   color: #fff;
 `;
@@ -66,7 +66,7 @@ export default function ToastConfirm() {
       {confirmMessage !== '' && (
         <Background>
           <ToastMessageItem>
-            <h3>{confirmMessage}</h3>
+            <h3 className="text-black">{confirmMessage}</h3>
             <div className="flex gap-4">
               <CancelButton type="button" onClick={closeConfirm}>
                 취소

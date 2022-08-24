@@ -63,9 +63,9 @@ export default function RecommendProducts() {
 
   return (
     <Layout header title="추천 제품" canGoBack canSearch>
-      <div className="px-5 py-2 space-y-4">
+      <div className="py-2 space-y-4">
         <VerticalBox>
-          <div className="flex items-end justify-between px-2">
+          <div className="px-5 flex items-end justify-between px-2">
             <SectionTitle>{pet?.name}의 나이에 적합한 사료에요!</SectionTitle>
           </div>
           <div className="w-full flex items-center">
@@ -95,7 +95,7 @@ export default function RecommendProducts() {
           </div>
         </VerticalBox>
         <VerticalBox>
-          <div className="flex items-end justify-between px-2">
+          <div className="px-5 flex items-end justify-between px-2">
             <SectionTitle>{secondRecommendationTitle}</SectionTitle>
           </div>
           <div className="w-full flex items-center">

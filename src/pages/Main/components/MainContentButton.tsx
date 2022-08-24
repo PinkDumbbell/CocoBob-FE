@@ -1,5 +1,6 @@
-import ContentsContainer from '@/components/ContentsContainer';
 import { ReactNode } from 'react';
+import ContentsContainer from '@/components/ContentsContainer';
+import ArrowIcon from '@/assets/icon/go_back_btn.png';
 import { HorizontalBox, HorizontalCenterBox, SectionSubtitle, VerticalBox } from '../index.style';
 
 interface MainContentButtonProps {
@@ -11,9 +12,9 @@ interface MainContentButtonProps {
 export default function MainContentButton({ label, title, onClick, icon }: MainContentButtonProps) {
   return (
     <ContentsContainer>
-      <div className="flex w-full items-center cursor-pointer" onClick={onClick}>
-        <HorizontalCenterBox className=" h-full aspect-square p-4">
-          <HorizontalCenterBox className="p-1 rounded-full bg-primary-bright text-white aspect-square w-full">
+      <div className="flex w-full h-16 items-center cursor-pointer" onClick={onClick}>
+        <HorizontalCenterBox className="ml-4 p-1">
+          <HorizontalCenterBox className="p-1  rounded-full bg-primary-bright text-white aspect-square w-full">
             {icon}
           </HorizontalCenterBox>
         </HorizontalCenterBox>
@@ -22,7 +23,9 @@ export default function MainContentButton({ label, title, onClick, icon }: MainC
             <p className="text-sm">{label}</p>
             <SectionSubtitle>{title}</SectionSubtitle>
           </VerticalBox>
-          <div className="font-bold">{'>'}</div>
+          <div className="font-bold">
+            <img src={ArrowIcon} alt="enter-icon-image" className="rotate-180" />
+          </div>
         </HorizontalBox>
       </div>
     </ContentsContainer>

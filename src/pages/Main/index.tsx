@@ -139,7 +139,7 @@ export default function Main() {
         </div>
         <ContentSection>
           <MainContentButton
-            label="반려동물 맞춤 제품을 추천해드려요!"
+            label="맞춤 제품을 추천해드려요!"
             title="추천 제품 보러가기"
             onClick={goProductsRecommendPage}
             icon={<RecommendIcon width={29} />}
