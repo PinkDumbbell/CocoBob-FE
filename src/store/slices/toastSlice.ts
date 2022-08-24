@@ -4,7 +4,7 @@ import { RootState } from '../config';
 
 export type ToastMessageType = 'error' | 'success';
 
-export type ToastType = 'withdrawal' | 'logout' | '';
+export type ToastType = 'withdrawal' | 'logout' | 'deleteProfileImage' | '';
 
 export type ToastState = {
   id: string;

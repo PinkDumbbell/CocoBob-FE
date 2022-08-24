@@ -88,7 +88,7 @@ export default function PetDetail() {
     setPreviewUrl('');
     setIsImageDeleted(true);
   };
-  const confirmDeleteProfile = useToastConfirm(initProfileImage);
+  const confirmDeleteProfile = useToastConfirm('deleteProfileImage', initProfileImage);
 
   const deleteProfileImage = () => {
     if (!previewUrl) return;
