@@ -4,11 +4,11 @@ import { concatClasses } from '@/utils/libs/concatClasses';
 import { ReactComponent as LikeIcon } from '@/assets/icon/heart.svg';
 import { ReactComponent as WonIcon } from '@/assets/icon/won.svg';
 import { theme } from '@/styles/theme';
-import { IProduct } from '@/@type/product';
+import { ProductPreviewType } from '@/@type/product';
 import { HorizontalBox, VerticalBox, VerticalCenterBox } from '../index.style';
 
 interface SwiperProductItemProps {
-  product: IProduct;
+  product: ProductPreviewType;
   isActive: boolean;
 }
 

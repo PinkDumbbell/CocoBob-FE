@@ -1,5 +1,5 @@
 import React from 'react';
-import { IProduct } from '@/@type/product';
+import { ProductPreviewType } from '@/@type/product';
 import ChipButton from '../ChipButton';
 
 /**
@@ -11,7 +11,7 @@ import ChipButton from '../ChipButton';
  * - 유아/성견/노견
  */
 interface IProductItem {
-  product: IProduct;
+  product: ProductPreviewType;
 }
 function ProductItem(props: IProductItem) {
   const { product } = props;

@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useGetUserQuery } from '@/store/api/userApi';
 import useLogout from '@/utils/hooks/useLogout';
 import useCurrentPet from '@/utils/hooks/useCurrentPet';
@@ -62,10 +62,14 @@ export default function Main() {
           <ContentsContainer style={{ zIndex: 10 }}>
             <div className="w-full h-auto flex justify-evenly gap-3 relative">
               <VerticalCenterBox className="bg-gray-300 rounded-md w-1/3 aspect-square">
-                사료
+                <Link to="/products" className="w-full h-full flex items-center justify-center">
+                  사료찾기
+                </Link>
               </VerticalCenterBox>
               <VerticalCenterBox className="bg-gray-300 rounded-md w-1/3 aspect-square">
-                생활기록
+                <Link to="/daily" className="w-full h-full flex items-center justify-center">
+                  생활기록
+                </Link>
               </VerticalCenterBox>
               <VerticalCenterBox className="bg-gray-300 rounded-md w-1/3 aspect-square">
                 보고서
@@ -79,13 +83,13 @@ export default function Main() {
             title="추천 제품 보러가기"
             onClick={goProductsRecommendPage}
           />
-          <MainContentButton title="로그아웃하기" onClick={onClickLogout} />
           <MainContentButton
             label="소중한 가족을 소개해주세요"
             title="반려동물 등록하기"
             onClick={goRegisterPetPage}
           />
           <MainContentButton label="현재 사료는 잘 주고 계신가요?" title="영양분석하기" />
+          <MainContentButton title="로그아웃하기" onClick={onClickLogout} />
         </ContentSection>
       </PageContainer>
     </Layout>
