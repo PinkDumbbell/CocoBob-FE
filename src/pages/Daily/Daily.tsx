@@ -85,16 +85,16 @@ export default function DailyMain() {
   if (!currentPetId) return null;
   return (
     <Layout header footer title="데일리 기록">
-      <div className="p-4 bg-white flex flex-col items-center justify-center gap-8 w-full h-full">
+      <div className="py-2 px-4 bg-white flex flex-col items-center justify-center gap-6 w-full h-full">
         <div className="flex flex-col border rounded-[10px] h-3/4 max-h-[600px] w-full bg-white shadow-lg rounded-[10px]">
-          <div className="w-full h-16 bg-primary-dark shadow-md rounded-t-[10px] flex items-center justify-center">
+          <div className="w-full h-14 bg-primary-dark shadow-md rounded-t-[10px] flex items-center justify-center">
             <button onClick={openDateSelector}>
               <h4 className="text-white font-[400] text-lg">
                 {dayjs(currentDate).format('YYYY. MM. DD')}
               </h4>
             </button>
           </div>
-          <div className="bg-white flex-1 flex flex-col gap-4 p-2 px-10 relative rounded-b-[10px]">
+          <div className="bg-white flex-1 flex flex-col gap-4 p-2 px-10 relative rounded-b-[10px] overflow-y-scroll">
             <div className="flex pt-8 pb-4 flex-col items-start w-full gap-2">
               <h5 className="text-left text-md w-full text-primary-dark">오늘의 일기</h5>
               {todayDaily?.data.note && (
