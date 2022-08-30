@@ -33,7 +33,7 @@ const EmailLoginSheet = ({ isOpen }: { isOpen: boolean }) => {
     if (!isLoggedIn) return;
 
     dispatch(closeBottomSheetAction);
-    navigate('/');
+    navigate('/', { replace: true });
   }, [isLoggedIn]);
 
   useEffect(() => {
