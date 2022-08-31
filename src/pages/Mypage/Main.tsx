@@ -1,7 +1,9 @@
+import { IPet } from '@/@type/pet';
 import Layout from '@/components/layout/Layout';
 import { useGetPetsQuery } from '@/store/api/petApi';
 import { useGetUserQuery } from '@/store/api/userApi';
 import useLogout from '@/utils/hooks/useLogout';
+import useToastConfirm from '@/utils/hooks/useToastConfirm';
 import useWithdrawal from '@/utils/hooks/useWithdrawal';
 import { Link } from 'react-router-dom';
 import AddPetBUtton from './components/AddPetButton';
@@ -18,9 +20,12 @@ import {
 export default function MypageMain() {
   const { data: user } = useGetUserQuery();
   const { data: pets, isLoading, isSuccess } = useGetPetsQuery();
-  const onClickLogout = useLogout();
-  const onClickWithdrawal = useWithdrawal();
-
+  const logout = useLogout();
+  const withdrawal = useWithdrawal();
+  const confirm = useToastConfirm('changeRepresentativePet');
+  const changeRepresentativePet = (petInfo: IPet) => {
+    confirm(`${petInfo.name}로 프로필을 변경합니다.`);
+  };
   return (
     <Layout header title="마이페이지" footer>
       <MainContentsContainer>
@@ -44,7 +49,11 @@ export default function MypageMain() {
                 <MainPetListContainer>
                   {isSuccess &&
                     pets?.map((pet, idx) => (
-                      <MainPetListItem className={idx === 0 ? 'border-primary-main' : ''} key={idx}>
+                      <MainPetListItem
+                        className={idx === 0 ? 'border-primary-main' : ''}
+                        key={idx}
+                        onClick={() => changeRepresentativePet(pet)}
+                      >
                         <PetSimpleInfo {...pet} />
                       </MainPetListItem>
                     ))}
@@ -64,12 +73,12 @@ export default function MypageMain() {
                 </MypageMenuItem>
               ))}
               <MypageMenuItem>
-                <button onClick={onClickLogout}>
+                <button onClick={logout}>
                   <h5>로그아웃</h5>
                 </button>
               </MypageMenuItem>
               <MypageMenuItem>
-                <button onClick={onClickWithdrawal}>
+                <button onClick={withdrawal}>
                   <h5>회원탈퇴</h5>
                 </button>
               </MypageMenuItem>

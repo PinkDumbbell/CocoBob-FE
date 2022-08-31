@@ -85,6 +85,20 @@ export const petApiSlice = apiSlice.injectEndpoints({
         { type: 'Pet' as const, id: 'LIST' },
       ],
     }),
+    deletePet: builder.mutation<void, number>({
+      query: (petId) => {
+        console.log('petId', petId);
+        return {
+          url: `/pets/${petId}`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: (result, error, petId) => [
+        'User',
+        { type: 'Pet' as const, id: 'LIST' },
+        { type: 'Pet' as const, id: petId },
+      ],
+    }),
   }),
 });
 
@@ -93,8 +107,10 @@ export const {
   useSaveEnrollmentDataMutation,
   useGetBreedsQuery,
   useGetPetsQuery,
+  useLazyGetPetsDetailQuery,
   useGetPetsDetailQuery,
   useUpdatePetDataMutation,
+  useDeletePetMutation,
 } = petApiSlice;
 
 export const selectUserResult = petApiSlice.endpoints.getEnrollmentData.select();

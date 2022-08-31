@@ -19,7 +19,12 @@ export default function PetSimpleCard({
   const ageInformation = `${years > 0 ? `${years}년` : ''} ${months}개월`;
   return (
     <>
-      <div className="relative h-full w-24 flex items-center">
+      <div
+        className="relative h-full w-24 flex items-center"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
         <img
           src={thumbnailPath ?? PetDefaultImage}
           alt=""
