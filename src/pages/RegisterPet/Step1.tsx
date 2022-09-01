@@ -1,7 +1,6 @@
-import { useForm } from 'react-hook-form';
-import FormInput from '@/components/Form/FormInput';
-import FormButton from '@/components/Form/FormButton';
 import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { FormInput, FormButton } from '@/components/Form';
 import { ButtonWrapper, Form, PageContainer, QuestionText, SubQuestionText } from './index.style';
 import { StepPageProps } from './type';
 
