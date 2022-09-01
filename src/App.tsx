@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import LoginPage from '@/pages/Login';
+import { ConfirmModal, ConfirmPortal } from '@/components/Confirm';
 import PrivateRoutes from './routes/PrivateRoutes';
 import PageTransition from './components/transition/PageTransition';
 import ToastMessage from './components/Toast/ToastMessage';
@@ -28,6 +29,9 @@ function App() {
     <>
       <ToastMessage />
       <ToastConfirm />
+      <ConfirmPortal>
+        <ConfirmModal />
+      </ConfirmPortal>
       <PageTransition transitionKey={location.pathname}>
         <Routes key={location.pathname} location={location}>
           <Route element={<PrivateRoutes />} path="/*" />
