@@ -29,8 +29,8 @@ import PetDefault from '@/assets/image/pet_default.png';
 
 import { getFileFromObjectURL } from '@/utils/libs/getFileFromObjectURL';
 import useToastMessage from '@/utils/hooks/useToastMessage';
-import useToastConfirm from '@/utils/hooks/useToastConfirm';
 import { useAppSelector } from '@/store/config';
+import { useConfirm } from '@/components/Confirm';
 import {
   AgeDescription,
   AgeSelectButton,
@@ -80,17 +80,22 @@ function useUpdatePet() {
 function useDeletePet(petId?: number) {
   const navigate = useNavigate();
   const openToast = useToastMessage();
+  const [openPopup] = useConfirm();
   const [skipFetchOnDelete, setSkipFetchOnDelete] = useState(false);
-  const [deletePet, response] = useDeletePetMutation();
+  const [deletePetMutation, response] = useDeletePetMutation();
   const { data, isError, isSuccess } = response;
 
-  const handleDeletePet = () => {
+  const deletePet = async () => {
     if (!petId) return;
-    setSkipFetchOnDelete(true);
-    deletePet(petId);
+    const confirm = await openPopup({
+      title: '반려동물 삭제',
+      contents: '반려동물을 삭제하시겠습니까?',
+    });
+    if (confirm) {
+      setSkipFetchOnDelete(true);
+      deletePetMutation(petId);
+    }
   };
-  const deleteConfirm = useToastConfirm('deletePet', handleDeletePet);
-
   useEffect(() => {
     if (!data || !isSuccess) return;
     navigate('/mypage');
@@ -106,7 +111,6 @@ function useDeletePet(petId?: number) {
   return {
     skipFetchOnDelete,
     deletePet,
-    deleteConfirm,
     ...response,
   };
 }
@@ -114,6 +118,7 @@ export default function PetDetail() {
   const { id } = useParams();
   if (!id) return <Navigate to="/404" replace />;
 
+  const [openPopup] = useConfirm();
   const {
     register,
     formState: { errors },
@@ -125,7 +130,7 @@ export default function PetDetail() {
   const isRepresentativePet = representativePetId === +id;
 
   const { updatePet } = useUpdatePet();
-  const { skipFetchOnDelete, deleteConfirm, isSuccess: isDeleteSuccess } = useDeletePet(+id);
+  const { skipFetchOnDelete, deletePet, isSuccess: isDeleteSuccess } = useDeletePet(+id);
   const {
     isSuccess,
     isLoading,
@@ -156,11 +161,16 @@ export default function PetDetail() {
     setPreviewUrl('');
     setIsImageDeleted(true);
   };
-  const confirmDeleteProfile = useToastConfirm('deleteProfileImage', initProfileImage);
 
-  const deleteProfileImage = () => {
+  const deleteProfileImage = async () => {
     if (!previewUrl) return;
-    confirmDeleteProfile('프로필 사진을 삭제하시겠습니까?');
+    const confirm = await openPopup({
+      title: '프로필 사진 삭제',
+      contents: '프로필 사진을 삭제하시겠습니까?',
+    });
+    if (confirm) {
+      initProfileImage();
+    }
   };
 
   const onSubmit = async (data: IPetEditForm) => {
@@ -385,7 +395,7 @@ export default function PetDetail() {
                   <button
                     type="button"
                     className="text-red-600 font-light opacity-80"
-                    onClick={() => deleteConfirm('정말로 반려동물 정보를 삭제하시겠습니까?')}
+                    onClick={deletePet}
                   >
                     반려동물 정보 삭제
                   </button>

@@ -5,7 +5,6 @@ import { ConfirmModal, ConfirmPortal } from '@/components/Confirm';
 import PrivateRoutes from './routes/PrivateRoutes';
 import PageTransition from './components/transition/PageTransition';
 import ToastMessage from './components/Toast/ToastMessage';
-import ToastConfirm from './components/Toast/ToastConfirm';
 import GoogleRedirectHandler from './pages/Redirect/google';
 import KakaoRedirectHandler from './pages/Redirect/kakao';
 import AppleRedirectHandler from './pages/Redirect/apple';
@@ -28,7 +27,6 @@ function App() {
   return (
     <>
       <ToastMessage />
-      <ToastConfirm />
       <ConfirmPortal>
         <ConfirmModal />
       </ConfirmPortal>
