@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import BottomSheet from '.';
+import BottomSheet from './BottomSheet';
 import Button from '../Button';
 import {
   BottomSheetContentWrapper,

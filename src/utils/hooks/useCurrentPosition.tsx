@@ -6,7 +6,7 @@ const defaultPosition: ILocation = {
   longitude: 127.0448556,
 };
 
-const useCurrentLocation = (options: IGeolocationOptions = {}) => {
+const useCurrentPosition = (options: IGeolocationOptions = {}) => {
   const [location, setLocation] = useState<ILocation>(defaultPosition);
   const [error, setError] = useState<string>();
 
@@ -37,4 +37,4 @@ const useCurrentLocation = (options: IGeolocationOptions = {}) => {
   return { location, error };
 };
 
-export default useCurrentLocation;
+export default useCurrentPosition;

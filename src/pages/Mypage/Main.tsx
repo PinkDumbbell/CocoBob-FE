@@ -3,9 +3,7 @@ import { IPet } from '@/@type/pet';
 import Layout from '@/components/layout/Layout';
 import { useGetPetsQuery } from '@/store/api/petApi';
 import { useGetUserQuery } from '@/store/api/userApi';
-import useConfirm from '@/utils/hooks/useConfirm';
-import useLogout from '@/utils/hooks/useLogout';
-import useWithdrawal from '@/utils/hooks/useWithdrawal';
+import { useConfirm, useLogout, useWithdrawal } from '@/utils/hooks';
 import AddPetBUtton from './components/AddPetButton';
 import PetSimpleInfo from './components/PetSimpleInfo';
 import {

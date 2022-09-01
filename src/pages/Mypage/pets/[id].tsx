@@ -5,32 +5,31 @@ import { useForm } from 'react-hook-form';
 import { QuestionWrapper } from '@/pages/RegisterPet/index.style';
 import ContentsContainer from '@/components/ContentsContainer';
 import Layout from '@/components/layout/Layout';
-import FormInput, { InputStyle, Label } from '@/components/Form/FormInput';
-import FormButton from '@/components/Form/FormButton';
+import { FormInput, FormButton } from '@/components/Form';
+import { InputStyle, Label } from '@/components/Form/FormInput';
 
 import { ActivityLevelType, IBreeds, IPetInformation, PetSexType, PetInfoForm } from '@/@type/pet';
+import { useAppSelector } from '@/store/config';
 import {
   useDeletePetMutation,
   useGetPetsDetailQuery,
   useUpdatePetDataMutation,
 } from '@/store/api/petApi';
-import useSelectImage from '@/utils/hooks/useSelectImage';
-import useBottomSheet from '@/utils/hooks/useBottomSheet';
-import useConfirm from '@/utils/hooks/useConfirm';
-import useToastMessage from '@/utils/hooks/useToastMessage';
+
+import { useSelectImage, useBottomSheet, useConfirm, useToastMessage } from '@/utils/hooks';
 import { getFileFromObjectURL } from '@/utils/libs/getFileFromObjectURL';
-import BreedBottomSheet from '@/components/BottomSheet/BreedBottomSheet';
-import BirthdayBottomSheet from '@/components/BottomSheet/BirthdayBottomSheet';
-import MonthsAgeBottomSheet from '@/components/BottomSheet/MonthsAgeBottomSheet';
+import {
+  BreedBottomSheet,
+  BirthdayBottomSheet,
+  MonthsAgeBottomSheet,
+} from '@/components/BottomSheet';
 import useAgeBottomSheet from '@/components/BottomSheet/hooks/useAgeBottomSheet';
 
 import { ReactComponent as TrashIcon } from '@/assets/icon/trash_icon.svg';
 import { ReactComponent as EditIcon } from '@/assets/icon/edit_icon.svg';
 import { ReactComponent as CalendarIcon } from '@/assets/icon/calendar_icon.svg';
-
 import PetDefault from '@/assets/image/pet_default.png';
 
-import { useAppSelector } from '@/store/config';
 import {
   AgeDescription,
   AgeSelectButton,
