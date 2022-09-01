@@ -1,9 +1,9 @@
-import { useConfirm } from '@/components/Confirm';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useWithdrawalMutation } from '@/store/api/userApi';
 import { useAppDispatch } from '@/store/config';
 import { logout } from '@/store/slices/authSlice';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import useConfirm from '@/utils/hooks/useConfirm';
 
 export default function useWithdrawal() {
   const dispatch = useAppDispatch();

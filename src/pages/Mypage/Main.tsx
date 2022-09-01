@@ -1,11 +1,11 @@
+import { Link } from 'react-router-dom';
 import { IPet } from '@/@type/pet';
-import { useConfirm } from '@/components/Confirm';
 import Layout from '@/components/layout/Layout';
 import { useGetPetsQuery } from '@/store/api/petApi';
 import { useGetUserQuery } from '@/store/api/userApi';
+import useConfirm from '@/utils/hooks/useConfirm';
 import useLogout from '@/utils/hooks/useLogout';
 import useWithdrawal from '@/utils/hooks/useWithdrawal';
-import { Link } from 'react-router-dom';
 import AddPetBUtton from './components/AddPetButton';
 import PetSimpleInfo from './components/PetSimpleInfo';
 import {

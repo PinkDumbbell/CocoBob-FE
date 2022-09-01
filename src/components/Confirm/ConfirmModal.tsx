@@ -1,35 +1,8 @@
+import { useContext } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/config';
 import { isPopupOpened, setPopupOpened } from '@/store/slices/confirmSlice';
-import { ReactNode, useContext } from 'react';
-import { Background, ContentsWrapper, RejectButton, SubmitButton } from './ConfirmModal.style';
 import { ConfirmContext } from './ConfirmPortal';
-
-type ConfirmOpenProps = {
-  title: string | ReactNode;
-  contents: string | ReactNode;
-};
-
-export function useConfirm() {
-  const dispatch = useAppDispatch();
-  const confirmContext = useContext(ConfirmContext);
-
-  const openPopup = async ({ title, contents }: ConfirmOpenProps) => {
-    confirmContext.title = title;
-    confirmContext.contents = contents;
-    dispatch(setPopupOpened(true));
-    return new Promise((resolve) => {
-      confirmContext.promiseInfo = {
-        resolve,
-      };
-    });
-  };
-
-  const hidePopup = () => {
-    dispatch(setPopupOpened(false));
-  };
-
-  return [openPopup, hidePopup];
-}
+import { Background, ContentsWrapper, RejectButton, SubmitButton } from './ConfirmModal.style';
 
 export default function ConfirmModal() {
   const dispatch = useAppDispatch();
