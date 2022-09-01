@@ -75,7 +75,10 @@ export default function ProductsPage() {
     setSearchParams({ aafco: 'false' });
   };
 
-  const onClickSearch = () => setSearchParams({ ...searchParams, name: searchKeyword });
+  const onClickSearch = () => {
+    setSearchParams({ ...searchParams, name: searchKeyword });
+    setOnSearch(false);
+  };
 
   useEffect(() => {
     setPage(0);

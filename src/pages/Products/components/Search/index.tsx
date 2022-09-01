@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { RelatedSearchKeywordContainer } from './index.style';
 
@@ -9,7 +10,7 @@ interface ISearch {
 export default function Search(props: ISearch) {
   const { searchInputValue, onClickSearch } = props;
   const [relatedWords, setRelatedWords] = useState<string[]>([]);
-
+  useEffect(() => {}, [searchInputValue]);
   // const letterEmphasis = (word: string) => {
   //   const pattern = new RegExp(searchKeyword, 'i');
   //   const matchString = word.match(pattern);
@@ -21,7 +22,7 @@ export default function Search(props: ISearch) {
   // };
   return (
     <div className="w-full h-full">
-      {searchInputValue !== '' && (
+      {searchInputValue !== '' ? (
         <RelatedSearchKeywordContainer>
           {relatedWords.map((word, idx) => (
             <span
@@ -33,8 +34,9 @@ export default function Search(props: ISearch) {
             />
           ))}
         </RelatedSearchKeywordContainer>
+      ) : (
+        <div>추천검색어</div>
       )}
-      <div>추천검색어</div>
     </div>
   );
 }

@@ -77,7 +77,7 @@ export default function RecommendProducts() {
               {agedLoading ? (
                 'Loading...'
               ) : agedSuccess ? (
-                agedProducts.productList.slice(10).map((product, idx) => (
+                agedProducts?.productList.slice(10).map((product, idx) => (
                   <SwiperSlide key={`aged-${product.productId}`}>
                     <SwiperProductItem
                       product={product}
@@ -107,7 +107,7 @@ export default function RecommendProducts() {
               {pregnancyLoading ? (
                 'Loading...'
               ) : pregnancySuccess ? (
-                pregnancyProducts.productList.slice(10).map((product, idx) => (
+                pregnancyProducts?.productList.slice(10).map((product, idx) => (
                   <SwiperSlide key={`pregnancy-${product.productId}`}>
                     <SwiperProductItem
                       product={product}
