@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { EffectCoverflow, Pagination } from 'swiper';
@@ -52,9 +51,9 @@ const productSwiperOption: SwiperProps = {
 
 export default function Main() {
   const navigate = useNavigate();
-  const { data: pet } = useCurrentPet();
+  const { data: pet, isError: currentPetError } = useCurrentPet();
   const { data } = useGetUserQuery();
-  const [getRecommends, { data: recommend, isSuccess, isLoading }] =
+  const [getRecommends, { data: recommend, isSuccess, isLoading, isError: recommendError }] =
     useLazyGetRecommendProductQuery();
   const onClickLogout = useLogout();
   const goRegisterPetPage = () => navigate('/register');
@@ -62,6 +61,7 @@ export default function Main() {
 
   const [recommendActiveIndex, setRecommendActiveIndex] = useState(0);
 
+  const isFetchError = currentPetError || recommendError;
   useEffect(() => {
     if (data?.representativeAnimalId === null) {
       navigate('/register', {
@@ -85,11 +85,21 @@ export default function Main() {
           <DoctorImageWrapper>
             <img src={doctor} alt="메인 배경 이미지 1" className="w-full" />
           </DoctorImageWrapper>
-          <VerticalBox className="z-10">
-            <SectionTitle>
-              <HighlightText>{pet?.name ?? '반려동물 불러오기 실패'}</HighlightText>
-            </SectionTitle>
-            <SectionSubtitle>어떻게 지내고 있을까요?</SectionSubtitle>
+          <VerticalBox className="z-10 min-h-[50px]">
+            {pet?.name && (
+              <>
+                <SectionTitle>
+                  <HighlightText>{pet.name ?? '반려동물 불러오기 실패'}</HighlightText>
+                </SectionTitle>
+                <SectionSubtitle>어떻게 지내고 있을까요?</SectionSubtitle>
+              </>
+            )}
+            {isFetchError && (
+              <>
+                <SectionTitle>에러발생</SectionTitle>
+                <SectionSubtitle>정보를 불러오지 못했습니다.</SectionSubtitle>
+              </>
+            )}
           </VerticalBox>
           <ContentsContainer style={{ zIndex: 10 }}>
             <div className="w-full h-auto flex justify-evenly gap-3 relative">
@@ -110,7 +120,7 @@ export default function Main() {
           </ContentsContainer>
         </MainContentSection>
         <div className="px-4 flex justify-between items-end">
-          <SectionTitle>{pet?.name}에게 추천하는 사료에요</SectionTitle>
+          <SectionTitle>{pet?.name ?? 'OO'}에게 추천하는 사료에요</SectionTitle>
           <Link to="/products/recommend" className="text-sm">
             더보기
           </Link>
@@ -121,9 +131,7 @@ export default function Main() {
             className="pt-4 pb-14"
             onActiveIndexChange={(swiper) => setRecommendActiveIndex(swiper.activeIndex)}
           >
-            {isLoading ? (
-              '추천 상품을 불러오고 있습니다'
-            ) : isSuccess ? (
+            {isSuccess &&
               recommend?.productList.slice(10).map((product, idx) => (
                 <SwiperSlide key={`main-${product.productId}`}>
                   <SwiperProductItem
@@ -132,13 +140,16 @@ export default function Main() {
                     key={`main-${product.productId}`}
                   />
                 </SwiperSlide>
-              ))
-            ) : (
-              <div className="text-center w-full text-2xl font-medium">
-                상품을 불러오는데 문제가 발생하였습니다.
-              </div>
-            )}
+              ))}
           </Swiper>
+          {isLoading && (
+            <div className="text-center w-full text-lg font-medium">상품을 불러오는 중 입니다.</div>
+          )}
+          {isFetchError && (
+            <div className="py-10 text-center w-full text-lg font-medium">
+              상품을 불러오지 못했습니다.
+            </div>
+          )}
         </div>
         <ContentSection>
           <MainContentButton

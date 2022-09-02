@@ -45,6 +45,7 @@ MemoizedProductItem.displayName = 'ProductItem';
 export default function ProductsPage() {
   const firstTrigger = useRef(false);
   const ref = useRef<HTMLDivElement>();
+  const navigate = useNavigate();
 
   const [category, setCategory] = useState<CategoryType>('사료');
   const [onSearch, setOnSearch] = useState<boolean>(false);
@@ -55,7 +56,7 @@ export default function ProductsPage() {
 
   const { ref: inViewRef, inView } = useInView({ threshold: 0, rootMargin: '150px 0px 0px 0px' });
   const [searchParams, setSearchParams] = useSearchParams();
-  const [trigger, { isFetching, data, isSuccess }] = useLazyGetProductQuery();
+  const [trigger, { isFetching, data, isSuccess, isError }] = useLazyGetProductQuery();
   const { filterModal, openFilterModal, closeFilterModal } = useFilterModal();
 
   const setInViewRef = useCallback(
@@ -181,13 +182,28 @@ export default function ProductsPage() {
           {searchResults?.map((product) => (
             <MemoizedProductItem key={product.productId} product={product} />
           ))}
-          {!isFetching && !data?.last && (
+          {!isError && !isFetching && !data?.last && (
             <div ref={setInViewRef} className="w-full h-20 flex items-center justify-center">
               LoadMore
             </div>
           )}
         </div>
         {isFetching && <p>로딩중</p>}
+        {isError && (
+          <div className="flex flex-col justify-center items-center gap-5">
+            <div className="flex flex-col items-center justify-center gap-2">
+              <h3>에러 발생</h3>
+              <p>잠시 후 다시 시도해주세요.</p>
+            </div>
+            <button
+              type="button"
+              className="bg-primary-bright text-white rounded-[10px] px-4 py-2"
+              onClick={() => navigate(0)}
+            >
+              새로고침
+            </button>
+          </div>
+        )}
       </div>
       {filterModal && <FilterModal setPage={setPage} close={closeFilterModal} />}
     </Layout>
