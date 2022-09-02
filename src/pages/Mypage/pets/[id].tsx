@@ -1,32 +1,35 @@
-/* eslint-disable no-unused-vars */
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import { QuestionWrapper } from '@/pages/RegisterPet/index.style';
 import ContentsContainer from '@/components/ContentsContainer';
 import Layout from '@/components/layout/Layout';
-import FormInput, { InputStyle, Label } from '@/components/Form/FormInput';
-import FormButton from '@/components/Form/FormButton';
+import { FormInput, FormButton } from '@/components/Form';
+import { InputStyle, Label } from '@/components/Form/FormInput';
 
 import { ActivityLevelType, IBreeds, IPetInformation, PetSexType, PetInfoForm } from '@/@type/pet';
-import { useGetPetsDetailQuery, useUpdatePetDataMutation } from '@/store/api/petApi';
-import useSelectImage from '@/utils/hooks/useSelectImage';
-import useBottomSheet from '@/utils/hooks/useBottomSheet';
-import BreedBottomSheet from '@/components/BottomSheet/BreedBottomSheet';
-import BirthdayBottomSheet from '@/components/BottomSheet/BirthdayBottomSheet';
-import MonthsAgeBottomSheet from '@/components/BottomSheet/MonthsAgeBottomSheet';
+import { useAppSelector } from '@/store/config';
+import {
+  useDeletePetMutation,
+  useGetPetsDetailQuery,
+  useUpdatePetDataMutation,
+} from '@/store/api/petApi';
+
+import { useSelectImage, useBottomSheet, useConfirm, useToastMessage } from '@/utils/hooks';
+import { getFileFromObjectURL } from '@/utils/libs/getFileFromObjectURL';
+import {
+  BreedBottomSheet,
+  BirthdayBottomSheet,
+  MonthsAgeBottomSheet,
+} from '@/components/BottomSheet';
 import useAgeBottomSheet from '@/components/BottomSheet/hooks/useAgeBottomSheet';
 
 import { ReactComponent as TrashIcon } from '@/assets/icon/trash_icon.svg';
 import { ReactComponent as EditIcon } from '@/assets/icon/edit_icon.svg';
 import { ReactComponent as CalendarIcon } from '@/assets/icon/calendar_icon.svg';
-
 import PetDefault from '@/assets/image/pet_default.png';
 
-import { getFileFromObjectURL } from '@/utils/libs/getFileFromObjectURL';
-import useToastMessage from '@/utils/hooks/useToastMessage';
-import useToastConfirm from '@/utils/hooks/useToastConfirm';
 import {
   AgeDescription,
   AgeSelectButton,
@@ -49,10 +52,72 @@ interface IPetEditForm {
   isPregnant: boolean;
 }
 const activityLevels: ActivityLevelType[] = [1, 2, 3, 4, 5];
+
+function useUpdatePet() {
+  const navigate = useNavigate();
+  const openToast = useToastMessage();
+  const [updatePet, response] = useUpdatePetDataMutation();
+  const { data, isError, isSuccess } = response;
+
+  useEffect(() => {
+    if (!isSuccess) return;
+    navigate('/mypage/pets', { replace: true });
+    openToast('성공적으로 정보를 수정하였습니다.', 'success');
+  }, [data, isSuccess]);
+
+  useEffect(() => {
+    if (!isError) return;
+    openToast('반려동물 수정 중 오류가 발생하였습니다.', 'error');
+  }, [isError]);
+
+  return {
+    ...response,
+    updatePet,
+  };
+}
+
+function useDeletePet(petId?: number) {
+  const navigate = useNavigate();
+  const openToast = useToastMessage();
+  const [openPopup] = useConfirm();
+  const [skipFetchOnDelete, setSkipFetchOnDelete] = useState(false);
+  const [deletePetMutation, response] = useDeletePetMutation();
+  const { data, isError, isSuccess } = response;
+
+  const deletePet = async () => {
+    if (!petId) return;
+    const confirm = await openPopup({
+      title: '반려동물 삭제',
+      contents: '반려동물을 삭제하시겠습니까?',
+    });
+    if (confirm) {
+      setSkipFetchOnDelete(true);
+      deletePetMutation(petId);
+    }
+  };
+  useEffect(() => {
+    if (!data || !isSuccess) return;
+    navigate('/mypage');
+    openToast('반려동물 정보가 삭제되었습니다.', 'success');
+  }, [data, isSuccess]);
+
+  useEffect(() => {
+    if (!isError) return;
+    openToast('반려동물 삭제 중 오류가 발생하였습니다.', 'error');
+    setSkipFetchOnDelete(false);
+  }, [isError]);
+
+  return {
+    skipFetchOnDelete,
+    deletePet,
+    ...response,
+  };
+}
 export default function PetDetail() {
   const { id } = useParams();
   if (!id) return <Navigate to="/404" replace />;
 
+  const [openPopup] = useConfirm();
   const {
     register,
     formState: { errors },
@@ -60,13 +125,20 @@ export default function PetDetail() {
     setValue,
     handleSubmit,
   } = useForm<IPetEditForm>();
-  const navigate = useNavigate();
-  const [updatePetData, { data: mutationResult }] = useUpdatePetDataMutation();
-  const { isSuccess, isLoading, data: petData } = useGetPetsDetailQuery(+id);
+  const representativePetId = useAppSelector((state) => state.user.user?.representativeAnimalId);
+  const isRepresentativePet = representativePetId === +id;
+
+  const { updatePet } = useUpdatePet();
+  const { skipFetchOnDelete, deletePet, isSuccess: isDeleteSuccess } = useDeletePet(+id);
+  const {
+    isSuccess,
+    isLoading,
+    data: petData,
+  } = useGetPetsDetailQuery(+id, { skip: skipFetchOnDelete });
   const { imageFile, previewUrl, handleChangeImage, setPreviewUrl } = useSelectImage({
     initPreviewUrl: petData?.thumbnailPath,
   });
-  const openToast = useToastMessage();
+
   const { openBottomSheet: openBreedBottomSheet, isBottomSheetOpen: isBreedBottomSheetOpen } =
     useBottomSheet('findBreed');
   const {
@@ -88,11 +160,16 @@ export default function PetDetail() {
     setPreviewUrl('');
     setIsImageDeleted(true);
   };
-  const confirmDeleteProfile = useToastConfirm('deleteProfileImage', initProfileImage);
 
-  const deleteProfileImage = () => {
+  const deleteProfileImage = async () => {
     if (!previewUrl) return;
-    confirmDeleteProfile('프로필 사진을 삭제하시겠습니까?');
+    const confirm = await openPopup({
+      title: '프로필 사진 삭제',
+      contents: '프로필 사진을 삭제하시겠습니까?',
+    });
+    if (confirm) {
+      initProfileImage();
+    }
   };
 
   const onSubmit = async (data: IPetEditForm) => {
@@ -111,7 +188,7 @@ export default function PetDetail() {
     if (imageFile) {
       updateParams.formInput.petImage = await getFileFromObjectURL(imageFile);
     }
-    updatePetData(updateParams);
+    updatePet(updateParams);
   };
 
   const initForm = (data: IPetInformation) => {
@@ -137,16 +214,10 @@ export default function PetDetail() {
     }
   }, [imageFile]);
 
-  useEffect(() => {
-    if (!mutationResult) return;
-    navigate('/mypage/pets', { replace: true });
-    openToast('성공적으로 정보를 수정하였습니다.', 'success');
-  }, [mutationResult]);
-
   return (
     <Layout header title="우리아이 정보 수정" canGoBack>
       {isLoading && <div>Loading...</div>}
-      {isSuccess && (
+      {isSuccess && !isDeleteSuccess && (
         <>
           <div className="p-2 px-3 relative">
             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -318,6 +389,17 @@ export default function PetDetail() {
                   </FlexColumn>
                 </FlexColumn>
               </ContentsContainer>
+              {!isRepresentativePet && (
+                <FlexColumnCenter>
+                  <button
+                    type="button"
+                    className="text-red-600 font-light opacity-80"
+                    onClick={deletePet}
+                  >
+                    반려동물 정보 삭제
+                  </button>
+                </FlexColumnCenter>
+              )}
               <SaveButtonContainer>
                 <FormButton name="저장" />
               </SaveButtonContainer>

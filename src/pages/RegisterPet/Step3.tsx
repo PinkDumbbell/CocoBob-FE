@@ -1,15 +1,16 @@
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+
 import { IBreeds } from '@/@type/pet';
 import FormButton from '@/components/Form/FormButton';
 import { InputStyle } from '@/components/Form/FormInput';
+import BreedBottomSheet from '@/components/BottomSheet/BreedBottomSheet';
+
 import { useGetBreedsQuery } from '@/store/api/petApi';
 import { favBreeds } from '@/utils/constants/enrollment';
-import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { concatClasses } from '@/utils/libs/concatClasses';
-import { useState, useEffect } from 'react';
+import { useToastMessage, useBottomSheet } from '@/utils/hooks';
 
-import { useForm } from 'react-hook-form';
-import useToastMessage from '@/utils/hooks/useToastMessage';
-import BreedBottomSheet from '@/components/BottomSheet/BreedBottomSheet';
 import { ButtonWrapper, Form, PageContainer, PetNameHighlight, QuestionText } from './index.style';
 import { StepPageProps } from './type';
 

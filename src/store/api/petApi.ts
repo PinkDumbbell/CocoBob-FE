@@ -2,6 +2,12 @@ import { IBreeds, IPet, IPetInformation, PetInfoForm } from '@/@type/pet';
 import { apiSlice } from '../slices/apiSlice';
 import { IGenericResponse } from './types';
 
+type UpdatePetReqType = {
+  formInput: PetInfoForm<File>;
+  petId: number;
+  isImageJustDeleted: boolean;
+};
+
 export const petApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getEnrollmentData: builder.query<any, void>({
@@ -55,15 +61,12 @@ export const petApiSlice = apiSlice.injectEndpoints({
       transformResponse: (response: IGenericResponse<IPetInformation>) => response.data,
       providesTags: (result) => [{ type: 'Pet' as const, id: result?.id }],
     }),
-    updatePetData: builder.mutation<
-      { petId: number },
-      { formInput: PetInfoForm<File>; petId: number; isImageJustDeleted: boolean }
-    >({
+    updatePetData: builder.mutation<{ petId: number }, UpdatePetReqType>({
       query: ({ formInput, petId, isImageJustDeleted }) => {
         const formData = new FormData();
         formData.append('isImageJustDeleted', JSON.stringify(isImageJustDeleted));
         // eslint-disable-next-line no-restricted-syntax
-        for (const [key, value] of Object.entries(formInput)) {
+        Object.entries(formInput).forEach(([key, value]) => {
           if (value !== undefined) {
             if (key === 'age' || key === 'birthday') {
               const newKey = key === 'age' ? 'months' : key;
@@ -72,7 +75,7 @@ export const petApiSlice = apiSlice.injectEndpoints({
               formData.append(key, value);
             }
           }
-        }
+        });
 
         return {
           url: `/pets/${petId}`,
@@ -85,6 +88,20 @@ export const petApiSlice = apiSlice.injectEndpoints({
         { type: 'Pet' as const, id: 'LIST' },
       ],
     }),
+    deletePet: builder.mutation<void, number>({
+      query: (petId) => {
+        console.log('petId', petId);
+        return {
+          url: `/pets/${petId}`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: (result, error, petId) => [
+        'User',
+        { type: 'Pet' as const, id: 'LIST' },
+        { type: 'Pet' as const, id: petId },
+      ],
+    }),
   }),
 });
 
@@ -93,8 +110,10 @@ export const {
   useSaveEnrollmentDataMutation,
   useGetBreedsQuery,
   useGetPetsQuery,
+  useLazyGetPetsDetailQuery,
   useGetPetsDetailQuery,
   useUpdatePetDataMutation,
+  useDeletePetMutation,
 } = petApiSlice;
 
 export const selectUserResult = petApiSlice.endpoints.getEnrollmentData.select();
