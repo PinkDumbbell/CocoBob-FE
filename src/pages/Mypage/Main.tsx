@@ -1,11 +1,9 @@
+import { Link } from 'react-router-dom';
 import { IPet } from '@/@type/pet';
 import Layout from '@/components/layout/Layout';
 import { useGetPetsQuery } from '@/store/api/petApi';
 import { useGetUserQuery } from '@/store/api/userApi';
-import useLogout from '@/utils/hooks/useLogout';
-import useToastConfirm from '@/utils/hooks/useToastConfirm';
-import useWithdrawal from '@/utils/hooks/useWithdrawal';
-import { Link } from 'react-router-dom';
+import { useConfirm, useLogout, useWithdrawal } from '@/utils/hooks';
 import AddPetBUtton from './components/AddPetButton';
 import PetSimpleInfo from './components/PetSimpleInfo';
 import {
@@ -22,9 +20,20 @@ export default function MypageMain() {
   const { data: pets, isLoading, isSuccess } = useGetPetsQuery();
   const logout = useLogout();
   const withdrawal = useWithdrawal();
-  const confirm = useToastConfirm('changeRepresentativePet');
-  const changeRepresentativePet = (petInfo: IPet) => {
-    confirm(`${petInfo.name}로 프로필을 변경합니다.`);
+  const [openPopup] = useConfirm();
+
+  const changeRepresentativePet = async (petInfo: IPet) => {
+    alert('준비중입니다.');
+    console.log(petInfo);
+  };
+  const handleChangeRepresentativePet = async (petInfo: IPet) => {
+    const confirm = await openPopup({
+      title: '프로필 변경',
+      contents: `${petInfo.name}로 프로필을 변경합니다.`,
+    });
+    if (confirm) {
+      changeRepresentativePet(petInfo);
+    }
   };
   return (
     <Layout header title="마이페이지" footer>
@@ -52,7 +61,7 @@ export default function MypageMain() {
                       <MainPetListItem
                         className={idx === 0 ? 'border-primary-main' : ''}
                         key={idx}
-                        onClick={() => changeRepresentativePet(pet)}
+                        onClick={() => handleChangeRepresentativePet(pet)}
                       >
                         <PetSimpleInfo {...pet} />
                       </MainPetListItem>

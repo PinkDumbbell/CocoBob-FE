@@ -1,6 +1,5 @@
 import Layout from '@/components/layout/Layout';
-import FormInput from '@/components/Form/FormInput';
-import FormButton from '@/components/Form/FormButton';
+import { FormInput, FormButton } from '@/components/Form';
 
 export default function ProfilePage() {
   return (

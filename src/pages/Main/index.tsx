@@ -3,13 +3,16 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { EffectCoverflow, Pagination } from 'swiper';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
+
 import { useGetUserQuery } from '@/store/api/userApi';
-import useLogout from '@/utils/hooks/useLogout';
-import useCurrentPet from '@/utils/hooks/useCurrentPet';
+import { useLazyGetRecommendProductQuery } from '@/store/api/productApi';
+
 import Layout from '@/components/layout/Layout';
 import ContentsContainer from '@/components/ContentsContainer';
+
+import { useLogout, useCurrentPet } from '@/utils/hooks';
+
 import doctor from '@/assets/image/main_doctor.png';
-import { useLazyGetRecommendProductQuery } from '@/store/api/productApi';
 import { ReactComponent as RecommendIcon } from '@/assets/icon/navbar_food.svg';
 import { ReactComponent as TrashIcon } from '@/assets/icon/trash_icon.svg';
 import { ReactComponent as DogFoodIcon } from '@/assets/icon/dog_food.svg';

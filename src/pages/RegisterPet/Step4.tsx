@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import BottomSheet from '@/components/BottomSheet';
+import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import Button from '@/components/Button';
 import FormButton from '@/components/Form/FormButton';
 import {
@@ -8,8 +8,7 @@ import {
   getDateDiff,
   getTotalMonthWithYearAndMonth,
 } from '@/utils/libs/date';
-import useBottomSheet from '@/utils/hooks/useBottomSheet';
-import useToastMessage from '@/utils/hooks/useToastMessage';
+import { useBottomSheet, useToastMessage } from '@/utils/hooks';
 import { ButtonWrapper, PageContainer, QuestionText, Form, PetNameHighlight } from './index.style';
 import { StepPageProps } from './type';
 
