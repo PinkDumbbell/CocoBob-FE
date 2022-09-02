@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import { IPet } from '@/@type/pet';
 import Layout from '@/components/layout/Layout';
 import { useGetPetsQuery } from '@/store/api/petApi';
-import { useGetUserQuery } from '@/store/api/userApi';
-import { useConfirm, useLogout, useWithdrawal } from '@/utils/hooks';
+import { useChangeRepresentativePetMutation, useGetUserQuery } from '@/store/api/userApi';
+import { useConfirm, useLogout, useWithdrawal, useToastMessage } from '@/utils/hooks';
+import { useEffect } from 'react';
 import AddPetBUtton from './components/AddPetButton';
 import PetSimpleInfo from './components/PetSimpleInfo';
 import {
@@ -20,21 +20,35 @@ export default function MypageMain() {
   const { data: pets, isLoading, isSuccess } = useGetPetsQuery();
   const logout = useLogout();
   const withdrawal = useWithdrawal();
-  const [openPopup] = useConfirm();
+  const openToast = useToastMessage();
+  const [changeRepresentativePetMutation, { isSuccess: isSuccessChangingRepresentativePet }] =
+    useChangeRepresentativePetMutation();
+  const [confirm] = useConfirm();
 
-  const changeRepresentativePet = async (petInfo: IPet) => {
-    alert('준비중입니다.');
-    console.log(petInfo);
+  const petList = [
+    ...(pets?.filter((pet) => pet.id === user?.representativeAnimalId) ?? []),
+    ...(pets?.filter((pet) => pet.id !== user?.representativeAnimalId) ?? []),
+  ];
+
+  const changeRepresentativePet = async (petId: number) => {
+    changeRepresentativePetMutation(petId);
   };
-  const handleChangeRepresentativePet = async (petInfo: IPet) => {
-    const confirm = await openPopup({
+  const handleChangeRepresentativePet = async (petId: number) => {
+    const isConfirmed = await confirm({
       title: '프로필 변경',
-      contents: `${petInfo.name}로 프로필을 변경합니다.`,
+      contents: `선택한 반려동물로 프로필을 변경합니다.`,
     });
-    if (confirm) {
-      changeRepresentativePet(petInfo);
+    if (isConfirmed) {
+      changeRepresentativePet(petId);
     }
   };
+
+  useEffect(() => {
+    if (!isSuccessChangingRepresentativePet) return;
+    openToast('현재 프로필이 수정되었습니다.', 'success');
+  }, [isSuccessChangingRepresentativePet]);
+
+  console.log(user);
   return (
     <Layout header title="마이페이지" footer>
       <MainContentsContainer>
@@ -57,11 +71,11 @@ export default function MypageMain() {
 
                 <MainPetListContainer>
                   {isSuccess &&
-                    pets?.map((pet, idx) => (
+                    petList.map((pet, idx) => (
                       <MainPetListItem
                         className={idx === 0 ? 'border-primary-main' : ''}
                         key={idx}
-                        onClick={() => handleChangeRepresentativePet(pet)}
+                        onClick={() => handleChangeRepresentativePet(pet.id)}
                       >
                         <PetSimpleInfo {...pet} />
                       </MainPetListItem>

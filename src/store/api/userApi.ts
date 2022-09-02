@@ -9,7 +9,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
     getUser: builder.query<IUser, void>({
       query: () => '/users',
       transformResponse: (response: IGenericResponse<IUser>) => response.data,
-      providesTags: ['User'],
+      providesTags: [{ type: 'User' }],
     }),
     login: builder.mutation<IAuthenticatedUser, ILoginForm>({
       query: (credentials) => ({
@@ -43,6 +43,18 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: 'DELETE',
       }),
     }),
+    changeRepresentativePet: builder.mutation<IGenericResponse<void>, number>({
+      query: (petId) => {
+        return {
+          url: '/users/representative-pet',
+          method: 'PATCH',
+          body: {
+            representativePetId: petId,
+          },
+        };
+      },
+      invalidatesTags: () => [{ type: 'User' }, { type: 'Pet' as const, id: 'LIST' }],
+    }),
   }),
 });
 
@@ -52,6 +64,7 @@ export const {
   useLogoutMutation,
   useSignUpMutation,
   useWithdrawalMutation,
+  useChangeRepresentativePetMutation,
 } = userApiSlice;
 
 export const selectUserResult = userApiSlice.endpoints.getUser.select();
