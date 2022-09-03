@@ -25,6 +25,7 @@
     "@mui/material": "^5.9.1",
     "@mui/styled-engine-sc": "^5.8.0",
     "@reduxjs/toolkit": "^1.8.3",
+    "async-mutex": "^0.3.2",
     "autoprefixer": "^10.4.7",
     "axios": "^0.27.2",
     "dayjs": "^1.11.4",

@@ -5,19 +5,19 @@ import FilterAllContent from './FilterAllContent';
 import FilterDetailContent from './FilterDetailContent';
 
 export type FilterModalProps = {
-  setPage: Dispatch<SetStateAction<number>>;
+  setPage?: Dispatch<SetStateAction<number>>;
   close: () => void;
 };
 
-export default function FilterModal({ setPage, close }: FilterModalProps) {
+export default function FilterModal({ close }: FilterModalProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set());
   const [filterType, setFilterType] = useState<'all' | FilterType>('all');
 
   const onClickSave = () => {
     // setSearchParams({...searchParams, })
-    setPage(0);
-    const filters: { [key: string]: boolean } = {};
+    // setPage(0);
+    const filters: { [key: string]: any } = {};
 
     selectedFilters.forEach((value) => {
       filters[value] = true;
