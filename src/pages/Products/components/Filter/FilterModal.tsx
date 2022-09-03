@@ -9,14 +9,14 @@ export type FilterModalProps = {
   close: () => void;
 };
 
-export default function FilterModal({ setPage, close }: FilterModalProps) {
+export default function FilterModal({ close }: FilterModalProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set());
   const [filterType, setFilterType] = useState<'all' | FilterType>('all');
 
   const onClickSave = () => {
     // setSearchParams({...searchParams, })
-    setPage(0);
+    // setPage(0);
     const filters: { [key: string]: boolean } = {};
 
     selectedFilters.forEach((value) => {

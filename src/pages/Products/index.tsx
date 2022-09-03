@@ -14,7 +14,24 @@ import FilterModal from './components/Filter/FilterModal';
 
 type CategoryType = '사료' | '간식' | '영양제';
 const categoryList: CategoryType[] = ['사료', '간식', '영양제'];
+const initFilters = { aafco: false };
+const isAafco = (key) => key === 'aafco';
+const combineList = (nextList: ProductPreviewType[]) => (prevList: ProductPreviewType[]) =>
+  prevList.concat(nextList);
 
+function useSelectFilters() {
+  const [filters, setFilters] = useState<any>(initFilters);
+
+  const handleInitFilters = () => setFilters(initFilters);
+
+  const handleSetFilters = (filterOption) => setFilters(filterOption);
+
+  return {
+    filters,
+    handleSetFilters,
+    handleInitFilters,
+  };
+}
 function useFilterModal() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -31,7 +48,52 @@ function useFilterModal() {
     closeFilterModal,
   };
 }
+function useFetchProductData(filters) {
+  const ref = useRef<HTMLDivElement>();
+  const [page, setPage] = useState<number>(0);
+  const [searchResults, setSearchResults] = useState<ProductPreviewType[]>([]);
+  const [trigger, { isFetching, data, isSuccess }] = useLazyGetProductQuery();
+  const { ref: inViewRef, inView } = useInView({ threshold: 0, rootMargin: '150px 0px 0px 0px' });
 
+  const setInViewRef = useCallback(
+    (node: HTMLDivElement) => {
+      ref.current = node;
+      inViewRef(node);
+    },
+    [inViewRef],
+  );
+
+  const handleInitResult = () => {
+    setPage(0);
+    setSearchResults([]);
+  };
+
+  const handleIncreasePage = () => {
+    trigger({ ...filters, page: page + 1 });
+    setPage((prevState) => prevState + 1);
+  };
+
+  const isLastData = data?.last;
+
+  useEffect(() => {
+    if (isFetching) return;
+    setPage(0);
+    trigger({ ...filters, page: 0 });
+  }, [filters]);
+
+  useEffect(() => {
+    if (isFetching || data?.last || !inView) return;
+    handleIncreasePage();
+  }, [inView, isFetching, data]);
+
+  useEffect(() => {
+    if (!isSuccess) return;
+    const productList = data?.productList ?? [];
+    setSearchResults(combineList(productList));
+  }, [data]);
+
+  return { searchResults, isFetching, isLastData, handleInitResult, setInViewRef };
+}
 const MemoizedProductItem = React.memo(({ product }: { product: ProductPreviewType }) => {
   const navigate = useNavigate();
   return (
@@ -43,86 +105,45 @@ const MemoizedProductItem = React.memo(({ product }: { product: ProductPreviewTy
 MemoizedProductItem.displayName = 'ProductItem';
 
 export default function ProductsPage() {
-  const firstTrigger = useRef(false);
-  const ref = useRef<HTMLDivElement>();
-
   const [category, setCategory] = useState<CategoryType>('사료');
   const [onSearch, setOnSearch] = useState<boolean>(false);
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [page, setPage] = useState<number>(0);
-  const [filters, setFilters] = useState<any>({ aafco: false });
-  const [searchResults, setSearchResults] = useState<ProductPreviewType[]>([]);
 
-  const { ref: inViewRef, inView } = useInView({ threshold: 0, rootMargin: '150px 0px 0px 0px' });
   const [searchParams, setSearchParams] = useSearchParams();
-  const [trigger, { isFetching, data, isSuccess }] = useLazyGetProductQuery();
+  const { filters, handleInitFilters, handleSetFilters } = useSelectFilters();
   const { filterModal, openFilterModal, closeFilterModal } = useFilterModal();
+  const { searchResults, isFetching, isLastData, handleInitResult, setInViewRef } =
+    useFetchProductData(filters);
 
-  const setInViewRef = useCallback(
-    (node: HTMLDivElement) => {
-      ref.current = node;
-      inViewRef(node);
-    },
-    [inViewRef],
-  );
-
-  const isAafco = (key: string) => key === 'aafco';
-  const combineList = (nextList: ProductPreviewType[]) => (prevList: ProductPreviewType[]) =>
-    prevList.concat(nextList);
-
-  const showAllProducts = () => {
+  const handleCloseSearch = () => {
     setOnSearch(false);
-    setSearchParams({ aafco: 'false' });
+    setSearchParams(initFilters);
   };
-
   const onClickSearch = () => setSearchParams({ ...searchParams, name: searchKeyword });
 
   useEffect(() => {
-    setPage(0);
-    firstTrigger.current = true;
-    setSearchResults([]);
+    handleInitResult();
     setSearchKeyword('');
     if (searchParams.toString().length === 0) {
-      setFilters({ aafco: false });
-      trigger({ page: 0 });
+      handleInitFilters();
       return;
     }
 
     const entries = searchParams.entries();
     const newFilters = Array.from(entries).reduce((filterObject, [key, value]) => {
       if (key === 'name') setSearchKeyword(value);
-      const entryValue = isAafco(key) ? value === 'true' : value;
-      return { ...filterObject, [key]: entryValue };
+      const filterValue = isAafco(key) ? value === 'true' : value;
+      return { ...filterObject, [key]: filterValue };
     }, {});
 
-    setFilters(newFilters);
+    handleSetFilters(newFilters);
   }, [searchParams]);
-
-  useEffect(() => {
-    if (!firstTrigger.current) return;
-    if (isFetching) return;
-    setPage(0);
-    trigger({ ...filters, page: 0 });
-  }, [filters]);
-
-  useEffect(() => {
-    if (!firstTrigger.current) return;
-    if (isFetching || data?.last || !inView) return;
-    trigger({ ...filters, page: page + 1 });
-    setPage((prevState) => prevState + 1);
-  }, [inView, isFetching, data]);
-
-  useEffect(() => {
-    if (!isSuccess) return;
-    const productList = data?.productList ?? [];
-    setSearchResults(combineList(productList));
-  }, [data]);
 
   return (
     <Layout footer>
       {onSearch && (
         <ProductSearchModal
-          onClose={() => showAllProducts()}
+          onClose={handleCloseSearch}
           onClickSearch={onClickSearch}
           searchInputValue={searchKeyword}
           setSearchInputValue={setSearchKeyword}
@@ -149,7 +170,7 @@ export default function ProductsPage() {
               {(filters?.aafco || searchKeyword) && (
                 <button
                   className="px-2 rounded-[10px] border border-gray-700"
-                  onClick={() => setSearchParams({ aafco: 'false' })}
+                  onClick={() => setSearchParams(initFilters)}
                 >
                   reset
                 </button>
@@ -181,7 +202,7 @@ export default function ProductsPage() {
           {searchResults?.map((product) => (
             <MemoizedProductItem key={product.productId} product={product} />
           ))}
-          {!isFetching && !data?.last && (
+          {!isFetching && !isLastData && (
             <div ref={setInViewRef} className="w-full h-20 flex items-center justify-center">
               LoadMore
             </div>
@@ -189,7 +210,7 @@ export default function ProductsPage() {
         </div>
         {isFetching && <p>로딩중</p>}
       </div>
-      {filterModal && <FilterModal setPage={setPage} close={closeFilterModal} />}
+      {filterModal && <FilterModal close={closeFilterModal} />}
     </Layout>
   );
 }
