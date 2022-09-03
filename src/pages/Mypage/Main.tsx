@@ -1,8 +1,9 @@
+import { Link } from 'react-router-dom';
+import { IPet } from '@/@type/pet';
 import Layout from '@/components/layout/Layout';
 import { useGetPetsQuery } from '@/store/api/petApi';
 import { useGetUserQuery } from '@/store/api/userApi';
-import useLogout from '@/utils/hooks/useLogout';
-import { Link } from 'react-router-dom';
+import { useConfirm, useLogout, useWithdrawal } from '@/utils/hooks';
 import AddPetBUtton from './components/AddPetButton';
 import PetSimpleInfo from './components/PetSimpleInfo';
 import {
@@ -17,7 +18,23 @@ import {
 export default function MypageMain() {
   const { data: user } = useGetUserQuery();
   const { data: pets, isLoading, isSuccess } = useGetPetsQuery();
-  const onClickLogout = useLogout();
+  const logout = useLogout();
+  const withdrawal = useWithdrawal();
+  const [openPopup] = useConfirm();
+
+  const changeRepresentativePet = async (petInfo: IPet) => {
+    alert('준비중입니다.');
+    console.log(petInfo);
+  };
+  const handleChangeRepresentativePet = async (petInfo: IPet) => {
+    const confirm = await openPopup({
+      title: '프로필 변경',
+      contents: `${petInfo.name}로 프로필을 변경합니다.`,
+    });
+    if (confirm) {
+      changeRepresentativePet(petInfo);
+    }
+  };
   return (
     <Layout header title="마이페이지" footer>
       <MainContentsContainer>
@@ -40,8 +57,12 @@ export default function MypageMain() {
 
                 <MainPetListContainer>
                   {isSuccess &&
-                    pets.map((pet, idx) => (
-                      <MainPetListItem className={idx === 0 ? 'border-primary-main' : ''} key={idx}>
+                    pets?.map((pet, idx) => (
+                      <MainPetListItem
+                        className={idx === 0 ? 'border-primary-main' : ''}
+                        key={idx}
+                        onClick={() => handleChangeRepresentativePet(pet)}
+                      >
                         <PetSimpleInfo {...pet} />
                       </MainPetListItem>
                     ))}
@@ -61,9 +82,14 @@ export default function MypageMain() {
                 </MypageMenuItem>
               ))}
               <MypageMenuItem>
-                <div onClick={onClickLogout}>
+                <button onClick={logout}>
                   <h5>로그아웃</h5>
-                </div>
+                </button>
+              </MypageMenuItem>
+              <MypageMenuItem>
+                <button onClick={withdrawal}>
+                  <h5>회원탈퇴</h5>
+                </button>
               </MypageMenuItem>
             </FlexColumn>
           </>

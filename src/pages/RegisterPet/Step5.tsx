@@ -1,9 +1,8 @@
-import { ActivityLevelType, PetSexType } from '@/@type/pet';
-import FormButton from '@/components/Form/FormButton';
-import FormInput from '@/components/Form/FormInput';
-import { concatClasses } from '@/utils/libs/concatClasses';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { ActivityLevelType, PetSexType } from '@/@type/pet';
+import { FormInput, FormButton } from '@/components/Form';
+import { concatClasses } from '@/utils/libs/concatClasses';
 import {
   PageContainer,
   QuestionText,

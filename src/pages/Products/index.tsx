@@ -189,7 +189,7 @@ export default function ProductsPage() {
                   setSearchParams({
                     ...searchParams,
                     name: searchKeyword,
-                    aafco: checked,
+                    aafco: String(checked),
                   })
                 }
               />

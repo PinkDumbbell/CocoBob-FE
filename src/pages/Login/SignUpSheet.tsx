@@ -1,4 +1,4 @@
-import BottomSheet from '@/components/BottomSheet';
+import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import { useSignUpMutation } from '@/store/api/userApi';
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import SignUpForm from './components/SignUpForm';

@@ -4,11 +4,11 @@ import { concatClasses } from '@/utils/libs/concatClasses';
 import { ReactComponent as LikeIcon } from '@/assets/icon/heart.svg';
 import { ReactComponent as WonIcon } from '@/assets/icon/won.svg';
 import { theme } from '@/styles/theme';
-import { IProduct } from '@/@type/product';
+import { ProductPreviewType } from '@/@type/product';
 import { HorizontalBox, VerticalBox, VerticalCenterBox } from '../index.style';
 
 interface SwiperProductItemProps {
-  product: IProduct;
+  product: ProductPreviewType;
   isActive: boolean;
 }
 
@@ -36,7 +36,7 @@ export default function SwiperProductItem({ product, isActive }: SwiperProductIt
             <VerticalBox className="overflow-hidden py-1" onClick={goProductDetailPage}>
               <p className="text-[11px] leading-[11px]">{brand}</p>
               <p className="text-[12px] leading-[12px] w-full whitespace-pre-line">
-                {`${name.slice(0, 35)}${name.length > 35 ? '...' : ''}`}
+                {`${name.slice(0, 28)}${name.length > 28 ? '...' : ''}`}
               </p>
             </VerticalBox>
             <div className="flex justify-between items-center">

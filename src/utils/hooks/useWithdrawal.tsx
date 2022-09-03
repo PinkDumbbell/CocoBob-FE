@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useLogoutMutation } from '@/store/api/userApi';
+import { useWithdrawalMutation } from '@/store/api/userApi';
 import { useAppDispatch } from '@/store/config';
 import { logout } from '@/store/slices/authSlice';
 import useConfirm from '@/utils/hooks/useConfirm';
 
-export default function useLogout() {
+export default function useWithdrawal() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [logoutMutation, { isSuccess }] = useLogoutMutation();
+  const [withdrawalMutaion, { isSuccess }] = useWithdrawalMutation();
   const [openPopup] = useConfirm();
 
   useEffect(() => {
@@ -18,14 +18,14 @@ export default function useLogout() {
     }
   }, [isSuccess]);
 
-  const onClickLogout = async () => {
+  const withdrawal = async () => {
     const confirm = await openPopup({
-      title: '로그아웃',
-      contents: '로그아웃을 하시겠습니까?',
+      title: '회원탈퇴',
+      contents: '회원탈퇴를 하시면 모든 정보가 삭제됩니다.',
     });
     if (confirm) {
-      logoutMutation();
+      withdrawalMutaion();
     }
   };
-  return onClickLogout;
+  return withdrawal;
 }
