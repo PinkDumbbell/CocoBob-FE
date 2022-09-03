@@ -56,7 +56,7 @@ function useFetchProductData(filters: FilterType) {
   const ref = useRef<HTMLDivElement>();
   const [page, setPage] = useState<number>(0);
   const [searchResults, setSearchResults] = useState<ProductPreviewType[]>([]);
-  const [trigger, { isFetching, data, isSuccess }] = useLazyGetProductQuery();
+  const [trigger, { isFetching, data, isSuccess, isError }] = useLazyGetProductQuery();
   const { ref: inViewRef, inView } = useInView({ threshold: 0, rootMargin: '150px 0px 0px 0px' });
 
   const setInViewRef = useCallback(
@@ -96,7 +96,7 @@ function useFetchProductData(filters: FilterType) {
     setSearchResults(combineList(productList));
   }, [data]);
 
-  return { searchResults, isFetching, isLastData, handleInitResult, setInViewRef };
+  return { searchResults, isFetching, isError, isLastData, handleInitResult, setInViewRef };
 }
 const MemoizedProductItem = React.memo(({ product }: { product: ProductPreviewType }) => {
   const navigate = useNavigate();
@@ -109,6 +109,7 @@ const MemoizedProductItem = React.memo(({ product }: { product: ProductPreviewTy
 MemoizedProductItem.displayName = 'ProductItem';
 
 export default function ProductsPage() {
+  const navigate = useNavigate();
   const [category, setCategory] = useState<CategoryType>('사료');
   const [onSearch, setOnSearch] = useState<boolean>(false);
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -116,7 +117,7 @@ export default function ProductsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { filters, handleInitFilters, handleSetFilters } = useSelectFilters();
   const { filterModal, openFilterModal, closeFilterModal } = useFilterModal();
-  const { searchResults, isFetching, isLastData, handleInitResult, setInViewRef } =
+  const { searchResults, isFetching, isError, isLastData, handleInitResult, setInViewRef } =
     useFetchProductData(filters);
 
   const handleCloseSearch = () => {
@@ -213,6 +214,21 @@ export default function ProductsPage() {
           )}
         </div>
         {isFetching && <p>로딩중</p>}
+        {isError && (
+          <div className="flex flex-col justify-center items-center gap-5">
+            <div className="flex flex-col items-center justify-center gap-2">
+              <h3>에러 발생</h3>
+              <p>잠시 후 다시 시도해주세요.</p>
+            </div>
+            <button
+              type="button"
+              className="bg-primary-bright text-white rounded-[10px] px-4 py-2"
+              onClick={() => navigate(0)}
+            >
+              새로고침
+            </button>
+          </div>
+        )}
       </div>
       {filterModal && <FilterModal close={closeFilterModal} />}
     </Layout>
