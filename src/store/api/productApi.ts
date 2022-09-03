@@ -29,7 +29,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
     }),
     getRecommendProduct: builder.query<
       ProductListType,
-      { petId: number; type: 'aged' | 'pregnancy' }
+      { petId?: number; type: 'aged' | 'pregnancy' }
     >({
       query: ({ petId, type }) => `/products/recommendation/${type}?petId=${petId}`,
       transformResponse: (response: IGenericResponse<ProductListType>) => response.data,

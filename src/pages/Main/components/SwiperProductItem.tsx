@@ -1,9 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import ContentsContainer from '@/components/ContentsContainer';
 import { concatClasses } from '@/utils/libs/concatClasses';
-import { ReactComponent as LikeIcon } from '@/assets/icon/heart.svg';
 import { ReactComponent as WonIcon } from '@/assets/icon/won.svg';
-import { theme } from '@/styles/theme';
 import { ProductPreviewType } from '@/@type/product';
 import { HorizontalBox, VerticalBox, VerticalCenterBox } from '../index.style';
 
@@ -14,9 +12,9 @@ interface SwiperProductItemProps {
 
 export default function SwiperProductItem({ product, isActive }: SwiperProductItemProps) {
   const navigate = useNavigate();
-  const { name, brand, productId, thumbnail, price, userLike } = product;
-  const onClickLike = () => console.log(productId);
+  const { name, brand, productId, thumbnail, price } = product;
   const goProductDetailPage = () => navigate(`/products/${productId}`);
+
   return (
     <div
       className={concatClasses(
@@ -26,9 +24,6 @@ export default function SwiperProductItem({ product, isActive }: SwiperProductIt
     >
       <ContentsContainer>
         <VerticalBox className="flex-1 justify-between relative overflow-hidden text-ellipsis whitespace-nowrap">
-          <button type="button" onClick={onClickLike} className="absolute right-0 top-0">
-            <LikeIcon fill={userLike ? theme.colors.primary.main : '#eeeeee'} />
-          </button>
           <VerticalCenterBox className="flex-2 bg-white rounded-md" onClick={goProductDetailPage}>
             <img src={thumbnail} alt={name} />
           </VerticalCenterBox>
