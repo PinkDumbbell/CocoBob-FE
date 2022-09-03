@@ -53,8 +53,10 @@ export default function Main() {
   const navigate = useNavigate();
   const { data: pet, isError: currentPetError } = useCurrentPet();
   const { data } = useGetUserQuery();
-  const [getRecommends, { data: recommend, isSuccess, isLoading, isError: recommendError }] =
-    useLazyGetRecommendProductQuery();
+  const [
+    getRecommendProducts,
+    { data: recommendedProducts, isSuccess, isLoading, isError: recommendError },
+  ] = useLazyGetRecommendProductQuery();
   const onClickLogout = useLogout();
   const goRegisterPetPage = () => navigate('/register');
   const goProductsRecommendPage = () => navigate('/products/recommend');
@@ -75,7 +77,7 @@ export default function Main() {
 
   useEffect(() => {
     if (!pet?.id) return;
-    getRecommends({ petId: pet.id, type: 'aged' });
+    getRecommendProducts({ petId: pet.id, type: 'aged' });
   }, [pet]);
 
   return (
@@ -132,7 +134,7 @@ export default function Main() {
             onActiveIndexChange={(swiper) => setRecommendActiveIndex(swiper.activeIndex)}
           >
             {isSuccess &&
-              recommend?.productList.slice(10).map((product, idx) => (
+              recommendedProducts?.productList.slice(10).map((product, idx) => (
                 <SwiperSlide key={`main-${product.productId}`}>
                   <SwiperProductItem
                     product={product}
