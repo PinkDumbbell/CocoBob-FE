@@ -13,18 +13,22 @@ import CategoryTabButton from './components/CategoryTabButton';
 import FilterModal from './components/Filter/FilterModal';
 
 type CategoryType = '사료' | '간식' | '영양제';
+type FilterType = {
+  aafco?: boolean;
+  [key: string]: any;
+};
 const categoryList: CategoryType[] = ['사료', '간식', '영양제'];
-const initFilters = { aafco: false };
-const isAafco = (key) => key === 'aafco';
+const initFilters: FilterType = { aafco: false };
+const isAafco = (key: string) => key === 'aafco';
 const combineList = (nextList: ProductPreviewType[]) => (prevList: ProductPreviewType[]) =>
   prevList.concat(nextList);
 
 function useSelectFilters() {
-  const [filters, setFilters] = useState<any>(initFilters);
+  const [filters, setFilters] = useState<FilterType>(initFilters);
 
   const handleInitFilters = () => setFilters(initFilters);
 
-  const handleSetFilters = (filterOption) => setFilters(filterOption);
+  const handleSetFilters = (filterOption: FilterType) => setFilters(filterOption);
 
   return {
     filters,
@@ -48,7 +52,7 @@ function useFilterModal() {
     closeFilterModal,
   };
 }
-function useFetchProductData(filters) {
+function useFetchProductData(filters: FilterType) {
   const ref = useRef<HTMLDivElement>();
   const [page, setPage] = useState<number>(0);
   const [searchResults, setSearchResults] = useState<ProductPreviewType[]>([]);

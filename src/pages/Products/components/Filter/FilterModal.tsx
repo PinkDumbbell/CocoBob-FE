@@ -5,7 +5,7 @@ import FilterAllContent from './FilterAllContent';
 import FilterDetailContent from './FilterDetailContent';
 
 export type FilterModalProps = {
-  setPage: Dispatch<SetStateAction<number>>;
+  setPage?: Dispatch<SetStateAction<number>>;
   close: () => void;
 };
 
@@ -17,7 +17,7 @@ export default function FilterModal({ close }: FilterModalProps) {
   const onClickSave = () => {
     // setSearchParams({...searchParams, })
     // setPage(0);
-    const filters: { [key: string]: boolean } = {};
+    const filters: { [key: string]: any } = {};
 
     selectedFilters.forEach((value) => {
       filters[value] = true;
