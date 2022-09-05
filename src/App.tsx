@@ -1,13 +1,15 @@
 import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
+import PrivateRoutes from '@/routes/PrivateRoutes';
 import LoginPage from '@/pages/Login';
+import GoogleRedirectHandler from '@/pages/Redirect/google';
+import KakaoRedirectHandler from '@/pages/Redirect/kakao';
+import AppleRedirectHandler from '@/pages/Redirect/apple';
+
 import { ConfirmModal, ConfirmPortal } from '@/components/Confirm';
-import PrivateRoutes from './routes/PrivateRoutes';
-import PageTransition from './components/transition/PageTransition';
-import ToastMessage from './components/Toast/ToastMessage';
-import GoogleRedirectHandler from './pages/Redirect/google';
-import KakaoRedirectHandler from './pages/Redirect/kakao';
-import AppleRedirectHandler from './pages/Redirect/apple';
+import { SelectModalPortal, SelectModal } from '@/components/SelectModal';
+import PageTransition from '@/components/transition/PageTransition';
+import ToastMessage from '@/components/Toast/ToastMessage';
 
 function App() {
   const location = useLocation();
@@ -30,6 +32,9 @@ function App() {
       <ConfirmPortal>
         <ConfirmModal />
       </ConfirmPortal>
+      <SelectModalPortal>
+        <SelectModal />
+      </SelectModalPortal>
       <PageTransition transitionKey={location.pathname}>
         <Routes key={location.pathname} location={location}>
           <Route element={<PrivateRoutes />} path="/*" />
