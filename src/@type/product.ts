@@ -102,3 +102,7 @@ export type ProductType = ProductPreviewTypeWithoutThumbnail &
     productDetailImage: string;
     productImage: string;
   };
+
+export interface IRelatedProduct {
+  names: string[];
+}

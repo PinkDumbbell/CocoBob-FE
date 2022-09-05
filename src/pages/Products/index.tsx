@@ -75,8 +75,8 @@ export default function ProductsPage() {
     setSearchParams({ aafco: 'false' });
   };
 
-  const onClickSearch = () => {
-    setSearchParams({ ...searchParams, name: searchKeyword });
+  const onClickSearch = (keyword?: string) => {
+    setSearchParams({ ...searchParams, name: keyword ?? searchKeyword });
     setOnSearch(false);
   };
 
