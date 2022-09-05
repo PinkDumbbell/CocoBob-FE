@@ -22,6 +22,8 @@ import DailyBodyWeight from '@/pages/Daily/BodyWeight';
 import WalkRecordList from '@/pages/Daily/Walk/WalkRecordList';
 import WalkRecordMap from '@/pages/Daily/Walk/WalkRecordMap';
 import RecommendProducts from '@/pages/Products/Recoomend';
+import NoteAddPage from '@/pages/Daily/Note/NoteAddPage';
+import NotePage from '@/pages/Daily/Note/NotePage';
 
 function PrivateRoute() {
   const { isLoggedIn } = useUser();
@@ -54,6 +56,8 @@ function PrivateRoutes() {
           </Route>
           <Route path="feeds" element={<DailyFeeds />} />
           <Route path="bodyWeight" element={<DailyBodyWeight />} />
+          <Route path="note" element={<NotePage />} />
+          <Route path="note/new" element={<NoteAddPage />} />
         </Route>
       </Route>
       <Route element={<NotFound />} path="*" />

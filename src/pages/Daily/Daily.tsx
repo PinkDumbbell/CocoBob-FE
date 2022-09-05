@@ -40,15 +40,35 @@ export default function DailyMain() {
   const openModal = (content: 'note' | 'walk' | 'feed' | 'bodyWeight') => setModalOpen(content);
   const closeModal = () => setModalOpen('');
 
+  const navigateToWalkPage = () => navigate('/daily/walk');
+
   const handleRecordWalk = async () => {
     const selectedMenu = await openSelectMenu(['산책하기', '간편기록']);
     if (!selectedMenu) return;
 
     if (selectedMenu === '산책하기') {
-      navigate('/daily/walk');
-    }
-    if (selectedMenu === '간편기록') {
+      navigateToWalkPage();
+    } else if (selectedMenu === '간편기록') {
       openModal('walk');
+    }
+  };
+  const handleRecordHealth = async () => {
+    const selectedMenu = await openSelectMenu([
+      '오늘의 급여',
+      '오늘의 몸무게',
+      '오늘의 일기 작성',
+      '오늘의 일기 확인',
+    ]);
+    if (!selectedMenu) return;
+
+    if (selectedMenu === '오늘의 급여') {
+      openModal('feed');
+    } else if (selectedMenu === '오늘의 몸무게') {
+      openModal('bodyWeight');
+    } else if (selectedMenu === '오늘의 일기 작성') {
+      navigate('/daily/note/new', { state: { date: currentDate } });
+    } else if (selectedMenu === '오늘의 일기 확인') {
+      navigate(`/daily/note?date=${dayjs(currentDate).format('YYYY.MM.DD')}`);
     }
   };
   useEffect(() => {
@@ -117,7 +137,7 @@ export default function DailyMain() {
         <div className="flex w-full items-center gap-5">
           <button
             type="button"
-            className="flex-1 rounded-[10px] bg-gray-200 h-20 p-4 shadow-md flex gap-4 items-center"
+            className="flex-1 rounded-[10px] bg-[#fbfdff] h-20 p-4 shadow-md flex gap-4 items-center"
             onClick={handleRecordWalk}
           >
             <div className="bg-primary-dark w-12 h-12 flex items-center justify-center rounded-[10px]">
@@ -127,8 +147,8 @@ export default function DailyMain() {
           </button>
           <button
             type="button"
-            className="flex-1 rounded-[10px] bg-gray-200 h-20 p-4 shadow-md flex gap-4 items-center"
-            onClick={() => setModalOpen('note')}
+            className="flex-1 rounded-[10px] bg-[#fbfdff] h-20 p-4 shadow-md flex gap-4 items-center"
+            onClick={handleRecordHealth}
           >
             <div className="bg-primary-dark w-12 h-12 flex items-center justify-center rounded-[10px]">
               <PencilIcon />

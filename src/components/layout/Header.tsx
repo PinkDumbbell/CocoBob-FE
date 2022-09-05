@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import useCurrentPet from '@/utils/hooks/useCurrentPet';
@@ -26,6 +26,7 @@ export interface HeaderProps {
   title?: string;
   canSearch?: boolean;
   hideTitle?: boolean;
+  customRightChild?: ReactNode;
 }
 const LeftChild = React.memo(({ canGoBack, onClickGoBack, menu }: HeaderProps) => {
   const navigator = useNavigate();
@@ -77,7 +78,15 @@ const RightChild = React.memo(({ canSearch }: { canSearch?: boolean }) => {
 });
 RightChild.displayName = 'HeaderRightChild';
 
-function Header({ menu, canGoBack, onClickGoBack, title, hideTitle, canSearch }: HeaderProps) {
+function Header({
+  menu,
+  canGoBack,
+  onClickGoBack,
+  title,
+  hideTitle,
+  canSearch,
+  customRightChild,
+}: HeaderProps) {
   const location = useLocation();
   const { data: pet } = useCurrentPet(location.pathname === '/');
 
@@ -96,7 +105,11 @@ function Header({ menu, canGoBack, onClickGoBack, title, hideTitle, canSearch }:
             <img src={pet?.thumbnailPath ?? DefaultProfile} alt="큰 프로필 사진" />
           )}
         </TitleWrapper>
-        <RightChild canSearch={canSearch} />
+        {customRightChild ? (
+          <RightMenuWrapper>{customRightChild}</RightMenuWrapper>
+        ) : (
+          <RightChild canSearch={canSearch} />
+        )}
       </HeaderContents>
     </HeaderWrapper>
   );
