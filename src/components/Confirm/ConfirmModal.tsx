@@ -26,9 +26,9 @@ export default function ConfirmModal() {
   return (
     <Background>
       <ContentsWrapper>
-        <div className="space-y-2">
-          <div>{title}</div>
-          <div className="overflow-y-auto">{contents}</div>
+        <div className="flex flex-col gap-2 pb-3">
+          <div className="text-center py-2">{title}</div>
+          <div className="text-center overflow-y-auto">{contents}</div>
         </div>
         <div className="flex items-center justify-evenly">
           <RejectButton type="button" onClick={handleReject}>
