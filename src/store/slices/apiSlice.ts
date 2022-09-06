@@ -21,7 +21,7 @@ interface RefreshedTokenResult {
 
 const mutex = new Mutex();
 
-const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/v1`;
+const baseUrl = `${import.meta.env.VITE_API_BASE_URL}`;
 
 const baseQuery = fetchBaseQuery({
   baseUrl,

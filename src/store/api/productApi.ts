@@ -7,7 +7,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
     getProduct: builder.query<ProductListType, SearchFilterType | void>({
       query: (arg) => {
         return {
-          url: '/products/search',
+          url: '/v2/products/search',
           params: { ...arg, size: arg?.size ?? 20 },
         };
       },
@@ -23,7 +23,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
           : [{ type: 'Product' as const, id: 'LIST' }],
     }),
     getProductDetail: builder.query<ProductType, number>({
-      query: (id) => `/products/${id}`,
+      query: (id) => `/v1/products/${id}`,
       transformResponse: (response: IGenericResponse<ProductType>) => response.data,
       providesTags: (result) => [{ type: 'ProductDetail', id: result?.productId }],
     }),
@@ -46,7 +46,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
     likeProduct: builder.mutation<IGenericResponse<void>, number>({
       query: (productId) => {
         return {
-          url: '/likes',
+          url: '/v1/likes',
           method: 'POST',
           body: {
             productId,
