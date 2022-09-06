@@ -25,7 +25,7 @@ export type DailyListResponseType = {
 export const dailyApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getDaily: builder.query<DailyItemType, number>({
-      query: (dailyId) => `/dailys/${dailyId}`,
+      query: (dailyId) => `/v1/dailys/${dailyId}`,
       transformResponse: (response: IGenericResponse<DailyItemResponseType>) => ({
         dailyId: response.data.dailyId,
         data: JSON.parse(response.data.data),
@@ -35,7 +35,7 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
     }),
     getDailyList: builder.query<DailyListResponseType, { petId: number; date: string }>({
       query: ({ petId, date }: { petId: number; date: string }) =>
-        `/dailys/pets/${petId}?date=${date}`,
+        `/v1/dailys/pets/${petId}?date=${date}`,
       transformResponse: (response: IGenericResponse<DailyListResponseType>) => response.data,
       providesTags: (result, error, args) => [{ type: 'Daily', id: args.date }],
     }),
@@ -43,7 +43,7 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
       query: ({ petId, body }) => {
         return {
           method: 'POST',
-          url: `/dailys/pets/${petId}`,
+          url: `/v1/dailys/pets/${petId}`,
           body,
         };
       },
@@ -56,7 +56,7 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
       query: ({ dailyId, body }) => {
         return {
           method: 'PUT',
-          url: `/dailys/${dailyId}`,
+          url: `/v1/dailys/${dailyId}`,
           body,
         };
       },

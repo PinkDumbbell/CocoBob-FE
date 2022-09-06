@@ -67,6 +67,7 @@ export type ProductPreviewType = {
   description: string;
   growing: boolean;
   isAAFCOSatisfied: boolean;
+  isLiked: boolean;
   likes: number;
   name: string;
   obesity: boolean;
@@ -74,7 +75,6 @@ export type ProductPreviewType = {
   price: number;
   productId: number;
   thumbnail: string;
-  userLike: boolean;
 };
 
 export type ProductListType = {
@@ -97,8 +97,6 @@ type ProductPreviewTypeWithoutThumbnail = Exclude<ProductPreviewType, 'thumbnail
 export type ProductType = ProductPreviewTypeWithoutThumbnail &
   NutritionType &
   IngredientType & {
-    likeCount: number;
-    petProperties: IPetProperties[];
     productDetailImage: string;
     productImage: string;
   };
