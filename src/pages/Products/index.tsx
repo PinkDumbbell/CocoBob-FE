@@ -126,7 +126,7 @@ export default function ProductsPage() {
   };
 
   const onClickSearch = (keyword?: string) => {
-    setSearchParams({ ...searchParams, name: keyword ?? searchKeyword });
+    setSearchParams({ ...searchParams, keyword: keyword ?? searchKeyword });
     setOnSearch(false);
   };
 

@@ -7,7 +7,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
     getProduct: builder.query<ProductListType, SearchFilterType | void>({
       query: (arg) => {
         return {
-          url: '/v1/products/search',
+          url: '/v2/products/search',
           params: { ...arg, size: arg?.size ?? 20 },
         };
       },

@@ -37,8 +37,8 @@ type NullableExtraFilterType = {
   brand?: string;
   code?: string;
   description?: string;
+  keyword?: string;
   growing?: boolean | null;
-  name?: string;
   obesity?: boolean | null;
   page?: number;
   pregnant?: boolean | null;
