@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import FormButton from '@/components/Form/FormButton';
-import FormInput from '@/components/Form/FormInput';
+import { FormInput, FormButton } from '@/components/Form';
 
 import useToastMessage from '@/utils/hooks/useToastMessage';
 import { checkEmailDuplicated } from '../api';

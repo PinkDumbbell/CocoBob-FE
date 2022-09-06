@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/store/config';
 import { selectIsLoggedIn } from '@/store/slices/authSlice';
 import { useLoginMutation } from '@/store/api/userApi';
 import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
-import BottomSheet from '@/components/BottomSheet';
+import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import useToastMessage from '@/utils/hooks/useToastMessage';
 import EmailLoginForm from './components/EmailLoginForm';
 import JoinLink from './components/JoinLink';

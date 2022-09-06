@@ -4,7 +4,7 @@ import { useGetBreedsQuery } from '@/store/api/petApi';
 import { Dispatch, SetStateAction } from 'react';
 import { concatClasses } from '@/utils/libs/concatClasses';
 import { InputStyle } from '../Form/FormInput';
-import BottomSheet from '.';
+import BottomSheet from './BottomSheet';
 import Button from '../Button';
 import { BottomSheetContentWrapper, BreedListContainer } from './BottomSheet.style';
 

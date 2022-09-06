@@ -66,7 +66,7 @@ export default function RecommendProducts() {
       <div className="py-2 space-y-4">
         <VerticalBox>
           <div className="px-5 flex items-end justify-between px-2">
-            <SectionTitle>{pet?.name}의 나이에 적합한 사료에요!</SectionTitle>
+            <SectionTitle>{pet?.name ?? 'OO'}의 나이에 적합한 사료에요!</SectionTitle>
           </div>
           <div className="w-full flex items-center">
             <Swiper
@@ -87,8 +87,8 @@ export default function RecommendProducts() {
                   </SwiperSlide>
                 ))
               ) : (
-                <div className="text-center w-full text-2xl font-medium">
-                  상품을 불러오는데 문제가 발생하였습니다.
+                <div className="text-center w-full text-lg font-medium">
+                  상품을 불러오지 못했습니다.
                 </div>
               )}
             </Swiper>
@@ -117,8 +117,8 @@ export default function RecommendProducts() {
                   </SwiperSlide>
                 ))
               ) : (
-                <div className="text-center w-full text-2xl font-medium">
-                  상품을 불러오는데 문제가 발생하였습니다.
+                <div className="text-center w-full text-lg font-medium">
+                  상품을 불러오지 못했습니다.
                 </div>
               )}
             </Swiper>

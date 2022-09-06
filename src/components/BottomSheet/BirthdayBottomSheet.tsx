@@ -1,6 +1,6 @@
 import { getDateDiff } from '@/utils/libs/date';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
-import BottomSheet from '.';
+import BottomSheet from './BottomSheet';
 import Button from '../Button';
 import {
   BottomSheetContentWrapper,
