@@ -65,7 +65,7 @@ const baseQueryWithReAuth = async (
       const release = await mutex.acquire();
 
       try {
-        const { data, error } = await refreshQuery('/users/token', api, extraOptions);
+        const { data, error } = await refreshQuery('/v1/users/token', api, extraOptions);
         if (
           !data ||
           error?.status === 401 ||

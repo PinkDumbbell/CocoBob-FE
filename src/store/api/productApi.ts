@@ -7,7 +7,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
     getProduct: builder.query<ProductListType, SearchFilterType | void>({
       query: (arg) => {
         return {
-          url: '/v2/products/search',
+          url: '/v1/products/search',
           params: { ...arg, size: arg?.size ?? 20 },
         };
       },
@@ -31,7 +31,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
       ProductListType,
       { petId?: number; type: 'aged' | 'pregnancy' }
     >({
-      query: ({ petId, type }) => `/products/recommendation/${type}?petId=${petId}`,
+      query: ({ petId, type }) => `/v1/products/recommendation/${type}?petId=${petId}`,
       transformResponse: (response: IGenericResponse<ProductListType>) => response.data,
       providesTags: (result) =>
         result?.productList
@@ -78,7 +78,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
       ],
     }),
     getRelatedWord: builder.query<IRelatedProduct, string>({
-      query: (keyword) => `/products/keyword?keyword=${keyword}`,
+      query: (keyword) => `/v1/products/keyword?keyword=${keyword}`,
       transformResponse: (response: IGenericResponse<IRelatedProduct>) => response.data,
     }),
   }),
