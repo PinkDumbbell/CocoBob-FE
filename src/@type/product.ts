@@ -74,7 +74,7 @@ export type ProductPreviewType = {
   price: number;
   productId: number;
   thumbnail: string;
-  userLike: boolean;
+  isLiked: boolean;
 };
 
 export type ProductListType = {
@@ -94,11 +94,4 @@ export interface IPetProperties {
 
 type ProductPreviewTypeWithoutThumbnail = Exclude<ProductPreviewType, 'thumbnail'>;
 
-export type ProductType = ProductPreviewTypeWithoutThumbnail &
-  NutritionType &
-  IngredientType & {
-    likeCount: number;
-    petProperties: IPetProperties[];
-    productDetailImage: string;
-    productImage: string;
-  };
+export type ProductType = ProductPreviewTypeWithoutThumbnail & NutritionType & IngredientType;
