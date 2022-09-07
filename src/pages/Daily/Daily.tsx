@@ -40,7 +40,8 @@ export default function DailyMain() {
   const openModal = (content: 'note' | 'walk' | 'feed' | 'bodyWeight') => setModalOpen(content);
   const closeModal = () => setModalOpen('');
 
-  const navigateToWalkPage = () => navigate('/daily/walk');
+  const navigateToWalkPage = () =>
+    navigate(`/daily/walk/record?date=${dayjs(currentDate).format('YYYY-MM-DD')}`);
 
   const handleRecordWalk = async () => {
     const selectedMenu = await openSelectMenu(['산책하기', '간편기록']);
@@ -94,7 +95,6 @@ export default function DailyMain() {
   useEffect(() => {
     if (!currentPetId) return;
     if (listDate !== activeStartDate) {
-      console.log('fetch!!');
       setListDate(activeStartDate);
       getDailyList({ petId: currentPetId, date: dayjs(activeStartDate).format('YYYY-MM') });
     }

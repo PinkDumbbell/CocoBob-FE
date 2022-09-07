@@ -1,7 +1,9 @@
 import useBottomSheet from './useBottomSheet';
 import useConfirm from './useConfirm';
+import useCounter from './useCounter';
 import useCurrentPet from './useCurrentPet';
 import useCurrentPosition from './useCurrentPosition';
+import useKakaoMap from './useKakaoMap';
 import useLogout from './useLogout';
 import usePlatform from './usePlatform';
 import useSearchBreed from './useSearchBreed';
@@ -14,8 +16,10 @@ import useWithdrawal from './useWithdrawal';
 export {
   useBottomSheet,
   useConfirm,
+  useCounter,
   useCurrentPet,
   useCurrentPosition,
+  useKakaoMap,
   useLogout,
   usePlatform,
   useSearchBreed,

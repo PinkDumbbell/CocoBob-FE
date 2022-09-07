@@ -6,7 +6,7 @@ import { ConfirmContext } from '@/components/Confirm/ConfirmPortal';
 
 type ConfirmOpenProps = {
   title: string | ReactNode;
-  contents: string | ReactNode;
+  contents?: string | ReactNode;
 };
 
 export default function useConfirm() {
