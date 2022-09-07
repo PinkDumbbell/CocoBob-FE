@@ -18,11 +18,11 @@ export default function SearchModal({
           onClickSearch={onClickSearch}
           goBack={onClose}
         />
-        {searchInputValue === '' && (
+        {
           <div className="w-full h-screen">
             <RecommandContent searchInputValue={searchInputValue} onClickSearch={onClickSearch} />
           </div>
-        )}
+        }
       </div>
     </Portal>
   );

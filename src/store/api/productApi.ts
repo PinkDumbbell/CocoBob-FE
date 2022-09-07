@@ -1,4 +1,4 @@
-import { ProductType, ProductListType, SearchFilterType } from '@/@type/product';
+import { ProductType, ProductListType, SearchFilterType, IRelatedProduct } from '@/@type/product';
 import { apiSlice } from '../slices/apiSlice';
 import { IGenericResponse } from './types';
 
@@ -77,6 +77,10 @@ export const productApiSlice = apiSlice.injectEndpoints({
         },
       ],
     }),
+    getRelatedWord: builder.query<IRelatedProduct, string>({
+      query: (keyword) => `/v1/products/keyword?keyword=${keyword}`,
+      transformResponse: (response: IGenericResponse<IRelatedProduct>) => response.data,
+    }),
   }),
 });
 
@@ -86,5 +90,6 @@ export const {
   useGetProductDetailQuery,
   useGetRecommendProductQuery,
   useLazyGetRecommendProductQuery,
+  useGetRelatedWordQuery,
   useLikeProductMutation,
 } = productApiSlice;
