@@ -137,23 +137,23 @@ export default function DailyMain() {
         <div className="flex w-full items-center gap-5">
           <button
             type="button"
-            className="flex-1 rounded-[10px] bg-[#fbfdff] h-20 p-4 shadow-md flex gap-4 items-center"
+            className="flex-1 rounded-[10px] bg-[#fbfdff] h-16 p-2 shadow-md flex gap-4 items-center"
             onClick={handleRecordWalk}
           >
             <div className="bg-primary-dark w-12 h-12 flex items-center justify-center rounded-[10px]">
               <DogIcon />
             </div>
-            <span className="text-black text-xl">산책기록</span>
+            <span className="text-black text-md">산책기록</span>
           </button>
           <button
             type="button"
-            className="flex-1 rounded-[10px] bg-[#fbfdff] h-20 p-4 shadow-md flex gap-4 items-center"
+            className="flex-1 rounded-[10px] bg-[#fbfdff] h-16 p-2 shadow-md flex gap-4 items-center"
             onClick={handleRecordHealth}
           >
             <div className="bg-primary-dark w-12 h-12 flex items-center justify-center rounded-[10px]">
               <PencilIcon />
             </div>
-            <span className="text-black text-xl">건강기록</span>
+            <span className="text-black text-md">건강기록</span>
           </button>
         </div>
       </div>
