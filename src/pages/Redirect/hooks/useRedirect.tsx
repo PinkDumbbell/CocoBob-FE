@@ -23,7 +23,7 @@ export default function useRedirect(
       const {
         data: { data },
       } = await axios.get<IGenericResponse<IAuthenticatedUser>>(
-        `/users/login/oauth/${socialLoginType}?code=${code}${user ? `&user=${user}` : ''}`,
+        `/v1/users/login/oauth/${socialLoginType}?code=${code}${user ? `&user=${user}` : ''}`,
       );
       if (data.userId) {
         dispatch(setCredentials(data));

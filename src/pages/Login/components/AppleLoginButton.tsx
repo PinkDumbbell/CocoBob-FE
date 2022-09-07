@@ -54,7 +54,7 @@ const AppleLoginButton = () => {
     const payload = getCredentialPayload(authorization.code, user);
     try {
       const credentialResponse = await axios.post<IGenericResponse<IAuthenticatedUser>>(
-        `/users/login/oauth/apple`,
+        `/v1/users/login/oauth/apple`,
         payload,
       );
       if (!credentialResponse) {
