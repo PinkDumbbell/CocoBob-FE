@@ -124,7 +124,11 @@ export default function ProductsPage() {
     setOnSearch(false);
     setSearchParams(initFilters);
   };
-  const onClickSearch = () => setSearchParams({ ...searchParams, name: searchKeyword });
+
+  const onClickSearch = (keyword?: string) => {
+    setSearchParams({ ...searchParams, keyword: keyword ?? searchKeyword });
+    setOnSearch(false);
+  };
 
   useEffect(() => {
     handleInitResult();

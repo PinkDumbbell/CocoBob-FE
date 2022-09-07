@@ -1,12 +1,36 @@
 import Button from '@/components/Button';
 import Layout from '@/components/layout/Layout';
-import { useGetProductDetailQuery } from '@/store/api/productApi';
+import { useGetProductDetailQuery, useLikeProductMutation } from '@/store/api/productApi';
+import { useToastMessage } from '@/utils/hooks';
+import { useEffect } from 'react';
+import { BsHeartFill, BsHeart } from 'react-icons/bs';
 import { Navigate, useParams } from 'react-router-dom';
 import Nutrient from './components/Nutrient';
 
+function useLikeProduct() {
+  const openToast = useToastMessage();
+  const [likeProduct, response] = useLikeProductMutation();
+  const { data, isError, isSuccess } = response;
+
+  useEffect(() => {
+    if (!isSuccess) return;
+    openToast('성공적으로 정보를 수정하였습니다.', 'success');
+  }, [data, isSuccess]);
+
+  useEffect(() => {
+    if (!isError) return;
+    openToast('오류가 발생하였습니다.', 'error');
+  }, [isError]);
+
+  return {
+    ...response,
+    likeProduct,
+  };
+}
 export default function ProductDetailPage() {
   const { id } = useParams();
   const { data: product, error } = useGetProductDetailQuery(parseInt(id ?? '1', 10));
+  const { likeProduct } = useLikeProduct();
   if (error) return <Navigate to="/404" replace />;
   const nutrientList = [
     { name: '단백질', key: 'amountOfProteinPerMcal' },
@@ -18,6 +42,14 @@ export default function ProductDetailPage() {
   ];
   return (
     <Layout footer header title="사료 정보" canGoBack>
+      <button
+        onClick={() => {
+          if (id) likeProduct(parseInt(id, 10));
+        }}
+        className="absolute w-5 h-5 z-[1001] top-4 right-5"
+      >
+        {product?.isLiked ? <BsHeartFill className="w-5 h-5" /> : <BsHeart className="w-5 h-5" />}
+      </button>
       <div className="w-full h-full absolute bg-slate-500 overflow-scroll">
         <div className="w-full h-[450px] bg-white rounded-t-xl mt-32 flex flex-col items-center">
           <div className="w-40 h-40 mt-[-5rem] mb-5">

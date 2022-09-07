@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { Mutex } from 'async-mutex';
 import { RootState } from '@/store/config';
 import { ThunkDispatch } from '@reduxjs/toolkit';
