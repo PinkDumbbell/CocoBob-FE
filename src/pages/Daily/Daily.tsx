@@ -90,6 +90,8 @@ export default function DailyMain() {
         getDailyList({ petId: currentPetId, date: todayDateString });
       }
       setCurrentDate(date);
+    } else {
+      setCurrentDate(date);
     }
   }, [searchParams]);
   useEffect(() => {
