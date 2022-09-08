@@ -6,7 +6,7 @@ export default function SocialLoginForm() {
   const platform = usePlatform();
 
   return (
-    <FormWrapper>
+    <FormWrapper className="space-y-[20px]">
       <SocialLoginButton>
         <a href={`${import.meta.env.VITE_API_BASE_URL}/v1/users/google`}>Google로 로그인</a>
       </SocialLoginButton>
