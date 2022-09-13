@@ -1,29 +1,39 @@
-import FormInput from '@/components/Form/FormInput';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import FormInput from '@/components/Form/FormInput';
 import DailyModal, { useDailyMutation, DailyModalProps } from './DailyModal';
 
+type WalkRecordType = {
+  walkTime: number;
+  walkDistance: number;
+};
 export default function DailyAddWalkModal({
   closeModal,
   todayDaily,
   date,
   petId,
 }: DailyModalProps) {
-  const { register, getValues } = useForm();
+  const { register, getValues, setValue } = useForm<WalkRecordType>();
   const createOrUpdateDaily = useDailyMutation();
 
   const saveDaily = () => {
     const walkTime = getValues('walkTime');
     const walkDistance = getValues('walkDistance');
-    console.log(todayDaily);
-    console.log(walkTime, walkDistance);
     const newDaily = {
       ...todayDaily?.data,
+      walkTime,
+      walkDistance,
     };
-    newDaily.walkTime = walkTime;
-    newDaily.walkDistance = walkDistance;
     createOrUpdateDaily(newDaily, petId, date, todayDaily?.dailyId);
     closeModal();
   };
+
+  useEffect(() => {
+    if (!todayDaily || !todayDaily?.data) return;
+
+    setValue('walkTime', todayDaily.data.walkTime ?? 0);
+    setValue('walkTime', todayDaily.data.walkDistance ?? 0);
+  }, []);
   return (
     <DailyModal closeModal={closeModal} onSubmit={saveDaily}>
       <div className="p-2 flex flex-col w-full items-center gap-2">

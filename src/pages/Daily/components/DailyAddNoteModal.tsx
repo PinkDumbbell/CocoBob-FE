@@ -7,7 +7,7 @@ export default function DailyAddNoteModal({
   date,
   petId,
 }: DailyModalProps) {
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState(todayDaily?.data.note ?? '');
   const createOrUpdateDaily = useDailyMutation();
 
   const saveDaily = () => {

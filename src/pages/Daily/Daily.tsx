@@ -1,17 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 import Layout from '@/components/layout/Layout';
 import { useAppSelector } from '@/store/config';
 import { getCurrentPet } from '@/store/slices/userSlice';
-import {
-  DailyItemType,
-  useLazyGetDailyListQuery,
-  useLazyGetDailyQuery,
-} from '@/store/api/dailyApi';
+import { useLazyGetDailyListQuery, useLazyGetDailyQuery } from '@/store/api/dailyApi';
 import { getDateString } from '@/utils/libs/date';
-import useSelectModal from '@/utils/hooks/useSelectModal';
+import { useToastMessage, useSelectModal } from '@/utils/hooks';
 import { ReactComponent as PencilIcon } from '@/assets/icon/pencil_icon.svg';
 import { ReactComponent as DogIcon } from '@/assets/icon/dog_icon.svg';
 
@@ -22,26 +18,42 @@ import DailyBodyWeight from './components/DailyAddBodyWeight';
 import DailyAddNoteModal from './components/DailyAddNoteModal';
 
 export default function DailyMain() {
-  const navigate = useNavigate();
   const currentPetId = useAppSelector(getCurrentPet);
-  const [searchParams] = useSearchParams();
-  const queryStringDate = searchParams.get('date');
-  const [currentDate, setCurrentDate] = useState<Date>();
-  const [listDate, setListDate] = useState<Date>();
-  const [getDailyList, { data: dailyList, isSuccess: dailyListSuccess }] =
-    useLazyGetDailyListQuery();
-  const [getDaily, { data: daily, isSuccess: dailySuccess }] = useLazyGetDailyQuery();
 
-  const [activeStartDate, setActiveStartDate] = useState<Date | undefined>(currentDate);
-  const [todayDaily, setTodayDaily] = useState<DailyItemType | undefined>();
+  if (!currentPetId)
+    return (
+      <Layout header title="데일리 기록" footer>
+        <div className="w-full h-full flex flex-col items-center justify-center">
+          <h3>반려동물을 등록 후 이용가능합니다</h3>
+        </div>
+      </Layout>
+    );
+
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const currentDateString = searchParams.get('date');
+
+  const isInvalidDate =
+    currentDateString && new Date(currentDateString).toString() === 'Invalid Date';
+  if (isInvalidDate) {
+    return <Navigate to="/404" replace />;
+  }
+
+  const currentDate = new Date(currentDateString ?? getDateString(new Date()));
+  const [getDailyList, { data: dailyList, isError: dailyListError }] = useLazyGetDailyListQuery();
+  const [getDaily, { data: todayDaily, isError: dailyError }] = useLazyGetDailyQuery();
+
+  const [activeStartDate, setActiveStartDate] = useState<Date>(currentDate);
   const [modalOpen, setModalOpen] = useState<'' | 'note' | 'walk' | 'feed' | 'bodyWeight'>('');
+
+  const openToast = useToastMessage();
   const [openSelectMenu] = useSelectModal();
 
   const openModal = (content: 'note' | 'walk' | 'feed' | 'bodyWeight') => setModalOpen(content);
   const closeModal = () => setModalOpen('');
 
   const navigateToWalkPage = () =>
-    navigate(`/daily/walk/record?date=${dayjs(currentDate).format('YYYY-MM-DD')}`);
+    navigate(`/daily/walk/record?date=${getDateString(currentDate)}`);
 
   const handleRecordWalk = async () => {
     const selectedMenu = await openSelectMenu(['산책하기', '간편기록']);
@@ -69,61 +81,33 @@ export default function DailyMain() {
     } else if (selectedMenu === '오늘의 일기 작성') {
       navigate('/daily/note/new', { state: { date: currentDate } });
     } else if (selectedMenu === '오늘의 일기 확인') {
-      navigate(`/daily/note?date=${dayjs(currentDate).format('YYYY.MM.DD')}`);
+      navigate(`/daily/note?date=${dayjs(currentDate).format('YYYY-MM-DD')}`);
     }
   };
-  useEffect(() => {
-    if (!queryStringDate) {
-      const today = new Date();
-      navigate(`/daily?date=${dayjs(today).format('YYYY-MM-DD')}`, { replace: true });
-      return;
-    }
 
-    const date = new Date(queryStringDate);
-    if (date.toString() === 'Invalid Date') navigate('/404');
-    else if (currentPetId) {
-      const todayDateString = dayjs(date).format('YYYY-MM');
-      const listDateString = dayjs(listDate).format('YYYY-MM');
-
-      if (!listDate || !dailyList || listDateString !== todayDateString) {
-        setListDate(date);
-        getDailyList({ petId: currentPetId, date: todayDateString });
-      }
-      setCurrentDate(date);
-    } else {
-      setCurrentDate(date);
-    }
-  }, [searchParams]);
   useEffect(() => {
-    if (!currentPetId) return;
-    if (listDate !== activeStartDate) {
-      setListDate(activeStartDate);
-      getDailyList({ petId: currentPetId, date: dayjs(activeStartDate).format('YYYY-MM') });
-    }
+    if (currentDateString) return;
+    navigate(`/daily?date=${getDateString(new Date())}`, { replace: true });
+  }, [currentDateString]);
+
+  useEffect(() => {
+    navigate(`/daily?date=${getDateString(new Date(activeStartDate))}`, { replace: true });
+    getDailyList({ petId: currentPetId, date: dayjs(activeStartDate).format('YYYY-MM') });
   }, [activeStartDate]);
 
   useEffect(() => {
-    if (!currentDate || !dailyList || !currentPetId || !dailyListSuccess) return;
+    if (!dailyList || !Array.isArray(dailyList?.idAndDates)) return;
 
-    const foundTodayDailyInfo = dailyList.idAndDates.find(
-      (dailyItem) => dailyItem.date === getDateString(currentDate),
-    );
-    if (foundTodayDailyInfo && foundTodayDailyInfo.id === daily?.dailyId) {
-      setTodayDaily(daily);
-    } else if (foundTodayDailyInfo && foundTodayDailyInfo.id !== daily?.dailyId) {
-      getDaily(foundTodayDailyInfo.id);
-    } else {
-      setTodayDaily(undefined);
-    }
+    const todayDailyItem = dailyList.idAndDates.find((daily) => daily.date === currentDateString);
+    if (!todayDailyItem) return;
+
+    getDaily(todayDailyItem.id);
   }, [currentDate, dailyList]);
 
   useEffect(() => {
-    if (!currentPetId || !daily) return;
-
-    setTodayDaily(daily);
-  }, [dailySuccess, daily]);
-
-  if (!currentPetId) return null;
+    if (!dailyError && !dailyListError) return;
+    openToast('기록을 불러오지 못했습니다.');
+  }, [dailyError, dailyListError]);
   return (
     <Layout header footer title="데일리 기록">
       <div className="p-4 bg-white flex flex-col items-center gap-4 w-full h-full overflow-y-auto">

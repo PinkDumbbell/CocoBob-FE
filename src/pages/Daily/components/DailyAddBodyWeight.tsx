@@ -1,20 +1,31 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import FormInput from '@/components/Form/FormInput';
 import DailyModal, { useDailyMutation, DailyModalProps } from './DailyModal';
 
+type BodyWeightFormType = {
+  bodyWeight: number;
+};
 export default function DailyBodyWeight({ closeModal, todayDaily, date, petId }: DailyModalProps) {
-  const { register, getValues } = useForm();
+  const { register, getValues, setValue } = useForm<BodyWeightFormType>();
   const createOrUpdateDaily = useDailyMutation();
 
   const saveDaily = () => {
     const bodyWeight = getValues('bodyWeight');
     const newDaily = {
       ...todayDaily?.data,
+      bodyWeight,
     };
-    newDaily.bodyWeight = bodyWeight;
     createOrUpdateDaily(newDaily, petId, date, todayDaily?.dailyId);
     closeModal();
   };
+
+  useEffect(() => {
+    if (!todayDaily || !todayDaily?.data) return;
+
+    setValue('bodyWeight', todayDaily.data.bodyWeight ?? 0);
+  }, []);
+
   return (
     <DailyModal closeModal={closeModal} onSubmit={saveDaily}>
       <div className="p-2 flex flex-col w-full items-center gap-2">

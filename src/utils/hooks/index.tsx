@@ -7,6 +7,7 @@ import useKakaoMap from './useKakaoMap';
 import useLogout from './useLogout';
 import usePlatform from './usePlatform';
 import useSearchBreed from './useSearchBreed';
+import useSelectModal from './useSelectModal';
 import useSelectImage from './useSelectImage';
 import useToastMessage from './useToastMessage';
 import useUser from './useUser';
@@ -24,6 +25,7 @@ export {
   useLogout,
   usePlatform,
   useSearchBreed,
+  useSelectModal,
   useSelectImage,
   useToastMessage,
   useUser,

@@ -14,7 +14,7 @@ import '../calendar.css';
 type DailyCalendarProps = {
   currentDate: Date;
   dailyList: DailyListItemType[];
-  setActiveStartDate: Dispatch<SetStateAction<Date | undefined>>;
+  setActiveStartDate: Dispatch<SetStateAction<Date>>;
 };
 export default function DailyCalendar({
   currentDate,
