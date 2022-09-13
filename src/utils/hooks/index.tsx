@@ -12,6 +12,7 @@ import useToastMessage from './useToastMessage';
 import useUser from './useUser';
 import useWatchPosition from './useWatchPosition';
 import useWithdrawal from './useWithdrawal';
+import useVh from './useVh';
 
 export {
   useBottomSheet,
@@ -28,4 +29,5 @@ export {
   useUser,
   useWatchPosition,
   useWithdrawal,
+  useVh,
 };

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import PrivateRoutes from '@/routes/PrivateRoutes';
 import LoginPage from '@/pages/Login';
@@ -10,21 +9,12 @@ import { ConfirmModal, ConfirmPortal } from '@/components/Confirm';
 import { SelectModalPortal, SelectModal } from '@/components/SelectModal';
 import PageTransition from '@/components/transition/PageTransition';
 import ToastMessage from '@/components/Toast/ToastMessage';
+import { usePlatform, useVh } from '@/utils/hooks';
 
 function App() {
   const location = useLocation();
-  const setVh = () => {
-    document.documentElement.style.setProperty('--vh', `${window.innerHeight}px`);
-  };
-
-  // fix mobile 100vh error
-  useEffect(() => {
-    window.addEventListener('resize', setVh);
-    setVh();
-    return () => {
-      window.removeEventListener('resize', setVh);
-    };
-  }, []);
+  usePlatform();
+  useVh();
 
   return (
     <>
