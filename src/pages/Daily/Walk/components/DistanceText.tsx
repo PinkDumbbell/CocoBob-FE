@@ -8,15 +8,15 @@ export default function DistanceText({ distance }: DistanceTextProps) {
   return (
     <p className="text-lg font-semibold text-primary-dark">
       {isKM ? (
-        <span>
-          {distance.toFixed(2)}
+        <>
+          <span>{distance.toFixed(2)}</span>
           <span className="text-black">km</span>
-        </span>
+        </>
       ) : (
-        <span>
-          {distanceInMeter}
+        <>
+          <span>{distanceInMeter}</span>
           <span className="text-black">M</span>
-        </span>
+        </>
       )}
     </p>
   );
