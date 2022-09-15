@@ -1,11 +1,12 @@
+import { ReactNode } from 'react';
+import dayjs from 'dayjs';
 import {
   DailyDataType,
   DailyItemType,
   useCreateDailyMutation,
   useUpdateDailyMutation,
 } from '@/store/api/dailyApi';
-import dayjs from 'dayjs';
-import { ReactNode } from 'react';
+import useKeyHandler from '@/utils/hooks/useKeyHandler';
 
 export type DailyModalProps = {
   closeModal: () => void;
@@ -52,8 +53,10 @@ export function useDailyMutation() {
   return createOrUpdateDaily;
 }
 export default function DailyModal({ closeModal, onSubmit, children }: DailyModalWrapperProps) {
+  useKeyHandler('Escape', closeModal);
+
   return (
-    <div className="z-[9000] max-w-[425px] flex flex-col items-center justify-center w-full h-full fixed top-0 bg-[#00000029] p-4">
+    <div className="z-[9000] max-w-[425px] flex flex-col items-center justify-center w-full h-screen fixed top-0  left-1/2 -translate-x-1/2 bg-[#00000029] p-4">
       <div className="w-full bg-white flex flex-col items-center justify-between rounded-[10px]">
         <div className="flex-1 w-full">{children}</div>
         <div className="pt-2 w-full flex items-center justify-evenly rounded-b-[10px]">
