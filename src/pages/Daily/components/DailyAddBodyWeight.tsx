@@ -33,7 +33,7 @@ export default function DailyBodyWeight({ closeModal, todayDaily, date, petId }:
         <div className="flex gap-1 items-center">
           <FormInput
             label="몸무게"
-            unit="g"
+            unit="kg"
             name="bodyWeight"
             rules={register('bodyWeight', {
               required: '몸무게를 입력하세요',
