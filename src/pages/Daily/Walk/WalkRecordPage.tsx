@@ -1,103 +1,30 @@
 /* eslint-disable consistent-return */
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppSelector } from '@/store/config';
 import Layout from '@/components/layout/Layout';
-import { useConfirm, useKakaoMap, useToastMessage } from '@/utils/hooks';
+import { useConfirm, useKakaoMap } from '@/utils/hooks';
 import { getDateString } from '@/utils/libs/date';
-import { ILocation } from '@/@type/location';
 
-import { CurrentPosButton, KakaoMap } from './WalkRecordMap';
-import RecordToolbar from './WalkRecordToolbar';
-
-const defaultPosition: ILocation = {
-  latitude: 37.5036833,
-  longitude: 127.0448556,
-};
-
-type LocationPermissionResponseType = {
-  success: boolean;
-  error: string;
-  location?: ILocation;
-};
-
-function useLocationWithApp() {
-  const platform = useAppSelector((state) => state.platform.currentPlatform);
-  const isMapAvailable = platform === 'android' || platform === 'ios';
-
-  const openToast = useToastMessage();
-  const [location, setLocation] = useState<ILocation>(defaultPosition);
-  const [error, setError] = useState('');
-
-  const getLocationPermissionHandler = async () => {
-    const permissionResponse: LocationPermissionResponseType =
-      await window.flutter_inappwebview.callHandler('locationPermissionHandler');
-
-    if (permissionResponse.error) {
-      setError(permissionResponse.error);
-    }
-    if (permissionResponse.success) {
-      setError('');
-      return permissionResponse.location;
-    }
-    return null;
-  };
-
-  const setCurrentLocationHandler = (currentLocation: ILocation) => {
-    const { latitude, longitude } = currentLocation;
-    if (latitude !== location.latitude && longitude !== location.longitude) {
-      setLocation({ latitude, longitude });
-    }
-  };
-  const getCurrentLocation = async () => {
-    if (
-      !window?.flutter_inappwebview ||
-      typeof window.flutter_inappwebview.callHandler !== 'function'
-    )
-      return;
-
-    const currentLocation = await getLocationPermissionHandler();
-    if (!currentLocation) {
-      setError('위치 권한을 얻는데 실패하였습니다.');
-      return;
-    }
-    setCurrentLocationHandler(currentLocation);
-  };
-
-  useEffect(() => {
-    if (!platform || !isMapAvailable) return;
-
-    const intervalId = setInterval(() => {
-      getCurrentLocation();
-    }, 2000);
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [platform]);
-
-  useEffect(() => {
-    if (!error) return;
-    openToast(error);
-  }, [error]);
-
-  return { data: location, isError: !!error, errorMessage: error };
-}
+import { CurrentPosButton, KakaoMap } from './components/WalkRecordMap';
+import RecordToolbar from './components/WalkRecordToolbar';
+import useLocationWithApp from './hooks/useLocationInApp';
 
 export default function WalkRecordMap() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const currentDateString = searchParams.get('date');
   const [confirm] = useConfirm();
   const platform = useAppSelector((state) => state.platform.currentPlatform);
   const isMapAvailable = platform === 'android' || platform === 'ios';
-
   const { data: location, isError: locationError } = useLocationWithApp();
   const { latitude, longitude } = location;
   const { mapRef, moveToCurrentPosition } = useKakaoMap(latitude, longitude);
 
+  const currentDateString = searchParams.get('date');
+
   const goBackGuard = async () => {
     if (!isMapAvailable) {
-      navigate(`/daily?date=${searchParams.get('date')}`);
+      navigate(`/daily/walk?date=${searchParams.get('date')}`);
       return;
     }
     const goBackConfirmed = await confirm({
@@ -105,7 +32,7 @@ export default function WalkRecordMap() {
     });
     if (!goBackConfirmed) return;
 
-    navigate(`/daily?date=${searchParams.get('date')}`);
+    navigate(`/daily/walk?date=${searchParams.get('date')}`);
   };
 
   useEffect(() => {
@@ -117,7 +44,7 @@ export default function WalkRecordMap() {
   return (
     <Layout header title="산책하기" canGoBack onClickGoBack={goBackGuard}>
       <div className="bg-white h-full flex flex-col w-full">
-        <div className="h-5/6 w-full relative">
+        <div className="h-full w-full relative">
           <CurrentPosButton moveToCurrentPosition={moveToCurrentPosition} />
           <KakaoMap mapRef={mapRef} latitude={latitude} longitude={longitude} />
         </div>
