@@ -64,7 +64,7 @@ export default function NoteAddPage() {
       canGoBack
       onClickGoBack={goBackGuard}
       header
-      title={dayjs(locationState.date).format('MM.DD')}
+      title={dayjs(locationState.date).format('MM월 DD일')}
       customRightChild={<SubmitButton onSubmit={handleSubmit(saveNote)} />}
     >
       <div className="w-full h-full p-4 flex flex-col gap-4">

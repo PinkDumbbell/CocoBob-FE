@@ -15,14 +15,15 @@ import PetEdit from '@/pages/Mypage/pets/[id]';
 import NotFound from '@/pages/404';
 import ProductDetailPage from '@/pages/Products/ProductDetail';
 import Daily from '@/pages/Daily';
-import DailyMain from '@/pages/Daily/Daily';
+import DailyMain from '@/pages/Daily/DailyPage';
 import DailyWalk from '@/pages/Daily/Walk';
-import DailyFeeds from '@/pages/Daily/Feeds';
-import DailyBodyWeight from '@/pages/Daily/BodyWeight';
 import WalkRecordPage from '@/pages/Daily/Walk/WalkRecordPage';
 import RecommendProducts from '@/pages/Products/Recoomend';
 import NoteAddPage from '@/pages/Daily/Note/NoteAddPage';
 import NotePage from '@/pages/Daily/Note/NotePage';
+import WalkHistoryPage from '@/pages/Daily/Walk/WalkHistoryPage';
+import HealthRecords from '@/pages/Daily/HealthRecords';
+import HealthRecordsPage from '@/pages/Daily/HealthRecords/HealthRecordsPage';
 
 function PrivateRoute() {
   const { isLoggedIn } = useUser();
@@ -50,10 +51,12 @@ function PrivateRoutes() {
         <Route path="/daily" element={<Daily />}>
           <Route index element={<DailyMain />} />
           <Route path="walk" element={<DailyWalk />}>
+            <Route index element={<WalkHistoryPage />} />
             <Route path="record" element={<WalkRecordPage />} />
           </Route>
-          <Route path="feeds" element={<DailyFeeds />} />
-          <Route path="bodyWeight" element={<DailyBodyWeight />} />
+          <Route path="health" element={<HealthRecords />}>
+            <Route index element={<HealthRecordsPage />} />
+          </Route>
           <Route path="note" element={<NotePage />} />
           <Route path="note/new" element={<NoteAddPage />} />
         </Route>

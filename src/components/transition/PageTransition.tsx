@@ -1,6 +1,4 @@
 /* eslint-disable no-unused-vars */
-import DailyBodyWeight from '@/pages/Daily/BodyWeight';
-import DailyFeeds from '@/pages/Daily/Feeds';
 import DailyWalk from '@/pages/Daily/Walk';
 import PetsPage from '@/pages/Mypage/pets/index';
 import PetDetail from '@/pages/Mypage/pets/[id]';
@@ -45,14 +43,6 @@ const detailPages: DetailPageType[] = [
   {
     path: '/daily/walk',
     component: <DailyWalk />,
-  },
-  {
-    path: '/daily/feeds',
-    component: <DailyFeeds />,
-  },
-  {
-    path: '/daily/bodyWeight',
-    component: <DailyBodyWeight />,
   },
 ];
 const PageTransitionV2 = ({ transitionKey, children }: PageTransitionProps) => {
