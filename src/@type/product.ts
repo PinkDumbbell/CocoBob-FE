@@ -102,5 +102,7 @@ export type ProductType = ProductPreviewTypeWithoutThumbnail &
   };
 
 export interface IRelatedProduct {
-  names: string[];
+  brand: string;
+  name: string;
+  productId: number;
 }

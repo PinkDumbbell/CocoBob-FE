@@ -77,9 +77,9 @@ export const productApiSlice = apiSlice.injectEndpoints({
         },
       ],
     }),
-    getRelatedWord: builder.query<IRelatedProduct, string>({
+    getRelatedWord: builder.query<IRelatedProduct[], string>({
       query: (keyword) => `/v1/products/keyword?keyword=${keyword}`,
-      transformResponse: (response: IGenericResponse<IRelatedProduct>) => response.data,
+      transformResponse: (response: IGenericResponse<IRelatedProduct[]>) => response.data,
     }),
   }),
 });
