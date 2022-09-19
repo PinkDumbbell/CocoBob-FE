@@ -77,9 +77,9 @@ export const productApiSlice = apiSlice.injectEndpoints({
         },
       ],
     }),
-    getRelatedWord: builder.query<IRelatedProduct, string>({
+    getRelatedProduct: builder.query<IRelatedProduct[], string>({
       query: (keyword) => `/v1/products/keyword?keyword=${keyword}`,
-      transformResponse: (response: IGenericResponse<IRelatedProduct>) => response.data,
+      transformResponse: (response: IGenericResponse<IRelatedProduct[]>) => response.data,
     }),
   }),
 });
@@ -90,6 +90,6 @@ export const {
   useGetProductDetailQuery,
   useGetRecommendProductQuery,
   useLazyGetRecommendProductQuery,
-  useGetRelatedWordQuery,
+  useGetRelatedProductQuery,
   useLikeProductMutation,
 } = productApiSlice;

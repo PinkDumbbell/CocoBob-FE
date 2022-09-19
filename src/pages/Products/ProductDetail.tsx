@@ -6,6 +6,14 @@ import { useEffect } from 'react';
 import { BsHeartFill, BsHeart } from 'react-icons/bs';
 import { Navigate, useParams } from 'react-router-dom';
 import Nutrient from './components/Nutrient';
+import {
+  FooterLikeContainer,
+  FooterReviewButton,
+  LikeNumber,
+  NutrientInfoContainer,
+  ProductDetailFooter,
+  ProductInfoContainer,
+} from './index.style';
 
 function useLikeProduct() {
   const openToast = useToastMessage();
@@ -41,19 +49,11 @@ export default function ProductDetailPage() {
     { name: '인', key: 'amountOfPhosphorusPerMcal' },
   ];
   return (
-    <Layout footer header title="사료 정보" canGoBack>
-      <button
-        onClick={() => {
-          if (id) likeProduct(parseInt(id, 10));
-        }}
-        className="absolute w-5 h-5 z-[1001] top-4 right-5"
-      >
-        {product?.isLiked ? <BsHeartFill className="w-5 h-5" /> : <BsHeart className="w-5 h-5" />}
-      </button>
+    <Layout header title="사료 정보" canGoBack>
       <div className="w-full h-full absolute bg-slate-500 overflow-scroll">
-        <div className="w-full h-[450px] bg-white rounded-t-xl mt-32 flex flex-col items-center">
+        <ProductInfoContainer>
           <div className="w-40 h-40 mt-[-5rem] mb-5">
-            <img className="w-full" src={product?.productImage} alt="" />
+            <img className="w-full" src={product?.productImage} alt="상품이미지 " />
           </div>
           <p className="text-[#999999] text-[13px]">⭐ 4.3(90)</p>
           <h3 className="text-black font-bold break-normal text-center w-full">{product?.name}</h3>
@@ -62,8 +62,8 @@ export default function ProductDetailPage() {
           <div className="w-full p-4">
             <Button label="리뷰 작성" size="full" onClick={() => {}} />
           </div>
-        </div>
-        <div className="w-full h-[300px] bg-white flex flex-col mb-[90px]">
+        </ProductInfoContainer>
+        <NutrientInfoContainer>
           <div className="w-full h-2 bg-gray-300" />
           <div className="m-4 flex flex-col">
             <h4>영양성분</h4>
@@ -87,8 +87,26 @@ export default function ProductDetailPage() {
               );
             })}
           </div>
-        </div>
+        </NutrientInfoContainer>
       </div>
+      <ProductDetailFooter>
+        <FooterLikeContainer>
+          <button
+            onClick={() => {
+              if (id) likeProduct(parseInt(id, 10));
+            }}
+            className="w-5 h-5 z-[1001]"
+          >
+            {product?.isLiked ? (
+              <BsHeartFill className="w-5 h-5" color="red" />
+            ) : (
+              <BsHeart className="w-5 h-5" color="white" />
+            )}
+          </button>
+          <LikeNumber>1000</LikeNumber>
+        </FooterLikeContainer>
+        <FooterReviewButton>리뷰 작성</FooterReviewButton>
+      </ProductDetailFooter>
     </Layout>
   );
 }
