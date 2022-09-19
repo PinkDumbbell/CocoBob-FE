@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useGetRelatedWordQuery } from '@/store/api/productApi';
+import { useGetRelatedProductQuery } from '@/store/api/productApi';
 import { Link } from 'react-router-dom';
 import { RelatedSearchKeywordContainer } from './index.style';
 
@@ -9,7 +9,7 @@ interface ISearch {
 }
 export default function Search(props: ISearch) {
   const { searchInputValue, onClickSearch } = props;
-  const { data } = useGetRelatedWordQuery(searchInputValue);
+  const { data } = useGetRelatedProductQuery(searchInputValue);
   // const letterEmphasis = (word: string) => {
   //   const pattern = new RegExp(searchKeyword, 'i');
   //   const matchString = word.match(pattern);
@@ -31,11 +31,10 @@ export default function Search(props: ISearch) {
             {searchInputValue}
           </span>
           {data?.map((product) => (
-            <span key={product.productId}>
-              <Link
-                to={`/products/${product.productId}`}
-              >{`${product.brand} ${product.name}`}</Link>
-            </span>
+            <Link
+              key={product.productId}
+              to={`/products/${product.productId}`}
+            >{`${product.brand} ${product.name}`}</Link>
           ))}
         </RelatedSearchKeywordContainer>
       ) : (
