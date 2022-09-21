@@ -46,19 +46,20 @@ const LeftChild = React.memo(({ canGoBack, onClickGoBack, menu }: HeaderProps) =
           </BackButton>
         )}
         {menu && (
-          <div>
-            <button type="button" onClick={openMenu}>
-              <MenuIcon />
-            </button>
-          </div>
+          <>
+            <div>
+              <button type="button" onClick={openMenu}>
+                <MenuIcon />
+              </button>
+            </div>
+            <SideMenuWrapper isOpen={isMenuOpen}>
+              <button type="button" onClick={closeMenu}>
+                닫기
+              </button>
+            </SideMenuWrapper>
+          </>
         )}
       </LeftMenuWrapper>
-
-      <SideMenuWrapper isOpen={isMenuOpen}>
-        <button type="button" onClick={closeMenu}>
-          닫기
-        </button>
-      </SideMenuWrapper>
     </>
   );
 });
@@ -79,7 +80,7 @@ const RightChild = React.memo(({ canSearch }: { canSearch?: boolean }) => {
 RightChild.displayName = 'HeaderRightChild';
 
 function Header({
-  menu,
+  menu = false,
   canGoBack,
   onClickGoBack,
   title,

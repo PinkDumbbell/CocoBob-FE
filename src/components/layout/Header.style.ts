@@ -90,7 +90,8 @@ export const BackButton = styled.button`
 
 export const SideMenuWrapper = styled.div<{ isOpen: boolean }>`
   position: absolute;
-  left: 0;
+  z-index: 9999;
+  left: -16px;
   top: 0;
   bottom: 0;
   width: 12rem;
