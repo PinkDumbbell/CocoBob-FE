@@ -1,30 +1,35 @@
 /* eslint-disable consistent-return */
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppSelector } from '@/store/config';
 import Layout from '@/components/layout/Layout';
-import { useConfirm, useKakaoMap } from '@/utils/hooks';
+import { useConfirm, useKakaoMap, useToastMessage } from '@/utils/hooks';
 import { getDateString } from '@/utils/libs/date';
 
 import { CurrentPosButton, KakaoMap } from './components/WalkRecordMap';
 import RecordToolbar from './components/WalkRecordToolbar';
 import useLocationWithApp from './hooks/useLocationInApp';
+import SaveWalkModal from './components/SaveWalkRecordModal';
 
 export default function WalkRecordMap() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [confirm] = useConfirm();
+  const openToast = useToastMessage();
   const platform = useAppSelector((state) => state.platform.currentPlatform);
   const isMapAvailable = platform === 'android' || platform === 'ios';
   const { data: location, isError: locationError } = useLocationWithApp();
   const { latitude, longitude } = location;
   const { mapRef, moveToCurrentPosition } = useKakaoMap(latitude, longitude);
 
+  const [saveWalkModal, setSaveWalkModal] = useState(false);
+
   const currentDateString = searchParams.get('date');
 
+  const goWalkHistoryPage = () => navigate(`/daily/walk?date=${searchParams.get('date')}`);
   const goBackGuard = async () => {
     if (!isMapAvailable) {
-      navigate(`/daily/walk?date=${searchParams.get('date')}`);
+      goWalkHistoryPage();
       return;
     }
     const goBackConfirmed = await confirm({
@@ -32,7 +37,23 @@ export default function WalkRecordMap() {
     });
     if (!goBackConfirmed) return;
 
-    navigate(`/daily/walk?date=${searchParams.get('date')}`);
+    goWalkHistoryPage();
+  };
+
+  const openSaveModal = async () => {
+    setSaveWalkModal(true);
+  };
+  const saveWalkRecord = () => {
+    setSaveWalkModal(false);
+    openToast('산책 기록을 성공적으로 저장했습니다.', 'success');
+    goWalkHistoryPage();
+  };
+  const resetWalkRecord = () => {
+    return Promise.resolve(
+      confirm({
+        title: '기록을 지우시겠습니까?',
+      }),
+    ) as Promise<boolean>;
   };
 
   useEffect(() => {
@@ -60,8 +81,16 @@ export default function WalkRecordMap() {
             </div>
           </div>
         )}
-        <RecordToolbar location={location} />
+        <RecordToolbar
+          location={location}
+          canRecord={true}
+          onSave={openSaveModal}
+          onReset={resetWalkRecord}
+        />
       </div>
+      {saveWalkModal && (
+        <SaveWalkModal close={() => setSaveWalkModal(false)} save={saveWalkRecord} />
+      )}
     </Layout>
   );
 }

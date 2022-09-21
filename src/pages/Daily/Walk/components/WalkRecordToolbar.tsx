@@ -1,5 +1,4 @@
-import { useNavigate } from 'react-router-dom';
-import { useConfirm, useCounter, useToastMessage } from '@/utils/hooks';
+import { useCounter } from '@/utils/hooks';
 import { LocationType } from '@/@type/location';
 import useDistanceWithLocation from '@/pages/Daily/Walk/hooks/useDistanceWithLocation';
 
@@ -9,12 +8,11 @@ import TimeText from './TimeText';
 
 type RecordToolbarType = {
   location: LocationType;
+  canRecord: boolean;
+  onSave: () => void;
+  onReset: () => Promise<boolean>;
 };
-export default function RecordToolbar({ location }: RecordToolbarType) {
-  const navigate = useNavigate();
-  const openToast = useToastMessage();
-  const [confirm] = useConfirm();
-
+export default function RecordToolbar({ location, canRecord, onSave, onReset }: RecordToolbarType) {
   const { status, totalCount, start, pause, reset } = useCounter();
   const { distance, resetDistance } = useDistanceWithLocation({
     location,
@@ -31,26 +29,19 @@ export default function RecordToolbar({ location }: RecordToolbarType) {
     resetDistance();
   };
   const handleRecording = () => {
-    if (status === 'running') pause();
-    else start();
-  };
-  const saveWalkRecord = async () => {
-    const isSaveConfirmed = await confirm({
-      title: '저장 하시겠습니까?',
-    });
-    if (!isSaveConfirmed) {
+    if (!canRecord) {
       return;
     }
-
-    openToast('산책 기록을 성공적으로 저장했습니다.', 'success');
-    resetRecordState();
-    navigate(-1);
+    if (status === 'running') {
+      pause();
+    } else {
+      start();
+    }
   };
-  const resetWalkRecord = async () => {
-    const resetConfirmed = await confirm({
-      title: '기록을 지우시겠습니까?',
-    });
-    if (!resetConfirmed) {
+
+  const handleReset = async () => {
+    const isConfirmed = await onReset();
+    if (!isConfirmed) {
       return;
     }
     resetRecordState();
@@ -67,15 +58,13 @@ export default function RecordToolbar({ location }: RecordToolbarType) {
         <button
           type="button"
           onClick={handleRecording}
-          className="rounded-full w-[5rem] h-[5rem] bg-primary-dark flex items-center justify-center"
+          className="rounded-full w-[6rem] h-[6rem] bg-primary-dark flex items-center justify-center"
         >
-          <span className="text-white font-medium text-md">
+          <span className="text-white font-medium text-lg">
             {status === 'running' ? '정지' : '시작'}
           </span>
         </button>
-        {canSave ? (
-          <RecordButtonGroup resetRecord={resetWalkRecord} saveRecord={saveWalkRecord} />
-        ) : null}
+        {canSave ? <RecordButtonGroup resetRecord={handleReset} saveRecord={onSave} /> : null}
       </div>
       <div className="flex flex-col items-center">
         <TimeText hours={hours} minutes={minutes} seconds={seconds} />
