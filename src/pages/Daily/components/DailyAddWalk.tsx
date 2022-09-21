@@ -2,17 +2,24 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import FormInput from '@/components/Form/FormInput';
 import DailyModal, { useDailyMutation, DailyModalProps } from './DailyModal';
+import { WalkHistoryItemType } from '../Walk/components/WalkHistoryList';
 
 type WalkRecordType = {
   walkTime: number;
   walkDistance: number;
+};
+
+type DailyAddWalkModalProps = DailyModalProps & {
+  // eslint-disable-next-line no-unused-vars
+  onSave: (walkRecord: WalkHistoryItemType) => void;
 };
 export default function DailyAddWalkModal({
   closeModal,
   todayDaily,
   date,
   petId,
-}: DailyModalProps) {
+  onSave,
+}: DailyAddWalkModalProps) {
   const { register, getValues, setValue } = useForm<WalkRecordType>();
   const createOrUpdateDaily = useDailyMutation();
 
@@ -25,6 +32,14 @@ export default function DailyAddWalkModal({
       walkDistance,
     };
     createOrUpdateDaily(newDaily, petId, date, todayDaily?.dailyId);
+    onSave({
+      id: Number((Math.random() * 100).toFixed(0)),
+      date: new Date(),
+      endTime: '13:32',
+      startTime: '13:49',
+      walkDistance,
+      walkTime,
+    });
     closeModal();
   };
 
