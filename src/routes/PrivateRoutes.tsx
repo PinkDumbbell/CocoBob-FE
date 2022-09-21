@@ -22,6 +22,7 @@ import RecommendProducts from '@/pages/Products/Recoomend';
 import NoteAddPage from '@/pages/Daily/Note/NoteAddPage';
 import NotePage from '@/pages/Daily/Note/NotePage';
 import WalkHistoryPage from '@/pages/Daily/Walk/WalkHistoryPage';
+import WalkHisotyDetailPage from '@/pages/Daily/Walk/[id]';
 import HealthRecords from '@/pages/Daily/HealthRecords';
 import HealthRecordsPage from '@/pages/Daily/HealthRecords/HealthRecordsPage';
 
@@ -53,6 +54,7 @@ function PrivateRoutes() {
           <Route path="walk" element={<DailyWalk />}>
             <Route index element={<WalkHistoryPage />} />
             <Route path="record" element={<WalkRecordPage />} />
+            <Route path="record/:id" element={<WalkHisotyDetailPage />} />
           </Route>
           <Route path="health" element={<HealthRecords />}>
             <Route index element={<HealthRecordsPage />} />
