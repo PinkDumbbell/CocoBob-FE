@@ -1,4 +1,5 @@
 /* eslint-disable consistent-return */
+/* global kakao */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppSelector } from '@/store/config';
@@ -22,7 +23,7 @@ export default function WalkRecordMap() {
 
   const { status, totalCount, start, pause, reset } = useCounter();
   const { data: location, isError: locationError } = useLocationWithApp();
-  const { distance, resetDistance } = useLocationDistance({
+  const { distance, resetDistance, locationRecords } = useLocationDistance({
     location,
     isRunning: status === 'running',
   });
@@ -84,6 +85,24 @@ export default function WalkRecordMap() {
 
     navigate(`/daily/walk/record?date=${getDateString(new Date())}`, { replace: true });
   }, [currentDateString]);
+
+  useEffect(() => {
+    if (!mapRef.current) {
+      return;
+    }
+
+    const linePath = locationRecords.map(
+      (record) => new kakao.maps.LatLng(record.latitude, record.longitude),
+    );
+    const polyline = new kakao.maps.Polyline({
+      path: linePath,
+      strokeWeight: 5,
+      strokeColor: '#FFAE00',
+      strokeOpacity: 0.6, // 0 ~ 1
+      strokeStyle: 'solid',
+    });
+    polyline.setMap(mapRef.current);
+  }, [locationRecords]);
 
   return (
     <Layout header title="산책하기" canGoBack onClickGoBack={goBackGuard}>
