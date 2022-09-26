@@ -3,13 +3,14 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppSelector } from '@/store/config';
 import Layout from '@/components/layout/Layout';
-import { useConfirm, useKakaoMap, useToastMessage } from '@/utils/hooks';
+import { useConfirm, useCounter, useKakaoMap, useToastMessage } from '@/utils/hooks';
 import { getDateString } from '@/utils/libs/date';
 
 import { CurrentPosButton, KakaoMap } from './components/WalkRecordMap';
 import RecordToolbar from './components/WalkRecordToolbar';
 import useLocationWithApp from './hooks/useLocationInApp';
 import SaveWalkModal from './components/SaveWalkRecordModal';
+import useLocationDistance from './hooks/useDistanceWithLocation';
 
 export default function WalkRecordMap() {
   const navigate = useNavigate();
@@ -18,7 +19,13 @@ export default function WalkRecordMap() {
   const openToast = useToastMessage();
   const platform = useAppSelector((state) => state.platform.currentPlatform);
   const isMapAvailable = platform === 'android' || platform === 'ios';
+
+  const { status, totalCount, start, pause, reset } = useCounter();
   const { data: location, isError: locationError } = useLocationWithApp();
+  const { distance, resetDistance } = useLocationDistance({
+    location,
+    isRunning: status === 'running',
+  });
   const { latitude, longitude } = location;
   const { mapRef, moveToCurrentPosition } = useKakaoMap(latitude, longitude);
 
@@ -48,16 +55,32 @@ export default function WalkRecordMap() {
     openToast('산책 기록을 성공적으로 저장했습니다.', 'success');
     goWalkHistoryPage();
   };
-  const resetWalkRecord = () => {
-    return Promise.resolve(
-      confirm({
-        title: '기록을 지우시겠습니까?',
-      }),
-    ) as Promise<boolean>;
+
+  const resetRecordState = async () => {
+    const isConfirmed = await confirm({
+      title: '기록을 지우시겠습니까?',
+    });
+    if (!isConfirmed) return;
+
+    reset();
+    resetDistance();
+  };
+
+  const startRecord = () => {
+    if (!isMapAvailable) {
+      return;
+    }
+    if (status === 'running') {
+      pause();
+    } else {
+      start();
+    }
   };
 
   useEffect(() => {
-    if (currentDateString) return;
+    if (currentDateString) {
+      return;
+    }
 
     navigate(`/daily/walk/record?date=${getDateString(new Date())}`, { replace: true });
   }, [currentDateString]);
@@ -82,10 +105,12 @@ export default function WalkRecordMap() {
           </div>
         )}
         <RecordToolbar
-          location={location}
-          canRecord={true}
+          distance={distance}
           onSave={openSaveModal}
-          onReset={resetWalkRecord}
+          onReset={resetRecordState}
+          onRecord={startRecord}
+          totalCount={totalCount}
+          runningStatus={status}
         />
       </div>
       {saveWalkModal && (
