@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import Calendar from 'react-calendar';
 
-import { useAppDispatch } from '@/store/config';
-import { DailyListItemType } from '@/store/api/dailyApi';
-import { setDate } from '@/store/slices/dailySlice';
+import { RecordIdOfDateType } from '@/store/api/dailyApi';
 import { getDateString } from '@/utils/libs/date';
 
 import 'react-calendar/dist/Calendar.css';
@@ -13,19 +11,17 @@ import '../calendar.css';
 
 type DailyCalendarProps = {
   currentDate: Date;
-  dailyList: DailyListItemType[];
+  recordIds?: RecordIdOfDateType;
   setActiveStartDate: Dispatch<SetStateAction<Date>>;
 };
 export default function DailyCalendar({
   currentDate,
-  dailyList,
+  recordIds,
   setActiveStartDate,
 }: DailyCalendarProps) {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const changeDate = (selectedDate: Date) => {
     const dateString = getDateString(selectedDate);
-    dispatch(setDate({ date: dateString }));
     navigate(`/daily?date=${dateString}`, { replace: true });
   };
 
@@ -40,8 +36,11 @@ export default function DailyCalendar({
       minDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정
       maxDetail="month" // 상단 네비게이션에서 '월' 단위만 보이게 설정
       tileContent={({ date }) => {
+        if (!recordIds)
+          return <div className="h-full flex flex-col justify-around items-center"></div>;
+
         const dateString = getDateString(date);
-        const isExist = dailyList.find((daily) => daily.date === dateString);
+        const isExist = recordIds[dateString];
         // 날짜 타일에 컨텐츠 추가하기 (html 태그)
         // 추가할 html 태그를 변수 초기화
         const html = [];

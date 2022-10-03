@@ -12,11 +12,12 @@ const CardContainer = tw(ShadowCard)`
 type DailyOverviewItemProps = {
   title: string;
   children: ReactNode;
+  onClick?: () => void;
 };
-export default function OverviewItem({ title, children }: DailyOverviewItemProps) {
+export default function OverviewItem({ title, children, onClick }: DailyOverviewItemProps) {
   return (
-    <CardContainer className="w-full h-full p-4 ">
-      <div className="flex flex-col items-center space-y-2">
+    <CardContainer className="w-full h-full p-4" onClick={onClick}>
+      <div className="flex flex-col items-center space-y-1">
         <h5 className="font-semibold">{title}</h5>
         {children}
       </div>
