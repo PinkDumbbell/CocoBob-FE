@@ -9,6 +9,9 @@ import { ReactComponent as PlusIcon } from '@/assets/icon/plus_icon.svg';
 import { useConfirm, useToastMessage } from '@/utils/hooks';
 
 import Button from '@/components/Button';
+import { NoteType, useCreateNoteRecordMutation, useEditNoteMutation } from '@/store/api/dailyApi';
+import { useAppSelector } from '@/store/config';
+import { getCurrentPet } from '@/store/slices/userSlice';
 import {
   AddImageButton,
   BottomSection,
@@ -23,6 +26,10 @@ import {
 
 type LocationStateType = {
   date?: Date;
+  editState?: {
+    noteId: number;
+    noteData: NoteType;
+  };
 };
 type NoteFormType = {
   title: string;
@@ -33,10 +40,16 @@ type ImageType = {
   file: File;
   preview: string;
 };
+
 export default function NoteAddPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const locationState = location.state as LocationStateType;
+  const { editState } = locationState;
+  const isEditMode = !!editState;
+
+  const currentPetId = useAppSelector(getCurrentPet);
+  const currentDate = dayjs(locationState.date).format('YYYY-MM-DD');
   const openToast = useToastMessage();
   const [confirm] = useConfirm();
 
@@ -44,22 +57,70 @@ export default function NoteAddPage() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<NoteFormType>();
 
   const imageEl = useRef<HTMLInputElement | null>(null);
   const [images, setImages] = useState<ImageType[]>([]);
+  const [currentImages, setCurrentImages] = useState<{ imageId: number; path: string }[]>([]);
+  const [removeImageIds, setRemoveImageIds] = useState<number[]>([]);
   const canAddImage = images.length < 4;
 
+  const [createNoteMutation, { isLoading: isCreateLoading, isSuccess }] =
+    useCreateNoteRecordMutation();
+  const [editNoteMutation, { isLoading: isUpdateLoading, isSuccess: isUpdateSuccess }] =
+    useEditNoteMutation();
+
+  const isLoading = isCreateLoading || isUpdateLoading;
+
+  const createNote = (formInputs: NoteFormType) => {
+    if (!currentPetId) {
+      return;
+    }
+    const noteData = {
+      title: formInputs.title,
+      note: formInputs.contents,
+      images: images.map((image) => image.file),
+    };
+    createNoteMutation({ petId: currentPetId, date: currentDate, noteData, sessionId: Date.now() });
+  };
+  const editNote = (formInputs: NoteFormType) => {
+    if (!editState?.noteId) {
+      return;
+    }
+    const noteData = {
+      noteId: editState.noteId,
+      title: formInputs.title,
+      note: formInputs.contents,
+      newImages: images.map((image) => image.file),
+      imageIdsToDelete: removeImageIds,
+    };
+    editNoteMutation(noteData);
+  };
+
   const saveNote = (formInputs: NoteFormType) => {
-    openToast(formInputs.title, 'success');
+    if (!currentPetId) {
+      openToast('반려동물 정보가 없습니다. 다시 시도해주세요.');
+      return;
+    }
+
+    if (isEditMode) {
+      editNote(formInputs);
+    } else {
+      createNote(formInputs);
+    }
   };
 
   const goBackGuard = async () => {
+    const message = isEditMode
+      ? '수정을 취소하시겠습니까?'
+      : '페이지를 나가면 작성중인 글이 삭제됩니다.';
     const goBack = await confirm({
       title: '',
-      contents: <p className="text-center">페이지를 나가면 작성중인 글이 삭제됩니다.</p>,
+      contents: <p className="text-center">{message}</p>,
     });
     if (!goBack) return;
+
     navigate(-1);
   };
 
@@ -127,6 +188,32 @@ export default function NoteAddPage() {
     resetInputEl(imageEl.current);
   }, [images]);
 
+  useEffect(() => {
+    if (!isSuccess) {
+      return;
+    }
+    navigate(`/daily?date=${currentDate}`);
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (!editState) {
+      return;
+    }
+    const { title, note, images: existImages } = editState.noteData;
+    setValue('title', title);
+    setValue('contents', note);
+
+    setCurrentImages(existImages);
+  }, [editState]);
+
+  useEffect(() => {
+    if (!isUpdateSuccess || !editState?.noteId) {
+      return;
+    }
+
+    navigate(-1);
+  }, [isUpdateSuccess]);
+
   return (
     <Layout
       canGoBack
@@ -166,6 +253,22 @@ export default function NoteAddPage() {
           </MainSection>
           <BottomSection>
             <ImagesContainer>
+              {currentImages.length > 0 &&
+                currentImages.map(({ imageId, path }) => (
+                  <ImageContainerColumn key={imageId}>
+                    <ImageWrapper
+                      onClick={() => {
+                        setRemoveImageIds((prevIds) => [...prevIds, imageId]);
+                        setCurrentImages((prevImages) => {
+                          const newImages = prevImages.filter((image) => image.imageId !== imageId);
+                          return newImages;
+                        });
+                      }}
+                    >
+                      <img src={path} alt="" className="w-full" />
+                    </ImageWrapper>
+                  </ImageContainerColumn>
+                ))}
               {images.length > 0 &&
                 images.map((image) => (
                   <ImageContainerColumn key={image.id}>
@@ -190,7 +293,12 @@ export default function NoteAddPage() {
               )}
             </ImagesContainer>
           </BottomSection>
-          <Button type="submit" width="full" label="저장하기" />
+          <Button
+            type="submit"
+            width="full"
+            label={isLoading ? '저장중...' : isEditMode ? '수정하기' : '저장하기'}
+            disabled={isLoading}
+          />
         </form>
       </PageContainer>
     </Layout>

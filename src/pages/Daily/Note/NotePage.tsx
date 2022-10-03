@@ -1,14 +1,19 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { BackButton, HeaderWrapper } from '@/components/layout/Header.style';
+import { useEffect } from 'react';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+
 import BackButtonImage from '@/assets/icon/header_back.png';
 import { ReactComponent as DotMenuIcon } from '@/assets/icon/dot_menu_icon.svg';
+import { BackButton, HeaderWrapper } from '@/components/layout/Header.style';
+import { useGetNoteQuery, useDeleteNoteMutation, NoteType } from '@/store/api/dailyApi';
 import useSelectModal from '@/utils/hooks/useSelectModal';
 import { useConfirm, useToastMessage } from '@/utils/hooks';
-import { useEffect, useState } from 'react';
 import { NoteContents } from './index.style';
+import NoteImageSwiper from './components/NoteImageSwiper';
 
 const headerStyles = {
   background: 'transparent',
+  paddingRight: '0.4rem',
+  paddingLeft: '0.4rem',
 };
 function Header({ onClickMenu }: { onClickMenu: () => Promise<void> }) {
   const navigate = useNavigate();
@@ -31,73 +36,107 @@ function Header({ onClickMenu }: { onClickMenu: () => Promise<void> }) {
     </HeaderWrapper>
   );
 }
-export default function NotePage() {
+
+type NoteHookProps = {
+  noteId: number;
+  noteData?: NoteType;
+};
+
+const useDeleteNote = ({ noteId, noteData }: NoteHookProps) => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const currentDate = searchParams.get('date');
   const openToast = useToastMessage();
   const [confirm] = useConfirm();
-  const [openSelectMenu] = useSelectModal();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [noteData, setNoteData] = useState({ title: '', contents: '', images: [] });
+  const [deleteNoteMutation, { isSuccess: isDeleteNoteSuccess, isError: isDeleteNoteError }] =
+    useDeleteNoteMutation();
 
-  const handleDeleteNote = async () => {
+  const deleteNote = async () => {
     const isConfirmedDeleteNote = await confirm({
       title: '글을 삭제 하시겠습니까?',
       contents: '',
     });
     if (!isConfirmedDeleteNote) return;
+    openToast('글을 삭제했습니다.', 'success');
+    deleteNoteMutation({ noteId });
+  };
+  useEffect(() => {
+    if (!isDeleteNoteSuccess) {
+      return;
+    }
+    navigate(`/daily?date=${noteData?.date}`, { replace: true });
+  }, [isDeleteNoteSuccess]);
+  useEffect(() => {
+    if (!isDeleteNoteError) {
+      return;
+    }
+    openToast('글 삭제를 실패했습니다.');
+  }, [isDeleteNoteError]);
 
-    openToast('오늘의 일기가 삭제되었습니다.', 'success');
+  return deleteNote;
+};
+
+const DELETE_NOTE = '글 삭제';
+const EDIT_NOTE = '글 수정';
+const NOTE_PAGE_MENU = [EDIT_NOTE, DELETE_NOTE];
+
+export default function NotePage() {
+  const { id } = useParams();
+  if (!id) {
+    return <Navigate to="404" />;
+  }
+  const navigate = useNavigate();
+  const [openSelectMenu] = useSelectModal();
+
+  const { data: noteData, isLoading } = useGetNoteQuery({ noteId: parseInt(id, 10) });
+
+  const noteHookProps: NoteHookProps = { noteId: parseInt(id, 10), noteData };
+  const deleteNote = useDeleteNote(noteHookProps);
+
+  const handleSelectedMenu = (selectedMenu: string) => {
+    if (selectedMenu === DELETE_NOTE) {
+      deleteNote();
+    } else if (selectedMenu === EDIT_NOTE) {
+      navigate('/daily/note/edit', {
+        state: {
+          date: noteData?.date,
+          editState: {
+            noteId: parseInt(id, 10),
+            noteData,
+          },
+        },
+      });
+    }
   };
   const openMenu = async () => {
-    const selectedMenu = await openSelectMenu(['글 수정', '글 삭제']);
-
+    const selectedMenu = await openSelectMenu(NOTE_PAGE_MENU);
     if (!selectedMenu) return;
-
-    if (selectedMenu === '글 삭제') {
-      handleDeleteNote();
-    } else if (selectedMenu === '글 수정') {
-      openToast('글 수정', 'success');
-    }
+    handleSelectedMenu(selectedMenu as string);
   };
 
-  useEffect(() => {
-    if (!currentDate) {
-      navigate('/404', { replace: true });
-    }
-    setIsLoading(true);
-    setTimeout(() => {
-      setNoteData({
-        title: '오늘의 기록입니다.',
-        contents: '태풍 힌남노가 지나가는 중이에요. 무사히 지나갔으면 좋겠네요',
-        images: [],
-      });
-      setIsLoading(false);
-    }, 1500);
-    console.log(currentDate);
-  }, [currentDate]);
   return (
     <div className="relative w-full h-full flex flex-col">
       <Header onClickMenu={openMenu} />
-      <div className="bg-primary-light w-full h-1/3 min-h-[200px]"></div>
+      {noteData && noteData.images && noteData.images.length > 0 ? (
+        <div className="h-[40%] w-full">
+          <div className="h-full w-full">
+            <NoteImageSwiper images={noteData.images} />
+          </div>
+        </div>
+      ) : (
+        <div className="pt-[70px]"></div>
+      )}
       <div
         className="bg-white flex-1 rounded-t-[10px] shadow-md -mt-2 p-4 flex flex-col gap-4 overflow-hidden"
         style={{ boxShadow: '2px 2px 10px rgba(0, 0, 0, 0.15)' }}
       >
         <div className="flex flex-col gap-2 py-4">
           <p className="text-center font-bold text-xl">
-            {isLoading ? 'Loading...' : noteData.title}
+            {isLoading ? 'Loading...' : noteData?.title}
           </p>
-          <p className="text-center text-sm text-gray-400">{currentDate}</p>
+          <p className="text-center text-sm text-gray-400">{noteData?.date}</p>
         </div>
         <div className="w-full h-1 bg-primary-light opacity-50 rounded-[10px]"></div>
-        {!isLoading && (
-          <>
-            <NoteContents>{noteData.contents}</NoteContents>
-          </>
-        )}
+        {!isLoading && <NoteContents>{noteData?.note}</NoteContents>}
         {isLoading && <div>Loaindg...</div>}
       </div>
     </div>
