@@ -3,13 +3,12 @@ import Header from '@/components/layout/Header';
 import WalkRecordDetail, { WalkRecordType } from './WalkRecordDetail';
 
 const mockSaveWalkData: WalkRecordType = {
-  id: 1,
-  startTime: '15:48',
-  endTime: '16:12',
-  walkTime: 24,
-  walkDistance: 1.1,
+  walkId: 1,
+  startedAt: '15:48',
+  finishedAt: '16:12',
+  totalTime: 24,
+  distance: 1.1,
   calcories: 108,
-  date: new Date(),
 };
 type SaveWalkModalProps = {
   close: () => void;
