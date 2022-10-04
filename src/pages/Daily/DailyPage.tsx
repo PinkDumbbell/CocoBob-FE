@@ -134,7 +134,7 @@ export default function DailyMain() {
                       content={
                         <div className="flex flex-col items-center">
                           <p className="text-primary-bright font-medium text-md">
-                            {recordOverview.walkTotalDistance} km
+                            {recordOverview.walkTotalDistance.toFixed(2)} km
                           </p>
                           <p className="text-primary-main font-semibold">
                             {recordOverview.walkTotalTime >= 60 && (
