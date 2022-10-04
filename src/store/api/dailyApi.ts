@@ -1,3 +1,4 @@
+import { WalkHistoryItemType } from '@/pages/Daily/Walk/components/WalkHistoryList';
 import { apiSlice } from '../slices/apiSlice';
 import { IGenericResponse } from './types';
 
@@ -56,9 +57,11 @@ export type RecordIdOfDateType = {
   [key: string]: RecordIdType;
 };
 
-export type RecordRequestType = {
+export type BasicRecordRequestType = {
   petId: number;
   date: string;
+};
+export type RecordRequestType = BasicRecordRequestType & {
   sessionId: number; // for disable cache behavior of RTK Query
 };
 type NoteRequestType = RecordRequestType & {
@@ -88,26 +91,19 @@ export type NoteEditType = {
   noteId: number;
 };
 
-export type WalkDetailType = {
-  date: string;
-  distance: number;
-  finishedAt?: string;
-  startedAT?: string;
-  totalTime: number;
-  walkId: number;
-};
-
 export const dailyApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getDailyRecordIdListOfMonth: builder.query<RecordIdOfDateType, RecordRequestType>({
       // eslint-disable-next-line no-unused-vars
-      query: ({ petId, date, sessionId }) => `/v1/records/pet/${petId}/ids?year-month=${date}`,
+      query: ({ petId, date }) => `/v1/records/pet/${petId}/ids?year-month=${date}`,
       transformResponse: (response: IGenericResponse<RecordIdOfDateType>) => response.data,
+      providesTags: (result, api, args) => ['Daily', { type: 'Daily', id: args.date }],
     }),
     getDailyRecordOverview: builder.query<RecordOverviewType, RecordRequestType>({
       // eslint-disable-next-line no-unused-vars
       query: ({ petId, date, sessionId }) => `v1/records/pet/${petId}?date=${date}`,
       transformResponse: (response: IGenericResponse<RecordOverviewType>) => response.data,
+      providesTags: (result, api, args) => ['Daily', { type: 'Daily', id: args.date }],
     }),
     getHealthRecord: builder.query<HealthRecordType, { healthRecordId: number; sessionId: number }>(
       {
@@ -152,7 +148,7 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
           body: formData,
         };
       },
-      invalidatesTags: ['DailyRecord'],
+      invalidatesTags: ['DailyRecord', 'Daily'],
     }),
     createNoteRecord: builder.mutation<any, NoteRequestType>({
       query: ({ petId, date, noteData }) => {
@@ -171,7 +167,10 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
           body: formData,
         };
       },
-      invalidatesTags: ['DailyRecord'],
+      invalidatesTags: (result, api, args) => [
+        'DailyRecord',
+        { type: 'Daily', id: args.date.substring(0, 7) },
+      ],
     }),
     getNote: builder.query<NoteType, { noteId: number }>({
       query: ({ noteId }) => `/v1/dailys/${noteId}`,
@@ -185,7 +184,7 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
           method: 'DELETe',
         };
       },
-      invalidatesTags: ['DailyRecord'],
+      invalidatesTags: ['DailyRecord', 'Daily'],
     }),
     editNote: builder.mutation<any, NoteEditType>({
       query: ({ noteId, imageIdsToDelete, newImages, note, title }) => {
@@ -206,9 +205,15 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: (result, api, args) => [{ type: 'DailyRecord', id: args.noteId }],
     }),
-    getWalk: builder.query<WalkDetailType, number>({
+    getWalkList: builder.query<WalkHistoryItemType[], RecordRequestType>({
+      query: ({ date, petId }) => `/v1/walks/pets/${petId}?date=${date}`,
+      transformResponse: (response: IGenericResponse<{ walks: WalkHistoryItemType[] }>) =>
+        response.data.walks,
+      providesTags: (result, api, args) => [{ type: 'DailyWalk', id: args.date }],
+    }),
+    getWalk: builder.query<WalkHistoryItemType, number>({
       query: (walkId: number) => `/v1/walks/${walkId}`,
-      transformResponse: (response: IGenericResponse<WalkDetailType>) => response.data,
+      transformResponse: (response: IGenericResponse<WalkHistoryItemType>) => response.data,
       providesTags: (result, api, args) => [{ type: 'DailyWalk', id: args }],
     }),
     deleteWalk: builder.mutation<any, any>({
@@ -218,7 +223,11 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
           method: 'DELETE',
         };
       },
-      invalidatesTags: (result, api, args) => ['DailyWalk', { type: 'DailyWalk', id: args }],
+      invalidatesTags: (result, api, args) => [
+        'Daily',
+        'DailyWalk',
+        { type: 'DailyWalk', id: args },
+      ],
     }),
     createWalk: builder.mutation<any, any>({
       query: ({ petId, date, distance, totalTime, startedAt, finishedAt }) => {
@@ -240,7 +249,11 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
           body: formData,
         };
       },
-      invalidatesTags: ['DailyWalk'],
+      invalidatesTags: (result, api, args) => [
+        'Daily',
+        'DailyRecord',
+        { type: 'DailyWalk', id: args.date },
+      ],
     }),
   }),
 });
@@ -260,4 +273,5 @@ export const {
   useCreateWalkMutation,
   useDeleteWalkMutation,
   useGetWalkQuery,
+  useGetWalkListQuery,
 } = dailyApiSlice;
