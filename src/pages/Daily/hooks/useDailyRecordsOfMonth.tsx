@@ -6,7 +6,11 @@ import { useToastMessage } from '@/utils/hooks';
 import { getDateString } from '@/utils/libs/date';
 import { useGetDailyRecordIdListOfMonthQuery } from '@/store/api/dailyApi';
 
-const useDailyRecordsOfMonth = (currentPetId: number, currentDateString: string) => {
+const useDailyRecordsOfMonth = (
+  currentPetId: number,
+  currentDateString: string,
+  timestamp = Date.now(),
+) => {
   const openToast = useToastMessage();
   const navigate = useNavigate();
 
@@ -18,7 +22,7 @@ const useDailyRecordsOfMonth = (currentPetId: number, currentDateString: string)
   const { data, isError, isLoading } = useGetDailyRecordIdListOfMonthQuery({
     date: activeStartDateString,
     petId: currentPetId,
-    sessionId: Date.now(),
+    sessionId: timestamp,
   });
 
   useEffect(() => {
@@ -37,7 +41,6 @@ const useDailyRecordsOfMonth = (currentPetId: number, currentDateString: string)
   }, [isError]);
 
   return {
-    currentDate,
     recordIdList: data,
     isRecordIdListLoading: isLoading,
     isRecordIdListError: isError,

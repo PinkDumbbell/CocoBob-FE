@@ -1,4 +1,4 @@
-import { useEffect, ReactNode } from 'react';
+import { useEffect, ReactNode, useRef } from 'react';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Autoplay } from 'swiper';
@@ -64,7 +64,6 @@ export default function DailyMain() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const currentDateString = searchParams.get('date');
-
   useEffect(() => {
     if (currentDateString) {
       return;
@@ -77,15 +76,18 @@ export default function DailyMain() {
   if (isInvalidDate) {
     return <Navigate to="/404" replace />;
   }
-
+  const timestamp = useRef(Date.now()).current;
+  const currentDate = currentDateString ? new Date(currentDateString) : new Date();
   const dateString = currentDateString ?? getDateString(new Date());
-  const { currentDate, recordIdList, setActiveStartDate } = useDailyRecordsOfMonth(
+  const { recordIdList, setActiveStartDate } = useDailyRecordsOfMonth(
     currentPetId,
     dateString,
+    timestamp,
   );
   const { numberOfOverviewItmes, recordOverview } = useDailyRecordOverview(
     currentPetId,
     dateString,
+    timestamp,
   );
   const { goHealthPage, selectWalkOrNote } = useRecordMenus(dateString);
 
@@ -99,6 +101,10 @@ export default function DailyMain() {
         : false,
   };
 
+  useEffect(() => {
+    console.log(recordIdList);
+    console.log(recordOverview);
+  }, [recordOverview]);
   return (
     <Layout header footer title="데일리 기록">
       <div className="p-4 flex flex-col items-center gap-4 w-full h-full overflow-y-auto space-y-4">
