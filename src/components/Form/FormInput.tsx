@@ -1,5 +1,6 @@
 import { UseFormRegisterReturn } from 'react-hook-form';
 import styled from 'styled-components';
+import tw from 'tailwind-styled-components';
 
 interface InputProps {
   label: string;
@@ -61,6 +62,10 @@ export const InputStyle = styled.input<{ isError: boolean | undefined; unit?: bo
   }
 `;
 
+const UnitText = tw.div`
+  font-light text-gray-500 text-sm bg-slate-100 h-[46px] rounded-r-[10px] absolute right-0 top-0 flex items-center justify-center w-[3rem]
+`;
+
 export default function Input({
   label,
   name,
@@ -89,11 +94,7 @@ export default function Input({
           {...rules}
           disabled={disabled}
         />
-        {!!unit && (
-          <div className="font-light text-gray-500 text-sm bg-slate-100 h-[46px] rounded-r-[10px] absolute right-0 flex items-center justify-center w-[3rem]">
-            {unit}
-          </div>
-        )}
+        {!!unit && <UnitText>{unit}</UnitText>}
         {errorMessage && (
           <p aria-errormessage={errorMessage} className="text-red-500 text-sm pt-1">
             {errorMessage}

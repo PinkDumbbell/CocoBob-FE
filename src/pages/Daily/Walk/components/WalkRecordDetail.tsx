@@ -1,11 +1,8 @@
 import { WalkHistoryItemType } from './WalkHistoryList';
 
-export type WalkRecordType = Exclude<
-  WalkHistoryItemType & {
-    calcories: number;
-  },
-  'id'
->;
+export type WalkRecordType = WalkHistoryItemType & {
+  calcories: number;
+};
 
 type WalkRecordDetailProps = {
   walkRecord: WalkRecordType;
