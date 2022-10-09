@@ -1,12 +1,12 @@
-import usePlatform from '@/utils/hooks/usePlatform';
+import { useAppSelector } from '@/store/config';
 import { SocialLoginButton, FormWrapper } from './SocialLoginForm.style';
 import AppleLoginButton from './AppleLoginButton';
 
 export default function SocialLoginForm() {
-  const platform = usePlatform();
+  const platform = useAppSelector((state) => state.platform.currentPlatform);
 
   return (
-    <FormWrapper>
+    <FormWrapper className="space-y-[20px]">
       <SocialLoginButton>
         <a href={`${import.meta.env.VITE_API_BASE_URL}/v1/users/google`}>Google로 로그인</a>
       </SocialLoginButton>

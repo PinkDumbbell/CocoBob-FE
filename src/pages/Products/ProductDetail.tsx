@@ -60,7 +60,7 @@ export default function ProductDetailPage() {
           <h4 className="text-[#1A70D2]">{product?.price.toLocaleString('ko-KR')}원</h4>
           <div className="w-full p-4 h-32 border border-gray-800">어떤 내용</div>
           <div className="w-full p-4">
-            <Button label="리뷰 작성" size="full" onClick={() => {}} />
+            <Button label="리뷰 작성" width="full" onClick={() => {}} />
           </div>
         </ProductInfoContainer>
         <NutrientInfoContainer>

@@ -1,17 +1,17 @@
-import { IGeolocationOptions, ILocation } from '@/@type/location';
+import { IGeolocationOptions, LocationType } from '@/@type/location';
 import { useEffect, useRef, useState } from 'react';
 
-const defaultPosition: ILocation = {
+const defaultPosition: LocationType = {
   latitude: 37.5036833,
   longitude: 127.0448556,
 };
 
 export default function useWatchPosition(options: IGeolocationOptions = {}) {
-  const [location, setLocation] = useState<ILocation>(defaultPosition);
+  const [location, setLocation] = useState<LocationType>(defaultPosition);
   const [error, setError] = useState('');
   const locationWatchId = useRef<number | null>(null);
 
-  const handleSuccess = (position: { coords: ILocation }) => {
+  const handleSuccess = (position: { coords: LocationType }) => {
     const { latitude, longitude } = position.coords;
 
     setLocation({

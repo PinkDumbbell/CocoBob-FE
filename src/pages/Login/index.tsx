@@ -34,7 +34,7 @@ export default function LoginPage() {
             className="border-[1.5px] border-white"
             label="이메일로 로그인"
             backgroundColor="transparent"
-            size="full"
+            width="full"
             primary="first"
             onClick={openEmailLoginSheet}
           />

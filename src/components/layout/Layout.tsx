@@ -10,6 +10,7 @@ interface LayoutProps extends HeaderProps {
   header?: boolean;
   footer?: boolean;
   canSearch?: boolean;
+  customRightChild?: ReactNode;
 }
 
 const useHeaderWithScroll = () => {
@@ -39,6 +40,7 @@ const useHeaderWithScroll = () => {
 function Layout({
   canGoBack,
   canSearch,
+  customRightChild,
   onClickGoBack,
   title,
   header,
@@ -64,6 +66,7 @@ function Layout({
           title={title}
           menu={menu}
           canSearch={canSearch}
+          customRightChild={customRightChild}
         />
       )}
 

@@ -38,15 +38,14 @@ const EmailLoginSheet = ({ isOpen }: { isOpen: boolean }) => {
 
   useEffect(() => {
     if (!isError) return;
-    const {
-      status,
-      data: { message },
-    } = error as { status: number; data: { message: string } };
+    const { status, data } = error as { status: number; data: { message?: string } };
 
     if (status === 403) {
       openToast('이메일 또는 비밀번호를 확인해주세요.');
-    } else if (status === 404) {
-      openToast(message);
+    } else if (status === 404 && data?.message) {
+      openToast(data.message);
+    } else {
+      openToast('에러가 발생했습니다. 잠시 후 다시 시도해주세요.');
     }
     reset();
   }, [isError]);

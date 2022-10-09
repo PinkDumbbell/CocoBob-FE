@@ -1,25 +1,33 @@
 import { concatClasses } from '@/utils/libs/concatClasses';
+import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
 
 interface ButtonProps {
   primary?: 'first' | 'second' | 'third' | 'fourth' | 'etc';
   backgroundColor?: string;
-  size?: 'full' | 'small';
+  width?: 'full' | 'small';
   label: string;
   onClick?: () => void;
   className?: string;
   disabled?: boolean;
 }
 
+type ButtonPropsWithDefaultProps = DetailedHTMLProps<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
+> &
+  ButtonProps;
+
 export const Button = ({
-  size = 'small',
+  width = 'small',
   primary = 'first',
   backgroundColor,
   label,
   className,
   disabled,
+  type,
   ...props
-}: ButtonProps) => {
-  const volume = size === 'full' ? 'min-w-full' : 'min-w-sm';
+}: ButtonPropsWithDefaultProps) => {
+  const volume = width === 'full' ? 'min-w-full' : 'min-w-sm';
   const totalStyle = [
     'max-w-sm py-2 px-10 text-xl font-bold rounded-[10px] text-center',
     `${volume}`,
@@ -38,11 +46,11 @@ export const Button = ({
 
   return (
     <button
-      type="button"
+      {...props}
       className={concatClasses(totalStyle.join(' '), className ?? '')}
       disabled={disabled}
       style={{ backgroundColor }}
-      {...props}
+      type={type ?? 'button'}
     >
       {label}
     </button>

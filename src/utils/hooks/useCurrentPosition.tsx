@@ -1,17 +1,17 @@
-import { IGeolocationOptions, ILocation } from '@/@type/location';
+import { IGeolocationOptions, LocationType } from '@/@type/location';
 import { useState, useEffect, useCallback } from 'react';
 
-const defaultPosition: ILocation = {
+const defaultPosition: LocationType = {
   latitude: 37.5036833,
   longitude: 127.0448556,
 };
 
 const useCurrentPosition = (options: IGeolocationOptions = {}) => {
-  const [location, setLocation] = useState<ILocation>(defaultPosition);
+  const [location, setLocation] = useState<LocationType>(defaultPosition);
   const [error, setError] = useState<string>();
 
   // Geolocation의 `getCurrentPosition` 메소드에 대한 성공 callback 핸들러
-  const handleSuccess = useCallback((pos: { coords: ILocation }) => {
+  const handleSuccess = useCallback((pos: { coords: LocationType }) => {
     const { latitude, longitude } = pos.coords;
     setLocation({
       latitude,
