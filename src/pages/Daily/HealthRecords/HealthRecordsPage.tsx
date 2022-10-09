@@ -37,7 +37,7 @@ export default function HealthRecordsPage() {
     modalOpen: feedModal,
     FeedModal,
     openModal: openFeedModal,
-  } = useFeedModal(currentPetId, new Date(currentDate), healthRecord);
+  } = useFeedModal(currentPetId, new Date(currentDate));
   const { data: currentPet, isLoading } = useCurrentPet();
 
   const goDailyPage = () => navigate(`/daily?date=${searchParams.get('date')}`);
