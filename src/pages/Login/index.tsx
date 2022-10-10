@@ -1,9 +1,12 @@
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
 import Button from '@/components/Button';
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
-import { useEffect } from 'react';
 import { useAppDispatch } from '@/store/config';
 import PetalogMain from '@/assets/image/petalog_main.png';
+
 import JoinLink from './components/JoinLink';
 import SocialLoginForm from './components/SocialLoginForm';
 import { PageContainer, LogoContainer, FormContainer } from './index.style';
@@ -12,16 +15,31 @@ import SignUpSheet from './SignUpSheet';
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
+  const [searchParams] = useSearchParams();
+
+  const agreement = searchParams.get('agreement');
+  const privacyModal = agreement === 'privacy';
+
   const { isBottomSheetOpen: isEmailBottomSheetOpen, openBottomSheet: openEmailLoginSheet } =
     useBottomSheet('emailLogin');
-  const { isBottomSheetOpen: isSignUpBottomSheetOpen } = useBottomSheet('signUp');
+  const { isBottomSheetOpen: isSignUpBottomSheetOpen, openBottomSheet: openSignUpBottomSheet } =
+    useBottomSheet('signUp');
 
+  const closeBottomSheet = () => {
+    dispatch(closeBottomSheetAction());
+  };
   useEffect(
     () => () => {
-      dispatch(closeBottomSheetAction());
+      closeBottomSheet();
     },
     [],
   );
+  useEffect(() => {
+    if (!privacyModal) {
+      return;
+    }
+    openSignUpBottomSheet();
+  }, [privacyModal]);
   return (
     <>
       <PageContainer>
@@ -41,7 +59,7 @@ export default function LoginPage() {
           <JoinLink color="white" />
         </FormContainer>
       </PageContainer>
-      <EmailLoginSheet isOpen={isEmailBottomSheetOpen} />
+      <EmailLoginSheet isOpen={isEmailBottomSheetOpen} closeBottomSheet={closeBottomSheet} />
       <SignUpSheet isOpen={isSignUpBottomSheetOpen} />
     </>
   );
