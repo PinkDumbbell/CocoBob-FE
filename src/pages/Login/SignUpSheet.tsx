@@ -25,7 +25,7 @@ const useAgreement = (modalOpen: () => void) => {
     if (checked) {
       modalOpen();
     } else {
-      setAgreed(checked);
+      setAgreed(false);
     }
   };
 
