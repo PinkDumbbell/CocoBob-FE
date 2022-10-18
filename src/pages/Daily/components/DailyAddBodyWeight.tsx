@@ -1,28 +1,48 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import FormInput from '@/components/Form/FormInput';
-import DailyModal, { useDailyMutation, DailyModalProps } from './DailyModal';
+import dayjs from 'dayjs';
+import DailyModal, { DailyModalProps } from './DailyModal';
+import useHealthRecordyMutation from '../HealthRecords/hooks/useHealthRecordMutation';
 
-export default function DailyBodyWeight({ closeModal, todayDaily, date, petId }: DailyModalProps) {
-  const { register, getValues } = useForm();
-  const createOrUpdateDaily = useDailyMutation();
+type BodyWeightFormType = {
+  bodyWeight: number;
+};
+export default function DailyBodyWeight({
+  closeModal,
+  healthRecord,
+  date,
+  petId,
+}: DailyModalProps) {
+  const { register, getValues, setValue } = useForm<BodyWeightFormType>();
+  const createOrUpdateHealthRecord = useHealthRecordyMutation();
 
-  const saveDaily = () => {
+  const saveHealthRecord = () => {
+    if (!petId) return;
     const bodyWeight = getValues('bodyWeight');
-    const newDaily = {
-      ...todayDaily?.data,
-    };
-    newDaily.bodyWeight = bodyWeight;
-    createOrUpdateDaily(newDaily, petId, date, todayDaily?.dailyId);
+    createOrUpdateHealthRecord({
+      ...healthRecord,
+      bodyWeight,
+      petId,
+      date: dayjs(date).format('YYYY-MM-DD'),
+    });
     closeModal();
   };
+
+  useEffect(() => {
+    if (!healthRecord) return;
+
+    setValue('bodyWeight', healthRecord.bodyWeight ?? 0);
+  }, []);
+
   return (
-    <DailyModal closeModal={closeModal} onSubmit={saveDaily}>
+    <DailyModal closeModal={closeModal} onSubmit={saveHealthRecord}>
       <div className="p-2 flex flex-col w-full items-center gap-2">
         <h3>몸무게기록</h3>
         <div className="flex gap-1 items-center">
           <FormInput
             label="몸무게"
-            unit="g"
+            unit="kg"
             name="bodyWeight"
             rules={register('bodyWeight', {
               required: '몸무게를 입력하세요',

@@ -19,11 +19,13 @@ import { apiSlice } from './slices/apiSlice';
 import toastSlice from './slices/toastSlice';
 import dailySlice from './slices/dailySlice';
 import confirmSlice from './slices/confirmSlice';
+import selectModalSlice from './slices/selectModalSlice';
+import platformSlice from './slices/platformSlice';
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['toast', 'confirm'],
+  blacklist: ['toast', 'confirm', 'selectModal', 'platform'],
 };
 
 const appReducer = combineReducers({
@@ -33,6 +35,8 @@ const appReducer = combineReducers({
   toast: toastSlice,
   daily: dailySlice,
   confirm: confirmSlice,
+  selectModal: selectModalSlice,
+  platform: platformSlice,
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 

@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useAppDispatch } from '@/store/config';
+import { setPlatform } from '@/store/slices/platformSlice';
 
 export type PlatformType = 'ios' | 'android' | 'windows' | 'mac' | 'os';
 
@@ -13,18 +15,34 @@ declare global {
 }
 
 export default function usePlatform() {
-  const [currentPlatform, setCurrentPlatform] = useState<PlatformType>('os');
+  const dispatch = useAppDispatch();
+  const [isInAppWebViewHandlerReady, setIsInAppWebViewReady] = useState(false);
 
-  const getPlatform = async () => {
-    if (window?.flutter_inappwebview) {
-      const { platform }: { platform: PlatformType } =
-        await window.flutter_inappwebview.callHandler('platformHandler');
-      setCurrentPlatform(platform);
-    }
+  const getPlatformInfo = async () => {
+    const { platform }: { platform: PlatformType } = await window.flutter_inappwebview.callHandler(
+      'platformHandler',
+    );
+    return platform;
   };
+  const setPlatformHandler = (platform: PlatformType) => {
+    dispatch(setPlatform(platform));
+  };
+  const inAppWebViewReadyHandler = () => {
+    setIsInAppWebViewReady(true);
+  };
+
   useEffect(() => {
-    getPlatform();
+    window.addEventListener('flutterInAppWebViewPlatformReady', inAppWebViewReadyHandler);
+    return () => {
+      window.removeEventListener('flutterInAppWebViewPlatformReady', inAppWebViewReadyHandler);
+    };
   }, []);
 
-  return currentPlatform;
+  useEffect(() => {
+    if (!isInAppWebViewHandlerReady) return;
+    (async function () {
+      const platform = await getPlatformInfo();
+      setPlatformHandler(platform);
+    })();
+  }, [isInAppWebViewHandlerReady]);
 }

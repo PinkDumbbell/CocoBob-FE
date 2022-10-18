@@ -9,7 +9,8 @@ export type BottomSheetType =
   | 'birthday'
   | 'monthsAge'
   | 'findBreed'
-  | 'walkSelector';
+  | 'walkSelector'
+  | 'dailyMeal';
 export type BottomSheetState = {
   bottomSheet: BottomSheetType;
 };

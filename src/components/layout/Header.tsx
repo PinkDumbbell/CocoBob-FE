@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import useCurrentPet from '@/utils/hooks/useCurrentPet';
@@ -26,6 +26,7 @@ export interface HeaderProps {
   title?: string;
   canSearch?: boolean;
   hideTitle?: boolean;
+  customRightChild?: ReactNode;
 }
 const LeftChild = React.memo(({ canGoBack, onClickGoBack, menu }: HeaderProps) => {
   const navigator = useNavigate();
@@ -45,19 +46,20 @@ const LeftChild = React.memo(({ canGoBack, onClickGoBack, menu }: HeaderProps) =
           </BackButton>
         )}
         {menu && (
-          <div>
-            <button type="button" onClick={openMenu}>
-              <MenuIcon />
-            </button>
-          </div>
+          <>
+            <div>
+              <button type="button" onClick={openMenu}>
+                <MenuIcon />
+              </button>
+            </div>
+            <SideMenuWrapper isOpen={isMenuOpen}>
+              <button type="button" onClick={closeMenu}>
+                닫기
+              </button>
+            </SideMenuWrapper>
+          </>
         )}
       </LeftMenuWrapper>
-
-      <SideMenuWrapper isOpen={isMenuOpen}>
-        <button type="button" onClick={closeMenu}>
-          닫기
-        </button>
-      </SideMenuWrapper>
     </>
   );
 });
@@ -77,7 +79,15 @@ const RightChild = React.memo(({ canSearch }: { canSearch?: boolean }) => {
 });
 RightChild.displayName = 'HeaderRightChild';
 
-function Header({ menu, canGoBack, onClickGoBack, title, hideTitle, canSearch }: HeaderProps) {
+function Header({
+  menu = false,
+  canGoBack,
+  onClickGoBack,
+  title,
+  hideTitle,
+  canSearch,
+  customRightChild,
+}: HeaderProps) {
   const location = useLocation();
   const { data: pet } = useCurrentPet(location.pathname === '/');
 
@@ -96,7 +106,11 @@ function Header({ menu, canGoBack, onClickGoBack, title, hideTitle, canSearch }:
             <img src={pet?.thumbnailPath ?? DefaultProfile} alt="큰 프로필 사진" />
           )}
         </TitleWrapper>
-        <RightChild canSearch={canSearch} />
+        {customRightChild ? (
+          <RightMenuWrapper>{customRightChild}</RightMenuWrapper>
+        ) : (
+          <RightChild canSearch={canSearch} />
+        )}
       </HeaderContents>
     </HeaderWrapper>
   );

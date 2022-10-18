@@ -104,7 +104,7 @@ export default function Main() {
             )}
           </VerticalBox>
           <ContentsContainer style={{ zIndex: 10 }}>
-            <div className="w-full h-auto flex justify-evenly gap-3 relative">
+            <div className="w-full h-20 flex justify-evenly space-x-3 relative">
               <VerticalCenterBox className="bg-gray-300 rounded-md w-1/3 aspect-square">
                 <Link to="/products" className="w-full h-full flex items-center justify-center">
                   사료찾기

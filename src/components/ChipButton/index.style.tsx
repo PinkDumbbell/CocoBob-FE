@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import tw from 'tailwind-styled-components';
 
 interface ChipButtonWrapperProps {

@@ -40,7 +40,9 @@
     "import/prefer-default-export": "off",
     "import/no-cycle": "off",
     "arrow-body-style": "off",
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "no-nested-ternary": "off",
+    "no-underscore-dangle": "off"
   },
   "settings": {
     "import/resolver": {

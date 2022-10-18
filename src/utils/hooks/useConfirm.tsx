@@ -1,31 +1,35 @@
+/* eslint-disable no-use-before-define */
 import { ReactNode, useContext } from 'react';
 import { useAppDispatch } from '@/store/config';
 import { setPopupOpened } from '@/store/slices/confirmSlice';
 import { ConfirmContext } from '@/components/Confirm/ConfirmPortal';
+import useKeyHandler from './useKeyHandler';
 
 type ConfirmOpenProps = {
   title: string | ReactNode;
-  contents: string | ReactNode;
+  contents?: string | ReactNode;
 };
 
 export default function useConfirm() {
+  useKeyHandler('Escape', hidePopup);
   const dispatch = useAppDispatch();
   const confirmContext = useContext(ConfirmContext);
 
-  const openPopup = async ({ title, contents }: ConfirmOpenProps) => {
+  function openPopup({ title, contents }: ConfirmOpenProps) {
     confirmContext.title = title;
     confirmContext.contents = contents;
     dispatch(setPopupOpened(true));
+
     return new Promise((resolve) => {
       confirmContext.promiseInfo = {
         resolve,
       };
     });
-  };
+  }
 
-  const hidePopup = () => {
+  function hidePopup() {
     dispatch(setPopupOpened(false));
-  };
+  }
 
   return [openPopup, hidePopup];
 }

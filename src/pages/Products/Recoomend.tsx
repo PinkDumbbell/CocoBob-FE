@@ -1,5 +1,4 @@
 /* eslint-disable no-extra-boolean-cast */
-/* eslint-disable no-nested-ternary */
 import { useEffect, useMemo, useState } from 'react';
 import { EffectCoverflow, Pagination } from 'swiper';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
