@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 
@@ -7,7 +7,7 @@ import ProductItem from '@/components/Product';
 import ProductSearchModal from '@/pages/Products/components/Search/modal';
 import { useLazyGetProductQuery } from '@/store/api/productApi';
 import { ProductPreviewType } from '@/@type/product';
-import Header from './components/Header';
+import { ReactComponent as SearchIcon } from '@/assets/icon/search_icon.svg';
 
 import CategoryTabButton from './components/CategoryTabButton';
 import FilterModal from './components/Filter/FilterModal';
@@ -52,20 +52,10 @@ function useFilterModal() {
     closeFilterModal,
   };
 }
-function useFetchProductData(filters: FilterType) {
-  const ref = useRef<HTMLDivElement>();
+function useFetchProductData(filters: FilterType, inView: boolean) {
   const [page, setPage] = useState<number>(0);
   const [searchResults, setSearchResults] = useState<ProductPreviewType[]>([]);
-  const [trigger, { isFetching, data, isSuccess, isError }] = useLazyGetProductQuery();
-  const { ref: inViewRef, inView } = useInView({ threshold: 0, rootMargin: '150px 0px 0px 0px' });
-
-  const setInViewRef = useCallback(
-    (node: HTMLDivElement) => {
-      ref.current = node;
-      inViewRef(node);
-    },
-    [inViewRef],
-  );
+  const [trigger, { isFetching, isLoading, data, isSuccess, isError }] = useLazyGetProductQuery();
 
   const handleInitResult = () => {
     setPage(0);
@@ -86,27 +76,39 @@ function useFetchProductData(filters: FilterType) {
   }, [filters]);
 
   useEffect(() => {
-    if (isFetching || data?.last || !inView) return;
+    if (isLoading || data?.last || !inView) return;
     handleIncreasePage();
-  }, [inView, isFetching, data]);
-
+  }, [inView, isLoading, data]);
+  useEffect(() => {
+    if (page === 0) return;
+    trigger({ ...filters, page: page + 1 });
+  }, [page]);
   useEffect(() => {
     if (!isSuccess) return;
     const productList = data?.productList ?? [];
     setSearchResults(combineList(productList));
   }, [data]);
 
-  return { searchResults, isFetching, isError, isLastData, handleInitResult, setInViewRef };
+  return {
+    searchResults,
+    isFetching,
+    isError,
+    isLastData,
+    handleInitResult,
+  };
 }
-const MemoizedProductItem = React.memo(({ product }: { product: ProductPreviewType }) => {
-  const navigate = useNavigate();
-  return (
-    <div className="px-2" onClick={() => navigate(`/products/${product.productId}`)}>
-      <ProductItem product={product} />
-    </div>
-  );
-});
-MemoizedProductItem.displayName = 'ProductItem';
+
+const ProductListItem = React.forwardRef(
+  ({ product }: { product: ProductPreviewType }, ref: React.Ref<HTMLDivElement>) => {
+    const navigate = useNavigate();
+    return (
+      <div ref={ref} className="px-2" onClick={() => navigate(`/products/${product.productId}`)}>
+        <ProductItem product={product} />
+      </div>
+    );
+  },
+);
+ProductListItem.displayName = 'MemoizedProductItem';
 
 export default function ProductsPage() {
   const navigate = useNavigate();
@@ -117,8 +119,27 @@ export default function ProductsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { filters, handleInitFilters, handleSetFilters } = useSelectFilters();
   const { filterModal, openFilterModal, closeFilterModal } = useFilterModal();
-  const { searchResults, isFetching, isError, isLastData, handleInitResult, setInViewRef } =
-    useFetchProductData(filters);
+
+  const { ref: inViewRef, inView } = useInView({
+    threshold: 0,
+    rootMargin: '100px 0px 0px 0px',
+  });
+  const ref = useRef();
+  // Use `useCallback` so we don't recreate the function on each render
+  const setRefs = useCallback(
+    (node: any) => {
+      // Ref's from useRef needs to have the node assigned to `current`
+      ref.current = node;
+      // Callback refs, like the one from `useInView`, is a function that takes the node as an argument
+      inViewRef(node);
+    },
+    [inViewRef],
+  );
+
+  const { searchResults, isError, isLastData, handleInitResult } = useFetchProductData(
+    filters,
+    inView,
+  );
 
   const handleCloseSearch = () => {
     setOnSearch(false);
@@ -149,7 +170,16 @@ export default function ProductsPage() {
   }, [searchParams]);
 
   return (
-    <Layout footer>
+    <Layout
+      footer
+      header={!onSearch}
+      title="제품목록"
+      customRightChild={
+        <div className="absolute right-4 flex items-center" onClick={() => setOnSearch(true)}>
+          <SearchIcon />
+        </div>
+      }
+    >
       {onSearch && (
         <ProductSearchModal
           onClose={handleCloseSearch}
@@ -158,9 +188,8 @@ export default function ProductsPage() {
           setSearchInputValue={setSearchKeyword}
         />
       )}
-      <div className="fixed top-0 left-0 right-0 mx-auto flex flex-col w-full max-w-[425px]">
-        <Header title={'제품목록'} goSearchPage={() => setOnSearch(true)} />
-        <div className={'flex flex-col w-full max-w-[425px] bg-white pt-[50px]'}>
+      <div className="flex flex-col w-full max-w-[425px] mx-auto h-full relative">
+        <div className="flex flex-col w-full max-w-[425px] bg-white">
           <div className="h-12 w-full flex justify-between items-center">
             {categoryList.map((categoryName) => (
               <CategoryTabButton
@@ -205,19 +234,21 @@ export default function ProductsPage() {
             </div>
           </div>
         </div>
-      </div>
-      <div className="w-full h-full">
-        <div className="pt-[150px] pb-[60px]">
-          {searchResults?.map((product) => (
-            <MemoizedProductItem key={product.productId} product={product} />
+        <div className="flex-1 overflow-y-auto">
+          {searchResults?.map((product, idx, arr) => (
+            <ProductListItem
+              product={product}
+              key={product.productId}
+              ref={idx === arr.length - 10 ? setRefs : null}
+            />
           ))}
-          {!isFetching && !isLastData && (
-            <div ref={setInViewRef} className="w-full h-20 flex items-center justify-center">
-              LoadMore
+          {isLastData && searchResults.length === 0 && (
+            <div className="flex items-center justify-center w-full h-20">
+              검색 결과가 없습니다. 다른 상품을 검색해보세요
             </div>
           )}
         </div>
-        {isFetching && <p>로딩중</p>}
+
         {isError && (
           <div className="flex flex-col justify-center items-center gap-5">
             <div className="flex flex-col items-center justify-center gap-2">
