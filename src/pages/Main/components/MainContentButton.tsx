@@ -11,10 +11,10 @@ interface MainContentButtonProps {
 }
 export default function MainContentButton({ label, title, onClick, icon }: MainContentButtonProps) {
   return (
-    <ContentsContainer>
+    <ContentsContainer className="p-2">
       <div className="flex w-full h-16 items-center cursor-pointer" onClick={onClick}>
         <HorizontalCenterBox className="ml-4 p-1">
-          <HorizontalCenterBox className="p-1  rounded-full bg-primary-bright text-white aspect-square w-full">
+          <HorizontalCenterBox className="rounded-full bg-white text-white aspect-square w-full">
             {icon}
           </HorizontalCenterBox>
         </HorizontalCenterBox>

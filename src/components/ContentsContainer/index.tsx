@@ -10,15 +10,20 @@ const Container = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
-  padding: 0.5rem;
 `;
 
 export default function ContentsContainer({
   style,
   children,
+  className,
 }: {
   style?: { [key: string]: string | number };
   children: ReactNode;
+  className?: string;
 }) {
-  return <Container style={style}>{children}</Container>;
+  return (
+    <Container style={style} className={className}>
+      {children}
+    </Container>
+  );
 }
