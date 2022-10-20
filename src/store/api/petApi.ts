@@ -90,7 +90,6 @@ export const petApiSlice = apiSlice.injectEndpoints({
     }),
     deletePet: builder.mutation<void, number>({
       query: (petId) => {
-        console.log('petId', petId);
         return {
           url: `/v1/pets/${petId}`,
           method: 'DELETE',

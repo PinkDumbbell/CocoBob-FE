@@ -42,7 +42,6 @@ export default function DailyAddFeed({ closeModal, healthRecord }: DailyModalPro
     if (!productName) {
       return;
     }
-    console.log(productName);
     setSelectedProduct({ name: productName });
     setValue('product', '');
     closeBottomSheet();

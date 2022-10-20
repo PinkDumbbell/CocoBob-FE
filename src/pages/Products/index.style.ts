@@ -36,7 +36,7 @@ export const ProductDescriptionContainer = styled.div`
   }
 `;
 
-export const AFFCOInfoContainer = styled.div`
+export const AAFCOInfoContainer = styled.div`
   & {
     position: absolute;
     padding: 20px;
@@ -84,11 +84,11 @@ export const ProductDetailSimpleInfo = styled.div`
   border-radius: 10px;
   border: 1px solid #1a70d2;
   overflow: hidden;
-  div {
+  & > div {
     display: flex;
     flex-direction: column;
     align-items: center;
-    span {
+    & > span {
       font-family: Noto Sans KR;
       font-size: 13px;
       font-weight: 500;

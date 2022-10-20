@@ -9,6 +9,7 @@ import { ProductType } from '@/@type/product';
 import { useEffect, useState } from 'react';
 import { BsHeartFill, BsHeart } from 'react-icons/bs';
 import { Navigate, useParams } from 'react-router-dom';
+import { ingredientInfo } from '@/utils/constants/ingredient';
 import mainIngredientImg from '@/assets/image/main-ingredient.png';
 import questionImg from '@/assets/image/question-mark.png';
 import categoryImg from '@/assets/image/category.png';
@@ -16,7 +17,7 @@ import flagImg from '@/assets/image/flag.png';
 import Nutrient from './components/ProductDetail/Nutrient';
 
 import {
-  AFFCOInfoContainer,
+  AAFCOInfoContainer,
   FooterLikeContainer,
   LikeNumber,
   NutrientInfoContainer,
@@ -29,7 +30,6 @@ import {
   ProductImgWrapper,
 } from './index.style';
 import RecommendInfo from './components/ProductDetail/RecommendInfoDetail/RecommendInfo';
-import MainIngredient from './components/ProductDetail/MainIngredient';
 import ProperAge, { DogInfoForAge } from './components/ProductDetail/ProperAge';
 import FeedRecommend from './components/ProductDetail/FeedRecommend';
 
@@ -58,36 +58,111 @@ function useLikeProduct() {
     likeProduct,
   };
 }
+
+// const getSummaryInfo = (product: ProductType | undefined, mainIngredient: any) => {
+//   return [
+//     {
+//       img: product?.brandImage,
+//       infoName: '브랜드',
+//       infoDescription: <h4 className="text-white">{product?.brand}</h4>,
+//     },
+//     {
+//       img: mainIngredientImg,
+//       infoName: '주재료',
+//       infoDescription: (
+//         <div className="flex items-center text-center">
+//           <span>{mainIngredient.length === 0 ? '분석필요' : mainIngredient[0]} </span>
+//           {mainIngredient.length > 1 && (
+//             <span className="bg-black  text-[6px] w-4 h-4 text-white rounded-[50%] ml-[4px]">
+//               +{mainIngredient.length - 1}
+//             </span>
+//           )}
+//         </div>
+//       ),
+//     },
+//     {
+//       img: DogInfoForAge[getAge(product)].img,
+//       infoName: '타겟',
+//       infoDescription: <h4>{DogInfoForAge[getAge(product)].name}</h4>,
+//     },
+//     {
+//       img: categoryImg,
+//       infoName: '사료종류',
+//       infoDescription: <h4>{product?.category}</h4>,
+//     },
+//   ];
+// };
+
 export default function ProductDetailPage() {
   const { id } = useParams();
-  const { data: product, error } = useGetProductDetailQuery(parseInt(id ?? '1', 10));
+  if (!id) {
+    return <Navigate to="/404" />;
+  }
   const { data: relatedProduct } = useGetRelatedProductQuery(parseInt(id ?? '1', 10));
+  const [mainIngredient, setMainIngredient] = useState<string[]>([]);
+  const [summaryInfo, setSummaryInfo] = useState<any[]>([]);
   const { likeProduct } = useLikeProduct();
-  const [isAAFCOOpen, setIsAFFCOOpen] = useState<boolean>(false);
-  console.log(relatedProduct);
-  const summaryInfo = [
-    {
-      img: product?.brandImage,
-      infoName: '브랜드',
-      infoDescription: product?.brand,
-    },
-    {
-      img: mainIngredientImg,
-      infoName: '주재료',
-      infoDescription: product?.brand,
-    },
-    {
-      img: DogInfoForAge[getAge(product)].img,
-      infoName: '타겟',
-      infoDescription: DogInfoForAge[getAge(product)].name,
-    },
-    {
-      img: categoryImg,
-      infoName: '사료종류',
-      infoDescription: product?.category,
-    },
-  ];
-  if (error) return <Navigate to="/404" replace />;
+  const [isAAFCOOpen, setIsAAFCOOpen] = useState<boolean>(false);
+  const {
+    data: product,
+    isError,
+    isSuccess: productSuccess,
+  } = useGetProductDetailQuery(parseInt(id, 10));
+  useEffect(() => {
+    if (!productSuccess || !product) {
+      return;
+    }
+
+    const mainIngredients: string[] = [];
+    ingredientInfo.forEach((info) => {
+      if (product[info.key]) {
+        mainIngredients.push(info.ingredient);
+      }
+    });
+    setMainIngredient(mainIngredients);
+  }, [product, productSuccess]);
+
+  useEffect(() => {
+    setSummaryInfo([
+      {
+        img: product?.brandImage,
+        infoName: '브랜드',
+        infoDescription: <h4 className="text-white">{product?.brand}</h4>,
+      },
+      {
+        img: mainIngredientImg,
+        infoName: '주재료',
+        infoDescription: (
+          <div className="flex items-center text-center">
+            <span>{mainIngredient.length === 0 ? '분석필요' : mainIngredient[0]} </span>
+            {mainIngredient.length > 1 && (
+              <span className="bg-black  text-[6px] w-4 h-4 text-white rounded-[50%] ml-[4px]">
+                +{mainIngredient.length - 1}
+              </span>
+            )}
+          </div>
+        ),
+      },
+      {
+        img: DogInfoForAge[getAge(product)].img,
+        infoName: '타겟',
+        infoDescription: <h4>{DogInfoForAge[getAge(product)].name}</h4>,
+      },
+      {
+        img: categoryImg,
+        infoName: '사료종류',
+        infoDescription: <h4>{product?.category}</h4>,
+      },
+    ]);
+  }, [mainIngredient]);
+
+  useEffect(() => {
+    if (!isError) {
+      return;
+    }
+    console.log('error');
+  }, [isError]);
+
   const nutrientList = [
     { name: '단백질', key: 'amountOfProteinPerMcal' },
     { name: '지방', key: 'amountOfFatPerMcal' },
@@ -100,7 +175,7 @@ export default function ProductDetailPage() {
     <Layout header title="사료 정보" canGoBack>
       <ProductDetailMainContainer
         className="w-full h-full absolute bg-slate-500 overflow-scroll"
-        onClick={() => setIsAFFCOOpen(false)}
+        onClick={() => setIsAAFCOOpen(false)}
       >
         <div className="w-full relative mt-[-5rem] z-0 blur">
           <img
@@ -118,22 +193,24 @@ export default function ProductDetailPage() {
             className="w-full p-4 h-32 flex place-content-around border-gray-800"
             id="shadow-box"
           >
-            {summaryInfo.map((info) => (
+            {summaryInfo.map((info: any) => (
               <ProductDetailSimpleInfo key={info.infoName}>
                 <div className="h-[51px] flex justify-center">
                   <img src={info.img} />
                 </div>
-                {info.infoName === '브랜드' ? (
-                  <div className="bg-[#0A2B52] h-[59px] w-full">
-                    <span className="flex text-[#AAC7E9]">{info.infoName}</span>
-                    <h4 className="text-white">{info.infoDescription}</h4>
-                  </div>
-                ) : (
-                  <div className="w-full h-[59px]">
-                    <span className="flex text-gray-500">{info.infoName}</span>
-                    <h4>{info.infoDescription}</h4>
-                  </div>
-                )}
+                <div
+                  className={`bg-[${info.infoName === '브랜드' ? '#0A2B52' : ''}] h-[59px] w-full`}
+                >
+                  <span
+                    className={`flex text-${info.infoName === '브랜드' ? '[#AAC7E9]' : 'gray-500'}`}
+                  >
+                    {info.infoName}
+                  </span>
+                  {/* <h4 className={`${info.infoName === '브랜드' ? 'text-white' : ''}`}>
+                    {info.infoDescription}
+                  </h4> */}
+                  {info.infoDescription}
+                </div>
               </ProductDetailSimpleInfo>
             ))}
           </div>
@@ -171,21 +248,21 @@ export default function ProductDetailPage() {
             <img src={flagImg} className="w-[23px] h-[16px] mt-[15px]" />
             <div className="flex items-center">
               {isAAFCOOpen && (
-                <AFFCOInfoContainer>
+                <AAFCOInfoContainer>
                   <h3>● AAFCO가 무엇입니까?</h3>
                   <span>
-                    AFFCO는 Association of American Feed Control Officials의 약자로 ‘미국 공식
-                    먹을거리 규제 협회’입니다. AFFCO는 미국에서 동물의 먹을거리 표준을 정하는
+                    AAFCO는 Association of American Feed Control Officials의 약자로 ‘미국 공식
+                    먹을거리 규제 협회’입니다. AAFCO는 미국에서 동물의 먹을거리 표준을 정하는
                     비영리기구입니다.
                   </span>
-                </AFFCOInfoContainer>
+                </AAFCOInfoContainer>
               )}
               <h4>AAFCO 기준</h4>
               <img
                 className="w-[16px] h-[16px] ml-[5px]"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setIsAFFCOOpen((prev) => !prev);
+                  setIsAAFCOOpen((prev) => !prev);
                 }}
                 src={questionImg}
               />
@@ -196,8 +273,8 @@ export default function ProductDetailPage() {
         <BrComponent />
         <RecommendInfo isPregnant={!!product?.pregnant} isObesity={!!product?.obesity} />
         <BrComponent />
-        <MainIngredient />
-        <BrComponent />
+        {/* <MainIngredient />
+        <BrComponent /> */}
         <ProperAge age={getAge(product)} />
         <BrComponent />
         <FeedRecommend productList={relatedProduct?.productList} />

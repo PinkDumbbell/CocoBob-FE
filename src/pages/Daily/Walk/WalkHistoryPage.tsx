@@ -118,8 +118,6 @@ export default function WalkHistoryPage() {
 
   const [createWalkRecord, { isSuccess }] = useCreateWalkMutation();
   const addWalkRecord = (newWalk: WalkRecordType) => {
-    console.log('add walk record', newWalk);
-
     createWalkRecord({
       ...newWalk,
       date,

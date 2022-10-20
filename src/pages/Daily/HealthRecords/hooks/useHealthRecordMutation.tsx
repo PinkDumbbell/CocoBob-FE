@@ -5,7 +5,6 @@ export default function useHealthRecordyMutation() {
   const [create] = useCreateHealthRecordMutation();
 
   const createHealthRecord = (healthRecord: HealthRecordRequestType) => {
-    console.log('create', healthRecord);
     const { date, petId, abnormalIds, bodyWeight, images, note } = healthRecord;
     create({
       date: dayjs(date).format('YYYY-MM-DD'),
@@ -17,7 +16,6 @@ export default function useHealthRecordyMutation() {
     });
   };
   const updateHealthRecord = (healthRecordId: number, healthRecord: HealthRecordRequestType) => {
-    console.log('update', healthRecordId, healthRecord);
     // TODO: update mutation
     // update({
     //   dailyId,

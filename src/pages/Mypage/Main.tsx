@@ -48,7 +48,6 @@ export default function MypageMain() {
     openToast('현재 프로필이 수정되었습니다.', 'success');
   }, [isSuccessChangingRepresentativePet]);
 
-  console.log(user);
   return (
     <Layout header title="마이페이지" footer>
       <MainContentsContainer>

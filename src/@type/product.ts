@@ -97,6 +97,7 @@ type ProductPreviewTypeWithoutThumbnail = Exclude<ProductPreviewType, 'thumbnail
 export type ProductType = ProductPreviewTypeWithoutThumbnail &
   NutritionType &
   IngredientType & {
+    [index: string]: string;
     productDetailImage: string;
     productImage: string;
     brandImage: string;
