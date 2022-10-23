@@ -68,22 +68,14 @@ export default function PetDetail() {
   }
 
   const { isLoading, data: petData } = useGetPetsDetailQuery(+id);
-  if (!petData || isLoading) {
-    return (
-      <Layout header title="우리아이 정보">
-        <div className="p-4">로딩중</div>
-      </Layout>
-    );
-  }
-
   const representativePetId = useAppSelector((state) => state.user.user?.representativeAnimalId);
   const isRepresentativePet = representativePetId === +id;
-
-  const { age, bodyWeight, breedInfo, name, sex, thumbnailPath, isSpayed, isPregnant } = petData;
   const { deletePet } = useDeletePet(+id);
 
-  const ageString = `${parseInt(String(age / 12), 10)}년 ${parseInt(String(age % 12), 10)}개월`;
-  const bodyWeightString = `${parseInt(bodyWeight.toString(), 10)}kg`;
+  const year = parseInt(String((petData?.age ?? 0) / 12), 10);
+  const month = parseInt(String((petData?.age ?? 0) % 12), 10);
+  const ageString = `${year}년 ${month}개월`;
+  const bodyWeightString = `${parseInt(petData?.bodyWeight.toString() ?? '', 10)}kg`;
 
   const selectMenu = async () => {
     const menus = ['정보수정'];
@@ -100,6 +92,7 @@ export default function PetDetail() {
       navigate(`/mypage/pets/${id}/edit`);
     }
   };
+
   return (
     <Layout
       header
@@ -115,26 +108,39 @@ export default function PetDetail() {
         <div className="flex flex-col space-y-5 w-full items-center">
           <div className="w-full flex justify-center items-center">
             <div className="w-28 aspect-square rounded-full overflow-hidden shadow-lg">
-              <img src={thumbnailPath} alt="반려동물 프로필 사진" />
+              <img src={petData?.thumbnailPath} alt="반려동물 프로필 사진" />
             </div>
           </div>
           <div className="space-y-3">
-            <div className="flex justify-center items-center space-x-2 w-full">
-              <span className="text-xl font-semibold">{name}</span>
-              <div className="w-6 h-6 bg-gray-200 rounded-full p-1">
-                {sex === 'MALE' ? <MaleIcon /> : <FemaleIcon />}
-              </div>
-            </div>
-            <div className="flex items-center justify-center w-full flex-wrap gap-3">
-              {isSpayed && <ChipButton filled content="중성화 완료" border={false} />}
-              {isPregnant && <ChipButton filled content="임신중" border={false} />}
-            </div>
+            {!isLoading && petData && (
+              <>
+                <div className="flex justify-center items-center space-x-2 w-full">
+                  <span className="text-xl font-semibold">{petData.name}</span>
+                  <div className="w-6 h-6 bg-gray-200 rounded-full p-1">
+                    {petData.sex === 'MALE' ? <MaleIcon /> : <FemaleIcon />}
+                  </div>
+                </div>
+                <div className="flex items-center justify-center w-full flex-wrap gap-3">
+                  {petData.isSpayed && <ChipButton filled content="중성화 완료" border={false} />}
+                  {petData.isPregnant && <ChipButton filled content="임신중" border={false} />}
+                </div>
+              </>
+            )}
+            {isLoading && (
+              <>
+                <div className="flex justify-center items-center space-x-2 w-full">
+                  <span className="text-xl font-semibold"></span>
+                  <div className="w-6 h-6 bg-gray-200 rounded-full p-1"></div>
+                </div>
+                <div className="flex items-center justify-center w-full flex-wrap gap-3"></div>
+              </>
+            )}
           </div>
         </div>
         <div className="w-full space-y-2">
           <h3 className="text-[1.2rem]">정보</h3>
           <div className="w-full p-4 bg-primary-light rounded-md space-y-2">
-            <PetInfoItem label="견종" content={breedInfo.name ?? '정보 없음'} />
+            <PetInfoItem label="견종" content={petData?.breedInfo.name ?? '정보 없음'} />
             <PetInfoItem label="나이" content={ageString ?? '정보 없음'} />
             <PetInfoItem label="몸무게" content={bodyWeightString ?? '정보 없음'} />
           </div>
