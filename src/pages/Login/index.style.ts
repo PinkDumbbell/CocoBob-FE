@@ -11,12 +11,6 @@ export const PageContainer = styled.div`
   width: 100%;
   height: 100%;
 
-  // background: radial-gradient(
-  //   at 10% 15%,
-  //   ${theme.colors.primary.light},
-  //   ${theme.colors.primary.main}
-  // );
-
   background: ${theme.colors.primary.bright};
 `;
 export const ItemsCenter = styled.div`
@@ -44,18 +38,14 @@ export const FormContainer = styled(ItemsCenter)`
     margin-top: 45px;
   }
 `;
-export const MockLogo = styled.div`
-  border-radius: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.2rem;
-`;
 
 export const LoginButton = styled.button`
   width: 100%;
-  text-align: center;
-  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 16px;
   font-weight: 700;
   line-height: 29px;
   height: 45px;
@@ -64,7 +54,7 @@ export const LoginButton = styled.button`
   background: white;
   color: ${({ theme: { colors } }) => colors.text.default};
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
+  border-radius: 12px;
 
   &:active {
     opacity: 0.8;
@@ -104,17 +94,4 @@ export const SubmenuWrapper = tw(BorderGray)`
   items-center 
   py-4 
   gap-7
-`;
-
-export const SocialLoginButtonWrapper = tw.div`
-  flex 
-  justify-center 
-  items-center 
-  gap-4
-`;
-export const SocialLoginButton = tw.button`
-  rounded-full 
-  bg-gray-300 
-  w-12 
-  h-12
 `;

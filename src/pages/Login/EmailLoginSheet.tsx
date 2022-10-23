@@ -9,13 +9,7 @@ import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import useToastMessage from '@/utils/hooks/useToastMessage';
 import EmailLoginForm from './components/EmailLoginForm';
 import JoinLink from './components/JoinLink';
-import {
-  FormWrapper,
-  SheetContent,
-  SocialLoginButton,
-  SocialLoginButtonWrapper,
-  SubmenuWrapper,
-} from './index.style';
+import { FormWrapper, SheetContent, SubmenuWrapper } from './index.style';
 import { ILoginForm } from './types';
 
 const EmailLoginSheet = ({ isOpen }: { isOpen: boolean }) => {
@@ -65,11 +59,6 @@ const EmailLoginSheet = ({ isOpen }: { isOpen: boolean }) => {
           </Link>
         </FormWrapper>
         <SubmenuWrapper>
-          <SocialLoginButtonWrapper>
-            <SocialLoginButton>K</SocialLoginButton>
-            <SocialLoginButton>A</SocialLoginButton>
-            <SocialLoginButton>G</SocialLoginButton>
-          </SocialLoginButtonWrapper>
           <JoinLink color="primary" />
         </SubmenuWrapper>
       </SheetContent>

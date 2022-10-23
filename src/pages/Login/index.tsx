@@ -31,7 +31,7 @@ export default function LoginPage() {
         <FormContainer>
           <SocialLoginForm />
           <Button
-            className="border-[1.5px] border-white"
+            className="border-[1.5px] border-white text-[16px]"
             label="이메일로 로그인"
             backgroundColor="transparent"
             width="full"

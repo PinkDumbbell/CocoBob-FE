@@ -8,12 +8,13 @@ export const FormWrapper = styled.div`
   width: 100%;
 `;
 export const SocialLoginButton = styled(LoginButton)`
-  &.kakao {
-    background-color: #fae100;
-    color: #391b1b;
+  gap: 1.2rem;
+
+  &#btn-kakao-login {
+    background-color: #fee500;
+    color: #000000;
   }
-  &.apple {
-    background-color: #333333;
-    color: #fefefe;
+  &#btn-google-login span {
+    font-face: Roboto;
   }
 `;
