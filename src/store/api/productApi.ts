@@ -1,4 +1,10 @@
-import { ProductType, ProductListType, SearchFilterType, IRelatedProduct } from '@/@type/product';
+import {
+  ProductType,
+  ProductListType,
+  SearchFilterType,
+  IRelatedProduct,
+  RelatedProductType,
+} from '@/@type/product';
 import { apiSlice } from '../slices/apiSlice';
 import { IGenericResponse } from './types';
 
@@ -7,7 +13,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
     getProduct: builder.query<ProductListType, SearchFilterType | void>({
       query: (arg) => {
         return {
-          url: '/v2/products/search',
+          url: '/v1/products/search',
           params: { ...arg, size: arg?.size ?? 20 },
         };
       },
@@ -43,6 +49,10 @@ export const productApiSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: 'RecommendProduct' as const, id: 'LIST' }],
     }),
+    getRelatedProduct: builder.query<RelatedProductType, number>({
+      query: (productId) => `v2/related-product?productId=${productId}`,
+      transformResponse: (response: IGenericResponse<RelatedProductType>) => response.data,
+    }),
     likeProduct: builder.mutation<IGenericResponse<void>, number>({
       query: (productId) => {
         return {
@@ -77,8 +87,8 @@ export const productApiSlice = apiSlice.injectEndpoints({
         },
       ],
     }),
-    getRelatedProduct: builder.query<IRelatedProduct[], string>({
-      query: (keyword) => `/v1/products/keyword?keyword=${keyword}`,
+    getRelatedProductWithKeyword: builder.query<IRelatedProduct[], string>({
+      query: (keyword) => `/v2/products/keyword?keyword=${keyword}`,
       transformResponse: (response: IGenericResponse<IRelatedProduct[]>) => response.data,
     }),
   }),
@@ -90,6 +100,7 @@ export const {
   useGetProductDetailQuery,
   useGetRecommendProductQuery,
   useLazyGetRecommendProductQuery,
-  useGetRelatedProductQuery,
+  useGetRelatedProductWithKeywordQuery,
   useLikeProductMutation,
+  useGetRelatedProductQuery,
 } = productApiSlice;

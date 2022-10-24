@@ -97,8 +97,10 @@ type ProductPreviewTypeWithoutThumbnail = Exclude<ProductPreviewType, 'thumbnail
 export type ProductType = ProductPreviewTypeWithoutThumbnail &
   NutritionType &
   IngredientType & {
+    [index: string]: string;
     productDetailImage: string;
     productImage: string;
+    brandImage: string;
   };
 
 export interface IRelatedProduct {
@@ -106,3 +108,14 @@ export interface IRelatedProduct {
   name: string;
   productId: number;
 }
+
+export type RelatedProductType = {
+  empty: true;
+  first: true;
+  last: true;
+  pageNumber: number;
+  pageSize: number;
+  productList: ProductPreviewType[];
+  totalElements: number;
+  totalPages: number;
+};

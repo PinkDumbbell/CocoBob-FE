@@ -101,10 +101,6 @@ export default function DailyMain() {
         : false,
   };
 
-  useEffect(() => {
-    console.log(recordIdList);
-    console.log(recordOverview);
-  }, [recordOverview]);
   return (
     <Layout header footer title="데일리 기록">
       <div className="p-4 flex flex-col items-center gap-4 w-full h-full overflow-y-auto space-y-4">
