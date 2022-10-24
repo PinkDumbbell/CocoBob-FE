@@ -9,12 +9,13 @@ import { useLazyGetRecommendProductQuery } from '@/store/api/productApi';
 import Layout from '@/components/layout/Layout';
 import ContentsContainer from '@/components/ContentsContainer';
 
-import { useLogout, useCurrentPet } from '@/utils/hooks';
+import { useCurrentPet } from '@/utils/hooks';
 
-import doctor from '@/assets/image/main_doctor.png';
+import doctorPng from '@/assets/image/main_doctor.png';
+import doctorWebp from '@/assets/image/main_doctor.webp';
+import dogIcon from '@/assets/icon/dog_icon.png';
 import { ReactComponent as RecommendIcon } from '@/assets/icon/navbar_food.svg';
-import { ReactComponent as TrashIcon } from '@/assets/icon/trash_icon.svg';
-import { ReactComponent as DogFoodIcon } from '@/assets/icon/dog_food.svg';
+
 import {
   ContentSection,
   DoctorImageWrapper,
@@ -24,7 +25,6 @@ import {
   SectionSubtitle,
   SectionTitle,
   VerticalBox,
-  VerticalCenterBox,
 } from './index.style';
 
 import 'swiper/css';
@@ -57,7 +57,6 @@ export default function Main() {
     getRecommendProducts,
     { data: recommendedProducts, isSuccess, isLoading, isError: recommendError },
   ] = useLazyGetRecommendProductQuery();
-  const onClickLogout = useLogout();
   const goRegisterPetPage = () => navigate('/register');
   const goProductsRecommendPage = () => navigate('/products/recommend');
 
@@ -85,7 +84,10 @@ export default function Main() {
       <PageContainer>
         <MainContentSection>
           <DoctorImageWrapper>
-            <img src={doctor} alt="메인 배경 이미지 1" className="w-full" />
+            <picture>
+              <source srcSet={doctorWebp} type="image/webp" />
+              <img src={doctorPng} alt="메인 배경 이미지 1" className="w-full" />
+            </picture>
           </DoctorImageWrapper>
           <VerticalBox className="z-10 min-h-[50px]">
             {pet?.name && (
@@ -103,23 +105,35 @@ export default function Main() {
               </>
             )}
           </VerticalBox>
-          <ContentsContainer style={{ zIndex: 10 }}>
-            <div className="w-full h-20 flex justify-evenly space-x-3 relative">
-              <VerticalCenterBox className="bg-gray-300 rounded-md w-1/3 aspect-square">
-                <Link to="/products" className="w-full h-full flex items-center justify-center">
-                  사료찾기
-                </Link>
-              </VerticalCenterBox>
-              <VerticalCenterBox className="bg-gray-300 rounded-md w-1/3 aspect-square">
-                <Link to="/daily" className="w-full h-full flex items-center justify-center">
-                  생활기록
-                </Link>
-              </VerticalCenterBox>
-              <VerticalCenterBox className="bg-gray-300 rounded-md w-1/3 aspect-square">
-                보고서
-              </VerticalCenterBox>
-            </div>
-          </ContentsContainer>
+          <div className="-translate-y-5">
+            <ContentsContainer>
+              <div className="w-full overflow-hidden">
+                <div className="p-4"></div>
+                <div className="flex w-full items-center rounded-b-[10px] overflow-hidden">
+                  <button
+                    className="p-2 w-1/2 bg-primary-main text-white"
+                    onClick={() => navigate('/products')}
+                  >
+                    사료찾기
+                  </button>
+                  <button
+                    className="p-2 w-1/2 bg-primary-main text-white"
+                    onClick={() => navigate('/daily')}
+                  >
+                    생활기록
+                  </button>
+                </div>
+              </div>
+            </ContentsContainer>
+          </div>
+        </MainContentSection>
+        <MainContentSection className="-mt-6">
+          <MainContentButton
+            label="소중한 가족을 소개해주세요"
+            title="반려동물 등록하기"
+            onClick={goRegisterPetPage}
+            icon={<img src={dogIcon} alt="register_pet_icon" />}
+          />
         </MainContentSection>
         <div className="px-4 flex justify-between items-end">
           <SectionTitle>{pet?.name ?? 'OO'}에게 추천하는 사료에요</SectionTitle>
@@ -158,23 +172,7 @@ export default function Main() {
             label="맞춤 제품을 추천해드려요!"
             title="추천 제품 보러가기"
             onClick={goProductsRecommendPage}
-            icon={<RecommendIcon width={29} />}
-          />
-          <MainContentButton
-            label="소중한 가족을 소개해주세요"
-            title="반려동물 등록하기"
-            onClick={goRegisterPetPage}
-            icon={<div className="w-[29px] text-xl text-center">+</div>}
-          />
-          <MainContentButton
-            label="현재 사료는 잘 주고 계신가요?"
-            title="영양분석하기"
-            icon={<DogFoodIcon width={29} />}
-          />
-          <MainContentButton
-            title="로그아웃하기"
-            onClick={onClickLogout}
-            icon={<TrashIcon width={29} />}
+            icon={<RecommendIcon width={29} stroke="#1A70D2" />}
           />
         </ContentSection>
       </PageContainer>

@@ -23,9 +23,13 @@ const ButtonWrap = styled.div`
     border: none;
     box-shadow: 2px 2px 10px rgb(0 0 0 / 15%);
     line-height: 29px;
-    font-size: 20px;
-    text-align: center;
+    font-size: 16px;
     width: 100%;
+    display: flex;
+
+    & svg {
+      margin-right: 1rem;
+    }
   }
 `;
 

@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, Suspense, useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { useLocation } from 'react-router-dom';
 import Footer from './Footer';
@@ -69,10 +69,15 @@ function Layout({
           customRightChild={customRightChild}
         />
       )}
-
-      <ChildrenWrapper ref={pageRef} headerShown={!!header} footerShown={!!footer}>
-        {children}
-      </ChildrenWrapper>
+      <Suspense
+        fallback={
+          <div className="fixed top-0 z-[1000] w-full max-w-[425px] mx-auto h-full bg-[#ffffff30]"></div>
+        }
+      >
+        <ChildrenWrapper ref={pageRef} headerShown={!!header} footerShown={!!footer}>
+          {children}
+        </ChildrenWrapper>
+      </Suspense>
       {footer && <Footer currentPath={pathname} />}
     </>
   );

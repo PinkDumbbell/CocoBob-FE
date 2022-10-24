@@ -43,13 +43,6 @@ export const MainContentsContainer = tw.div`
   h-full w-full flex flex-col bg-gray-100 gap-4 py-2
 `;
 
-export const PetListContainer = tw.div`
-  w-full flex flex-col p-5 bg-white rounded-lg shadow-md shadow-gray-300
-`;
-
-export const PetCard = tw.div`
-flex pb-4 gap-5 border-b border-gray-200
-`;
 export const MypageMenuItem = tw.div`
 p-4 border-b border-gray-200
 `;
