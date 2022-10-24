@@ -59,40 +59,6 @@ function useLikeProduct() {
   };
 }
 
-// const getSummaryInfo = (product: ProductType | undefined, mainIngredient: any) => {
-//   return [
-//     {
-//       img: product?.brandImage,
-//       infoName: '브랜드',
-//       infoDescription: <h4 className="text-white">{product?.brand}</h4>,
-//     },
-//     {
-//       img: mainIngredientImg,
-//       infoName: '주재료',
-//       infoDescription: (
-//         <div className="flex items-center text-center">
-//           <span>{mainIngredient.length === 0 ? '분석필요' : mainIngredient[0]} </span>
-//           {mainIngredient.length > 1 && (
-//             <span className="bg-black  text-[6px] w-4 h-4 text-white rounded-[50%] ml-[4px]">
-//               +{mainIngredient.length - 1}
-//             </span>
-//           )}
-//         </div>
-//       ),
-//     },
-//     {
-//       img: DogInfoForAge[getAge(product)].img,
-//       infoName: '타겟',
-//       infoDescription: <h4>{DogInfoForAge[getAge(product)].name}</h4>,
-//     },
-//     {
-//       img: categoryImg,
-//       infoName: '사료종류',
-//       infoDescription: <h4>{product?.category}</h4>,
-//     },
-//   ];
-// };
-
 export default function ProductDetailPage() {
   const { id } = useParams();
   if (!id) {
