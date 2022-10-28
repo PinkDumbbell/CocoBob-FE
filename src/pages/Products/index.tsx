@@ -156,12 +156,14 @@ export default function ProductsPage() {
   };
 
   const hanldeCategoryChange = (selectedCategory: CategoryType) => {
-    if (selectedCategory === '사료') {
-      setCategory('사료');
-    } else {
+    if (selectedCategory !== '사료') {
       openToast('열심히 준비 중이에요!', 'success');
+      return;
     }
+
+    setCategory(selectedCategory);
   };
+
   useEffect(() => {
     handleInitResult();
     setSearchKeyword('');
