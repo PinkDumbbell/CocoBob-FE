@@ -23,6 +23,14 @@ interface Step4Form {
   bodyWeight: number;
 }
 
+const activityLevelStrings = [
+  '',
+  '활동이 적은 편이에요',
+  '다른 아이들보다 차분한 편이에요',
+  '잘 움직이는 편이에요',
+  '활발해요!',
+  '엄청 기운이 넘쳐요!',
+];
 export default function Step5({ goNextStep, enrollPetData, setEnrollData }: StepPageProps) {
   const {
     register,
@@ -35,28 +43,6 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
   const [selectedActivityLevel, setSelectedActivityLevel] = useState(
     enrollPetData?.activityLevel ?? 3,
   );
-  const activityLevelString = () => {
-    let description;
-    // eslint-disable-next-line
-    switch (selectedActivityLevel) {
-      case 1:
-        description = '활동이 적은 편이에요';
-        break;
-      case 2:
-        description = '다른 아이들보다 차분한 편이에요';
-        break;
-      case 3:
-        description = '잘 움직이는 편이에요';
-        break;
-      case 4:
-        description = '활발해요!';
-        break;
-      case 5:
-        description = '엄청 기운이 넘쳐요!';
-        break;
-    }
-    return description;
-  };
 
   const isButtonDisabled = !watch(['bodyWeight', 'sex']).every((value) => value);
 
@@ -180,7 +166,9 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
                 />
               </div>
               <div>
-                <p className="text-primary-bright text-sm">{activityLevelString()}</p>
+                <p className="text-primary-bright text-sm">
+                  {activityLevelStrings[selectedActivityLevel]}
+                </p>
               </div>
             </div>
           </div>
