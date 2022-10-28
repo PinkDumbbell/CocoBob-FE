@@ -18,5 +18,5 @@ export const DatePicker = tw.input`
 `;
 
 export const BreedListContainer = tw.div`
-  h-[50vh] px-2 py-3 overflow-y-scroll
+  h-[50vh] py-3 overflow-y-scroll
 `;
