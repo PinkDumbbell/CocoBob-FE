@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../config';
 
-type PlatformType = 'ios' | 'android' | 'windows' | 'mac' | 'os';
+export type PlatformType = 'ios' | 'android' | 'windows' | 'mac' | 'os';
 
 type PlatformStateType = {
   currentPlatform: PlatformType | null;
@@ -10,12 +10,22 @@ const initialState: PlatformStateType = {
   currentPlatform: null,
 };
 
+const getPlatformInfo = async () => {
+  const { platform }: { platform: PlatformType } = await window.flutter_inappwebview.callHandler(
+    'platformHandler',
+  );
+  return platform;
+};
+
 const confirmSlice = createSlice({
   name: 'confirm',
   initialState,
   reducers: {
-    setPlatform: (state, { payload }: PayloadAction<PlatformType>) => {
-      state.currentPlatform = payload;
+    setPlatform: (state) => {
+      const platformHandler = async function () {
+        state.currentPlatform = await getPlatformInfo();
+      };
+      platformHandler();
     },
   },
 });
