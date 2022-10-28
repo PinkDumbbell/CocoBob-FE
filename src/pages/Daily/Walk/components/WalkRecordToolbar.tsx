@@ -3,6 +3,7 @@ import DistanceText from './DistanceText';
 import TimeText from './TimeText';
 
 type RecordToolbarType = {
+  isAvailable: boolean;
   distance: number;
   onSave: () => void;
   onReset: () => void;
@@ -11,6 +12,7 @@ type RecordToolbarType = {
   runningStatus: 'reset' | 'running' | 'paused';
 };
 export default function RecordToolbar({
+  isAvailable,
   distance,
   onSave,
   onReset,
@@ -24,11 +26,18 @@ export default function RecordToolbar({
   const hours = Math.floor(totalCount / 3600);
 
   return (
-    <div className="h-[6rem] w-full bg-[#F2F8FF] rounded-t-[10px] shadow-md -mt-1 flex items-center justify-between px-10 relative">
+    <div
+      className="h-[6rem] w-full bg-[#F2F8FF] rounded-t-[10px] shadow-md -mt-1 flex items-center justify-between px-10 relative"
+      onClickCapture={(e) => {
+        if (!isAvailable) {
+          e.stopPropagation();
+        }
+      }}
+    >
       <div className="flex flex-col items-center">
-        <p className="text-lg font-semibold text-primary-dark">
+        <div className="text-lg font-semibold text-primary-dark">
           <DistanceText distance={distance} />
-        </p>
+        </div>
       </div>
       <div className="z-[5] flex flex-col gap-2 absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 items-center">
         <button

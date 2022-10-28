@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import PrivateRoutes from '@/routes/PrivateRoutes';
 import LoginPage from '@/pages/Login';
@@ -9,12 +10,29 @@ import { ConfirmModal, ConfirmPortal } from '@/components/Confirm';
 import { SelectModalPortal, SelectModal } from '@/components/SelectModal';
 import PageTransition from '@/components/transition/PageTransition';
 import ToastMessage from '@/components/Toast/ToastMessage';
-import { usePlatform, useVh } from '@/utils/hooks';
+import { setPlatform } from '@/store/slices/platformSlice';
+import { useVh } from '@/utils/hooks';
+
+declare global {
+  // eslint-disable-next-line no-unused-vars
+  interface Window {
+    flutter_inappwebview: {
+      // eslint-disable-next-line no-unused-vars
+      callHandler: (handlerName: string, args?: any[]) => any;
+    };
+  }
+}
 
 function App() {
   const location = useLocation();
-  usePlatform();
   useVh();
+
+  useEffect(() => {
+    window.addEventListener('flutterInAppWebViewPlatformReady', setPlatform);
+    return () => {
+      window.removeEventListener('flutterInAppWebViewPlatformReady', setPlatform);
+    };
+  }, []);
 
   return (
     <>

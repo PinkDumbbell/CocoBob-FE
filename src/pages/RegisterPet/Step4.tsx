@@ -2,11 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import Button from '@/components/Button';
+import DatePicker from '@/components/DatePicker';
 import FormButton from '@/components/Form/FormButton';
 import {
   getKoreanStringDateFromDate,
   getDateDiff,
   getTotalMonthWithYearAndMonth,
+  getDateString,
 } from '@/utils/libs/date';
 import { useBottomSheet, useToastMessage } from '@/utils/hooks';
 import { ButtonWrapper, PageContainer, QuestionText, Form, PetNameHighlight } from './index.style';
@@ -20,7 +22,6 @@ type AgeModeType = 'birthday' | 'monthsAge' | '';
 
 export default function Step4({ goNextStep, enrollPetData, setEnrollData }: StepPageProps) {
   const {
-    currentBottomSheet,
     isBottomSheetOpen: isBirthdayBottomSheetOpen,
     openBottomSheet: openBirthdayBottomSheet,
     closeBottomSheet,
@@ -109,32 +110,32 @@ export default function Step4({ goNextStep, enrollPetData, setEnrollData }: Step
       </div>
       <Form onSubmit={handleSubmit(onValidSubmit)}>
         <div className="flex flex-col gap-1">
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-1">
             <button
-              className="text-left p-1 border border-primary-main rounded-md font-semibold"
+              className="text-left p-1.5 border border-primary-main rounded-md"
               type="button"
               onClick={openBirthdayBottomSheet}
             >
               생년월일을 알고 있어요
             </button>
-            {selectedMode === 'birthday' && !currentBottomSheet && (
-              <div className="py-2 px-3 w-full bg-primary-light rounded-md">
+            {selectedMode === 'birthday' && (
+              <div className="py-2 px-3 w-full bg-blue-50 rounded-md">
                 <p>{getKoreanStringDateFromDate(age.birthday ?? '')}</p>
               </div>
             )}
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-1">
             <button
-              className="text-left p-1 border border-primary-main rounded-md font-semibold"
+              className="text-left p-1.5 border border-primary-main rounded-md"
               type="button"
               onClick={openMonthsAgeBottomSheet}
             >
               대략적인 나이만 알고 있어요
             </button>
-            {selectedMode === 'monthsAge' && !currentBottomSheet && (
-              <div className="py-2 px-3 w-full bg-primary-light rounded-md">
+            {selectedMode === 'monthsAge' && age.months > 0 && (
+              <div className="py-2 px-3 w-full bg-blue-50 rounded-md">
                 <p>
-                  {Math.floor(age.months! / 12)}년 {age.months! % 12}개월
+                  {Math.floor(age.months / 12)}년 {age.months % 12}개월
                 </p>
               </div>
             )}
@@ -145,15 +146,15 @@ export default function Step4({ goNextStep, enrollPetData, setEnrollData }: Step
         </ButtonWrapper>
       </Form>
       <BottomSheet isOpen={isBirthdayBottomSheetOpen}>
-        <div className="p-4">
-          <div className="flex flex-col gap-2">
-            <h4 className="text-lg font-bold">언제 태어났나요?</h4>
+        <div className="p-5">
+          <div className="flex flex-col gap-1">
+            <h4 className="text-lg font-medium">언제 태어났나요?</h4>
             <div className="py-3 w-full flex flex-col items-center justify-center gap-3">
-              <input
-                type="date"
-                defaultValue={age.birthday}
-                className="text-gray-600 relative w-full text-center bg-primary-light rounded-md text-md py-1"
-                onChange={(e) => setAge((prev) => ({ ...prev, birthday: e.target.value }))}
+              <DatePicker
+                currentDate={age.birthday ? new Date(age.birthday) : new Date()}
+                onChangeDate={(date: Date | null) => {
+                  if (date) setAge((prev) => ({ ...prev, birthday: getDateString(date) }));
+                }}
               />
               {age.birthday && <p className="text-sm text-primary-main">{`나이 : ${ageString}`}</p>}
             </div>
@@ -162,9 +163,9 @@ export default function Step4({ goNextStep, enrollPetData, setEnrollData }: Step
         </div>
       </BottomSheet>
       <BottomSheet isOpen={isMonthsAgeBottomSheetOpen}>
-        <div className="p-4">
-          <div className="flex flex-col gap-2">
-            <h4 className="text-lg font-bold">추정 나이는 몇 살인가요?</h4>
+        <div className="p-5">
+          <div className="flex flex-col gap-1">
+            <h4 className="text-lg font-medium">추정 나이는 몇 살인가요?</h4>
             <h6 className="text-md">맞춤형 정보를 위해 나이 정보는 꼭 필요해요</h6>
             <div className="py-3 w-full flex  items-center justify-center gap-3">
               <div className="flex gap-1">

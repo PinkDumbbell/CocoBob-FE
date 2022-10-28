@@ -6,6 +6,7 @@ interface ChipButtonWrapperProps {
   theme: 'primary' | 'black';
 }
 export const ChipButtonWrapper = tw.div<ChipButtonWrapperProps>`
+  cursor-pointer
   px-[20px]
   rounded-[10px]
   w-fit

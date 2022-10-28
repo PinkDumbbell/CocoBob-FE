@@ -127,17 +127,9 @@ export default function Main() {
             </ContentsContainer>
           </div>
         </MainContentSection>
-        <MainContentSection className="-mt-6">
-          <MainContentButton
-            label="소중한 가족을 소개해주세요"
-            title="반려동물 등록하기"
-            onClick={goRegisterPetPage}
-            icon={<img src={dogIcon} alt="register_pet_icon" />}
-          />
-        </MainContentSection>
         <div className="px-4 flex justify-between items-end">
           <SectionTitle>{pet?.name ?? 'OO'}에게 추천하는 사료에요</SectionTitle>
-          <Link to="/products/recommend" className="text-sm">
+          <Link to="/products/recommend" className="text-sm cursor-pointer">
             더보기
           </Link>
         </div>
@@ -172,7 +164,13 @@ export default function Main() {
             label="맞춤 제품을 추천해드려요!"
             title="추천 제품 보러가기"
             onClick={goProductsRecommendPage}
-            icon={<RecommendIcon width={29} stroke="#1A70D2" />}
+            icon={<RecommendIcon width={32} stroke="#114786" />}
+          />
+          <MainContentButton
+            label="소중한 가족을 소개해주세요"
+            title="반려동물 등록하기"
+            onClick={goRegisterPetPage}
+            icon={<img src={dogIcon} alt="register_pet_icon" width={28} />}
           />
         </ContentSection>
       </PageContainer>

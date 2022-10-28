@@ -59,9 +59,10 @@ export default function Step3({ goNextStep, enrollPetData, setEnrollData }: Step
         <div className="flex flex-col gap-4">
           <InputStyle
             isError={false}
-            className="text-gray-400 text-left p-2 border-b border-b-gray-400"
+            className="text-gray-400 text-left p-2 border-b border-b-gray-400 cursor-pointer"
             onClick={openBottomSheet}
             onChange={(e) => e.preventDefault()}
+            value={breed?.name}
             placeholder={breed?.id ? breed.name : '품종을 검색해보세요'}
           />
 
@@ -69,7 +70,7 @@ export default function Step3({ goNextStep, enrollPetData, setEnrollData }: Step
             {favBreeds.map((breedChip: IBreeds) => (
               <span
                 className={concatClasses(
-                  'py-1 px-2 text-sm rounded-lg whitespace-nowrap',
+                  'py-1 px-2 text-sm rounded-lg whitespace-nowrap cursor-pointer',
                   breedChip.id === breed?.id
                     ? 'border border-primary-main bg-primary-light text-primary-main'
                     : 'border',

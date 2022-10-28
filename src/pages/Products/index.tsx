@@ -2,11 +2,14 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 
+import ProductSearchModal from '@/pages/Products/components/Search/modal';
 import Layout from '@/components/layout/Layout';
 import ProductItem from '@/components/Product';
-import ProductSearchModal from '@/pages/Products/components/Search/modal';
+
+import { useToastMessage } from '@/utils/hooks';
 import { useLazyGetProductQuery } from '@/store/api/productApi';
 import { ProductPreviewType } from '@/@type/product';
+
 import { ReactComponent as SearchIcon } from '@/assets/icon/search_icon.svg';
 
 import CategoryTabButton from './components/CategoryTabButton';
@@ -112,6 +115,7 @@ ProductListItem.displayName = 'MemoizedProductItem';
 
 export default function ProductsPage() {
   const navigate = useNavigate();
+  const openToast = useToastMessage();
   const [category, setCategory] = useState<CategoryType>('사료');
   const [onSearch, setOnSearch] = useState<boolean>(false);
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -149,6 +153,15 @@ export default function ProductsPage() {
   const onClickSearch = (keyword?: string) => {
     setSearchParams({ ...searchParams, keyword: keyword ?? searchKeyword });
     setOnSearch(false);
+  };
+
+  const hanldeCategoryChange = (selectedCategory: CategoryType) => {
+    if (selectedCategory !== '사료') {
+      openToast('열심히 준비 중이에요!', 'success');
+      return;
+    }
+
+    setCategory(selectedCategory);
   };
 
   useEffect(() => {
@@ -195,7 +208,7 @@ export default function ProductsPage() {
               <CategoryTabButton
                 key={categoryName}
                 name={categoryName}
-                onClick={() => setCategory(categoryName)}
+                onClick={() => hanldeCategoryChange(categoryName)}
                 isOn={category === categoryName}
               />
             ))}
