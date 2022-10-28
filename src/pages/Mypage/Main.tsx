@@ -37,6 +37,9 @@ export default function MypageMain() {
     changeRepresentativePetMutation(petId);
   };
   const handleChangeRepresentativePet = async (petId: number) => {
+    if (user?.representativeAnimalId === petId) {
+      return;
+    }
     const isConfirmed = await confirm({
       title: '프로필 변경',
       contents: `선택한 반려동물로 프로필을 변경합니다.`,

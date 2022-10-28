@@ -8,9 +8,14 @@ export default function AddPetBUtton() {
     navigate('/register');
   };
   return (
-    <div className="flex items-center justify-center">
-      <button type="button" onClick={addPet}>
+    <div className="min-w-[15rem] h-full rounded-lg border items-center gap-3 shadow-gray-300 shadow-md overflow-hidden">
+      <button
+        type="button"
+        onClick={addPet}
+        className="flex flex-col gap-2 justify-center items-center w-full h-full"
+      >
         <img src={addIcon} alt="add-pet-icon" />
+        <p className="text-primary-dark">새 가족을 소개해주세요</p>
       </button>
     </div>
   );
