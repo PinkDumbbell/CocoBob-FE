@@ -35,9 +35,9 @@ export default function RecordToolbar({
       }}
     >
       <div className="flex flex-col items-center">
-        <p className="text-lg font-semibold text-primary-dark">
+        <div className="text-lg font-semibold text-primary-dark">
           <DistanceText distance={distance} />
-        </p>
+        </div>
       </div>
       <div className="z-[5] flex flex-col gap-2 absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 items-center">
         <button
