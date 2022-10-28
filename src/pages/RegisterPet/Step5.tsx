@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ActivityLevelType, PetSexType } from '@/@type/pet';
 import { FormInput, FormButton } from '@/components/Form';
 import { concatClasses } from '@/utils/libs/concatClasses';
+import { ReactComponent as MaleIcon } from '@/assets/icon/male_icon.svg';
+import { ReactComponent as FemaleIcon } from '@/assets/icon/female_icon.svg';
 import {
   PageContainer,
   QuestionText,
@@ -21,7 +23,6 @@ interface Step4Form {
   bodyWeight: number;
 }
 
-const activityLevels: ActivityLevelType[] = [1, 2, 3, 4, 5];
 export default function Step5({ goNextStep, enrollPetData, setEnrollData }: StepPageProps) {
   const {
     register,
@@ -34,6 +35,28 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
   const [selectedActivityLevel, setSelectedActivityLevel] = useState(
     enrollPetData?.activityLevel ?? 3,
   );
+  const activityLevelString = () => {
+    let description;
+    // eslint-disable-next-line
+    switch (selectedActivityLevel) {
+      case 1:
+        description = '활동이 적은 편이에요';
+        break;
+      case 2:
+        description = '다른 아이들보다 차분한 편이에요';
+        break;
+      case 3:
+        description = '잘 움직이는 편이에요';
+        break;
+      case 4:
+        description = '활발해요!';
+        break;
+      case 5:
+        description = '엄청 기운이 넘쳐요!';
+        break;
+    }
+    return description;
+  };
 
   const isButtonDisabled = !watch(['bodyWeight', 'sex']).every((value) => value);
 
@@ -57,8 +80,12 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
     }
   }, [enrollPetData]);
 
-  const handleSelectActivityLevel = (level: ActivityLevelType) => {
-    setSelectedActivityLevel(level);
+  const handleSelectActivityLevel = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    const level = parseInt(value, 10);
+    if (Number.isNaN(level) || level < 1 || level > 5) {
+      return;
+    }
+    setSelectedActivityLevel(level as ActivityLevelType);
   };
 
   return (
@@ -83,11 +110,16 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
                 <label
                   htmlFor="pet-sex-man"
                   className={concatClasses(
-                    'border border-primary-main rounded-md w-full block',
+                    'cursor-pointer gap-2 border border-primary-main rounded-md w-full flex items-center justify-center',
                     watch('sex') === 'MALE' ? 'bg-primary-light text-primary-main' : '',
                   )}
                 >
-                  남자
+                  <MaleIcon
+                    width={14}
+                    height={14}
+                    fill={watch('sex') === 'MALE' ? '#1f80ee' : '#222'}
+                  />
+                  <span>남자</span>
                 </label>
               </div>
               <div className="flex-1 text-center w-1/2">
@@ -101,11 +133,16 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
                 <label
                   htmlFor="pet-sex-woman"
                   className={concatClasses(
-                    'border border-primary-main rounded-md w-full block',
+                    'cursor-pointer gap-2 border border-primary-main rounded-md w-full flex items-center justify-center',
                     watch('sex') === 'FEMALE' ? 'bg-primary-light text-primary-main' : '',
                   )}
                 >
-                  여자
+                  <FemaleIcon
+                    width={14}
+                    height={14}
+                    fill={watch('sex') === 'FEMALE' ? '#1f80ee' : '#222'}
+                  />
+                  <span>여자</span>
                 </label>
               </div>
             </div>
@@ -127,19 +164,24 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
             type="text"
           />
           <div className="flex flex-col gap-2">
-            <p>활동수준</p>
-            <div className="flex gap-4">
-              {activityLevels.map((value) => (
+            <p className="font-medium text-[14px]">활동수준</p>
+            <div className="flex flex-col gap-3">
+              <div>
                 <input
-                  key={value}
-                  type="radio"
-                  name={String(value)}
-                  id={`activity-level-${value}`}
-                  value={value}
-                  checked={value === selectedActivityLevel}
-                  onChange={() => handleSelectActivityLevel(value)}
+                  type="range"
+                  name="activity-level"
+                  id="activity-level"
+                  list="tickmarks"
+                  className="w-full h-1.5 rounded-lg bg-gray-200 appearance-none cursor-pointer dark:gray-600"
+                  min="1"
+                  max="5"
+                  value={selectedActivityLevel}
+                  onChange={handleSelectActivityLevel}
                 />
-              ))}
+              </div>
+              <div>
+                <p className="text-primary-bright text-sm">{activityLevelString()}</p>
+              </div>
             </div>
           </div>
 
