@@ -60,10 +60,7 @@ export const LoginButton = styled.button`
     opacity: 0.8;
   }
 `;
-const SheetContentBg = styled.div`
-  background: linear-gradient(133.79deg, #fffdfd 23.76%, #ffeeee 136.99%);
-`;
-export const SheetContent = tw(SheetContentBg)`
+export const SheetContent = tw.div`
   w-full 
   h-full 
   py-2 
