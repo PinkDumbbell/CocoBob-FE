@@ -1,8 +1,9 @@
+/* global kakao */
 import { useRef } from 'react';
 
 export default function useKakaoMap(lat: number, lng: number) {
   const { kakao } = window;
-  const mapRef = useRef(null);
+  const mapRef = useRef<kakao.maps.Map>(null);
 
   const moveToCurrentPosition = () => {
     if (!mapRef.current) {

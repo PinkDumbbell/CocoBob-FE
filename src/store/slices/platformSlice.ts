@@ -30,6 +30,6 @@ const confirmSlice = createSlice({
   },
 });
 
-export const isPopupOpened = (state: RootState) => state.platform;
+export const getCurrentPlatform = (state: RootState) => state.platform.currentPlatform;
 export const { setPlatform } = confirmSlice.actions;
 export default confirmSlice.reducer;
