@@ -2,13 +2,16 @@
 /* global kakao */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useAppSelector } from '@/store/config';
+
 import Layout from '@/components/layout/Layout';
 import { useConfirm, useCounter, useKakaoMap, useToastMessage } from '@/utils/hooks';
+import { useAppSelector } from '@/store/config';
+import { getCurrentPlatform } from '@/store/slices/platformSlice';
 import { getDateString } from '@/utils/libs/date';
 
 import { CurrentPosButton, KakaoMap } from './components/WalkRecordMap';
 import RecordToolbar from './components/WalkRecordToolbar';
+
 import useLocationWithApp from './hooks/useLocationInApp';
 import SaveWalkModal from './components/SaveWalkRecordModal';
 import useLocationDistance from './hooks/useDistanceWithLocation';
@@ -18,7 +21,7 @@ export default function WalkRecordMap() {
   const [searchParams] = useSearchParams();
   const [confirm] = useConfirm();
   const openToast = useToastMessage();
-  const platform = useAppSelector((state) => state.platform.currentPlatform);
+  const platform = useAppSelector(getCurrentPlatform);
   const isMapAvailable = platform === 'android' || platform === 'ios';
 
   const { status, totalCount, start, pause, reset } = useCounter();
@@ -87,7 +90,7 @@ export default function WalkRecordMap() {
   }, [currentDateString]);
 
   useEffect(() => {
-    if (!mapRef.current) {
+    if (!mapRef.current || locationRecords.length === 0) {
       return;
     }
 
@@ -109,7 +112,7 @@ export default function WalkRecordMap() {
       <div className="bg-white h-full flex flex-col w-full">
         <div className="h-full w-full relative">
           <CurrentPosButton moveToCurrentPosition={moveToCurrentPosition} />
-          <KakaoMap mapRef={mapRef} latitude={latitude} longitude={longitude} />
+          {isMapAvailable && <KakaoMap ref={mapRef} latitude={latitude} longitude={longitude} />}
         </div>
         {locationError && (
           <div className="z-10 fixed bottom-32 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-red-500 text-white text-sm rounded-[10px] flex items-center justify-center">
