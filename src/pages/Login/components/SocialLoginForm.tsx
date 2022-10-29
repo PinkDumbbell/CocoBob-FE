@@ -1,11 +1,12 @@
 import { useAppSelector } from '@/store/config';
 import googleLogo from '@/assets/icon/google_logo.png';
 import kakaoLogo from '@/assets/icon/kakao_logo.png';
+import { getCurrentPlatform } from '@/store/slices/platformSlice';
 import { SocialLoginButton, FormWrapper } from './SocialLoginForm.style';
 import AppleLoginButton from './AppleLoginButton';
 
 export default function SocialLoginForm() {
-  const platform = useAppSelector((state) => state.platform.currentPlatform);
+  const platform = useAppSelector(getCurrentPlatform);
 
   return (
     <FormWrapper className="space-y-[20px]">

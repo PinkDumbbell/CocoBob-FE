@@ -10,7 +10,7 @@ import { ConfirmModal, ConfirmPortal } from '@/components/Confirm';
 import { SelectModalPortal, SelectModal } from '@/components/SelectModal';
 import PageTransition from '@/components/transition/PageTransition';
 import ToastMessage from '@/components/Toast/ToastMessage';
-import { setPlatform } from '@/store/slices/platformSlice';
+import { getPlatformInfo } from '@/store/slices/platformSlice';
 import { useVh } from '@/utils/hooks';
 import { useAppDispatch } from './store/config';
 
@@ -32,7 +32,7 @@ function App() {
 
   useEffect(() => {
     const platformHandler = () => {
-      dispatch(setPlatform());
+      dispatch(getPlatformInfo());
     };
     window.addEventListener('flutterInAppWebViewPlatformReady', platformHandler);
     return () => {
