@@ -9,7 +9,6 @@ type ProductListProps = {
   products: ProductPreviewType[];
   isLastPage?: boolean;
   error: boolean;
-  loadRef: any;
 };
 
 const ProductList = forwardRef(

@@ -212,32 +212,14 @@ export default function ProductsPage() {
                   className="px-2 rounded-[10px] border border-gray-700"
                   onClick={() => setSearchParams(initFilters)}
                 >
-                  reset
+                  초기화
                 </button>
               )}
-            </div>
-            <div className="flex items-center gap-2">
-              {/* <label htmlFor="aafco-filter" className="text-gray-700 text-[0.8rem]">
-                AAFCO 만족 상품
-              </label>
-              <input
-                type="checkbox"
-                name=""
-                id="aafco-filter"
-                checked={filters?.aafco}
-                onChange={({ target: { checked } }) =>
-                  setSearchParams({
-                    ...searchParams,
-                    name: searchKeyword,
-                    aafco: String(checked),
-                  })
-                }
-              /> */}
             </div>
           </div>
         </div>
         <ProductList
-          loadRef={setRefs}
+          ref={setRefs}
           products={searchResults}
           error={isError}
           isLastPage={isLastData}
