@@ -15,8 +15,6 @@ export default function FilterModal({ close }: FilterModalProps) {
   const [filterType, setFilterType] = useState<'all' | FilterType>('all');
 
   const onClickSave = () => {
-    // setSearchParams({...searchParams, })
-    // setPage(0);
     const filters: { [key: string]: any } = {};
 
     selectedFilters.forEach((value) => {

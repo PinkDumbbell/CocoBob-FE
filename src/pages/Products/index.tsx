@@ -1,19 +1,20 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 
 import ProductSearchModal from '@/pages/Products/components/Search/modal';
 import Layout from '@/components/layout/Layout';
-import ProductItem from '@/components/Product';
 
 import { useToastMessage } from '@/utils/hooks';
 import { useLazyGetProductQuery } from '@/store/api/productApi';
 import { ProductPreviewType } from '@/@type/product';
 
 import { ReactComponent as SearchIcon } from '@/assets/icon/search_icon.svg';
+import { ReactComponent as FilterIcon } from '@/assets/icon/filter_icon.svg';
 
 import CategoryTabButton from './components/CategoryTabButton';
 import FilterModal from './components/Filter/FilterModal';
+import ProductList from './components/ProductList/ProductList';
 
 type CategoryType = '사료' | '간식' | '영양제';
 type FilterType = {
@@ -101,20 +102,7 @@ function useFetchProductData(filters: FilterType, inView: boolean) {
   };
 }
 
-const ProductListItem = React.forwardRef(
-  ({ product }: { product: ProductPreviewType }, ref: React.Ref<HTMLDivElement>) => {
-    const navigate = useNavigate();
-    return (
-      <div ref={ref} className="px-2" onClick={() => navigate(`/products/${product.productId}`)}>
-        <ProductItem product={product} />
-      </div>
-    );
-  },
-);
-ProductListItem.displayName = 'MemoizedProductItem';
-
 export default function ProductsPage() {
-  const navigate = useNavigate();
   const openToast = useToastMessage();
   const [category, setCategory] = useState<CategoryType>('사료');
   const [onSearch, setOnSearch] = useState<boolean>(false);
@@ -129,12 +117,9 @@ export default function ProductsPage() {
     rootMargin: '100px 0px 0px 0px',
   });
   const ref = useRef();
-  // Use `useCallback` so we don't recreate the function on each render
   const setRefs = useCallback(
     (node: any) => {
-      // Ref's from useRef needs to have the node assigned to `current`
       ref.current = node;
-      // Callback refs, like the one from `useInView`, is a function that takes the node as an argument
       inViewRef(node);
     },
     [inViewRef],
@@ -214,9 +199,13 @@ export default function ProductsPage() {
             ))}
           </div>
           <div className="w-full px-3 py-1 border-t border-b border-gray-200 flex items-center justify-between">
-            <div className="flex gap-3">
-              <button className="rounded-lg border border-gray-700 px-4" onClick={openFilterModal}>
-                필터
+            <div className="flex gap-3 h-7">
+              <button
+                className="rounded-lg border px-4 flex items-center gap-1 text-xs"
+                onClick={openFilterModal}
+              >
+                <FilterIcon className="h-5" />
+                <span>필터</span>
               </button>
               {(filters?.aafco || searchKeyword) && (
                 <button
@@ -228,7 +217,7 @@ export default function ProductsPage() {
               )}
             </div>
             <div className="flex items-center gap-2">
-              <label htmlFor="aafco-filter" className="text-gray-700 text-[0.8rem]">
+              {/* <label htmlFor="aafco-filter" className="text-gray-700 text-[0.8rem]">
                 AAFCO 만족 상품
               </label>
               <input
@@ -243,40 +232,16 @@ export default function ProductsPage() {
                     aafco: String(checked),
                   })
                 }
-              />
+              /> */}
             </div>
           </div>
         </div>
-        <div className="flex-1 overflow-y-auto">
-          {searchResults?.map((product, idx, arr) => (
-            <ProductListItem
-              product={product}
-              key={product.productId}
-              ref={idx === arr.length - 10 ? setRefs : null}
-            />
-          ))}
-          {isLastData && searchResults.length === 0 && (
-            <div className="flex items-center justify-center w-full h-20">
-              검색 결과가 없습니다. 다른 상품을 검색해보세요
-            </div>
-          )}
-        </div>
-
-        {isError && (
-          <div className="flex flex-col justify-center items-center gap-5">
-            <div className="flex flex-col items-center justify-center gap-2">
-              <h3>에러 발생</h3>
-              <p>잠시 후 다시 시도해주세요.</p>
-            </div>
-            <button
-              type="button"
-              className="bg-primary-bright text-white rounded-[10px] px-4 py-2"
-              onClick={() => navigate(0)}
-            >
-              새로고침
-            </button>
-          </div>
-        )}
+        <ProductList
+          loadRef={setRefs}
+          products={searchResults}
+          error={isError}
+          isLastPage={isLastData}
+        />
       </div>
       {filterModal && <FilterModal close={closeFilterModal} />}
     </Layout>
