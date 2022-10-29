@@ -2,9 +2,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { useGetPetsQuery } from '@/store/api/petApi';
 
-import AddPetButton from '../components/AddPetButton';
 import PetSimpleCard from '../components/PetSimpleInfo';
 import { FlexColumn, MainContentsContainer } from '../index.style';
+import HeaderAddPetButton from '../components/HeaderAddPetButton';
 
 export default function PetsPage() {
   const { data: pets, isSuccess } = useGetPetsQuery();
@@ -20,7 +20,7 @@ export default function PetsPage() {
       title="우리 아이 목록"
       canGoBack
       onClickGoBack={goMypage}
-      customRightChild={<AddPetButton />}
+      customRightChild={<HeaderAddPetButton />}
     >
       <MainContentsContainer className="px-2">
         <FlexColumn className="gap-4">
