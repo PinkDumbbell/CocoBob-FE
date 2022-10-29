@@ -8,13 +8,38 @@ import {
 import { apiSlice } from '../slices/apiSlice';
 import { IGenericResponse } from './types';
 
+function getQueryStringFromIter(iter: string[]) {
+  return iter.join(',');
+}
+function addParams(
+  map: Map<string, string | boolean | number>,
+  key: string,
+  values: Array<string> | string | number | boolean,
+) {
+  if (!values) {
+    return;
+  }
+
+  if (typeof values === 'string' || typeof values === 'boolean' || typeof values === 'number') {
+    map.set(key, values);
+  } else if (Array.isArray(values) && values.length > 0) {
+    map.set(key, getQueryStringFromIter(values));
+  }
+}
 export const productApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getProduct: builder.query<ProductListType, SearchFilterType | void>({
-      query: (arg) => {
+    getProduct: builder.query<ProductListType, SearchFilterType>({
+      query: ({ page, size, ...args }) => {
+        const paramsMap = new Map();
+        Object.entries(args).forEach(([key, value]) => {
+          addParams(paramsMap, key, value);
+        });
+
+        const params = Object.fromEntries(paramsMap);
+
         return {
-          url: '/v1/products/search',
-          params: { ...arg, size: arg?.size ?? 20 },
+          url: '/v2/products/search',
+          params: { page, size: size ?? 20, ...params },
         };
       },
       transformResponse: (response: IGenericResponse<ProductListType>) => response.data,

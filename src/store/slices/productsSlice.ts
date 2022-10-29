@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../config';
-// import { RootState } from '../config';
 
 export type CategoryType = '사료' | '간식' | '영양제';
 export type SearchFilterType = {
@@ -8,11 +7,12 @@ export type SearchFilterType = {
   brands?: string[];
   codes?: string[];
   ingredient?: string[];
+  allergyIngredient?: string[];
   keyword?: string;
-  page: number;
+  size: number;
 };
 export type ProductSearch = {
-  searchResults: any[];
+  page: number;
   filters: SearchFilterType;
   currentTab: CategoryType;
 };
@@ -20,20 +20,28 @@ export type ProductSearch = {
 const initialState: ProductSearch = {
   currentTab: '사료',
   filters: {
-    page: 1,
+    size: 20,
   },
-  searchResults: [],
+  page: 0,
 };
 
 const productsSlice = createSlice({
-  name: 'confirm',
+  name: 'products',
   initialState,
   reducers: {
     setFilters(
       state,
-      action: PayloadAction<{ aafco?: boolean; brands?: string[]; ingredient?: string[] }>,
+      action: PayloadAction<{
+        page: number;
+        aafco?: boolean;
+        brands?: string[];
+        ingredient?: string[];
+        allergyIngredient?: string[];
+      }>,
     ) {
-      state.filters = { ...state.filters, ...action.payload };
+      const { page, ...filters } = action.payload;
+      state.page = page;
+      state.filters = { ...state.filters, ...filters };
     },
     addFilter(
       state,
@@ -45,12 +53,21 @@ const productsSlice = createSlice({
       const { key, value } = action.payload;
       state.filters = { ...state.filters, [key]: value };
     },
-    setProductList(state, action: PayloadAction<any[]>) {
-      state.searchResults = action.payload;
+    resetFilter(state) {
+      state.filters = initialState.filters;
+      state.page = 0;
+    },
+    resetPage(state) {
+      state.page = 0;
+    },
+    increasePage(state) {
+      state.page += 1;
     },
   },
 });
 
-export const { addFilter, setFilters, setProductList } = productsSlice.actions;
+export const { addFilter, setFilters, resetFilter, resetPage, increasePage } =
+  productsSlice.actions;
 export const getCurrentFilters = (state: RootState) => state.products.filters;
+export const getPage = (state: RootState) => state.products.page;
 export default productsSlice.reducer;

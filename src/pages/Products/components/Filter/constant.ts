@@ -3,7 +3,7 @@ export type FilterPropertiesType = {
   filterValue: string;
 };
 
-export type FilterType = 'grainType' | 'ingredients';
+export type FilterType = 'grainType' | 'ingredients' | 'alergyIngredient';
 
 export const grainType: FilterPropertiesType[] = [
   {
@@ -51,41 +51,45 @@ export const ingredients: FilterPropertiesType[] = [
   },
   {
     name: '가수분해 소고기',
-    filterValue: 'hydrolytic_beef',
+    filterValue: 'hydrolyticBeef',
   },
   {
     name: '가수분해 돼지고기',
-    filterValue: 'hydrolytic_pork',
+    filterValue: 'hydrolyticPork',
   },
   {
     name: '가수분해 닭고기',
-    filterValue: 'hydrolytic_chicken',
+    filterValue: 'hydrolyticChicken',
   },
   {
     name: '가수분해 연어',
-    filterValue: 'hydrolytic_salmon',
+    filterValue: 'hydrolyticSalmon',
   },
   {
     name: '가수분해 칠면조',
-    filterValue: 'hydrolytic_turkey',
+    filterValue: 'hydrolyticTurkey',
   },
   {
     name: '가수분해 양고기',
-    filterValue: 'hydrolytic_mutton',
+    filterValue: 'hydrolyticMutton',
   },
   {
     name: '가수분해 오리고기',
-    filterValue: 'hydrolytic_duck',
+    filterValue: 'hydrolyticDuck',
   },
 ];
 
 export const allFilters = {
-  grainType: {
-    name: '알갱이 타입',
-    items: grainType,
+  brands: {
+    name: '브랜드',
+    items: ['로얄캐닌', '보스독', '하림'],
   },
   ingredients: {
-    name: '원재료',
+    name: '포함 원재료',
+    items: ingredients,
+  },
+  allergyIngredient: {
+    name: '제외하고 싶은 원재료',
     items: ingredients,
   },
 };

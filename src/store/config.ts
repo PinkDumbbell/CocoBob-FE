@@ -26,7 +26,7 @@ import productsSlice from './slices/productsSlice';
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['toast', 'confirm', 'selectModal', 'platform'],
+  blacklist: ['toast', 'confirm', 'selectModal', 'platform', 'products'],
 };
 
 const appReducer = combineReducers({

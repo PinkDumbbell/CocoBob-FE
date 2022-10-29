@@ -18,20 +18,18 @@ const ProductList = forwardRef(
 
     return (
       <>
-        <div className="flex-1 overflow-y-auto">
-          {products?.map((product, idx, arr) => (
-            <ProductListItem
-              product={product}
-              key={product.productId}
-              ref={idx === arr.length - 10 ? loadRef : null}
-            />
-          ))}
-          {isLastPage && products.length === 0 && (
-            <div className="flex items-center justify-center w-full h-20">
-              검색 결과가 없습니다. 다른 상품을 검색해보세요
-            </div>
-          )}
-        </div>
+        {products.map((product, idx, arr) => (
+          <ProductListItem
+            product={product}
+            key={product.productId}
+            ref={idx === arr.length - 10 ? loadRef : null}
+          />
+        ))}
+        {isLastPage && products.length === 0 && (
+          <div className="flex items-center justify-center w-full h-20">
+            검색 결과가 없습니다. 다른 상품을 검색해보세요
+          </div>
+        )}
 
         {error && (
           <div className="flex flex-col justify-center items-center gap-5">
