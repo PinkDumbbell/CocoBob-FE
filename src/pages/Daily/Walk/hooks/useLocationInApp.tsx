@@ -1,5 +1,6 @@
 import { LocationType } from '@/@type/location';
-import { useAppSelector } from '@/store/config';
+import { useAppDispatch, useAppSelector } from '@/store/config';
+import { getCurrentPlatform, getPlatformInfo } from '@/store/slices/platformSlice';
 import { useConfirm } from '@/utils/hooks';
 import { useEffect, useState } from 'react';
 
@@ -16,8 +17,9 @@ type LocationPermissionResponseType = {
 
 export default function useLocationWithApp() {
   const [confirm] = useConfirm();
+  const dispatch = useAppDispatch();
+  const platform = useAppSelector(getCurrentPlatform);
 
-  const platform = useAppSelector((state) => state.platform.currentPlatform);
   const isMapAvailable = platform === 'android' || platform === 'ios';
 
   const [locationAvailable, setLocationAvailable] = useState(false);
@@ -56,7 +58,7 @@ export default function useLocationWithApp() {
       return;
     }
     const permission = await window.flutter_inappwebview.callHandler('checkLocationPermission');
-    console.log('permission', permission);
+
     if (!permission) {
       const agreed = await confirm({
         title: <h3>위치권한 요청</h3>,
@@ -90,20 +92,23 @@ export default function useLocationWithApp() {
   const getLocationPermissionHandler = async () => {
     const permissionResponse: LocationPermissionResponseType =
       await window.flutter_inappwebview.callHandler('locationPermissionHandler');
-
     if (permissionResponse.success && permissionResponse?.location) {
       setCurrentLocationHandler(permissionResponse.location);
     } else {
       setError('위치 정보를 불러오는데에 실패하였습니다.');
     }
   };
-
   useEffect(() => {
-    if (!isMapAvailable) {
+    if (platform === null) {
+      dispatch(getPlatformInfo());
+    }
+  }, [platform]);
+  useEffect(() => {
+    if (!isMapAvailable || platform === null) {
       return;
     }
     checkLocationPermission();
-  }, [isMapAvailable]);
+  }, [platform, isMapAvailable]);
 
   useEffect(() => {
     if (!locationAvailable) {
