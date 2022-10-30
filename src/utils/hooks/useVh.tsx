@@ -11,4 +11,8 @@ export default function useVh() {
       window.removeEventListener('resize', setVh);
     };
   }, []);
+
+  return {
+    setVh,
+  };
 }
