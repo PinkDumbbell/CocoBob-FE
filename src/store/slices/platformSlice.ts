@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../config';
 
 export type PlatformType = 'ios' | 'android' | 'windows' | 'mac' | 'os';
@@ -10,26 +10,25 @@ const initialState: PlatformStateType = {
   currentPlatform: null,
 };
 
-const getPlatformInfo = async () => {
+export const getPlatformInfo = createAsyncThunk('getPlatform', async () => {
   const { platform }: { platform: PlatformType } = await window.flutter_inappwebview.callHandler(
     'platformHandler',
   );
+  console.log('react platform', platform);
   return platform;
-};
+});
 
 const confirmSlice = createSlice({
   name: 'confirm',
   initialState,
-  reducers: {
-    setPlatform: (state) => {
-      const platformHandler = async function () {
-        state.currentPlatform = await getPlatformInfo();
-      };
-      platformHandler();
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getPlatformInfo.fulfilled, (state, action) => {
+      state.currentPlatform = action.payload;
+    });
   },
 });
 
 export const getCurrentPlatform = (state: RootState) => state.platform.currentPlatform;
-export const { setPlatform } = confirmSlice.actions;
+
 export default confirmSlice.reducer;

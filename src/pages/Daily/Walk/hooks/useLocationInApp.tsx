@@ -37,15 +37,15 @@ export default function useLocationWithApp() {
       !window?.flutter_inappwebview ||
       typeof window.flutter_inappwebview.callHandler !== 'function'
     ) {
-      return;
+      return false;
     }
 
     const permission = await window.flutter_inappwebview.callHandler('getLocationPermission');
     if (!permission) {
-      return;
+      return false;
     }
 
-    setLocationAvailable(true);
+    return true;
   };
 
   const checkLocationPermission = async () => {
@@ -55,8 +55,8 @@ export default function useLocationWithApp() {
     ) {
       return;
     }
-    const permission = await window.flutter_inappwebview.callHandler('checkLocaionPermission');
-
+    const permission = await window.flutter_inappwebview.callHandler('checkLocationPermission');
+    console.log('permission', permission);
     if (!permission) {
       const agreed = await confirm({
         title: <h3>위치권한 요청</h3>,
@@ -72,15 +72,16 @@ export default function useLocationWithApp() {
         return;
       }
 
-      await getLocationPermission();
-    } else {
-      setLocationAvailable(true);
+      const permissionAllowed = await getLocationPermission();
+      if (!permissionAllowed) {
+        return;
+      }
     }
+    setLocationAvailable(true);
   };
 
   const setCurrentLocationHandler = (currentLocation: LocationType) => {
     const { latitude, longitude } = currentLocation;
-    console.log(currentLocation.latitude);
     if (latitude !== location.latitude && longitude !== location.longitude) {
       setLocation({ latitude, longitude });
     }
