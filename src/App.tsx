@@ -35,6 +35,7 @@ function App() {
       dispatch(getPlatformInfo());
     };
     window.addEventListener('flutterInAppWebViewPlatformReady', platformHandler);
+
     return () => {
       window.removeEventListener('flutterInAppWebViewPlatformReady', platformHandler);
     };
