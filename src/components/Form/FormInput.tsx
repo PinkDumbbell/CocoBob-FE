@@ -1,3 +1,4 @@
+import { useVh } from '@/utils/hooks';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
@@ -76,6 +77,7 @@ export default function Input({
   isError,
   errorMessage,
 }: InputProps) {
+  const { setVh } = useVh();
   return (
     <InputContainer>
       <Label htmlFor={name} isError={isError}>
@@ -92,6 +94,7 @@ export default function Input({
           unit={!!unit}
           {...rules}
           disabled={disabled}
+          onBlur={setVh}
         />
         {!!unit && <UnitText>{unit}</UnitText>}
         {errorMessage && (
