@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 
 type ConfirmContextType = {
   popupOpened: boolean;
-  title: string | ReactNode | null;
-  contents?: string | ReactNode | null;
+  title?: string | ReactNode;
+  contents: string | ReactNode | null;
   promiseInfo?: {
     // eslint-disable-next-line
     resolve?: (value: boolean) => void;
@@ -13,7 +13,6 @@ type ConfirmContextType = {
 
 const initConfirm: ConfirmContextType = {
   popupOpened: false,
-  title: '',
   contents: '',
   promiseInfo: {},
 };

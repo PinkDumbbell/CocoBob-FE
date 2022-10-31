@@ -41,8 +41,7 @@ export default function MypageMain() {
       return;
     }
     const isConfirmed = await confirm({
-      title: '프로필 변경',
-      contents: `선택한 반려동물로 프로필을 변경합니다.`,
+      contents: <p className="py-10">선택한 반려동물로 프로필을 변경합니다.</p>,
     });
     if (isConfirmed) {
       changeRepresentativePet(petId);

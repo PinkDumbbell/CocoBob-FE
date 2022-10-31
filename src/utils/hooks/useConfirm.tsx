@@ -6,8 +6,8 @@ import { ConfirmContext } from '@/components/Confirm/ConfirmPortal';
 import useKeyHandler from './useKeyHandler';
 
 type ConfirmOpenProps = {
-  title: string | ReactNode;
-  contents?: string | ReactNode;
+  title?: string | ReactNode;
+  contents: string | ReactNode;
 };
 
 export default function useConfirm() {

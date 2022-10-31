@@ -115,8 +115,7 @@ export default function EditPet() {
   const deleteProfileImage = async () => {
     if (!previewUrl) return;
     const confirm = await openPopup({
-      title: '프로필 사진 삭제',
-      contents: '프로필 사진을 삭제하시겠습니까?',
+      contents: <p className="py-10">프로필 사진을 삭제하시겠습니까?</p>,
     });
     if (confirm) {
       initProfileImage();
