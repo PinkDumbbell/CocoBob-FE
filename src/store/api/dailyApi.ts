@@ -205,7 +205,7 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: (result, api, args) => [{ type: 'DailyRecord', id: args.noteId }],
     }),
-    getWalkList: builder.query<WalkHistoryItemType[], RecordRequestType>({
+    getWalkList: builder.query<WalkHistoryItemType[], BasicRecordRequestType>({
       query: ({ date, petId }) => `/v1/walks/pets/${petId}?date=${date}`,
       transformResponse: (response: IGenericResponse<{ walks: WalkHistoryItemType[] }>) =>
         response.data.walks,
