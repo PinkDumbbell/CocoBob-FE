@@ -99,7 +99,7 @@ export default function ProductDetailPage() {
         img: mainIngredientImg,
         infoName: '주재료',
         infoDescription: (
-          <div className="flex items-center text-center">
+          <div className="flex items-center text-center" key={mainIngredient.length}>
             <span>{mainIngredient.length === 0 ? '분석필요' : mainIngredient[0]} </span>
             {mainIngredient.length > 1 && (
               <span className="bg-black  text-[6px] w-4 h-4 text-white rounded-[50%] ml-[4px]">

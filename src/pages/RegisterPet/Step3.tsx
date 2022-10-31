@@ -8,8 +8,8 @@ import BreedBottomSheet from '@/components/BottomSheet/BreedBottomSheet';
 
 import { useGetBreedsQuery } from '@/store/api/petApi';
 import { favBreeds } from '@/utils/constants/enrollment';
+import { useToastMessage, useBottomSheet, useVh } from '@/utils/hooks';
 import { concatClasses } from '@/utils/libs/concatClasses';
-import { useToastMessage, useBottomSheet } from '@/utils/hooks';
 
 import { ButtonWrapper, Form, PageContainer, PetNameHighlight, QuestionText } from './index.style';
 import { StepPageProps } from './type';
@@ -17,6 +17,7 @@ import { StepPageProps } from './type';
 export default function Step3({ goNextStep, enrollPetData, setEnrollData }: StepPageProps) {
   const { isBottomSheetOpen, openBottomSheet, closeBottomSheet } = useBottomSheet('findBreed');
   const openToast = useToastMessage();
+  const { setVh } = useVh();
   const { isSuccess, data: breeds } = useGetBreedsQuery();
   const [breed, setBreed] = useState<IBreeds | undefined>();
 
@@ -64,6 +65,7 @@ export default function Step3({ goNextStep, enrollPetData, setEnrollData }: Step
             onChange={(e) => e.preventDefault()}
             value={breed?.name}
             placeholder={breed?.id ? breed.name : '품종을 검색해보세요'}
+            onBlur={setVh}
           />
 
           <div className="flex flex-wrap gap-2 items-center py-2">

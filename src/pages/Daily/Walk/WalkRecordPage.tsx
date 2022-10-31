@@ -2,13 +2,16 @@
 /* global kakao */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useAppSelector } from '@/store/config';
+
 import Layout from '@/components/layout/Layout';
 import { useConfirm, useCounter, useKakaoMap, useToastMessage } from '@/utils/hooks';
+import { useAppSelector } from '@/store/config';
+import { getCurrentPlatform } from '@/store/slices/platformSlice';
 import { getDateString } from '@/utils/libs/date';
 
 import { CurrentPosButton, KakaoMap } from './components/WalkRecordMap';
 import RecordToolbar from './components/WalkRecordToolbar';
+
 import useLocationWithApp from './hooks/useLocationInApp';
 import SaveWalkModal from './components/SaveWalkRecordModal';
 import useLocationDistance from './hooks/useDistanceWithLocation';
@@ -18,7 +21,7 @@ export default function WalkRecordMap() {
   const [searchParams] = useSearchParams();
   const [confirm] = useConfirm();
   const openToast = useToastMessage();
-  const platform = useAppSelector((state) => state.platform.currentPlatform);
+  const platform = useAppSelector(getCurrentPlatform);
   const isMapAvailable = platform === 'android' || platform === 'ios';
 
   const { status, totalCount, start, pause, reset } = useCounter();
@@ -41,7 +44,7 @@ export default function WalkRecordMap() {
       return;
     }
     const goBackConfirmed = await confirm({
-      title: '페이지를 나가시면 기록이 삭제됩니다.',
+      contents: <p className="py-10">페이지를 나가시면 기록이 삭제됩니다.</p>,
     });
     if (!goBackConfirmed) return;
 
@@ -59,7 +62,7 @@ export default function WalkRecordMap() {
 
   const resetRecordState = async () => {
     const isConfirmed = await confirm({
-      title: '기록을 지우시겠습니까?',
+      contents: <p className="py-10">기록을 지우시겠습니까?</p>,
     });
     if (!isConfirmed) return;
 

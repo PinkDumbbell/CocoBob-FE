@@ -31,7 +31,6 @@ export const KakaoMap = forwardRef(
       lat: latitude,
       lng: longitude,
     };
-    console.log('kakaomap', window.kakao);
     return (
       <Map ref={mapRef} draggable center={center} level={level} maxLevel={maxLevel} style={styles}>
         <MapMarker position={center}></MapMarker>

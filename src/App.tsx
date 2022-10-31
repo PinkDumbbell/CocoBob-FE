@@ -10,8 +10,9 @@ import { ConfirmModal, ConfirmPortal } from '@/components/Confirm';
 import { SelectModalPortal, SelectModal } from '@/components/SelectModal';
 import PageTransition from '@/components/transition/PageTransition';
 import ToastMessage from '@/components/Toast/ToastMessage';
-import { setPlatform } from '@/store/slices/platformSlice';
+import { getPlatformInfo } from '@/store/slices/platformSlice';
 import { useVh } from '@/utils/hooks';
+import { useAppDispatch } from './store/config';
 
 declare global {
   // eslint-disable-next-line no-unused-vars
@@ -25,12 +26,18 @@ declare global {
 
 function App() {
   const location = useLocation();
+  const dispatch = useAppDispatch();
+
   useVh();
 
   useEffect(() => {
-    window.addEventListener('flutterInAppWebViewPlatformReady', setPlatform);
+    const platformHandler = () => {
+      dispatch(getPlatformInfo());
+    };
+    window.addEventListener('flutterInAppWebViewPlatformReady', platformHandler);
+
     return () => {
-      window.removeEventListener('flutterInAppWebViewPlatformReady', setPlatform);
+      window.removeEventListener('flutterInAppWebViewPlatformReady', platformHandler);
     };
   }, []);
 

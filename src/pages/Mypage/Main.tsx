@@ -74,7 +74,7 @@ export default function MypageMain() {
                   <span className="text-primary-main">{user?.name}</span>님의 펫탈로그
                 </h2>
               </MainTitleWrapper>
-              <FlexColumn className="gap-3">
+              <FlexColumn className="gap-3 w-full h-40">
                 <div className="flex items-center justify-between">
                   <h3>소중한 가족들</h3>
                   <Link to="/mypage/pets" className="text-caption">
@@ -85,13 +85,14 @@ export default function MypageMain() {
                 <MainPetListContainer>
                   {isSuccess &&
                     petList.map((pet, idx) => (
-                      <MainPetListItem
-                        className={idx === 0 ? 'border-primary-main' : ''}
-                        key={idx}
-                        onClick={() => handleChangeRepresentativePet(pet.id)}
-                      >
-                        <PetSimpleInfo {...pet} />
-                      </MainPetListItem>
+                      <div key={pet.id}>
+                        <MainPetListItem
+                          className={idx === 0 ? 'border-primary-main' : ''}
+                          onClick={() => handleChangeRepresentativePet(pet.id)}
+                        >
+                          <PetSimpleInfo {...pet} />
+                        </MainPetListItem>
+                      </div>
                     ))}
                   <AddPetBUtton />
                 </MainPetListContainer>

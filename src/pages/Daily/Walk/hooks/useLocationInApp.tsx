@@ -1,5 +1,6 @@
 import { LocationType } from '@/@type/location';
-import { useAppSelector } from '@/store/config';
+import { useAppDispatch, useAppSelector } from '@/store/config';
+import { getCurrentPlatform, getPlatformInfo } from '@/store/slices/platformSlice';
 import { useConfirm } from '@/utils/hooks';
 import { useEffect, useState } from 'react';
 
@@ -16,8 +17,9 @@ type LocationPermissionResponseType = {
 
 export default function useLocationWithApp() {
   const [confirm] = useConfirm();
+  const dispatch = useAppDispatch();
+  const platform = useAppSelector(getCurrentPlatform);
 
-  const platform = useAppSelector((state) => state.platform.currentPlatform);
   const isMapAvailable = platform === 'android' || platform === 'ios';
 
   const [locationAvailable, setLocationAvailable] = useState(false);
@@ -37,15 +39,15 @@ export default function useLocationWithApp() {
       !window?.flutter_inappwebview ||
       typeof window.flutter_inappwebview.callHandler !== 'function'
     ) {
-      return;
+      return false;
     }
 
     const permission = await window.flutter_inappwebview.callHandler('getLocationPermission');
     if (!permission) {
-      return;
+      return false;
     }
 
-    setLocationAvailable(true);
+    return true;
   };
 
   const checkLocationPermission = async () => {
@@ -55,7 +57,7 @@ export default function useLocationWithApp() {
     ) {
       return;
     }
-    const permission = await window.flutter_inappwebview.callHandler('checkLocaionPermission');
+    const permission = await window.flutter_inappwebview.callHandler('checkLocationPermission');
 
     if (!permission) {
       const agreed = await confirm({
@@ -72,15 +74,16 @@ export default function useLocationWithApp() {
         return;
       }
 
-      await getLocationPermission();
-    } else {
-      setLocationAvailable(true);
+      const permissionAllowed = await getLocationPermission();
+      if (!permissionAllowed) {
+        return;
+      }
     }
+    setLocationAvailable(true);
   };
 
   const setCurrentLocationHandler = (currentLocation: LocationType) => {
     const { latitude, longitude } = currentLocation;
-    console.log(currentLocation.latitude);
     if (latitude !== location.latitude && longitude !== location.longitude) {
       setLocation({ latitude, longitude });
     }
@@ -89,20 +92,23 @@ export default function useLocationWithApp() {
   const getLocationPermissionHandler = async () => {
     const permissionResponse: LocationPermissionResponseType =
       await window.flutter_inappwebview.callHandler('locationPermissionHandler');
-
     if (permissionResponse.success && permissionResponse?.location) {
       setCurrentLocationHandler(permissionResponse.location);
     } else {
       setError('위치 정보를 불러오는데에 실패하였습니다.');
     }
   };
-
   useEffect(() => {
-    if (!isMapAvailable) {
+    if (platform === null) {
+      dispatch(getPlatformInfo());
+    }
+  }, [platform]);
+  useEffect(() => {
+    if (!isMapAvailable || platform === null) {
       return;
     }
     checkLocationPermission();
-  }, [isMapAvailable]);
+  }, [platform, isMapAvailable]);
 
   useEffect(() => {
     if (!locationAvailable) {
