@@ -84,7 +84,7 @@ export default function WalkHistoryPage() {
   const [addWalkModal, setAddWalkModal] = useState(false);
   const openToast = useToastMessage();
 
-  const { isWalkHistoryLoading, walkHistory } = useWalkHistory(date, currentPetId);
+  const { walkHistory } = useWalkHistory(date, currentPetId);
   const isWalkHistoryExist = walkHistory && walkHistory.length > 0;
 
   const initWalkTotalInfo = new Map<'totalTime' | 'totalDistance', number>([
@@ -165,7 +165,7 @@ export default function WalkHistoryPage() {
         </div>
         <div className="w-full overflow-y-auto">
           <h3 className="pb-2">{date}</h3>
-          <WalkHistoryList isLoading={isWalkHistoryLoading} walkHistory={walkHistory ?? []} />
+          <WalkHistoryList walkHistory={walkHistory ?? []} />
         </div>
       </div>
       {addWalkModal && (
