@@ -87,7 +87,7 @@ export default function WalkRecordMap() {
   }, [currentDateString]);
 
   useEffect(() => {
-    if (!mapRef.current) {
+    if (!isMapAvailable || !mapRef.current || locationRecords.length === 0) {
       return;
     }
 
@@ -102,14 +102,20 @@ export default function WalkRecordMap() {
       strokeStyle: 'solid',
     });
     polyline.setMap(mapRef.current);
-  }, [locationRecords]);
+  }, [isMapAvailable, locationRecords]);
 
   return (
     <Layout header title="산책하기" canGoBack onClickGoBack={goBackGuard}>
       <div className="bg-white h-full flex flex-col w-full">
         <div className="h-full w-full relative">
           <CurrentPosButton moveToCurrentPosition={moveToCurrentPosition} />
-          <KakaoMap mapRef={mapRef} latitude={latitude} longitude={longitude} />
+          {isMapAvailable ? (
+            <KakaoMap ref={mapRef} latitude={latitude} longitude={longitude} />
+          ) : (
+            <div className="bg-white w-full h-full flex flex-col items-center justify-center">
+              <h4 className="text-lg ">지도를 이용할 수 없습니다</h4>
+            </div>
+          )}
         </div>
         {locationError && (
           <div className="z-10 fixed bottom-32 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-red-500 text-white text-sm rounded-[10px] flex items-center justify-center">
