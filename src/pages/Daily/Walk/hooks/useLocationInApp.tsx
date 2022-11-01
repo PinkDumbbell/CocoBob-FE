@@ -71,11 +71,14 @@ export default function useLocationWithApp() {
       });
       if (!agreed) {
         setError('위치 권한을 거부하였습니다.');
+        setLocationAvailable(false);
         return;
       }
 
       const permissionAllowed = await getLocationPermission();
       if (!permissionAllowed) {
+        setError('위치 권한을 거부하였습니다.');
+        setLocationAvailable(false);
         return;
       }
     }
@@ -111,15 +114,24 @@ export default function useLocationWithApp() {
   }, [platform, isMapAvailable]);
 
   useEffect(() => {
-    if (!locationAvailable) {
+    if (!locationAvailable || error) {
       return;
     }
+
     const intervalId = setInterval(getLocationPermissionHandler, 500);
     // eslint-disable-next-line consistent-return
     return () => {
       clearInterval(intervalId);
     };
-  }, [locationAvailable]);
+  }, [locationAvailable, error]);
+
+  useEffect(() => {
+    if (!error) {
+      return;
+    }
+
+    alert("'설정 > 앱 목록 > 권한'에서 위치 권한을 변경할 수 있습니다.");
+  }, [error]);
 
   return { locationAvailable, data: location, isError: !!error, errorMessage: error };
 }

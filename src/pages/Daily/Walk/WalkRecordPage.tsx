@@ -112,7 +112,7 @@ export default function WalkRecordMap() {
       <div className="bg-white h-full flex flex-col w-full">
         <div className="h-full w-full relative">
           <CurrentPosButton moveToCurrentPosition={moveToCurrentPosition} />
-          {isMapAvailable ? (
+          {isMapAvailable && locationAvailable ? (
             <KakaoMap ref={mapRef} latitude={latitude} longitude={longitude} />
           ) : (
             <div className="bg-white w-full h-full flex flex-col items-center justify-center">

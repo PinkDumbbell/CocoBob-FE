@@ -2,7 +2,6 @@
 import { useRef } from 'react';
 
 export default function useKakaoMap(lat: number, lng: number) {
-  const { kakao } = window;
   const mapRef = useRef<kakao.maps.Map>(null);
 
   const moveToCurrentPosition = () => {
@@ -10,11 +9,10 @@ export default function useKakaoMap(lat: number, lng: number) {
       return;
     }
 
-    const map = mapRef.current as any;
     const bounds = new kakao.maps.LatLngBounds();
     bounds.extend(new kakao.maps.LatLng(lat, lng));
-    map.setBounds(bounds);
-    map.setLevel(2);
+    mapRef.current.setBounds(bounds);
+    mapRef.current.setLevel(2);
   };
 
   const resetPoliline = () => {
