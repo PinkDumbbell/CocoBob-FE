@@ -20,8 +20,7 @@ export default function useLogout() {
 
   const onClickLogout = async () => {
     const confirm = await openPopup({
-      title: '로그아웃',
-      contents: '로그아웃을 하시겠습니까?',
+      contents: <p className="py-10">로그아웃을 하시겠습니까?</p>,
     });
     if (confirm) {
       logoutMutation();

@@ -31,8 +31,13 @@ function useDeletePet(petId?: number) {
   const deletePet = async () => {
     if (!petId) return;
     const confirm = await openPopup({
-      title: '반려동물 삭제',
-      contents: '반려동물을 삭제하시겠습니까?',
+      contents: (
+        <div className="flex flex-col py-6 gap-1/2 items-center">
+          <p className="break-words">반려동물을 삭제하시겠습니까?</p>
+          <p>지금까지의 추억이 모두 사라집니다.</p>
+          <p>그래도 삭제하시겠습니까?</p>
+        </div>
+      ),
     });
     if (confirm) {
       setSkipFetchOnDelete(true);

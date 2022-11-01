@@ -44,7 +44,7 @@ export default function WalkRecordMap() {
       return;
     }
     const goBackConfirmed = await confirm({
-      title: '페이지를 나가시면 기록이 삭제됩니다.',
+      contents: <p className="py-10">페이지를 나가시면 기록이 삭제됩니다.</p>,
     });
     if (!goBackConfirmed) return;
 
@@ -62,7 +62,7 @@ export default function WalkRecordMap() {
 
   const resetRecordState = async () => {
     const isConfirmed = await confirm({
-      title: '기록을 지우시겠습니까?',
+      contents: <p className="py-10">기록을 지우시겠습니까?</p>,
     });
     if (!isConfirmed) return;
 
@@ -90,7 +90,7 @@ export default function WalkRecordMap() {
   }, [currentDateString]);
 
   useEffect(() => {
-    if (!mapRef.current || locationRecords.length === 0) {
+    if (!isMapAvailable || !mapRef.current || locationRecords.length === 0) {
       return;
     }
 
@@ -105,15 +105,19 @@ export default function WalkRecordMap() {
       strokeStyle: 'solid',
     });
     polyline.setMap(mapRef.current);
-  }, [locationRecords]);
+  }, [isMapAvailable, locationRecords]);
 
   return (
     <Layout header title="산책하기" canGoBack onClickGoBack={goBackGuard}>
       <div className="bg-white h-full flex flex-col w-full">
         <div className="h-full w-full relative">
           <CurrentPosButton moveToCurrentPosition={moveToCurrentPosition} />
-          {isMapAvailable && locationAvailable && (
+          {isMapAvailable && locationAvailable ? (
             <KakaoMap ref={mapRef} latitude={latitude} longitude={longitude} />
+          ) : (
+            <div className="bg-white w-full h-full flex flex-col items-center justify-center">
+              <h4 className="text-lg ">지도를 이용할 수 없습니다</h4>
+            </div>
           )}
         </div>
         {locationError && (

@@ -63,7 +63,7 @@ export default function useLocationWithApp() {
       const agreed = await confirm({
         title: <h3>위치권한 요청</h3>,
         contents: (
-          <p>
+          <p className="py-10 break-words">
             펫탈로그는 앱이 사용 중이 아닐때도 위치 정보를 수집하여 산책 경로 자동 기록 기능을
             제공합니다.
           </p>

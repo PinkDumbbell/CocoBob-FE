@@ -116,8 +116,7 @@ export default function NoteAddPage() {
       ? '수정을 취소하시겠습니까?'
       : '페이지를 나가면 작성중인 글이 삭제됩니다.';
     const goBack = await confirm({
-      title: '',
-      contents: <p className="text-center">{message}</p>,
+      contents: <p className="py-10">{message}</p>,
     });
     if (!goBack) return;
 
