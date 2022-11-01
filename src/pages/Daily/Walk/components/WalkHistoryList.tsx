@@ -1,12 +1,6 @@
+import { WalkHistoryItemType } from '@/@type/walk';
 import WalkHistoryListItem from './WalkHistoryListItem';
 
-export type WalkHistoryItemType = {
-  walkId: number;
-  distance: number;
-  totalTime: number;
-  startedAt: string;
-  finishedAt: string;
-};
 type WalkHistoryListProps = {
   walkHistory: WalkHistoryItemType[];
 };

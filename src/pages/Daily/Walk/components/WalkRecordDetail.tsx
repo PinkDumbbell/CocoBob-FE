@@ -1,7 +1,7 @@
-import { WalkHistoryItemType } from './WalkHistoryList';
+import { WalkRecordType } from '@/@type/walk';
 
 type WalkRecordDetailProps = {
-  walkRecord: WalkHistoryItemType;
+  walkRecord: WalkRecordType;
 };
 
 export default function WalkRecordDetail({ walkRecord }: WalkRecordDetailProps) {

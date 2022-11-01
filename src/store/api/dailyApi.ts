@@ -1,4 +1,4 @@
-import { WalkHistoryItemType } from '@/pages/Daily/Walk/components/WalkHistoryList';
+import { RecordOverviewType, WalkHistoryItemType } from '@/@type/walk';
 import { apiSlice } from '../slices/apiSlice';
 import { IGenericResponse } from './types';
 
@@ -39,15 +39,7 @@ export type HealthRecordType = {
   meals: MealType[];
   note: string;
 };
-export type RecordOverviewType = {
-  dailyId: number;
-  dailyTitle: string;
-  healthRecordId: number;
-  isAbnormal: boolean;
-  mealCount: number;
-  walkTotalDistance: number;
-  walkTotalTime: number;
-};
+
 export type RecordIdType = {
   dailyId: number;
   healthRecordId: number;

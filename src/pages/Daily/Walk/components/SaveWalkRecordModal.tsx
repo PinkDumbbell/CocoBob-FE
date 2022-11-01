@@ -1,14 +1,13 @@
+import { WalkRecordType } from '@/@type/walk';
 import Button from '@/components/Button';
 import Header from '@/components/layout/Header';
-import WalkRecordDetail, { WalkRecordType } from './WalkRecordDetail';
+import WalkRecordDetail from './WalkRecordDetail';
 
 const mockSaveWalkData: WalkRecordType = {
-  walkId: 1,
   startedAt: '15:48',
   finishedAt: '16:12',
   totalTime: 24,
   distance: 1.1,
-  calcories: 108,
 };
 type SaveWalkModalProps = {
   close: () => void;
