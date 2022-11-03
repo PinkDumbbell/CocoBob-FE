@@ -81,7 +81,7 @@ function useWalkRecord(isMapAvailable: boolean, location: LocationType) {
     }
   };
 
-  const openSaveModal = async () => {
+  const openSaveModal = () => {
     setSaveWalkModal(true);
   };
   const closeWalkModal = () => {
@@ -123,7 +123,7 @@ export default function WalkRecordMap() {
   const [confirm] = useConfirm();
   const platform = useAppSelector(getCurrentPlatform);
 
-  const isMapAvailable = platform === 'android' || platform === 'ios' || true;
+  const isMapAvailable = platform === 'android' || platform === 'ios';
   const currentDateString = searchParams.get('date');
 
   const { locationAvailable, data: location, isError: locationError } = useLocationWithApp();
