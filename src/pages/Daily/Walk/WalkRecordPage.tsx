@@ -26,6 +26,8 @@ function useWalkRecord(isMapAvailable: boolean, location: LocationType) {
   const openToast = useToastMessage();
   const { data: currentPet } = useCurrentPet();
 
+  const dateString = searchParams.get('date');
+
   const [saveWalkModal, setSaveWalkModal] = useState(false);
 
   const [saveWalk, { isSuccess, isError }] = useCreateWalkMutation();
@@ -46,15 +48,15 @@ function useWalkRecord(isMapAvailable: boolean, location: LocationType) {
   const goWalkHistoryPage = () => navigate(`/daily/walk?date=${searchParams.get('date')}`);
 
   const saveWalkRecord = () => {
-    if (!currentPet?.id || !recordStartTime || !recordEndTime) {
+    if (!currentPet?.id || !recordStartTime || !recordEndTime || !dateString) {
       return;
     }
+
     const saveParams = {
       petId: currentPet.id,
-      date: searchParams.get('date'),
+      date: dateString,
       ...walkSaveData,
     };
-    console.log('saveWalk', saveParams);
     saveWalk(saveParams);
   };
 
