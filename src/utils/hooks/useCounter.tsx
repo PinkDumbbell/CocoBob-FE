@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 
 export default function useCounter() {
   const [recordStartTime, setStartTime] = useState<Date | null>(null);
+  const [recordEndTime, setEndTime] = useState<Date | null>(null);
   const [status, setStatus] = useState<'reset' | 'running' | 'paused'>('reset');
   const [totalCount, setTotalCount] = useState(0);
   const timerId = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -24,6 +25,7 @@ export default function useCounter() {
     if (timerId.current === null) return;
     clearInterval(timerId.current);
     setStatus('paused');
+    setEndTime(new Date());
   };
 
   useEffect(() => {
@@ -41,5 +43,6 @@ export default function useCounter() {
     pause,
     reset,
     recordStartTime,
+    recordEndTime,
   };
 }
