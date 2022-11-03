@@ -56,6 +56,13 @@ export type BasicRecordRequestType = {
 export type RecordRequestType = BasicRecordRequestType & {
   sessionId: number; // for disable cache behavior of RTK Query
 };
+
+type WalkRecordSaveParamsType = BasicRecordRequestType & {
+  distance: number;
+  totalTime: number;
+  startedAt?: string;
+  finishedAt?: string;
+};
 type NoteRequestType = RecordRequestType & {
   noteData: {
     images: File[];
@@ -221,7 +228,7 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
         { type: 'DailyWalk', id: args },
       ],
     }),
-    createWalk: builder.mutation<any, any>({
+    createWalk: builder.mutation<any, WalkRecordSaveParamsType>({
       query: ({ petId, date, distance, totalTime, startedAt, finishedAt }) => {
         // startedAt, finishedAt이 있으면 totalTime 무시. 자동 계산
         // startedAt, finishedAt이 없으면 totalTime 필요. 필수
@@ -233,8 +240,9 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
           formData.set('finishedAt', finishedAt); // hh:mm:ss
         }
         formData.set('date', date);
-        formData.set('distance', distance);
-        formData.set('totalTime', totalTime);
+        formData.set('distance', String(distance));
+        formData.set('totalTime', String(totalTime));
+
         return {
           url: `/v1/walks/pets/${petId}`,
           method: 'POST',

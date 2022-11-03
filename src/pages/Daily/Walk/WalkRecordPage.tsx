@@ -4,10 +4,13 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import Layout from '@/components/layout/Layout';
-import { useConfirm, useCounter, useKakaoMap, useToastMessage } from '@/utils/hooks';
+import { useConfirm, useCounter, useCurrentPet, useKakaoMap, useToastMessage } from '@/utils/hooks';
 import { useAppSelector } from '@/store/config';
 import { getCurrentPlatform } from '@/store/slices/platformSlice';
-import { getDateString } from '@/utils/libs/date';
+import { useCreateWalkMutation } from '@/store/api/dailyApi';
+import { getDateString, getTimeString } from '@/utils/libs/date';
+import { LocationType } from '@/@type/location';
+import { WalkRecordType } from '@/@type/walk';
 
 import { CurrentPosButton, KakaoMap } from './components/WalkRecordMap';
 import RecordToolbar from './components/WalkRecordToolbar';
@@ -16,48 +19,45 @@ import useLocationWithApp from './hooks/useLocationInApp';
 import SaveWalkModal from './components/SaveWalkRecordModal';
 import useLocationDistance from './hooks/useDistanceWithLocation';
 
-export default function WalkRecordMap() {
+function useWalkRecord(isMapAvailable: boolean, location: LocationType) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [confirm] = useConfirm();
   const openToast = useToastMessage();
-  const platform = useAppSelector(getCurrentPlatform);
-  const isMapAvailable = platform === 'android' || platform === 'ios';
+  const { data: currentPet } = useCurrentPet();
 
-  const { status, totalCount, start, pause, reset } = useCounter();
-  const { locationAvailable, data: location, isError: locationError } = useLocationWithApp();
+  const dateString = searchParams.get('date');
+
+  const [saveWalkModal, setSaveWalkModal] = useState(false);
+
+  const [saveWalk, { isSuccess, isError }] = useCreateWalkMutation();
+  const { status, totalCount, start, pause, reset, recordStartTime, recordEndTime } = useCounter();
+
   const { distance, resetDistance, locationRecords } = useLocationDistance({
     location,
     isRunning: status === 'running',
   });
-  const { latitude, longitude } = location;
-  const { mapRef, moveToCurrentPosition } = useKakaoMap(latitude, longitude);
 
-  const [saveWalkModal, setSaveWalkModal] = useState(false);
-
-  const currentDateString = searchParams.get('date');
+  const walkSaveData: WalkRecordType = {
+    distance,
+    finishedAt: getTimeString(recordEndTime ?? new Date()),
+    startedAt: getTimeString(recordStartTime ?? new Date()),
+    totalTime: Math.ceil(totalCount / 60),
+  };
 
   const goWalkHistoryPage = () => navigate(`/daily/walk?date=${searchParams.get('date')}`);
-  const goBackGuard = async () => {
-    if (!isMapAvailable) {
-      goWalkHistoryPage();
+
+  const saveWalkRecord = () => {
+    if (!currentPet?.id || !recordStartTime || !recordEndTime || !dateString) {
       return;
     }
-    const goBackConfirmed = await confirm({
-      contents: <p className="py-10">페이지를 나가시면 기록이 삭제됩니다.</p>,
-    });
-    if (!goBackConfirmed) return;
 
-    goWalkHistoryPage();
-  };
-
-  const openSaveModal = async () => {
-    setSaveWalkModal(true);
-  };
-  const saveWalkRecord = () => {
-    setSaveWalkModal(false);
-    openToast('산책 기록을 성공적으로 저장했습니다.', 'success');
-    goWalkHistoryPage();
+    const saveParams = {
+      petId: currentPet.id,
+      date: dateString,
+      ...walkSaveData,
+    };
+    saveWalk(saveParams);
   };
 
   const resetRecordState = async () => {
@@ -79,6 +79,82 @@ export default function WalkRecordMap() {
     } else {
       start();
     }
+  };
+
+  const openSaveModal = () => {
+    setSaveWalkModal(true);
+  };
+  const closeWalkModal = () => {
+    setSaveWalkModal(false);
+  };
+
+  useEffect(() => {
+    if (!isSuccess) {
+      return;
+    }
+    openToast('산책이 저장되었습니다.', 'success');
+    goWalkHistoryPage();
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (!isError) {
+      return;
+    }
+    openToast('저장에 실패하였습니다.');
+  }, [isError]);
+
+  return {
+    status,
+    distance,
+    totalCount,
+    startRecord,
+    resetRecordState,
+    saveWalkRecord,
+    locationRecords,
+    saveWalkModal,
+    openSaveModal,
+    closeWalkModal,
+    walkSaveData,
+  };
+}
+export default function WalkRecordMap() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [confirm] = useConfirm();
+  const platform = useAppSelector(getCurrentPlatform);
+
+  const isMapAvailable = platform === 'android' || platform === 'ios';
+  const currentDateString = searchParams.get('date');
+
+  const { locationAvailable, data: location, isError: locationError } = useLocationWithApp();
+  const { mapRef, moveToCurrentPosition } = useKakaoMap(location.latitude, location.longitude);
+  const {
+    status,
+    distance,
+    totalCount,
+    startRecord,
+    resetRecordState,
+    saveWalkRecord,
+    locationRecords,
+    saveWalkModal,
+    openSaveModal,
+    closeWalkModal,
+    walkSaveData,
+  } = useWalkRecord(isMapAvailable, location);
+
+  const goWalkHistoryPage = () => navigate(`/daily/walk?date=${searchParams.get('date')}`);
+
+  const goBackGuard = async () => {
+    if (!isMapAvailable) {
+      goWalkHistoryPage();
+      return;
+    }
+    const goBackConfirmed = await confirm({
+      contents: <p className="py-10">페이지를 나가시면 기록이 삭제됩니다.</p>,
+    });
+    if (!goBackConfirmed) return;
+
+    goWalkHistoryPage();
   };
 
   useEffect(() => {
@@ -113,7 +189,7 @@ export default function WalkRecordMap() {
         <div className="h-full w-full relative">
           <CurrentPosButton moveToCurrentPosition={moveToCurrentPosition} />
           {isMapAvailable && locationAvailable ? (
-            <KakaoMap ref={mapRef} latitude={latitude} longitude={longitude} />
+            <KakaoMap ref={mapRef} latitude={location.latitude} longitude={location.longitude} />
           ) : (
             <div className="bg-white w-full h-full flex flex-col items-center justify-center">
               <h4 className="text-lg ">지도를 이용할 수 없습니다</h4>
@@ -144,7 +220,7 @@ export default function WalkRecordMap() {
         />
       </div>
       {saveWalkModal && (
-        <SaveWalkModal close={() => setSaveWalkModal(false)} save={saveWalkRecord} />
+        <SaveWalkModal close={closeWalkModal} save={saveWalkRecord} walkData={walkSaveData} />
       )}
     </Layout>
   );
