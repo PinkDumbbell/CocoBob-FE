@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import Button from '@/components/Button';
+import { Button } from '@/components/Button';
 import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
 import { useAppDispatch } from '@/store/config';
