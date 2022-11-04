@@ -20,13 +20,17 @@ module.exports = {
 
         'primary-light': 'rgb(206, 229, 255)',
         'primary-bright': '#1f80ee',
+        'primary-brightest': '#F2F8FF',
         'primary-main': '#1A70D2',
-        'primary-dark': '#114786',
+        'primary-lightdark': '#165EB0',
+        'primary-dark': '#124C8F',
+        'primary-darkest': '#0A2B52',
 
         'secondary-light': '#AAC7E9',
         'secondary-main': '#72A2D8',
         bold: '#1d1d1d',
         black: '#333333',
+        white: '#fefefe',
         caption: '#999999',
       },
       keyframes: {

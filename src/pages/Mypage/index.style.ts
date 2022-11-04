@@ -51,7 +51,7 @@ py-6
 `;
 
 export const MainPetListContainer = tw.div`
- w-full flex items-center overflow-x-auto whitespace-nowrap space-x-4 px-1 h-32
+ w-full flex items-center overflow-x-auto overflow-y-hidden whitespace-nowrap space-x-4 px-1 h-32
 `;
 export const MainPetListItem = tw.div`
   flex w-60 h-28 p-4 rounded-lg border items-center gap-3 shadow-gray-300 shadow-md cursor-pointer

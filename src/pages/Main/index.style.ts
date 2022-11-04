@@ -21,6 +21,7 @@ export const VerticalBox = tw.div`
 export const VerticalCenterBox = tw(VerticalBox)`
 	items-center
 	justify-center
+	flex-2 bg-white rounded-[10px]
 `;
 export const HorizontalBox = tw.div`
 	flex items-center

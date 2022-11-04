@@ -111,15 +111,15 @@ export default function Main() {
             <ContentsContainer>
               <div className="w-full overflow-hidden">
                 <div className="p-4"></div>
-                <div className="flex w-full items-center rounded-b-[10px] overflow-hidden">
+                <div className="flex w-full items-center overflow-hidden">
                   <button
-                    className="p-2 w-1/2 bg-primary-main text-white"
+                    className="p-2 w-1/2 bg-primary-main text-white rounded-bl-[10px]"
                     onClick={() => navigate('/products')}
                   >
                     사료찾기
                   </button>
                   <button
-                    className="p-2 w-1/2 bg-primary-main text-white"
+                    className="p-2 w-1/2 bg-primary-main text-white rounded-br-[10px]"
                     onClick={() => navigate('/daily')}
                   >
                     생활기록

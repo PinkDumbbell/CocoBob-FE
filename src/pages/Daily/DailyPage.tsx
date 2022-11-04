@@ -115,7 +115,7 @@ export default function DailyMain() {
         </div>
         <div className="flex w-full items-center gap-5">
           <DailyMenuButton label="건강일지" onClick={goHealthPage} icon={<DogIcon />} />
-          <DailyMenuButton label="일지기록" onClick={selectWalkOrNote} icon={<PencilIcon />} />
+          <DailyMenuButton label="일지기록" onClick={selectWalkOrNote} icon={<PencilIcon />} main />
         </div>
         <div className="w-full flex items-center">
           {recordOverview && (
