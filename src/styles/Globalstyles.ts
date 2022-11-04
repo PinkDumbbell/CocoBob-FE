@@ -157,6 +157,7 @@ const GlobalStyle = createGlobalStyle`
     height: 16px;
 
     transition: background-color 100ms linear;
+
     &:checked{
       border: 1px solid #114786;
       background-image: url(${checkboxBg});
@@ -166,6 +167,25 @@ const GlobalStyle = createGlobalStyle`
       background-color: ${theme.colors.primary.main}
     }
   }
+
+   // Animation -------------------
+   @keyframes push {
+    from {
+      transform: scale(1.0);
+    }
+    to {
+      transform: scale(1.025);
+    }
+   }
+
+   @keyframes afterpush {
+    from {
+      transform: scale(1.025);
+    }
+    to {
+      transform: scale(0.96);
+    }
+   }
 `;
 
 export default GlobalStyle;

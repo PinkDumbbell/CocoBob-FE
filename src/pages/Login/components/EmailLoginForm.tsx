@@ -46,7 +46,11 @@ export default function EmailLoginForm({
         rules={register('password', { required: true })}
         isError={!!errors.password}
       />
-      <FormButton name={!isLoading ? '로그인' : <SmallSpinner />} disabled={isLoading} />
+      <FormButton
+        className={`hover:animate-push active:animate-afterpush`}
+        name={!isLoading ? '로그인' : <SmallSpinner />}
+        disabled={isLoading}
+      />
     </LoginForm>
   );
 }

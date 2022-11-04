@@ -1,5 +1,13 @@
 import { concatClasses } from '@/utils/libs/concatClasses';
 import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
+import {
+  common,
+  FirstStyle,
+  SecondStyle,
+  ThirdStyle,
+  FourthStyle,
+  FifthStyle,
+} from './index.style';
 
 interface ButtonProps {
   primary?: 'first' | 'second' | 'third' | 'fourth' | 'etc';
@@ -28,21 +36,12 @@ export const Button = ({
   ...props
 }: ButtonPropsWithDefaultProps) => {
   const volume = width === 'full' ? 'min-w-full' : 'min-w-sm';
-  const totalStyle = [
-    'max-w-sm py-2 px-10 text-xl font-bold rounded-[10px] text-center',
-    `${volume}`,
-  ];
-  if (primary === 'first')
-    totalStyle.push(
-      'text-white bg-primary-main hover:bg-gradient-to-tl from-redf to-redt shadow-md',
-    );
-  if (primary === 'second')
-    totalStyle.push(
-      'text-primary-main bg-transparent border-2 border-primary-dark hover:border-2 border-primary-light',
-    );
-  if (primary === 'third') totalStyle.push('text-primary-main bg-white border-2 border-[#dddddd]');
-  if (primary === 'fourth') totalStyle.push('text-black bg-white border-2 border-[#efefef]');
-  if (primary === 'etc') totalStyle.push('text-[#999999] font-medium underline decoration-1');
+  const totalStyle = [`${volume} ${common}`];
+  if (primary === 'first') totalStyle.push(FirstStyle);
+  if (primary === 'second') totalStyle.push(SecondStyle);
+  if (primary === 'third') totalStyle.push(ThirdStyle);
+  if (primary === 'fourth') totalStyle.push(FourthStyle);
+  if (primary === 'etc') totalStyle.push(FifthStyle);
 
   return (
     <button
