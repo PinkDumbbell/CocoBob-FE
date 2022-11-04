@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 /* global kakao */
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -14,9 +13,9 @@ import { WalkRecordType } from '@/@type/walk';
 
 import { CurrentPosButton, KakaoMap } from './components/WalkRecordMap';
 import RecordToolbar from './components/WalkRecordToolbar';
+import SaveWalkModal from './components/SaveWalkRecordModal';
 
 import useLocationWithApp from './hooks/useLocationInApp';
-import SaveWalkModal from './components/SaveWalkRecordModal';
 import useLocationDistance from './hooks/useDistanceWithLocation';
 
 function useWalkRecord(isMapAvailable: boolean, location: LocationType) {
@@ -28,7 +27,7 @@ function useWalkRecord(isMapAvailable: boolean, location: LocationType) {
 
   const dateString = searchParams.get('date');
 
-  const [saveWalkModal, setSaveWalkModal] = useState(false);
+  const [isSaveModalOn, setIsSaveModalOn] = useState(false);
 
   const [saveWalk, { isSuccess, isError }] = useCreateWalkMutation();
   const { status, totalCount, start, pause, reset, recordStartTime, recordEndTime } = useCounter();
@@ -51,7 +50,6 @@ function useWalkRecord(isMapAvailable: boolean, location: LocationType) {
     if (!currentPet?.id || !recordStartTime || !recordEndTime || !dateString) {
       return;
     }
-
     const saveParams = {
       petId: currentPet.id,
       date: dateString,
@@ -82,10 +80,10 @@ function useWalkRecord(isMapAvailable: boolean, location: LocationType) {
   };
 
   const openSaveModal = () => {
-    setSaveWalkModal(true);
+    setIsSaveModalOn(true);
   };
   const closeWalkModal = () => {
-    setSaveWalkModal(false);
+    setIsSaveModalOn(false);
   };
 
   useEffect(() => {
@@ -93,6 +91,7 @@ function useWalkRecord(isMapAvailable: boolean, location: LocationType) {
       return;
     }
     openToast('산책이 저장되었습니다.', 'success');
+    closeWalkModal();
     goWalkHistoryPage();
   }, [isSuccess]);
 
@@ -111,7 +110,7 @@ function useWalkRecord(isMapAvailable: boolean, location: LocationType) {
     resetRecordState,
     saveWalkRecord,
     locationRecords,
-    saveWalkModal,
+    isSaveModalOn,
     openSaveModal,
     closeWalkModal,
     walkSaveData,
@@ -136,7 +135,7 @@ export default function WalkRecordMap() {
     resetRecordState,
     saveWalkRecord,
     locationRecords,
-    saveWalkModal,
+    isSaveModalOn,
     openSaveModal,
     closeWalkModal,
     walkSaveData,
@@ -219,7 +218,7 @@ export default function WalkRecordMap() {
           runningStatus={status}
         />
       </div>
-      {saveWalkModal && (
+      {isSaveModalOn && (
         <SaveWalkModal close={closeWalkModal} save={saveWalkRecord} walkData={walkSaveData} />
       )}
     </Layout>

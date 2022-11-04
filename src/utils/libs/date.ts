@@ -12,4 +12,4 @@ export const getDateDiff = (targetDate: string, diffTarget: 'year' | 'month' | '
 
 export const getTotalMonthWithYearAndMonth = (year: number, month: number) => year * 12 + month;
 export const getDateString = (date: Date) => dayjs(date).format('YYYY-MM-DD');
-export const getTimeString = (date: Date) => dayjs(date).format('HH:mm');
+export const getTimeString = (date: Date) => dayjs(date).format('hh:mm:ss');
