@@ -7,6 +7,8 @@ import { useChangeRepresentativePetMutation, useGetUserQuery } from '@/store/api
 import { useConfirm, useLogout, useToastMessage } from '@/utils/hooks';
 import settingsIcon from '@/assets/icon/settings_icon.png';
 
+import { Spinner } from '@/Animation';
+
 import AddPetBUtton from './components/AddPetButton';
 import PetSimpleInfo from './components/PetSimpleInfo';
 import {
@@ -65,7 +67,7 @@ export default function MypageMain() {
       }
     >
       <MainContentsContainer>
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <Spinner />}
         {!isLoading && (
           <>
             <FlexColumn className="p-4 gap-1 bg-white">

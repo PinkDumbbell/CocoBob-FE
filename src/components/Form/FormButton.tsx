@@ -1,8 +1,8 @@
-import { useCallback } from 'react';
+import { useCallback, ReactElement } from 'react';
 import styled from 'styled-components';
 
 interface ButtonProps {
-  name: string;
+  name: string | ReactElement;
   disabled?: boolean;
   // eslint-disable-next-line no-unused-vars
   onClick?: Function;

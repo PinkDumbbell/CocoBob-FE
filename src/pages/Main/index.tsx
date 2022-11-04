@@ -16,6 +16,8 @@ import doctorWebp from '@/assets/image/main_doctor.webp';
 import dogIcon from '@/assets/icon/dog_icon.png';
 import { ReactComponent as RecommendIcon } from '@/assets/icon/navbar_food.svg';
 
+import { Spinner } from '@/Animation';
+
 import {
   ContentSection,
   DoctorImageWrapper,
@@ -150,9 +152,7 @@ export default function Main() {
                 </SwiperSlide>
               ))}
           </Swiper>
-          {isLoading && (
-            <div className="text-center w-full text-lg font-medium">상품을 불러오는 중 입니다.</div>
-          )}
+          {isLoading && <Spinner />}
           {isFetchError && (
             <div className="py-10 text-center w-full text-lg font-medium">
               상품을 불러오지 못했습니다.
