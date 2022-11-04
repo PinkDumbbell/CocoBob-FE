@@ -3,16 +3,17 @@ import useAnimation from '@/utils/hooks/useAnimation';
 import bone from './assets/bone.json';
 
 const Container = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  z-index: 2000;
 `;
 
 const DotLoader = () => {
-  const boneAnimation = useAnimation(bone, true, 10, 10);
+  const boneAnimation = useAnimation(bone, true, 15, 15);
 
-  return <Container {...boneAnimation}>Hello</Container>;
+  return <Container {...boneAnimation}></Container>;
 };
 
 export default DotLoader;

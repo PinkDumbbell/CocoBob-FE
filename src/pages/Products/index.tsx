@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import ProductSearchModal from '@/pages/Products/components/Search/modal';
@@ -11,6 +11,7 @@ import { ReactComponent as ResetIcon } from '@/assets/icon/refresh_icon.svg';
 
 import { useAppDispatch, useAppSelector } from '@/store/config';
 import { getCurrentFilters, resetFilter } from '@/store/slices/productsSlice';
+import { Spinner } from '@/Animation';
 import CategoryTabButton from './components/CategoryTabButton';
 import FilterModal from './components/Filter/FilterModal';
 import ProductList from './components/ProductList/ProductList';
@@ -72,6 +73,14 @@ export default function ProductsPage() {
   );
   const hasFilter = hasAafco || hasBrands || hasIngredient || hasAllergyIngredient;
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  });
+
   return (
     <Layout
       footer
@@ -127,6 +136,7 @@ export default function ProductsPage() {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
+          {isLoading && <Spinner />}
           <ProductList ref={setRefs} products={products} error={isError} isLastPage={isLastData} />
         </div>
       </div>

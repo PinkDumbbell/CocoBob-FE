@@ -9,6 +9,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { theme } from '@/styles/theme';
 import store from '@/store/config';
 import EmailLoginForm from './EmailLoginForm';
+import 'jest-canvas-mock';
 
 /**
  * case 1:
