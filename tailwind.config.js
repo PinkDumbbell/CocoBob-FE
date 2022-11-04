@@ -8,6 +8,10 @@ module.exports = {
       nh: '100vh',
     },
     extend: {
+      boxShadow: {
+        smallSpinner:
+          '12px 0px 0 0 rgba(244, 244, 245, 0.2), 9.7px 7.1px 0 0 rgba(244, 244, 245, 0.4),3.7199999999999998px 11.4px 0 0 rgba(244, 244, 245, 0.6), -3.7199999999999998px 11.4px 0 0 rgba(244, 244, 245, 0.8), -9.7px 7.1px 0 0 rgba(244, 244, 245, 1)',
+      },
       colors: {
         redf: 'rgb(206, 229, 255)',
         redt: '#1A70D2',
