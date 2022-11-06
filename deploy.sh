@@ -1,1 +1,0 @@
-echo "> FE Deployed"

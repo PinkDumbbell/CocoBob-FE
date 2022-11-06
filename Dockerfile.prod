@@ -1,0 +1,27 @@
+FROM node:14-alpine AS builder
+# Add a work directory
+RUN sudo mkdir /usr/app
+WORKDIR /usr/app
+ENV NODE_ENV builder
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+# Cache and Install dependencies
+COPY package.json /usr/app/package.json
+COPY package-lock.json /usr/app/package-lock.json
+
+RUN npm install --silent
+RUN npm install react-scripts@3.4.1 -g --silent
+
+# Copy app files
+COPY . /usr/app
+RUN npm run build
+
+FROM nginx:latest
+
+RUN rm -rf /etc/nginx/conf.d
+COPY conf /etc/nginx
+
+COPY --from=builder /usr/app/dist /usr/share/nginx/html
+
+# Expose port
+EXPOSE 80
+CMD [ "nginx", "-g", "daemon off;" ]

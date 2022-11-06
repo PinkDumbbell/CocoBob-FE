@@ -1,38 +1,56 @@
-/* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IUser } from '@/@type/user';
+import { userApiSlice } from '../api/userApi';
+import { RootState } from '../config';
 
 export type UserState = {
-  isLoggedIn: boolean;
-  user: { email: string; name: string } | null;
-};
-export type LoginPayload = {
-  email: string;
-  password: string;
+  user: IUser | null;
+  currentPet: number | null;
 };
 
 const initialState: UserState = {
-  isLoggedIn: false,
-  user: null,
+  user: {
+    userId: null,
+    email: null,
+    name: null,
+    representativeAnimalId: null,
+    pets: [],
+  },
+  currentPet: null,
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    loginAction(state: UserState, action: PayloadAction<LoginPayload>) {
-      state.isLoggedIn = true;
-      state.user = {
-        email: action.payload.email,
-        name: 'tester',
-      };
+    setUserAction(state: UserState, action: PayloadAction<IUser>) {
+      const { payload } = action;
+      state.user = payload;
+      state.currentPet = payload.representativeAnimalId;
     },
-    logoutAction(state: UserState) {
-      state.user = null;
-      state.isLoggedIn = false;
+    setRepresentativePet(state: UserState, action: PayloadAction<{ petId: number }>) {
+      if (state.user) {
+        state.user.representativeAnimalId = action.payload.petId;
+      }
     },
+    logoutAction() {
+      return initialState;
+    },
+    setCurrentPet(state: UserState, action: PayloadAction<{ petId: number }>) {
+      const {
+        payload: { petId },
+      } = action;
+      state.currentPet = petId;
+    },
+  },
+  extraReducers(builder) {
+    builder.addMatcher(userApiSlice.endpoints.getUser.matchFulfilled, (state, response) => {
+      userSlice.caseReducers.setUserAction(state, response);
+    });
   },
 });
 
 const { reducer, actions } = userSlice;
-export const { loginAction, logoutAction } = actions;
+export const getCurrentPet = (state: RootState) => state.user.user?.representativeAnimalId;
+export const { setUserAction, logoutAction, setRepresentativePet, setCurrentPet } = actions;
 export default reducer;

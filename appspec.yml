@@ -3,16 +3,16 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ec2-user/cocobob-fe/dist
+    destination: /home/ec2-user/cocobob-fe
     overwrite: yes
 
 permissions:
-  - object: /home/ec2-user/cocobob-fe/dist
+  - object: /home/ec2-user/cocobob-fe
     owner: root
     group: root
     mode: 755
 hooks:
   AfterInstall:
-    - location: deploy.sh
+    - location: development.sh
       timeout: 60
       runas: root

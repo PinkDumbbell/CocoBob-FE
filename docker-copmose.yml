@@ -1,0 +1,24 @@
+version: "3"
+services:
+  development:             # nginx 컨테이너 이름 (원하는 이름)
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./
+    image: dev-app 
+    ports:
+      - 3000:80
+    volumes:
+      - /app/node_modules
+      - ./:/app
+      - /etc/nginx/:/etc/nginx/    # Nginx 컨테이너 내부 /etc/nginx 디렉토리가 위에서 설치한 EC2 내부에 /etc/nginx 디렉토리를 참조함
+  product:         # Spring Boot 컨테이너 이름 (원하는 이름)
+    build:
+      dockerfile: Dockerfile.prod
+      context: ./
+    image: product-app 
+    ports:
+      - 80:80
+    volumes:
+      - /app/node_modules
+      - ./:/app
+      - /etc/nginx/:/etc/nginx/    # Nginx 컨테이너 내부 /etc/nginx 디렉토리가 위에서 설치한 EC2 내부에 /etc/nginx 디렉토리를 참조함
