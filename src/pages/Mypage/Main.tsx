@@ -73,13 +73,13 @@ export default function MypageMain() {
             <FlexColumn className="p-4 gap-1 bg-white">
               <MainTitleWrapper>
                 <h2>
-                  <span className="text-primary-main">{user?.name}</span>님의 펫탈로그
+                  <span className="text-primary">{user?.name}</span>님의 펫탈로그
                 </h2>
               </MainTitleWrapper>
-              <FlexColumn className="gap-3 w-full h-40">
+              <FlexColumn className="gap-3 w-full h-44">
                 <div className="flex items-center justify-between">
                   <h3>소중한 가족들</h3>
-                  <Link to="/mypage/pets" className="text-caption">
+                  <Link to="/mypage/pets" className="text-caption text-gray">
                     전체보기
                   </Link>
                 </div>
@@ -89,7 +89,7 @@ export default function MypageMain() {
                     petList.map((pet, idx) => (
                       <div key={pet.id}>
                         <MainPetListItem
-                          className={idx === 0 ? 'border-primary-main' : ''}
+                          className={idx === 0 ? 'border-primary' : ''}
                           onClick={() => handleChangeRepresentativePet(pet.id)}
                         >
                           <PetSimpleInfo {...pet} />
@@ -102,17 +102,17 @@ export default function MypageMain() {
             </FlexColumn>
             <FlexColumn className="bg-white">
               {[{ page: '찜한 제품', path: '/mypage/wish' }].map((menu, idx) => (
-                <MypageMenuItem key={idx}>
-                  <Link to={menu.path}>
-                    <h5>{menu.page}</h5>
-                  </Link>
-                </MypageMenuItem>
+                <Link to={menu.path} key={idx}>
+                  <MypageMenuItem>
+                    <p>{menu.page}</p>
+                  </MypageMenuItem>
+                </Link>
               ))}
-              <MypageMenuItem>
-                <button onClick={logout}>
-                  <h5>로그아웃</h5>
-                </button>
-              </MypageMenuItem>
+              <button onClick={logout}>
+                <MypageMenuItem>
+                  <p>로그아웃</p>
+                </MypageMenuItem>
+              </button>
             </FlexColumn>
           </>
         )}

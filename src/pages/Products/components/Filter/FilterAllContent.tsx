@@ -21,8 +21,10 @@ type ChipButtonStyleProps = { theme?: 'primary' | 'black'; filled?: boolean; bor
 const FilterCategory = ({ title, children }: { title: string; children: ReactNode }) => {
   return (
     <div className="w-full flex flex-col gap-3 p-2">
-      <h4>{title}</h4>
-      <div className="flex gap-3 flex-wrap items-center justify-start">{children}</div>
+      <h3 className="text-h3">{title}</h3>
+      <div className="flex gap-3 flex-wrap text-caption items-center justify-start pb-semi-min">
+        {children}
+      </div>
     </div>
   );
 };
@@ -41,7 +43,7 @@ const addFilter = (toAdd: string) => (set: Set<string>) => {
 
 const FilterHeader = ({ close, save }: { close: () => void; save: () => void }) => {
   return (
-    <div className="flex items-center justify-between p-1 h-10 border-b border-b-gray-400">
+    <div className="flex items-center justify-between p-1 h-10 border-b border-b-secondary-brightest">
       <button className="h-full aspect-square" onClick={close}>
         <CloseIcon />
       </button>
@@ -137,7 +139,7 @@ export default function FilterAllContent({ close, clearFilters }: FilterAllConte
   return (
     <>
       <FilterHeader save={saveFilters} close={close} />
-      <div className="flex-1 bg-white overflow-y-auto">
+      <div className="flex-1 bg-white overflow-y-auto pt-0">
         <FilterCategory title="AAFCO 기준">
           <ChipButton
             content="전체 사료 보기"

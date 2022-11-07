@@ -55,7 +55,7 @@ export default function BirthdayBottomSheet({
             defaultValue={date}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setDate(e.target.value)}
           />
-          {ageString && <p className="text-sm text-primary-main">{`나이 : ${ageString}`}</p>}
+          {ageString && <p className="text-sm text-primary">{`나이 : ${ageString}`}</p>}
         </SelectDateWrapper>
         <Button label="선택완료" onClick={saveDate} />
       </BottomSheetContentWrapper>

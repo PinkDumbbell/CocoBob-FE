@@ -64,13 +64,13 @@ export default function DailyAddWalkModal({ closeModal, onSave }: DailyAddWalkMo
             })}
             errorMessage={distanceError?.message}
           />
-          <div className="border-t border-t-gray-100 w-full flex">
+          <div className="border-t border-t-secondary-brightest w-full flex">
             <div
               className={concatClasses(
-                'flex-1 flex items-center border-b-2 justify-center border-r-1 py-2',
+                'flex-1 flex items-center border-b-2 justify-center border-r-1 py-2 cursor-pointer',
                 optionalInput === 1
                   ? 'text-primary-bright border-b-primary-bright'
-                  : 'text-gray-500 border-b-gray-200',
+                  : 'text-secondary-brightest border-b-secondary-brightest',
               )}
               onClick={() => setOptionalInput(1)}
             >
@@ -78,10 +78,10 @@ export default function DailyAddWalkModal({ closeModal, onSave }: DailyAddWalkMo
             </div>
             <div
               className={concatClasses(
-                'flex-1 flex items-center border-b-2 justify-center py-2',
+                'flex-1 flex items-center border-b-2 justify-center py-2 cursor-pointer',
                 optionalInput === 2
                   ? 'text-primary-bright border-b-primary-bright'
-                  : 'text-gray-500 border-b-gray-200',
+                  : 'text-secondary-brightest border-b-secondary-brightest',
               )}
               onClick={() => setOptionalInput(2)}
             >

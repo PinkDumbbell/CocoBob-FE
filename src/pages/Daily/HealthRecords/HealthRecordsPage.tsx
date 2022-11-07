@@ -4,6 +4,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import Layout from '@/components/layout/Layout';
 
+import { Spinner } from '@/Animation';
+
 import { getDateString } from '@/utils/libs/date';
 import { useCurrentPet } from '@/utils/hooks';
 import { useAppSelector } from '@/store/config';
@@ -66,7 +68,7 @@ export default function HealthRecordsPage() {
         <div className="flex flex-col space-y-1">
           <h3 className="font-semibold">{dayjs(currentDate).format('MM월DD일')}</h3>
           <p className="font-semibold">
-            <span className="text-primary-main">{isLoading ? '로딩중' : currentPet?.name}</span>의
+            <span className="text-primary">{isLoading ? <Spinner /> : currentPet?.name}</span>의
             건강 상태에요
           </p>
         </div>
@@ -76,7 +78,7 @@ export default function HealthRecordsPage() {
           <div className="flex items-center justify-between">
             {healthRecord?.bodyWeight ? (
               <p className="font-bold">
-                <span className="text-primary-main text-2xl">{healthRecord.bodyWeight}</span>
+                <span className="text-primary text-2xl">{healthRecord.bodyWeight}</span>
                 <span className="ml-1 ">kg</span>
               </p>
             ) : (
@@ -86,7 +88,7 @@ export default function HealthRecordsPage() {
               {healthRecord?.bodyWeight ? '수정' : '추가'}
             </button>
           </div>
-          <div className="rounded-[10px] border border-primary-light p-3"></div>
+          <div className="rounded border border-primary-max p-3"></div>
         </div>
         <div className="space-y-3">
           <div className="flex items-end justify-between">
@@ -95,7 +97,7 @@ export default function HealthRecordsPage() {
               추가
             </button>
           </div>
-          <div className="rounded-[10px] border border-primary-light p-3"></div>
+          <div className="rounded border border-primary-max  p-3"></div>
         </div>
       </div>
       {bodyWeightModal && <BodyWeightModal />}

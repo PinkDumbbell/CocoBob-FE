@@ -19,6 +19,6 @@ export const theme: DefaultTheme = {
       caption: '#999999',
     },
     error: '#e85354',
-    success: '#3abb67',
+    success: '#1ad27c',
   },
 };

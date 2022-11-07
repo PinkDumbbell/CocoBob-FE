@@ -39,7 +39,7 @@ export const SubQuestionText = styled.p`
 `;
 export const PetNameHighlight = tw.span`
   font-bold
-  text-primary-main
+  text-primary
 `;
 
 export const ButtonWrapper = styled.div`
@@ -92,5 +92,5 @@ export const SkipButton = tw.button`
   text-center
   leading-[20px]
   text-[14px]
-  text-light
+  text-caption
 `;

@@ -27,7 +27,7 @@ export default function RecordToolbar({
 
   return (
     <div
-      className="h-[6rem] w-full bg-[#F2F8FF] rounded-t-[10px] shadow-md -mt-1 flex items-center justify-between px-10 relative"
+      className="h-[6rem] w-full bg-[#F2F8FF] rounded-t shadow-md -mt-1 flex items-center justify-between px-10 relative"
       onClickCapture={(e) => {
         if (!isAvailable) {
           e.stopPropagation();

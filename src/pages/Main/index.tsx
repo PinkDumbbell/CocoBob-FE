@@ -91,7 +91,7 @@ export default function Main() {
               <img src={doctorPng} alt="메인 배경 이미지 1" className="w-full" />
             </picture>
           </DoctorImageWrapper>
-          <VerticalBox className="z-10 min-h-[50px]">
+          <VerticalBox className="z-10 min-h-section">
             {pet?.name && (
               <>
                 <SectionTitle>
@@ -113,13 +113,13 @@ export default function Main() {
                 <div className="p-4"></div>
                 <div className="flex w-full items-center overflow-hidden">
                   <button
-                    className="p-2 w-1/2 bg-primary-main text-white rounded-bl-[10px]"
+                    className="p-2 w-1/2 bg-primary text-white rounded-bl"
                     onClick={() => navigate('/products')}
                   >
                     사료찾기
                   </button>
                   <button
-                    className="p-2 w-1/2 bg-primary-main text-white rounded-br-[10px]"
+                    className="p-2 w-1/2 bg-primary text-white rounded-br"
                     onClick={() => navigate('/daily')}
                   >
                     생활기록
@@ -131,7 +131,7 @@ export default function Main() {
         </MainContentSection>
         <div className="px-4 flex justify-between items-end">
           <SectionTitle>{pet?.name ?? 'OO'}에게 추천하는 사료에요</SectionTitle>
-          <Link to="/products/recommend" className="text-sm cursor-pointer">
+          <Link to="/products/recommend" className="text-caption text-gray cursor-pointer">
             더보기
           </Link>
         </div>

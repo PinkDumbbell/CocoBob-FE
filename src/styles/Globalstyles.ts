@@ -137,8 +137,8 @@ const GlobalStyle = createGlobalStyle`
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
     border: 1px solid #555555;
     border-radius: 100%;
     -webkit-border-radius: 100%;

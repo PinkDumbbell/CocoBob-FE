@@ -16,14 +16,14 @@ export default function RecordButtonGroup({
       <button
         type="button"
         onClick={saveRecord}
-        className="rounded-[10px] w-16 h-7 bg-gray-600 flex items-center justify-center text-white font-normal text-sm"
+        className="rounded w-16 h-7 bg-secondary-brighter flex items-center justify-center text-white font-normal text-sm"
       >
         {saveLabel}
       </button>
       <button
         type="button"
         onClick={resetRecord}
-        className="rounded-[10px] w-16 h-7 bg-gray-600 flex items-center justify-center text-white font-normal text-sm"
+        className="rounded w-16 h-7 bg-secondary-brighter flex items-center justify-center text-white font-normal text-sm"
       >
         {resetLabel}
       </button>

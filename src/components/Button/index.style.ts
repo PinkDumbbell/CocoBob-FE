@@ -2,10 +2,11 @@ export const common = `
 max-w-sm
 py-2
 px-10
-text-xl
+text-h3
 text-center
 font-bold
-rounded-[10px]
+rounded
+h-btn
 
 hover:animate-push
 active:animate-afterpush
@@ -14,7 +15,7 @@ active:animate-afterpush
 export const FirstStyle = `
 text-white
 shadow-md
-bg-primary-main
+bg-primary
 transition ease-in-out
 
 hover:bg-gradient-to-tl
@@ -27,7 +28,7 @@ active:to-btnactivet
 `;
 
 export const SecondStyle = `
-text-primary-main
+text-primary
 bg-transparent
 border-2
 border-primary-dark
@@ -37,7 +38,7 @@ border-primary-light
 `;
 
 export const ThirdStyle = `
-text-primary-main
+text-primary
 bg-white
 border-2
 border-[#dddddd]

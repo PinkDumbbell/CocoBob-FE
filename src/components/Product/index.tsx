@@ -16,16 +16,16 @@ interface IProductItem {
 function ProductItem(props: IProductItem) {
   const { product } = props;
   return (
-    <div className="flex w-full h-36 border-b border-gray-200">
+    <div className="flex w-full h-36 border-b border-secondary-brightest">
       <div className="w-36 h-36 flex justify-center items-center p-1">
-        <img className="w-full rounded-[10px]" src={product?.thumbnail} alt="" />
+        <img className="w-full rounded" src={product?.thumbnail} alt="" />
       </div>
       <div className="flex flex-col p-1 justify-center gap-2">
         <div className="flex flex-col gap-0.5">
           <h4 className="text-black font-bold w-60">{product?.name}</h4>
           <p>{product?.price.toLocaleString('ko-KR')}원</p>
         </div>
-        <div className="flex gap-1 items-center">
+        <div className="flex gap-1 items-center text-caption">
           <ChipButton content="성견" filled={false} border />
           <ChipButton content="AAFCO" filled />
         </div>

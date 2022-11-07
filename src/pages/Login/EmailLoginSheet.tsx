@@ -64,7 +64,7 @@ const EmailLoginSheet = ({
             isLoading={isLoading}
             isError={isError}
           />
-          <Link to="/find" className="font-normal text-primary-main">
+          <Link to="/find" className="text-caption text-primary">
             아이디/비밀번호 찾기
           </Link>
         </FormWrapper>

@@ -92,8 +92,8 @@ export default function SignUpSheet({ isOpen }: SignUpSheetProps) {
         <FormWrapper>
           <h2>회원가입</h2>
           <SignUpForm isOpen={isOpen} signUp={onSubmitSignUpForm} />
-          <div className="flex flex-col items-start w-full px-4 gap-2">
-            <div className="flex items-center space-x-3">
+          <div className="flex flex-col items-start w-full px-2 gap-2">
+            <div className="flex items-center align-middle space-x-3">
               <input
                 type="checkbox"
                 name=""
@@ -101,8 +101,8 @@ export default function SignUpSheet({ isOpen }: SignUpSheetProps) {
                 checked={privacyAgreed}
                 onChange={privacyCheckHandler}
               />
-              <p className="text-sm">개인정보 처리방침 이용 동의</p>
-              <button className="text-sm text-primary-bright" onClick={openPrivacyModal}>
+              <p className="text-caption text-secondary">개인정보 처리방침 이용 동의</p>
+              <button className="text-caption text-primary-bright" onClick={openPrivacyModal}>
                 전문 보기
               </button>
             </div>
@@ -110,7 +110,7 @@ export default function SignUpSheet({ isOpen }: SignUpSheetProps) {
           <SignUpFooter>
             <span>이미 계정이 있으시다면?</span>
             <a
-              className="font-bold"
+              className="font-bold text-primary hover:cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
                 openEmailLoginBottomSheet();

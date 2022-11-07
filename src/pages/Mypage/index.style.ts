@@ -36,23 +36,23 @@ export const SexTypeLabel = tw.label`
 `;
 
 export const SaveButtonContainer = tw.div`
-  p-3 fixed mx-auto bottom-0 w-full max-w-[425px] bg-white rounded-t-lg left-1/2 -translate-x-[50%]
+  p-3 fixed mx-auto bottom-0 w-full max-w-full bg-white rounded-t-lg left-1/2 -translate-x-[50%]
 `;
 
 export const MainContentsContainer = tw.div`
-  h-full w-full flex flex-col bg-gray-100 gap-4 py-2
+  h-full w-full flex flex-col bg-secondary-brightest gap-4 py-2
 `;
 
 export const MypageMenuItem = tw.div`
-p-4 border-b border-gray-200
+p-4 border-b border-secondary-brightest
 `;
 export const MainTitleWrapper = tw.div`
 py-6
 `;
 
 export const MainPetListContainer = tw.div`
- w-full flex items-center overflow-x-auto overflow-y-hidden whitespace-nowrap space-x-4 px-1 h-32
+ w-full flex items-center overflow-x-auto overflow-y-hidden whitespace-nowrap space-x-4 px-1 h-40
 `;
 export const MainPetListItem = tw.div`
-  flex w-60 h-28 p-4 rounded-lg border items-center gap-3 shadow-gray-300 shadow-md cursor-pointer
+  flex w-60 h-28 p-4 rounded border border-secondary-brightest items-center gap-3 shadow-gray-300 shadow-md cursor-pointer
 `;

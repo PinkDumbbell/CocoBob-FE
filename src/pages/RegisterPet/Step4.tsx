@@ -112,7 +112,7 @@ export default function Step4({ goNextStep, enrollPetData, setEnrollData }: Step
         <div className="flex flex-col gap-1">
           <div className="flex flex-col gap-1">
             <button
-              className="text-left p-1.5 border border-primary-main rounded-md"
+              className="text-left p-1.5 border border-primary rounded-md"
               type="button"
               onClick={openBirthdayBottomSheet}
             >
@@ -126,7 +126,7 @@ export default function Step4({ goNextStep, enrollPetData, setEnrollData }: Step
           </div>
           <div className="flex flex-col gap-1">
             <button
-              className="text-left p-1.5 border border-primary-main rounded-md"
+              className="text-left p-1.5 border border-primary rounded-md"
               type="button"
               onClick={openMonthsAgeBottomSheet}
             >
@@ -156,7 +156,7 @@ export default function Step4({ goNextStep, enrollPetData, setEnrollData }: Step
                   if (date) setAge((prev) => ({ ...prev, birthday: getDateString(date) }));
                 }}
               />
-              {age.birthday && <p className="text-sm text-primary-main">{`나이 : ${ageString}`}</p>}
+              {age.birthday && <p className="text-sm text-primary">{`나이 : ${ageString}`}</p>}
             </div>
             <Button label="선택완료" onClick={saveBirthday} />
           </div>

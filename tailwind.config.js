@@ -6,8 +6,64 @@ module.exports = {
       // for iPhone 12 pro (390, 844, gutter 20)
       nw: '100vw',
       nh: '100vh',
+      full: '425px',
+    },
+    maxWidth: {
+      full: '425px',
+    },
+    // font
+    fontSize: {
+      h1: [
+        '2rem',
+        {
+          lineHeight: '2.88rem',
+          letterSpacing: '-0.025em',
+          fontWeight: '700',
+        },
+      ],
+      h2: [
+        '1.5rem',
+        {
+          lineHeight: '2.16rem',
+          letterSpacing: '-0.025em',
+          fontWeight: '700',
+        },
+      ],
+      h3: [
+        '1.125rem',
+        {
+          lineHeight: '1.62rem',
+          letterSpacing: '-0.025em',
+          fontWeight: '500',
+        },
+      ],
+      p: [
+        '1rem',
+        {
+          lineHeight: '1.44rem',
+          letterSpacing: '-0.02em',
+          fontWeight: '400',
+        },
+      ],
+      caption: [
+        '0.8125rem',
+        {
+          lineHeight: '1.26rem',
+          letterSpacing: '-0.02em',
+          fontWeight: '300',
+        },
+      ],
     },
     extend: {
+      // custon min-height
+      minHeight: {
+        btn: '2.9375rem',
+        section: '3.125rem',
+      },
+      // custom Height
+      height: {
+        btn: '2.9375rem',
+      },
       margin: {
         // Space Heirarchy
         min: '0.3125rem',
@@ -23,11 +79,17 @@ module.exports = {
       // padding
       padding: {
         sm: '0.375rem',
-        main: '0.5rem',
         lg: '0.625rem',
+
+        // Space Heirarchy
+        min: '0.3125rem',
+        'semi-min': '0.625rem',
+        main: '1.25rem',
+        'semi-max': '1.875rem',
+        max: '3.125rem',
       },
 
-      // rounded corners
+      // rounded corners (default 10px(0.625rem))
       borderRadius: {
         none: '0',
         sm: '0.3125rem',
@@ -37,49 +99,6 @@ module.exports = {
         full: '9999px',
       },
 
-      // font
-      fontSize: {
-        h1: [
-          '2rem',
-          {
-            lineHeight: '2.88rem',
-            letterSpacing: '-0.025em',
-            fontWeight: '700',
-          },
-        ],
-        h2: [
-          '1.5rem',
-          {
-            lineHeight: '2.16rem',
-            letterSpacing: '-0.025em',
-            fontWeight: '700',
-          },
-        ],
-        h3: [
-          '1.5rem',
-          {
-            lineHeight: '1.8rem',
-            letterSpacing: '-0.025em',
-            fontWeight: '500',
-          },
-        ],
-        p: [
-          '1rem',
-          {
-            lineHeight: '1.44rem',
-            letterSpacing: '-0.02em',
-            fontWeight: '400',
-          },
-        ],
-        caption: [
-          '0.875rem',
-          {
-            lineHeight: '1.26rem',
-            letterSpacing: '-0.02em',
-            fontWeight: '300',
-          },
-        ],
-      },
       boxShadow: {
         // Shadow Heirarchy
         min: '1px 1px 3px rgba(0, 0, 0, 0.15)',
@@ -125,14 +144,18 @@ module.exports = {
         bold: '#1B1B1B',
         black: '#333333',
         white: '#fffdfd',
-        caption: '#b3b3b3',
-        disabled: '#ededed',
+        gray: '#737373',
+        disabled: '#e6e6e6',
         focus: '#0099FF',
 
         // alert
         good: '#1AD27C',
-        bad: '#D2201A',
+        bad: '#e85354',
         warn: '#d27c1a',
+
+        // dim (background shadow screen)
+        'dim-black': '#00000029',
+        'dim-blue': '#d5e4f77d',
       },
       keyframes: {
         push: {

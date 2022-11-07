@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import ProductSearchModal from '@/pages/Products/components/Search/modal';
@@ -75,11 +75,9 @@ export default function ProductsPage() {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-  });
+  setTimeout(() => {
+    setIsLoading(false);
+  }, 1000);
 
   return (
     <Layout
@@ -100,8 +98,8 @@ export default function ProductsPage() {
           onChangeKeyword={onChangeSearchKeyword}
         />
       )}
-      <div className="flex flex-col w-full max-w-[425px] mx-auto h-full relative">
-        <div className="flex flex-col w-full max-w-[425px] bg-white">
+      <div className="flex flex-col w-full max-w-full mx-auto h-full relative">
+        <div className="flex flex-col w-full max-w-full bg-white">
           <div className="h-12 w-full flex justify-between items-center">
             {categoryList.map((categoryName) => (
               <CategoryTabButton
@@ -112,10 +110,10 @@ export default function ProductsPage() {
               />
             ))}
           </div>
-          <div className="w-full px-3 py-1 border-t border-b border-gray-200 flex items-center justify-between">
-            <div className="flex gap-3 h-7 w-full">
+          <div className="w-full px-3 py-1 border-t border-b border-secondary-brightest flex items-center justify-between">
+            <div className="text-caption flex gap-3 h-7 w-full">
               <button
-                className="rounded-lg border w-20 h-full flex items-center gap-1 text-xs justify-center"
+                className="rounded-sm text-black border border-secondary-brightest w-20 h-full flex items-center gap-1 text-xs justify-center"
                 onClick={openFilterModal}
               >
                 <FilterIcon className="h-5" />
@@ -123,7 +121,7 @@ export default function ProductsPage() {
               </button>
               {hasFilter && (
                 <button
-                  className="rounded-lg border w-20 h-full flex items-center gap-1 text-xs justify-center"
+                  className="rounded-full text-black border border-secondary-brightest w-20 h-full flex items-center gap-1 text-xs justify-center"
                   onClick={() => {
                     dispatch(resetFilter());
                   }}

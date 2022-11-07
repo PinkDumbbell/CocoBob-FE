@@ -9,7 +9,8 @@ export const Container = tw.div`
 
   w-screen
   h-screen
-  bg-[rgba(220,220,220,0.3)]
+  bg-white
+  bg-opacity-60
   backdrop-blur-sm
 `;
 
@@ -20,12 +21,12 @@ export const BG = tw.div`
   -translate-x-2/4
   -translate-y-2/4
 
-  bg-[#d5e4f77d]
+  bg-dim-blue
   backdrop-blur-md
 
   border-2
   border-[#f2f8ff3f]
-  rounded-xl
+  rounded
 
   w-28
   h-28`;

@@ -6,15 +6,19 @@ interface JoinLinkProps {
   color: 'white' | 'primary';
 }
 const LinkWrapper = tw.div<JoinLinkProps>`
+  text-caption
   flex
   gap-3
-  text-sm
   pt-4
-  ${({ color }: JoinLinkProps) => (color === 'primary' ? 'text-black' : 'text-white')}
 `;
+
+const LinkTitle = tw.span<JoinLinkProps>`
+${({ color }: JoinLinkProps) => (color === 'primary' ? 'text-secondary' : 'text-white')}
+`;
+
 const Link = tw.a<JoinLinkProps>`
   font-bold hover:cursor-pointer
-  ${({ color }: JoinLinkProps) => (color === 'primary' ? 'text-primary-main' : 'text-white')}
+  ${({ color }: JoinLinkProps) => (color === 'primary' ? 'text-primary' : 'text-white')}
 `;
 
 export default function JoinLink({ color }: JoinLinkProps) {
@@ -22,7 +26,7 @@ export default function JoinLink({ color }: JoinLinkProps) {
 
   return (
     <LinkWrapper color={color}>
-      <span>계정이 없으시다면?</span>
+      <LinkTitle color={color}>계정이 없으시다면?</LinkTitle>
       <Link
         onClick={(e: SyntheticEvent<HTMLAnchorElement>) => {
           e.preventDefault();
