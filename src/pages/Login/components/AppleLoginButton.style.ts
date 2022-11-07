@@ -6,7 +6,7 @@ export const ButtonWrap = styled.div`
   button {
     display: flex;
     border: none;
-    height: 46px;
+    height: 47px;
     width: 100%;
     border-radius: 10px;
     box-shadow: 2px 2px 10px rgb(0 0 0 / 15%);

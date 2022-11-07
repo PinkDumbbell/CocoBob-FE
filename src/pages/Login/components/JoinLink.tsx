@@ -13,7 +13,7 @@ const LinkWrapper = tw.div<JoinLinkProps>`
   ${({ color }: JoinLinkProps) => (color === 'primary' ? 'text-black' : 'text-white')}
 `;
 const Link = tw.a<JoinLinkProps>`
-  font-bold
+  font-bold hover:cursor-pointer
   ${({ color }: JoinLinkProps) => (color === 'primary' ? 'text-primary-main' : 'text-white')}
 `;
 

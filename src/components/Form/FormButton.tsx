@@ -22,8 +22,13 @@ const FormButtonContainer = styled.button<{ disabled: boolean }>`
   letter-spacing: -0.02em;
   color: #fefefe;
 
+  &:hover {
+    animation: push 0.2s ease-out forwards;
+  }
+
   &:active {
     opacity: 0.8;
+    animation: afterpush 0.2s ease-out forwards;
   }
 `;
 export default function FormButton(props: ButtonProps) {

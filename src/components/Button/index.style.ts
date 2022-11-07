@@ -18,8 +18,12 @@ bg-primary-main
 transition ease-in-out
 
 hover:bg-gradient-to-tl
+hover:from-btnhoverf
+hover:to-btnhovert
+
 active:bg-gradient-to-br
-from-btnactivet 
+active:from-btnactivef
+active:to-btnactivet
 `;
 
 export const SecondStyle = `

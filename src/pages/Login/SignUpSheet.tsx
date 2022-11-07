@@ -108,7 +108,7 @@ export default function SignUpSheet({ isOpen }: SignUpSheetProps) {
             </div>
           </div>
           <SignUpFooter>
-            <span>이미 계정이 있으시다면 ?</span>
+            <span>이미 계정이 있으시다면?</span>
             <a
               className="font-bold"
               onClick={(e) => {
