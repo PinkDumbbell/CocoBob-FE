@@ -1,5 +1,6 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { useLocation } from 'react-router-dom';
 
 import ProductSearchModal from '@/pages/Products/components/Search/modal';
 import Layout from '@/components/layout/Layout';
@@ -11,16 +12,19 @@ import { ReactComponent as ResetIcon } from '@/assets/icon/refresh_icon.svg';
 
 import { useAppDispatch, useAppSelector } from '@/store/config';
 import { getCurrentFilters, resetFilter } from '@/store/slices/productsSlice';
+import Header from '@/components/layout/Header';
 import CategoryTabButton from './components/CategoryTabButton';
 import FilterModal from './components/Filter/FilterModal';
 import ProductList from './components/ProductList/ProductList';
-
 import useFetchProductData from './hooks/useFetchProductData';
 import useSearchKeyword from './hooks/useSearchKeyword';
 import useFilterSheet from './hooks/useFilterSheet';
+import SearchHeader from './components/Search/header';
 
 type CategoryType = '사료' | '간식' | '영양제';
-
+type locationStateType = {
+  openSearch?: boolean;
+};
 const categoryList: CategoryType[] = ['사료', '간식', '영양제'];
 
 const useTab = () => {
@@ -44,7 +48,7 @@ const useTab = () => {
 export default function ProductsPage() {
   const dispatch = useAppDispatch();
   const filters = useAppSelector(getCurrentFilters);
-
+  const location = useLocation();
   const { category, hanldeCategoryChange } = useTab();
   const { ref: inViewRef, inView } = useInView({
     threshold: 0,
@@ -52,9 +56,16 @@ export default function ProductsPage() {
   });
   const { products, isError, isLastData, clearProducts } = useFetchProductData(inView);
   const { filterModal, openFilterModal, closeFilterModal } = useFilterSheet();
-  const { searchKeyword, search, clearSearch, isOnSearch, openSearchInput, onChangeSearchKeyword } =
+  const { search, searchKeyword, clearSearch, isOnSearch, openSearchInput, onChangeSearchKeyword } =
     useSearchKeyword();
 
+  const hasAafco = typeof filters.aafco === 'boolean';
+  const hasBrands = !!(Array.isArray(filters.brands) && filters.brands.length > 0);
+  const hasIngredient = !!(Array.isArray(filters.ingredient) && filters.ingredient.length > 0);
+  const hasAllergyIngredient = !!(
+    Array.isArray(filters.allergyIngredient) && filters.allergyIngredient.length > 0
+  );
+  const hasFilter = hasAafco || hasBrands || hasIngredient || hasAllergyIngredient;
   const ref = useRef();
   const setRefs = useCallback(
     (node: any) => {
@@ -64,18 +75,21 @@ export default function ProductsPage() {
     [inViewRef],
   );
 
-  const hasAafco = typeof filters.aafco === 'boolean';
-  const hasBrands = !!(Array.isArray(filters.brands) && filters.brands.length > 0);
-  const hasIngredient = !!(Array.isArray(filters.ingredient) && filters.ingredient.length > 0);
-  const hasAllergyIngredient = !!(
-    Array.isArray(filters.allergyIngredient) && filters.allergyIngredient.length > 0
-  );
-  const hasFilter = hasAafco || hasBrands || hasIngredient || hasAllergyIngredient;
+  useEffect(() => {
+    if (!location.state) {
+      return;
+    }
+    const { openSearch = false } = location.state as locationStateType;
+    if (!openSearch) {
+      return;
+    }
+    openSearchInput();
+  }, [location.state]);
 
   return (
     <Layout
       footer
-      header={!isOnSearch}
+      header={false}
       title="제품목록"
       customRightChild={
         <div className="absolute right-4 flex items-center" onClick={openSearchInput}>
@@ -83,15 +97,34 @@ export default function ProductsPage() {
         </div>
       }
     >
+      {isOnSearch || !!searchKeyword ? (
+        <SearchHeader
+          goBack={clearSearch}
+          onClickSearch={search}
+          searchKeyword={searchKeyword}
+          setSearchInputValue={onChangeSearchKeyword}
+          onFocus={false}
+        />
+      ) : (
+        <Header
+          title="제품목록"
+          customRightChild={
+            <div className="absolute right-4 flex items-center" onClick={openSearchInput}>
+              <SearchIcon />
+            </div>
+          }
+        />
+      )}
+
       {isOnSearch && (
         <ProductSearchModal
           onClose={clearSearch}
           onClickSearch={search}
-          searchInputValue={searchKeyword}
-          onChangeKeyword={onChangeSearchKeyword}
+          searchKeyword={searchKeyword}
+          setSearchInputValue={onChangeSearchKeyword}
         />
       )}
-      <div className="flex flex-col w-full max-w-[425px] mx-auto h-full relative">
+      <div className="flex flex-col w-full max-w-[425px] mx-auto h-full relative mt-[50px]">
         <div className="flex flex-col w-full max-w-[425px] bg-white">
           <div className="h-12 w-full flex justify-between items-center">
             {categoryList.map((categoryName) => (

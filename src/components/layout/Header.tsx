@@ -70,7 +70,7 @@ const RightChild = React.memo(({ canSearch }: { canSearch?: boolean }) => {
   return (
     <RightMenuWrapper>
       {canSearch && (
-        <Link to="/products" state={{ childrenElement: 3 }}>
+        <Link to="/products" state={{ openSearch: true }}>
           <SearchIcon />
         </Link>
       )}
