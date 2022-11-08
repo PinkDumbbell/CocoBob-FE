@@ -30,14 +30,29 @@ export type HealthRecordRequestType = {
   note?: string;
   petId: number;
 };
+
+export type BodyWeightHistoryType = {
+  date: string;
+  bodyWeight: number;
+};
 export type HealthRecordType = {
   abnormals: any[];
   bodyWeight: number;
+  bodyWeights: BodyWeightHistoryType[];
   date: string;
   healthRecordId: number;
   images: ImageType[];
   meals: MealType[];
-  note: string;
+  note: string | null;
+};
+type HealthRecordUpdateType = {
+  date: string;
+  abnormalIds: number[] | null;
+  bodyWeight?: number;
+  healthRecordId: number;
+  imagesIdToDelete?: number[];
+  newImages?: File[];
+  note: string | null;
 };
 
 export type RecordIdType = {
@@ -98,23 +113,25 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
       transformResponse: (response: IGenericResponse<RecordIdOfDateType>) => response.data,
       providesTags: (result, api, args) => ['Daily', { type: 'Daily', id: args.date }],
     }),
-    getDailyRecordOverview: builder.query<RecordOverviewType, RecordRequestType>({
+    getDailyRecordOverview: builder.query<RecordOverviewType, BasicRecordRequestType>({
       // eslint-disable-next-line no-unused-vars
-      query: ({ petId, date, sessionId }) => `v1/records/pet/${petId}?date=${date}`,
+      query: ({ petId, date }) => `v1/records/pet/${petId}?date=${date}`,
       transformResponse: (response: IGenericResponse<RecordOverviewType>) => response.data,
-      providesTags: (result, api, args) => ['Daily', { type: 'Daily', id: args.date }],
+      providesTags: (result, api, args) => [{ type: 'Daily', id: args.date }],
     }),
-    getHealthRecord: builder.query<HealthRecordType, { healthRecordId: number; sessionId: number }>(
-      {
-        // eslint-disable-next-line no-unused-vars
-        query: ({ healthRecordId, sessionId }) => `/v1/health-records/${healthRecordId}`,
-        transformResponse: (response: IGenericResponse<HealthRecordType>) => response.data,
-        providesTags: (result, api, args) => [
-          'DailyRecord',
-          { type: 'DailyRecord', id: args.healthRecordId },
-        ],
+    getHealthRecord: builder.query<HealthRecordType, number>({
+      // eslint-disable-next-line no-unused-vars
+      query: (healthRecordId) => {
+        return `/v1/health-records/${healthRecordId}`;
       },
-    ),
+      transformResponse: (response: IGenericResponse<HealthRecordType>) => response.data,
+      providesTags: (result, api, args) => ['DailyRecord', { type: 'DailyRecord', id: args }],
+    }),
+    getRecentBodyWeights: builder.query<any, number>({
+      query: (petId: number) => `/v1/health-records/pets/${petId}/recent-weights`,
+      transformResponse: (response: IGenericResponse<any>) => response.data,
+      providesTags: () => [{ type: 'DailyRecord', id: 'recentBodyWeights' }],
+    }),
     addMeal: builder.mutation<void, { healthRecordId: number; meal: MealRequestType }>({
       query: ({ healthRecordId, meal }) => {
         return {
@@ -148,6 +165,45 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
         };
       },
       invalidatesTags: ['DailyRecord', 'Daily'],
+    }),
+    updateHealthRecord: builder.mutation<any, HealthRecordUpdateType>({
+      query: (params) => {
+        console.log(params);
+        const formData = new FormData();
+
+        if (params?.bodyWeight) {
+          formData.set('bodyWeight', `${params.bodyWeight}`);
+        }
+
+        formData.set('note', params.note ? params.note : '');
+
+        if (!params.abnormalIds) {
+          formData.set('abnormalIds', '');
+        } else {
+          params.abnormalIds.forEach((abnormalId) =>
+            formData.append('abnormalIds', `${abnormalId}`),
+          );
+        }
+
+        if (params?.imagesIdToDelete && params.imagesIdToDelete.length > 0) {
+          params.imagesIdToDelete.forEach((imageId) =>
+            formData.append('imagesIdToDelete', `${imageId}`),
+          );
+        }
+        if (params?.newImages && params.newImages.length > 0) {
+          params.newImages.forEach((newImage) => formData.append('newImages', newImage));
+        }
+
+        return {
+          url: `/v1/health-records/${params.healthRecordId}`,
+          body: formData,
+          method: 'PUT',
+        };
+      },
+      invalidatesTags: (result, api, args) => [
+        { type: 'DailyRecord', id: args.healthRecordId },
+        { type: 'Daily', id: args.date },
+      ],
     }),
     createNoteRecord: builder.mutation<any, NoteRequestType>({
       query: ({ petId, date, noteData }) => {
@@ -192,9 +248,9 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
         formData.set('note', note);
 
         newImages.forEach((image) => {
-          formData.set('newImages', image);
+          formData.append('newImages', image);
         });
-        imageIdsToDelete.forEach((imageId) => formData.set('imageIdsToDelete', String(imageId)));
+        imageIdsToDelete.forEach((imageId) => formData.append('imageIdsToDelete', String(imageId)));
 
         return {
           url: `/v1/dailys/${noteId}`,
@@ -264,6 +320,8 @@ export const {
   useLazyGetDailyRecordIdListOfMonthQuery,
   useLazyGetDailyRecordOverviewQuery,
   useGetHealthRecordQuery,
+  useGetRecentBodyWeightsQuery,
+  useUpdateHealthRecordMutation,
   useLazyGetHealthRecordQuery,
   useCreateHealthRecordMutation,
   useCreateNoteRecordMutation,
