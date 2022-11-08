@@ -1,105 +1,100 @@
 import { useEffect } from 'react';
 import dayjs from 'dayjs';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import Layout from '@/components/layout/Layout';
-
-import { getDateString } from '@/utils/libs/date';
 import { useCurrentPet } from '@/utils/hooks';
 import { useAppSelector } from '@/store/config';
 import { getCurrentPet } from '@/store/slices/userSlice';
-import {
-  useLazyGetDailyRecordOverviewQuery,
-  useLazyGetHealthRecordQuery,
-} from '@/store/api/dailyApi';
+import { useGetDailyRecordOverviewQuery, useGetHealthRecordQuery } from '@/store/api/dailyApi';
+import { ReactComponent as PlusIcon } from '@/assets/icon/plus_icon.svg';
 
-import useBodyWeight from './hooks/useBodyWeightModal';
-import useFeedModal from './hooks/useFeecModal';
+import { useBodyWeightModal } from './hooks/useBodyWeightModal';
+import useDate from './hooks/useDate';
+import BodyWeightHistory from './components/BodyWeightChart';
 
 export default function HealthRecordsPage() {
   const currentPetId = useAppSelector(getCurrentPet);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const currentDate = searchParams.get('date');
+  const { currentDate } = useDate();
+
+  const { data: currentPet, isLoading } = useCurrentPet();
+  const { data: overview } = useGetDailyRecordOverviewQuery(
+    { date: String(currentDate), petId: currentPetId! },
+    { skip: !currentDate || !currentPetId },
+  );
+  const healthRecordId = overview?.healthRecordId;
+
+  const { data: healthRecord } = useGetHealthRecordQuery(Number(healthRecordId), {
+    skip: !healthRecordId,
+  });
+
+  const { Modal: BodyWeightModal, openModal } = useBodyWeightModal();
+
+  const goDailyPage = () => navigate(`/daily?date=${currentDate}`);
+
+  useEffect(() => {
+    if (!healthRecord) {
+      return;
+    }
+    console.log('healthRecord', healthRecord);
+  }, [healthRecord]);
 
   if (!currentDate || !currentPetId) {
-    return null;
+    return <Navigate to="/404" />;
   }
-  const [getDailyOverview, { data: overview }] = useLazyGetDailyRecordOverviewQuery();
-  const [getHealthRecord, { data: healthRecord }] = useLazyGetHealthRecordQuery();
-
-  const {
-    modalOpen: bodyWeightModal,
-    openModal: openBodyWeightModal,
-    Modal: BodyWeightModal,
-  } = useBodyWeight(currentPetId, new Date(currentDate), healthRecord);
-  const {
-    modalOpen: feedModal,
-    FeedModal,
-    openModal: openFeedModal,
-  } = useFeedModal(currentPetId, new Date(currentDate));
-  const { data: currentPet, isLoading } = useCurrentPet();
-
-  const goDailyPage = () => navigate(`/daily?date=${searchParams.get('date')}`);
-
-  useEffect(() => {
-    if (currentDate) {
-      if (new Date(currentDate).toString() === 'Invalid Date') {
-        return;
-      }
-      getDailyOverview({ date: currentDate, petId: currentPetId, sessionId: Date.now() });
-      return;
-    }
-    navigate(`/daily/health?date=${getDateString(new Date())}`, { replace: true });
-  }, [currentDate]);
-
-  useEffect(() => {
-    if (!overview || !overview.healthRecordId) {
-      return;
-    }
-    getHealthRecord({ healthRecordId: overview.healthRecordId, sessionId: Date.now() });
-  }, [overview]);
 
   return (
-    <Layout header title="건강일지" canGoBack onClickGoBack={goDailyPage}>
-      <div className="w-full max-w-[425px] h-full max-auto flex flex-col p-4 space-y-4">
-        <div className="flex flex-col space-y-1">
-          <h3 className="font-semibold">{dayjs(currentDate).format('MM월DD일')}</h3>
-          <p className="font-semibold">
-            <span className="text-primary-main">{isLoading ? '로딩중' : currentPet?.name}</span>의
-            건강 상태에요
-          </p>
-        </div>
-        <div></div>
-        <div className="space-y-3">
-          <h4 className="font-semibold text-lg">몸무게</h4>
-          <div className="flex items-center justify-between">
-            {healthRecord?.bodyWeight ? (
-              <p className="font-bold">
-                <span className="text-primary-main text-2xl">{healthRecord.bodyWeight}</span>
-                <span className="ml-1 ">kg</span>
+    <>
+      <Layout header title="건강일지" canGoBack onClickGoBack={goDailyPage}>
+        <div className="w-full max-w-[425px] h-full max-auto flex flex-col p-4 space-y-4">
+          <div className="flex flex-col space-y-1">
+            <h3 className="font-semibold">{dayjs(currentDate).format('MM월DD일')}</h3>
+            <p className="font-semibold">
+              <span className="text-primary-main">{isLoading ? '로딩중' : currentPet?.name}</span>의
+              건강 상태에요
+            </p>
+          </div>
+
+          <div className="space-y-3 w-full">
+            <h4 className="font-semibold text-lg">몸무게</h4>
+            <div className="flex items-end justify-between">
+              <p className="text-gray-800 text-lg align-baseline">
+                {healthRecord?.bodyWeight ? (
+                  <>
+                    <span className="text-2xl text-primary-main">{healthRecord.bodyWeight}</span>
+                    <span>kg</span>
+                  </>
+                ) : (
+                  <span className="text-lg text-primary-main">몸무게를 기록해주세요</span>
+                )}
               </p>
-            ) : (
-              <p>오늘 무게를 측정해주세요</p>
-            )}
-            <button type="button" onClick={openBodyWeightModal}>
-              {healthRecord?.bodyWeight ? '수정' : '추가'}
-            </button>
+              <button onClick={openModal}>
+                <PlusIcon />
+              </button>
+            </div>
+            <div className="rounded-[10px] border border-primary-bright min-h-[100px] w-full flex items-center justify-center">
+              {healthRecord?.bodyWeights && healthRecord.bodyWeights.length > 0 ? (
+                <BodyWeightHistory data={healthRecord.bodyWeights} />
+              ) : (
+                <p className="text-md text-gray-400">최근 기록이 없습니다</p>
+              )}
+            </div>
           </div>
-          <div className="rounded-[10px] border border-primary-light p-3"></div>
-        </div>
-        <div className="space-y-3">
-          <div className="flex items-end justify-between">
-            <h4 className="font-semibold text-lg">급여량</h4>
-            <button type="button" onClick={openFeedModal}>
-              추가
-            </button>
+          <div className="space-y-3">
+            <div className="flex items-end justify-between">
+              <h4 className="font-semibold text-lg">급여량</h4>
+              <button type="button" onClick={() => {}}>
+                <PlusIcon />
+              </button>
+            </div>
+            <div className="rounded-[10px] border border-primary-bright p-3 min-h-[100px] flex items-center justify-center">
+              <p className="text-md text-gray-400">오늘의 급여를 기록해보세요!</p>
+            </div>
           </div>
-          <div className="rounded-[10px] border border-primary-light p-3"></div>
         </div>
-      </div>
-      {bodyWeightModal && <BodyWeightModal />}
-      {feedModal && <FeedModal />}
-    </Layout>
+      </Layout>
+      <BodyWeightModal />
+    </>
   );
 }

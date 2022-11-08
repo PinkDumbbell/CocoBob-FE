@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import DailyAddFeed from '@/pages/Daily/components/DailyAddFeed';
 
-export default function useFeedModal(petId: number, date: Date) {
+export default function useFeedModal(petId: number | null, date: Date | null) {
   const [modalOpen, setModalOpen] = useState(false);
   const closeModal = () => {
     setModalOpen(false);
@@ -9,7 +9,8 @@ export default function useFeedModal(petId: number, date: Date) {
   const openModal = () => {
     setModalOpen(true);
   };
-  const Modal = () => <DailyAddFeed closeModal={closeModal} date={date} petId={petId} />;
+  const Modal = () =>
+    date ? <DailyAddFeed closeModal={closeModal} date={date} petId={petId} /> : null;
 
   return {
     modalOpen,
