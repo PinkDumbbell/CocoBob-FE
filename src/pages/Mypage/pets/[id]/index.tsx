@@ -144,7 +144,7 @@ export default function PetDetail() {
         </div>
         <div className="w-full space-y-2">
           <h3 className="text-[1.2rem]">정보</h3>
-          <div className="w-full p-4 bg-primary-light rounded-md space-y-2">
+          <div className="w-full p-4 bg-primary-max rounded-md space-y-2">
             <PetInfoItem label="견종" content={petData?.breedInfo.name ?? '정보 없음'} />
             <PetInfoItem label="나이" content={ageString ?? '정보 없음'} />
             <PetInfoItem label="몸무게" content={bodyWeightString ?? '정보 없음'} />

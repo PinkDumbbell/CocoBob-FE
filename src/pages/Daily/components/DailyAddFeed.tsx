@@ -68,8 +68,8 @@ export default function DailyAddFeed({ closeModal, healthRecord }: DailyModalPro
                 id="btn-feed-search"
                 onClick={openBottomSheet}
                 className={concatClasses(
-                  'text-left p-2 border rounded-[10px] ',
-                  selectedProduct ? 'text-black' : 'text-gray-400',
+                  'text-left p-2 border rounded border-secondary-brightest',
+                  selectedProduct ? 'text-black' : 'text-gray',
                 )}
               >
                 {selectedProduct ? selectedProduct.name : '급여 사료를 찾아보세요'}

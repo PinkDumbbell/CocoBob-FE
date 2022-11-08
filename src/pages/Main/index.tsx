@@ -16,6 +16,8 @@ import doctorWebp from '@/assets/image/main_doctor.webp';
 import dogIcon from '@/assets/icon/dog_icon.png';
 import { ReactComponent as RecommendIcon } from '@/assets/icon/navbar_food.svg';
 
+import { Spinner } from '@/Animation';
+
 import {
   ContentSection,
   DoctorImageWrapper,
@@ -89,7 +91,7 @@ export default function Main() {
               <img src={doctorPng} alt="메인 배경 이미지 1" className="w-full" />
             </picture>
           </DoctorImageWrapper>
-          <VerticalBox className="z-10 min-h-[50px]">
+          <VerticalBox className="z-10 min-h-section">
             {pet?.name && (
               <>
                 <SectionTitle>
@@ -109,15 +111,15 @@ export default function Main() {
             <ContentsContainer>
               <div className="w-full overflow-hidden">
                 <div className="p-4"></div>
-                <div className="flex w-full items-center rounded-b-[10px] overflow-hidden">
+                <div className="flex w-full items-center overflow-hidden">
                   <button
-                    className="p-2 w-1/2 bg-primary-main text-white"
+                    className="p-2 w-1/2 bg-primary text-white rounded-bl"
                     onClick={() => navigate('/products')}
                   >
                     사료찾기
                   </button>
                   <button
-                    className="p-2 w-1/2 bg-primary-main text-white"
+                    className="p-2 w-1/2 bg-primary text-white rounded-br"
                     onClick={() => navigate('/daily')}
                   >
                     생활기록
@@ -129,7 +131,7 @@ export default function Main() {
         </MainContentSection>
         <div className="px-4 flex justify-between items-end">
           <SectionTitle>{pet?.name ?? 'OO'}에게 추천하는 사료에요</SectionTitle>
-          <Link to="/products/recommend" className="text-sm cursor-pointer">
+          <Link to="/products/recommend" className="text-caption text-gray cursor-pointer">
             더보기
           </Link>
         </div>
@@ -150,9 +152,7 @@ export default function Main() {
                 </SwiperSlide>
               ))}
           </Swiper>
-          {isLoading && (
-            <div className="text-center w-full text-lg font-medium">상품을 불러오는 중 입니다.</div>
-          )}
+          {isLoading && <Spinner />}
           {isFetchError && (
             <div className="py-10 text-center w-full text-lg font-medium">
               상품을 불러오지 못했습니다.

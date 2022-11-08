@@ -30,7 +30,7 @@ export default function SaveWalkModal({ close, save, walkData }: SaveWalkModalPr
     <div className="fixed top-0 w-full max-w-[425px] h-full bg-white z-[9999] pt-[50px] flex flex-col">
       <Header canGoBack onClickGoBack={close} title="산책저장" />
       <div className="p-4 flex-1">
-        <div className="rounded-[10px] overflow-hidden w-full h-auto">
+        <div className="rounded overflow-hidden w-full h-auto">
           <div
             ref={staticMap}
             onClickCapture={(e) => {

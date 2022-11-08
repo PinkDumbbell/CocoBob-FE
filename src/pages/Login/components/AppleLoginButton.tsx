@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import AppleSignin from 'react-apple-signin-auth';
-import styled from 'styled-components';
 import axios from '@/utils/api';
 import useToastMessage from '@/utils/hooks/useToastMessage';
 import { IGenericResponse } from '@/store/api/types';
@@ -13,25 +12,7 @@ import {
   AppleUserType,
   IAuthenticatedUser,
 } from '@/@type/user';
-
-const ButtonWrap = styled.div`
-  width: 100%;
-  button {
-    width: 100%;
-    border: none;
-    border-radius: 10px;
-    border: none;
-    box-shadow: 2px 2px 10px rgb(0 0 0 / 15%);
-    line-height: 29px;
-    font-size: 16px;
-    width: 100%;
-    display: flex;
-
-    & svg {
-      margin-right: 1rem;
-    }
-  }
-`;
+import { ButtonWrap } from './AppleLoginButton.style';
 
 const APPLE_LOGIN_ERROR_MESSAGE = '로그인에 실패하였습니다. 다시 시도해주세요';
 const AppleLoginButton = () => {

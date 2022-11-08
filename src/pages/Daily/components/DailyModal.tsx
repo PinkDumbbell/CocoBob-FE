@@ -27,12 +27,15 @@ export default function DailyModal({ closeModal, onSubmit, children }: DailyModa
         <div className="flex-1 w-full">{children}</div>
         <div className="h-12 w-full flex items-center rounded-b-[10px] overflow-hidden border-t border-primary-light">
           <button
-            className="h-full flex-1 font-medium border-r border-primary-light"
+            className="py-sm border-t border-secondary-brightest flex-1 rounded-bl text-primary-bright"
             onClick={closeModal}
           >
             취소
           </button>
-          <button className="h-full flex-1 text-primary-main font-medium" onClick={onSubmit}>
+          <button
+            className="py-sm border-t border-secondary-brightest flex-1 rounded-br bg-primary-dark text-white"
+            onClick={onSubmit}
+          >
             확인
           </button>
         </div>

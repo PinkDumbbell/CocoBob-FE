@@ -3,6 +3,8 @@ import dayjs from 'dayjs';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 import Layout from '@/components/layout/Layout';
+
+import { Spinner } from '@/Animation';
 import { useCurrentPet } from '@/utils/hooks';
 import { useAppSelector } from '@/store/config';
 import { getCurrentPet } from '@/store/slices/userSlice';
@@ -51,24 +53,21 @@ export default function HealthRecordsPage() {
           <div className="flex flex-col space-y-1">
             <h3 className="font-semibold">{dayjs(currentDate).format('MM월DD일')}</h3>
             <p className="font-semibold">
-              <span className="text-primary-main">{isLoading ? '로딩중' : currentPet?.name}</span>의
+              <span className="text-primary">{isLoading ? <Spinner /> : currentPet?.name}</span>의
               건강 상태에요
             </p>
           </div>
-
-          <div className="space-y-3 w-full">
+          <div className="space-y-3">
             <h4 className="font-semibold text-lg">몸무게</h4>
-            <div className="flex items-end justify-between">
-              <p className="text-gray-800 text-lg align-baseline">
-                {healthRecord?.bodyWeight ? (
-                  <>
-                    <span className="text-2xl text-primary-main">{healthRecord.bodyWeight}</span>
-                    <span>kg</span>
-                  </>
-                ) : (
-                  <span className="text-lg text-primary-main">몸무게를 기록해주세요</span>
-                )}
-              </p>
+            <div className="flex items-center justify-between">
+              {healthRecord?.bodyWeight ? (
+                <p className="font-bold">
+                  <span className="text-primary text-2xl">{healthRecord.bodyWeight}</span>
+                  <span className="ml-1 ">kg</span>
+                </p>
+              ) : (
+                <p className="text-md text-gray-400">몸무게를 기록해주세요</p>
+              )}
               <button onClick={openModal}>
                 <PlusIcon />
               </button>
@@ -77,10 +76,11 @@ export default function HealthRecordsPage() {
               {healthRecord?.bodyWeights && healthRecord.bodyWeights.length > 0 ? (
                 <BodyWeightHistory data={healthRecord.bodyWeights} />
               ) : (
-                <p className="text-md text-gray-400">최근 기록이 없습니다</p>
+                <p className="text-md text-gray-400">최근 기록이 없습니다.</p>
               )}
             </div>
           </div>
+
           <div className="space-y-3">
             <div className="flex items-end justify-between">
               <h4 className="font-semibold text-lg">급여량</h4>
@@ -91,6 +91,7 @@ export default function HealthRecordsPage() {
             <div className="rounded-[10px] border border-primary-bright p-3 min-h-[100px] flex items-center justify-center">
               <p className="text-md text-gray-400">오늘의 급여를 기록해보세요!</p>
             </div>
+            <div className="rounded border border-primary-max p-3"></div>
           </div>
         </div>
       </Layout>
