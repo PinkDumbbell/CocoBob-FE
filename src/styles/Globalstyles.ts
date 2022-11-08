@@ -123,24 +123,25 @@ const GlobalStyle = createGlobalStyle`
     color : var(--t-caption);
   }
 
-  input[type='date']{
-    position:relative;
-  }
-  input[type='date']:before{
-    display:none;
-  }
-  input[type='date']::-webkit-calendar-picker-indicator{
-    z-index:1;
-    position: absolute;
-    left:0;
+  input, textarea, button{
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border-radius: 0;
+    -moz-border-radius:0;
+    -webkit-border-radius:0;
   }
 
   input[type='radio']{
     appearance: none;
-    border: 1px solid #555555;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     width: 16px;
     height: 16px;
+    border: 1px solid #555555;
     border-radius: 100%;
+    -webkit-border-radius: 100%;
+    -moz-border-radius:100%;
   }
   input[type='radio']:checked{
     border: 1px solid ${theme.colors.primary.dark};

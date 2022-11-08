@@ -84,7 +84,7 @@ export default function RegisterPet() {
   useEffect(() => {
     if (!isSuccess) return;
 
-    navigate('/');
+    navigate('/', { replace: true });
   }, [isSuccess]);
 
   useEffect(() => {

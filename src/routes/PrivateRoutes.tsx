@@ -10,8 +10,8 @@ import MypageMain from '@/pages/Mypage/Main';
 import ProfilePage from '@/pages/Mypage/Profile';
 import WishPage from '@/pages/Mypage/Wish';
 import PetsPage from '@/pages/Mypage/pets/index';
-import PetEdit from '@/pages/Mypage/pets/[id]';
-
+import PetInfo from '@/pages/Mypage/pets/[id]';
+import PetInfoEdit from '@/pages/Mypage/pets/[id]/edit';
 import NotFound from '@/pages/404';
 import ProductDetailPage from '@/pages/Products/ProductDetail';
 import Daily from '@/pages/Daily';
@@ -47,7 +47,8 @@ function PrivateRoutes() {
           <Route path="profile" element={<ProfilePage />} />
           <Route path="wish" element={<WishPage />} />
           <Route path="pets" element={<PetsPage />} />
-          <Route path="pets/:id" element={<PetEdit />} />
+          <Route path="pets/:id" element={<PetInfo />} />
+          <Route path="pets/:id/edit" element={<PetInfoEdit />} />
         </Route>
         <Route path="/daily" element={<Daily />}>
           <Route index element={<DailyMain />} />

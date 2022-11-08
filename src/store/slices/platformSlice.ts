@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../config';
 
-type PlatformType = 'ios' | 'android' | 'windows' | 'mac' | 'os';
+export type PlatformType = 'ios' | 'android' | 'windows' | 'mac' | 'os';
 
 type PlatformStateType = {
   currentPlatform: PlatformType | null;
@@ -10,16 +10,25 @@ const initialState: PlatformStateType = {
   currentPlatform: null,
 };
 
+export const getPlatformInfo = createAsyncThunk('getPlatform', async () => {
+  const { platform }: { platform: PlatformType } = await window.flutter_inappwebview.callHandler(
+    'platformHandler',
+  );
+  console.log('react platform', platform);
+  return platform;
+});
+
 const confirmSlice = createSlice({
   name: 'confirm',
   initialState,
-  reducers: {
-    setPlatform: (state, { payload }: PayloadAction<PlatformType>) => {
-      state.currentPlatform = payload;
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getPlatformInfo.fulfilled, (state, action) => {
+      state.currentPlatform = action.payload;
+    });
   },
 });
 
-export const isPopupOpened = (state: RootState) => state.platform;
-export const { setPlatform } = confirmSlice.actions;
+export const getCurrentPlatform = (state: RootState) => state.platform.currentPlatform;
+
 export default confirmSlice.reducer;

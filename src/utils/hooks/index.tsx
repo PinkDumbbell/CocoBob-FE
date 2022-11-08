@@ -5,7 +5,6 @@ import useCurrentPet from './useCurrentPet';
 import useCurrentPosition from './useCurrentPosition';
 import useKakaoMap from './useKakaoMap';
 import useLogout from './useLogout';
-import usePlatform from './usePlatform';
 import useSearchBreed from './useSearchBreed';
 import useSelectModal from './useSelectModal';
 import useSelectImage from './useSelectImage';
@@ -23,7 +22,6 @@ export {
   useCurrentPosition,
   useKakaoMap,
   useLogout,
-  usePlatform,
   useSearchBreed,
   useSelectModal,
   useSelectImage,

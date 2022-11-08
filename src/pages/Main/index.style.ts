@@ -1,7 +1,7 @@
 import tw from 'tailwind-styled-components';
 
 export const PageContainer = tw.div`
-	flex flex-col gap-4 w-full py-2
+	flex flex-col space-y-4 w-full py-2
 `;
 
 export const ContentSection = tw.section`

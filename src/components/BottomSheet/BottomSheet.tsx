@@ -1,7 +1,9 @@
-import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
 import { ReactNode } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+
+import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
+
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { createTheme, ThemeProvider } from '@mui/material';
 
@@ -42,7 +44,9 @@ export default function BottomSheet({
   children: ReactNode;
 }) {
   const dispatch = useDispatch();
-  const closeBottomSheet = () => dispatch(closeBottomSheetAction());
+  const closeBottomSheet = () => {
+    dispatch(closeBottomSheetAction());
+  };
 
   return (
     <ThemeProvider theme={theme}>

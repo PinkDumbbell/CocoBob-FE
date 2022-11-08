@@ -1,4 +1,4 @@
-import { WalkHistoryItemType } from '@/pages/Daily/Walk/components/WalkHistoryList';
+import { RecordOverviewType, WalkHistoryItemType } from '@/@type/walk';
 import { apiSlice } from '../slices/apiSlice';
 import { IGenericResponse } from './types';
 
@@ -39,15 +39,7 @@ export type HealthRecordType = {
   meals: MealType[];
   note: string;
 };
-export type RecordOverviewType = {
-  dailyId: number;
-  dailyTitle: string;
-  healthRecordId: number;
-  isAbnormal: boolean;
-  mealCount: number;
-  walkTotalDistance: number;
-  walkTotalTime: number;
-};
+
 export type RecordIdType = {
   dailyId: number;
   healthRecordId: number;
@@ -63,6 +55,13 @@ export type BasicRecordRequestType = {
 };
 export type RecordRequestType = BasicRecordRequestType & {
   sessionId: number; // for disable cache behavior of RTK Query
+};
+
+type WalkRecordSaveParamsType = BasicRecordRequestType & {
+  distance: number;
+  totalTime: number;
+  startedAt?: string;
+  finishedAt?: string;
 };
 type NoteRequestType = RecordRequestType & {
   noteData: {
@@ -205,7 +204,7 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: (result, api, args) => [{ type: 'DailyRecord', id: args.noteId }],
     }),
-    getWalkList: builder.query<WalkHistoryItemType[], RecordRequestType>({
+    getWalkList: builder.query<WalkHistoryItemType[], BasicRecordRequestType>({
       query: ({ date, petId }) => `/v1/walks/pets/${petId}?date=${date}`,
       transformResponse: (response: IGenericResponse<{ walks: WalkHistoryItemType[] }>) =>
         response.data.walks,
@@ -229,7 +228,7 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
         { type: 'DailyWalk', id: args },
       ],
     }),
-    createWalk: builder.mutation<any, any>({
+    createWalk: builder.mutation<any, WalkRecordSaveParamsType>({
       query: ({ petId, date, distance, totalTime, startedAt, finishedAt }) => {
         // startedAt, finishedAt이 있으면 totalTime 무시. 자동 계산
         // startedAt, finishedAt이 없으면 totalTime 필요. 필수
@@ -241,8 +240,9 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
           formData.set('finishedAt', finishedAt); // hh:mm:ss
         }
         formData.set('date', date);
-        formData.set('distance', distance);
-        formData.set('totalTime', totalTime);
+        formData.set('distance', String(distance));
+        formData.set('totalTime', String(totalTime));
+
         return {
           url: `/v1/walks/pets/${petId}`,
           method: 'POST',

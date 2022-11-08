@@ -1,0 +1,7 @@
+.react-datepicker__input-container input {
+  text-align: center;
+  background-color: var(--primary-light);
+  padding: 0.25rem 0rem;
+  border-radius: 10px;
+  cursor: pointer;
+}

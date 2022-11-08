@@ -1,12 +1,9 @@
 import PetDefaultImage from '@/assets/image/pet_default.png';
-import { ReactComponent as EditIcon } from '@/assets/icon/edit_icon.svg';
 import { ReactComponent as MaleIcon } from '@/assets/icon/male_icon.svg';
 import { ReactComponent as FemaleIcon } from '@/assets/icon/female_icon.svg';
 import { IPet } from '@/@type/pet';
-import { Link } from 'react-router-dom';
 
 export default function PetSimpleCard({
-  id,
   name,
   age,
   bodyWeight,
@@ -19,23 +16,12 @@ export default function PetSimpleCard({
   const ageInformation = `${years > 0 ? `${years}년` : ''} ${months}개월`;
   return (
     <>
-      <div
-        className="relative h-full w-24 flex items-center"
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
+      <div className="relative h-full w-24 flex items-center">
         <img
           src={thumbnailPath ?? PetDefaultImage}
-          alt=""
+          alt="반려동물 프로필 사진"
           className="w-16 aspect-square bg-gray-300 rounded-full overflow-hidden"
         />
-        <Link
-          to={`/mypage/pets/${id}`}
-          className="absolute right-0 bottom-1 w-5 h-5 bg-white border border-secondary-main rounded-md"
-        >
-          <EditIcon />
-        </Link>
       </div>
       <div className="w-full flex flex-col gap-1.5 overflow-hidden">
         <div className="flex items-center gap-2">

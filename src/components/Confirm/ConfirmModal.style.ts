@@ -21,26 +21,29 @@ const ContentsWrapper = styled.div`
   height: fit-content;
   width: 80%;
   border-radius: 10px;
-  background: white;
-  padding: 1rem;
+  background: #fdfdfd;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 1rem;
+  overflow: hidden;
 `;
 const ConfirmButton = styled.button`
-  text-align: center;
-  font-size: 0.875rem;
-  padding: 0.25rem 1.25rem;
+  font-size: 1rem;
+  height: 2.5rem;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 const RejectButton = styled(ConfirmButton)`
-  border-radius: 10px;
   border: 1px solid ${({ theme: { colors } }) => colors.text.caption};
+  font-weight: 400;
 `;
 const SubmitButton = styled(ConfirmButton)`
-  background: ${({ theme: { colors } }) => colors.primary.bright};
-  border-radius: 10px;
+  background: ${({ theme: { colors } }) => colors.primary.dark};
+  border: 1px solid ${({ theme: { colors } }) => colors.primary.dark};
   color: #fff;
+  font-weight: 600;
 `;
 
 export { Background, ContentsWrapper, RejectButton, SubmitButton };

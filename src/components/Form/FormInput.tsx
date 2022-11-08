@@ -1,3 +1,4 @@
+import { useVh } from '@/utils/hooks';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
@@ -47,6 +48,8 @@ export const InputStyle = styled.input<{ isError: boolean | undefined; unit?: bo
   background: #fffdfd;
   border: 1px solid ${({ isError, theme: { colors } }) => (isError ? colors.error : '#EDEDED')};
   border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-borader-radius: 10px;
 
   ::placeholder {
     font-weight: 400;
@@ -55,10 +58,6 @@ export const InputStyle = styled.input<{ isError: boolean | undefined; unit?: bo
     /* identical to box height, or 144% */
     letter-spacing: -0.02em;
     color: #999999;
-  }
-
-  :focus {
-    outline: 1px solid #1d1d1d;
   }
 `;
 
@@ -78,6 +77,7 @@ export default function Input({
   isError,
   errorMessage,
 }: InputProps) {
+  const { setVh } = useVh();
   return (
     <InputContainer>
       <Label htmlFor={name} isError={isError}>
@@ -85,6 +85,7 @@ export default function Input({
       </Label>
       <InputWrapper>
         <InputStyle
+          className="focus:outline-none"
           id={name}
           required={required}
           type={type}
@@ -93,6 +94,7 @@ export default function Input({
           unit={!!unit}
           {...rules}
           disabled={disabled}
+          onBlur={setVh}
         />
         {!!unit && <UnitText>{unit}</UnitText>}
         {errorMessage && (

@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
 import Button from '@/components/Button';
@@ -19,18 +19,17 @@ const AddWalkButton = ({ onClick }: { onClick: () => void }) => {
     </button>
   );
 };
-const TodayWalkInfo = ({
-  totalDistance,
-  totalTime,
-}: {
+
+type TodayWalkInfoProps = {
   totalDistance: number;
   totalTime: number;
-}) => {
+};
+const TodayWalkInfo = ({ totalDistance, totalTime }: TodayWalkInfoProps) => {
   return (
     <>
       <h4>오늘은 이만큼 걸었어요!</h4>
       <div className="flex space-x-5 font-semibold">
-        <div className="flex  items-end">
+        <div className="flex items-end">
           <span className="text-2xl">{totalDistance.toFixed(2)}</span>
           <span className="text-primary-dark">KM</span>
         </div>
@@ -49,9 +48,15 @@ const TodayWalkInfo = ({
   );
 };
 
-const useWalkHistory = (petId: number, date: string) => {
-  const timestamp = useRef(Date.now()).current;
-  const { data, isError, isLoading } = useGetWalkListQuery({ date, petId, sessionId: timestamp });
+const useWalkHistory = (date: string | null, petId?: number | null) => {
+  if (!date || !petId) {
+    return {
+      walkHistory: [],
+      isWalkHistoryLoading: true,
+    };
+  }
+
+  const { data, isError, isLoading } = useGetWalkListQuery({ date, petId });
 
   const openToast = useToastMessage();
 
@@ -76,27 +81,17 @@ export default function WalkHistoryPage() {
 
   const goDailyPage = () => navigate(`/daily?date=${date}`);
 
-  if (!currentPetId) {
-    return (
-      <Layout header title="산책일지" canGoBack onClickGoBack={goDailyPage}>
-        <div className="p-4">반려동물 등록이 필요합니다.</div>
-      </Layout>
-    );
-  }
-  if (!date) {
-    return <Navigate to={`daily/walk?date=${getDateString(new Date())}`} />;
-  }
-
   const [addWalkModal, setAddWalkModal] = useState(false);
   const openToast = useToastMessage();
 
-  const { isWalkHistoryLoading, walkHistory } = useWalkHistory(currentPetId, date);
+  const { walkHistory } = useWalkHistory(date, currentPetId);
   const isWalkHistoryExist = walkHistory && walkHistory.length > 0;
 
   const initWalkTotalInfo = new Map<'totalTime' | 'totalDistance', number>([
     ['totalTime', 0],
     ['totalDistance', 0],
   ]);
+
   const walkTotalInfo = useMemo(() => {
     if (!walkHistory) {
       return initWalkTotalInfo;
@@ -118,6 +113,9 @@ export default function WalkHistoryPage() {
 
   const [createWalkRecord, { isSuccess }] = useCreateWalkMutation();
   const addWalkRecord = (newWalk: WalkRecordType) => {
+    if (!date || !currentPetId) {
+      return;
+    }
     createWalkRecord({
       ...newWalk,
       date,
@@ -133,6 +131,17 @@ export default function WalkHistoryPage() {
     openToast('산책 기록이 등록되었습니다.', 'success');
   }, [isSuccess]);
 
+  if (!currentPetId) {
+    return (
+      <Layout header title="산책일지" canGoBack onClickGoBack={goDailyPage}>
+        <div className="p-4">반려동물 등록이 필요합니다.</div>
+      </Layout>
+    );
+  }
+  if (!date) {
+    return <Navigate to={`daily/walk?date=${getDateString(new Date())}`} />;
+  }
+
   return (
     <Layout
       header
@@ -146,16 +155,20 @@ export default function WalkHistoryPage() {
       }
     >
       <div className="w-full max-w-[425px] h-full max-auto flex flex-col p-4 space-y-2">
-        <div className="w-full p-4 rounded-[10px] bg-gray-300 flex flex-col items-center justify-around space-y-4 min-h-[150px]">
-          {!isWalkHistoryLoading && !isWalkHistoryExist && <h4>아직 산책기록이 없어요</h4>}
-          {isWalkHistoryExist && (
+        <div className="w-full p-4 rounded-[10px] bg-gray-300 flex flex-col items-center justify-around gap-1 min-h-[150px]">
+          {isWalkHistoryExist ? (
             <TodayWalkInfo totalDistance={totalDistance} totalTime={totalTime} />
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-evenly">
+              <h4>아직 산책을 하지 않으셨나요?</h4>
+              <p className="text-sm text-gray-500">산책하기를 눌러 산책을 시작해보세요!</p>
+            </div>
           )}
           <Button label="산책하기" onClick={goWalkRecordPage} />
         </div>
         <div className="w-full overflow-y-auto">
           <h3 className="pb-2">{date}</h3>
-          <WalkHistoryList isLoading={isWalkHistoryLoading} walkHistory={walkHistory ?? []} />
+          <WalkHistoryList walkHistory={walkHistory ?? []} />
         </div>
       </div>
       {addWalkModal && (

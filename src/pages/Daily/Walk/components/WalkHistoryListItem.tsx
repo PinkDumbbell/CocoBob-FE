@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { WalkHistoryItemType } from './WalkHistoryList';
+
+import { WalkHistoryItemType } from '@/@type/walk';
 
 type WalkHistoryListItemProps = {
   walkInfo: WalkHistoryItemType;

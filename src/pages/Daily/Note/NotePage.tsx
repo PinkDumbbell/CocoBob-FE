@@ -52,8 +52,7 @@ const useDeleteNote = ({ noteId, noteData }: NoteHookProps) => {
 
   const deleteNote = async () => {
     const isConfirmedDeleteNote = await confirm({
-      title: '글을 삭제 하시겠습니까?',
-      contents: '',
+      contents: <p className="py-10">글을 삭제 하시겠습니까?</p>,
     });
     if (!isConfirmedDeleteNote) return;
     openToast('글을 삭제했습니다.', 'success');

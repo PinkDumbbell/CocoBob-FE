@@ -7,7 +7,7 @@ import { Background, ContentsWrapper, RejectButton, SubmitButton } from './Confi
 export default function ConfirmModal() {
   const dispatch = useAppDispatch();
   const popupOpened = useAppSelector(isPopupOpened);
-  const { title, contents, promiseInfo } = useContext(ConfirmContext);
+  const { contents, promiseInfo } = useContext(ConfirmContext);
 
   const closePopup = () => dispatch(setPopupOpened(false));
   const handleReject = () => {
@@ -26,9 +26,8 @@ export default function ConfirmModal() {
   return (
     <Background>
       <ContentsWrapper>
-        <div className="flex flex-col gap-2 pb-3">
-          <div className="text-center py-2">{title}</div>
-          <div className="text-center overflow-y-auto">{contents}</div>
+        <div className="px-4 flex items-center justify-center flex-1 overflow-y-auto w-full h-22">
+          {contents}
         </div>
         <div className="flex items-center justify-evenly">
           <RejectButton type="button" onClick={handleReject}>

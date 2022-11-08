@@ -54,9 +54,15 @@ export type KeyofNutritionType = keyof NutritionType;
 export type KeyofIngredientType = keyof IngredientType;
 export type KeyofExtraFilterType = keyof NullableExtraFilterType;
 
-export type SearchFilterType = NullableNutritionType &
-  NullableIngredientType &
-  NullableExtraFilterType;
+export type SearchFilterType = {
+  aafco?: boolean;
+  page: number;
+  ingredient?: string[];
+  allergyIngredient?: string[];
+  brands?: string[];
+  size?: number;
+  keyword?: string;
+};
 export type KeyofSearchFilterType = KeyofExtraFilterType | KeyofNutritionType | KeyofIngredientType;
 
 export type ProductPreviewType = {

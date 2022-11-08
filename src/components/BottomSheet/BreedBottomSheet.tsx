@@ -19,8 +19,8 @@ const BreedList = ({ breeds, selectedBreed, setBreed }: IBreedList) => (
       <div key={breed.id} onClick={() => setBreed(breed)}>
         <p
           className={concatClasses(
-            selectedBreed?.id === breed.id ? 'bg-primary-light' : '',
-            'py-2',
+            selectedBreed?.id === breed.id ? 'bg-blue-50' : '',
+            'px-2 py-2 cursor-pointer',
           )}
         >
           <span className="inline-block text-primary-main w-14">{breed.size}</span>

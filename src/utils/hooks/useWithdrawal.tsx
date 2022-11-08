@@ -20,8 +20,7 @@ export default function useWithdrawal() {
 
   const withdrawal = async () => {
     const confirm = await openPopup({
-      title: '회원탈퇴',
-      contents: '회원탈퇴를 하시면 모든 정보가 삭제됩니다.',
+      contents: <p className="py-10">회원탈퇴를 하시면 모든 정보가 삭제됩니다.</p>,
     });
     if (confirm) {
       withdrawalMutaion();

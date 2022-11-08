@@ -43,13 +43,6 @@ export const MainContentsContainer = tw.div`
   h-full w-full flex flex-col bg-gray-100 gap-4 py-2
 `;
 
-export const PetListContainer = tw.div`
-  w-full flex flex-col p-5 bg-white rounded-lg shadow-md shadow-gray-300
-`;
-
-export const PetCard = tw.div`
-flex pb-4 gap-5 border-b border-gray-200
-`;
 export const MypageMenuItem = tw.div`
 p-4 border-b border-gray-200
 `;
@@ -58,8 +51,8 @@ py-6
 `;
 
 export const MainPetListContainer = tw.div`
-w-full flex items-center overflow-auto whitespace-nowrap py-2 space-x-4 px-1
+ w-full flex items-center overflow-x-auto whitespace-nowrap space-x-4 px-1 h-32
 `;
 export const MainPetListItem = tw.div`
-  flex min-w-[15rem] h-28 p-4 rounded-lg border items-center gap-3 shadow-gray-300 shadow-md overflow-hidden
+  flex w-60 h-28 p-4 rounded-lg border items-center gap-3 shadow-gray-300 shadow-md cursor-pointer
 `;
