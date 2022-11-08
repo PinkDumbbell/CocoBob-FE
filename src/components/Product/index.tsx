@@ -18,7 +18,7 @@ function ProductItem(props: IProductItem) {
   return (
     <div className="flex w-full h-36 border-b border-gray-200">
       <div className="w-36 h-36 flex justify-center items-center p-1">
-        <img className="w-full" src={product?.thumbnail} alt="" />
+        <img className="w-full rounded-[10px]" src={product?.thumbnail} alt="" />
       </div>
       <div className="flex flex-col p-1 justify-center gap-2">
         <div className="flex flex-col gap-0.5">

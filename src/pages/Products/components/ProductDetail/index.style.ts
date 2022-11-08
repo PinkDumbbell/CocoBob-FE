@@ -2,12 +2,13 @@ import styled from 'styled-components';
 
 export const ProductRecommendInfoContainer = styled.div`
   background-color: white;
-  height: 200px;
+  height: 192px;
+  padding-top: 20px;
   h4 {
     font-family: Noto Sans KR;
     font-size: 14px;
     font-weight: 700;
-    line-height: 50px;
+    line-height: 20px;
     letter-spacing: -0.02em;
     text-align: left;
     margin-left: 16px;
@@ -28,8 +29,11 @@ export const RecomendInfoDetailContainer = styled.div<{ isProper: boolean }>`
     font-family: Noto Sans KR;
     font-size: 16px;
     font-weight: 500;
-    line-height: 40px;
+    line-height: 23px;
+    width: 170px;
     letter-spacing: -0.02em;
+    margin-top: 5px;
+    margin-bottom: 10px;
     text-align: left;
     color: ${(isProper) => (isProper ? '#1A70D2' : '#B3B3B3')};
   }
@@ -78,7 +82,7 @@ export const MainContainer = styled.div<{ color: string }>`
 export const FeedRecommendContainer = styled.div`
   width: 100%;
   background-color: white;
-  padding: 16px;
+  padding: 20px 0px 20px 16px;
   height: 350px;
   & > div {
     padding: 10px;
@@ -99,7 +103,7 @@ export const FeedRecommendContainer = styled.div`
     font-family: Noto Sans KR;
     font-size: 14px;
     font-weight: 700;
-    line-height: 50px;
+    line-height: 20px;
     letter-spacing: -0.02em;
     text-align: left;
   }
@@ -115,5 +119,21 @@ export const InfoContainer = styled.div`
     border-radius: 10px;
     padding: 10px;
     background-color: #f2f8ff;
+  }
+  b {
+    font-family: Noto Sans KR;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: -0.02em;
+    text-align: left;
+  }
+  span {
+    font-family: Noto Sans KR;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: -0.02em;
+    text-align: left;
   }
 `;
