@@ -50,6 +50,7 @@ export default function ProductsPage() {
   const filters = useAppSelector(getCurrentFilters);
   const location = useLocation();
   const { category, hanldeCategoryChange } = useTab();
+  const [searchOpen, setSearchOpen] = useState<boolean>(false);
   const { ref: inViewRef, inView } = useInView({
     threshold: 0,
     rootMargin: '100px 0px 0px 0px',
@@ -83,6 +84,7 @@ export default function ProductsPage() {
     if (!openSearch) {
       return;
     }
+    setSearchOpen(true);
     openSearchInput();
   }, [location.state]);
 
@@ -103,7 +105,7 @@ export default function ProductsPage() {
           onClickSearch={search}
           searchKeyword={searchKeyword}
           setSearchInputValue={onChangeSearchKeyword}
-          onFocus={false}
+          onFocus={searchOpen}
         />
       ) : (
         <Header
