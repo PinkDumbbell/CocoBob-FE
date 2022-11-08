@@ -52,14 +52,15 @@ export const RecomendInfoDetailContainer = styled.div<{ isProper: boolean }>`
 
 export const MainContainer = styled.div<{ color: string }>`
   background-color: white;
-  padding: 16px;
+  padding: 20px 16px 20px 16px;
   h4 {
     font-family: Noto Sans KR;
     font-size: 14px;
     font-weight: 700;
-    line-height: 50px;
+    line-height: 20px;
     letter-spacing: -0.02em;
     text-align: left;
+    margin-bottom: 5px;
   }
   & > span {
     font-family: Noto Sans KR;

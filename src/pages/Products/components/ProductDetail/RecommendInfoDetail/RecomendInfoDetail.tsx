@@ -28,7 +28,7 @@ export default function RecommendInfoDetail(props: IProps) {
         <RecomendInfoDetailContainer isProper={false}>
           <span>{title}</span>
           <div>
-            <span className="text-[#1A70D2]">핑크덤벨</span>
+            <span className="text-[#1A70D2]">{currentPet?.name}</span>
             <span>에게</span>
             <br />
             <span>중요한</span>
