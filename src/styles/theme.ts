@@ -4,6 +4,7 @@ export const theme: DefaultTheme = {
   colors: {
     primary: {
       dark: '#114786',
+      lightdark: '#165EB0',
       main: '#1A70D2',
       bright: '#1f80ee',
       light: 'rgb(206, 229, 255)',
@@ -18,6 +19,6 @@ export const theme: DefaultTheme = {
       caption: '#999999',
     },
     error: '#e85354',
-    success: '#3abb67',
+    success: '#1ad27c',
   },
 };

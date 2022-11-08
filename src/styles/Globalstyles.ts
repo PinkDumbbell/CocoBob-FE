@@ -42,6 +42,7 @@ const GlobalStyle = createGlobalStyle`
     --t-default : #333333;
     --t-caption : #999999;
     --gutter: 1.25rem;
+    --primary-lightdark : #165EB0;
     --primary-light: rgb(206, 229, 255);
     --primary-main: #1A70D2;
     --primary-bright: #1f80ee;
@@ -136,8 +137,8 @@ const GlobalStyle = createGlobalStyle`
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
     border: 1px solid #555555;
     border-radius: 100%;
     -webkit-border-radius: 100%;
@@ -157,6 +158,7 @@ const GlobalStyle = createGlobalStyle`
     height: 16px;
 
     transition: background-color 100ms linear;
+
     &:checked{
       border: 1px solid #114786;
       background-image: url(${checkboxBg});
@@ -166,6 +168,25 @@ const GlobalStyle = createGlobalStyle`
       background-color: ${theme.colors.primary.main}
     }
   }
+
+   // Animation -------------------
+   @keyframes push {
+    from {
+      transform: scale(1.0);
+    }
+    to {
+      transform: scale(1.025);
+    }
+   }
+
+   @keyframes afterpush {
+    from {
+      transform: scale(1.025);
+    }
+    to {
+      transform: scale(0.96);
+    }
+   }
 `;
 
 export default GlobalStyle;

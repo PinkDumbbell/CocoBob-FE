@@ -39,26 +39,24 @@ export const FormContainer = styled(ItemsCenter)`
   }
 `;
 
-export const LoginButton = styled.button`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+export const LoginButton = tw.button`
+  w-full
+  h-[47px]
+  flex
+  justify-center
+  items-center
 
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 29px;
-  height: 45px;
+  text-base
+  font-bold
 
-  border: none;
-  background: white;
-  color: ${({ theme: { colors } }) => colors.text.default};
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 12px;
+  border-none
+  bg-white
+  shadow-[2px_2px_10px_rgba(0, 0, 0, 0.15)]
+  rounded-xl
+  text-black
 
-  &:active {
-    opacity: 0.8;
-  }
+  hover:animate-push
+  active:animate-afterpush
 `;
 export const SheetContent = tw.div`
   w-full 

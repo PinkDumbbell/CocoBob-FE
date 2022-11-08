@@ -29,17 +29,17 @@ const TodayWalkInfo = ({ totalDistance, totalTime }: TodayWalkInfoProps) => {
     <>
       <h4>오늘은 이만큼 걸었어요!</h4>
       <div className="flex space-x-5 font-semibold">
-        <div className="flex items-end">
-          <span className="text-2xl">{totalDistance.toFixed(2)}</span>
+        <div className="flex items-baseline">
+          <span className="text-h2">{totalDistance.toFixed(2)}</span>
           <span className="text-primary-dark">KM</span>
         </div>
         <div className="flex space-x-1">
-          <div className="flex items-end">
-            <span className="text-2xl">{Math.floor(totalTime / 60)}</span>
+          <div className="flex items-baseline">
+            <span className="text-h2">{Math.floor(totalTime / 60)}</span>
             <span className="text-primary-dark">시간</span>
           </div>
-          <div className="flex items-end">
-            <span className="text-2xl">{totalTime % 60}</span>
+          <div className="flex items-baseline">
+            <span className="text-h2">{totalTime % 60}</span>
             <span className="text-primary-dark">분</span>
           </div>
         </div>
@@ -155,13 +155,13 @@ export default function WalkHistoryPage() {
       }
     >
       <div className="w-full max-w-[425px] h-full max-auto flex flex-col p-4 space-y-2">
-        <div className="w-full p-4 rounded-[10px] bg-gray-300 flex flex-col items-center justify-around gap-1 min-h-[150px]">
+        <div className="w-full p-4 rounded bg-primary-max flex flex-col items-center justify-around gap-1 min-h-[150px]">
           {isWalkHistoryExist ? (
             <TodayWalkInfo totalDistance={totalDistance} totalTime={totalTime} />
           ) : (
             <div className="flex-1 flex flex-col items-center justify-evenly">
-              <h4>아직 산책을 하지 않으셨나요?</h4>
-              <p className="text-sm text-gray-500">산책하기를 눌러 산책을 시작해보세요!</p>
+              <h3 className="text-h3 ">아직 산책을 하지 않으셨나요?</h3>
+              <p className="text-p text-gray pb-3">산책하기를 눌러 산책을 시작해보세요!</p>
             </div>
           )}
           <Button label="산책하기" onClick={goWalkRecordPage} />

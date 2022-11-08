@@ -11,7 +11,7 @@ export default function CategoryTabButton({ isOn, name, onClick }: CategoryTabBu
       key={name}
       className={concatClasses(
         'h-full flex justify-center items-center flex-1',
-        isOn ? ' border-b border-primary-main text-primary-main' : '',
+        isOn ? ' border-b border-primary text-primary' : '',
       )}
       onClick={onClick}
     >

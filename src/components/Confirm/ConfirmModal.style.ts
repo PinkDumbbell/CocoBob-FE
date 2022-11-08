@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import tw from 'tailwind-styled-components';
 
 const Background = styled.div`
   z-index: 9999;
@@ -27,18 +28,20 @@ const ContentsWrapper = styled.div`
   justify-content: space-between;
   overflow: hidden;
 `;
-const ConfirmButton = styled.button`
-  font-size: 1rem;
-  height: 2.5rem;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+const ConfirmButton = tw.button`
+  text-p
+  h-[2.5rem]
+  flex-1
+  items-center
+  justify-center
 `;
-const RejectButton = styled(ConfirmButton)`
-  border: 1px solid ${({ theme: { colors } }) => colors.text.caption};
-  font-weight: 400;
+
+const RejectButton = tw(ConfirmButton)`
+  border border-gray
+  font-semibold
 `;
+
 const SubmitButton = styled(ConfirmButton)`
   background: ${({ theme: { colors } }) => colors.primary.dark};
   border: 1px solid ${({ theme: { colors } }) => colors.primary.dark};

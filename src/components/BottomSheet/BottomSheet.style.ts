@@ -11,12 +11,19 @@ export const Description = tw.p`
 `;
 
 export const SelectDateWrapper = tw.div`
-  py-3 w-full flex  items-center justify-center gap-3
+  py-3 w-full flex items-center justify-center gap-3
 `;
 export const DatePicker = tw.input`
-  text-gray-600 relative w-full text-center bg-primary-light rounded-md text-md py-1
+  text-gray-600 relative w-full text-center bg-primary-bright rounded-md text-md py-1
 `;
 
 export const BreedListContainer = tw.div`
   h-[50vh] py-3 overflow-y-scroll
+`;
+
+export const LoadingContainer = tw.div`
+  flex
+  justify-center
+  align-center
+  h-[50vh]
 `;

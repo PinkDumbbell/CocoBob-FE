@@ -23,13 +23,13 @@ export default function DailyModal({ closeModal, onSubmit, children }: DailyModa
         <div className="flex-1 w-full">{children}</div>
         <div className="pt-2 w-full flex items-center justify-evenly rounded-b-[10px]">
           <button
-            className="py-1 border-t border-gray-200 flex-1 rounded-bl-[10px] bg-gray-700 text-white"
+            className="py-sm border-t border-secondary-brightest flex-1 rounded-bl text-primary-bright"
             onClick={closeModal}
           >
             취소
           </button>
           <button
-            className="py-1 border-t border-gray-200 flex-1 rounded-br-[10px] text-primary-bright"
+            className="py-sm border-t border-secondary-brightest flex-1 rounded-br bg-primary-dark text-white"
             onClick={onSubmit}
           >
             확인

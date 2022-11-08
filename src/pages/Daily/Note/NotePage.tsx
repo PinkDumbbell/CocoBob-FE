@@ -7,6 +7,7 @@ import { BackButton, HeaderWrapper } from '@/components/layout/Header.style';
 import { useGetNoteQuery, useDeleteNoteMutation, NoteType } from '@/store/api/dailyApi';
 import useSelectModal from '@/utils/hooks/useSelectModal';
 import { useConfirm, useToastMessage } from '@/utils/hooks';
+import { SmallSpinner } from '@/Animation';
 import { NoteContents } from './index.style';
 import NoteImageSwiper from './components/NoteImageSwiper';
 
@@ -129,12 +130,12 @@ export default function NotePage() {
         style={{ boxShadow: '2px 2px 10px rgba(0, 0, 0, 0.15)' }}
       >
         <div className="flex flex-col gap-2 py-4">
-          <p className="text-center font-bold text-xl">
-            {isLoading ? 'Loading...' : noteData?.title}
+          <p className="text-center font-bold text-h3">
+            {isLoading ? <SmallSpinner /> : noteData?.title}
           </p>
-          <p className="text-center text-sm text-gray-400">{noteData?.date}</p>
+          <p className="text-center text-p text-secondary-brighter">{noteData?.date}</p>
         </div>
-        <div className="w-full h-1 bg-primary-light opacity-50 rounded-[10px]"></div>
+        <div className="w-full h-1 bg-primary-brightest opacity-50 rounded"></div>
         {!isLoading && <NoteContents>{noteData?.note}</NoteContents>}
         {isLoading && <div>Loaindg...</div>}
       </div>

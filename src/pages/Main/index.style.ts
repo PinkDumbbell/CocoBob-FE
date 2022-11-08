@@ -21,6 +21,7 @@ export const VerticalBox = tw.div`
 export const VerticalCenterBox = tw(VerticalBox)`
 	items-center
 	justify-center
+	flex-2 bg-white rounded
 `;
 export const HorizontalBox = tw.div`
 	flex items-center
@@ -36,5 +37,5 @@ export const SectionSubtitle = tw.p`
 	font-semibold
 `;
 export const HighlightText = tw.span`
-	text-primary-main
+	text-primary
 `;

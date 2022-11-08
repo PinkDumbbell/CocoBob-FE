@@ -74,7 +74,7 @@ export default function Step3({ goNextStep, enrollPetData, setEnrollData }: Step
                 className={concatClasses(
                   'py-1 px-2 text-sm rounded-lg whitespace-nowrap cursor-pointer',
                   breedChip.id === breed?.id
-                    ? 'border border-primary-main bg-primary-light text-primary-main'
+                    ? 'border border-primary bg-primary-max text-primary'
                     : 'border',
                 )}
                 onClick={() => setBreed(breedChip)}

@@ -20,7 +20,7 @@ export default function MainContentButton({ label, title, onClick, icon }: MainC
         </HorizontalCenterBox>
         <HorizontalBox className="w-full gap-4 justify-evenly py-2 px-4">
           <VerticalBox className="items-start w-full">
-            <p className="text-sm">{label}</p>
+            <p className="text-caption">{label}</p>
             <SectionSubtitle>{title}</SectionSubtitle>
           </VerticalBox>
           <div className="font-bold">
