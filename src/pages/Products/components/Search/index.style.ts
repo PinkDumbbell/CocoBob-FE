@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
+import { theme } from '@/styles/theme';
 
 const StrongTagColor = styled.div`
   strong {
-    color: red;
+    color: ${theme.colors.primary.lightdark};
   }
 `;
 

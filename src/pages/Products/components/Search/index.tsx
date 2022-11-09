@@ -10,17 +10,17 @@ interface ISearch {
 export default function Search(props: ISearch) {
   const { searchInputValue, onClickSearch } = props;
   const { data } = useGetRelatedProductWithKeywordQuery(searchInputValue);
-  // const letterEmphasis = (word: string) => {
-  //   const pattern = new RegExp(searchKeyword, 'i');
-  //   const matchString = word.match(pattern);
+  const letterEmphasis = (word: string) => {
+    const pattern = new RegExp(searchInputValue, 'i');
+    const matchString = word.match(pattern);
 
-  //   if (matchString && matchString.length !== 0)
-  //     return word.replace(matchString[0], `<strong>${matchString[0]}</strong>`);
+    if (matchString && matchString.length !== 0)
+      return word.replace(matchString[0], `<strong>${matchString[0]}</strong>`);
 
-  //   return '';
-  // };
+    return '';
+  };
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full p-2">
       {searchInputValue !== '' ? (
         <RelatedSearchKeywordContainer>
           <span
@@ -31,14 +31,17 @@ export default function Search(props: ISearch) {
             {searchInputValue}
           </span>
           {data?.map((product) => (
-            <Link
-              key={product.productId}
-              to={`/products/${product.productId}`}
-            >{`${product.brand} ${product.name}`}</Link>
+            <Link key={product.productId} to={`/products/${product.productId}`}>
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: letterEmphasis(`${product.brand} ${product.name}`),
+                }}
+              />
+            </Link>
           ))}
         </RelatedSearchKeywordContainer>
       ) : (
-        <div>추천검색어</div>
+        <div className="text-h3">추천검색어</div>
       )}
     </div>
   );

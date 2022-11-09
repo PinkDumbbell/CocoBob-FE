@@ -31,7 +31,7 @@ export default function SearchHeader(props: ISearch) {
     inputRef.current?.focus();
   }, []);
   return (
-    <div className="absolute px-[8px] flex space-between items-center h-[50px] border-b border-gray-200 w-full z-[1000] bg-white">
+    <div className="absolute px-[8px] flex space-between items-center h-[50px] border-b border-primary-brightest w-full z-[1000] bg-white">
       <button onClick={goBack} className="h-full flex items-center justify-center px-3">
         <img src={goBackImg} />
       </button>

@@ -24,8 +24,8 @@ const useAnimation = (
   return {
     ref: DOM,
     style: {
-      width: `${setWidth}vw`,
-      height: `${setHeight}vh`,
+      width: `${setWidth}rem`,
+      height: `${setHeight}rem`,
     },
     className: 'animation',
   };
