@@ -134,7 +134,7 @@ export default function ProductsPage() {
         />
       )}
       <div className="flex flex-col w-full max-w-full mx-auto h-full relative mt-[50px]">
-        <div className="flex flex-col w-full max-w-[425px] bg-white">
+        <div className="flex flex-col w-full max-w-full bg-white">
           <div className="h-12 w-full flex justify-between items-center">
             {categoryList.map((categoryName) => (
               <CategoryTabButton
