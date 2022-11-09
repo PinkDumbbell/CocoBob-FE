@@ -9,12 +9,14 @@ import {
 } from '@/store/slices/productsSlice';
 import { useToastMessage } from '@/utils/hooks';
 import { ProductPreviewType } from '@/@type/product';
+import { useSearchParams } from 'react-router-dom';
 
 export default function useFetchProductData(inView: boolean) {
   const toast = useToastMessage();
   const dispatch = useAppDispatch();
   const [init, setInit] = useState(false);
   const filters = useAppSelector(getCurrentFilters);
+  const [searchParams] = useSearchParams();
   const page = useAppSelector(getPage);
   const [products, setProducts] = useState<ProductPreviewType[]>([]);
 
@@ -30,6 +32,8 @@ export default function useFetchProductData(inView: boolean) {
   useEffect(() => {
     setInit(true);
     return () => {
+      // searchParams.delete('keyword');
+      // setSearchParams(searchParams);
       dispatch(resetFilter());
     };
   }, []);
@@ -46,8 +50,8 @@ export default function useFetchProductData(inView: boolean) {
       return;
     }
 
-    getProducts({ ...filters, page });
-  }, [page, filters, isLoading]);
+    getProducts({ ...filters, page, keyword: searchParams.get('keyword') ?? '' });
+  }, [page, filters, isLoading, searchParams]);
 
   useEffect(() => {
     if (!isSuccess || !searchResult?.productList) {

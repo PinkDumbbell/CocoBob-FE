@@ -37,6 +37,7 @@ const productsSlice = createSlice({
         brands?: string[];
         ingredient?: string[];
         allergyIngredient?: string[];
+        keyword?: string;
       }>,
     ) {
       const { page, ...filters } = action.payload;

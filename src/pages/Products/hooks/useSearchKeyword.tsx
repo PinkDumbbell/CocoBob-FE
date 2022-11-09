@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 export default function useSearchKeyword() {
@@ -6,11 +6,17 @@ export default function useSearchKeyword() {
   const [isOnSearch, setIsOnSearch] = useState<boolean>(false);
   const [searchKeyword, setSearchKeyword] = useState('');
 
+  useEffect(() => {
+    const keyword = searchParams.get('keyword');
+    setSearchKeyword(keyword ?? '');
+  }, []);
   const clearSearch = () => {
     setIsOnSearch(false);
     setSearchKeyword('');
-    searchParams.delete('keyword');
-    setSearchParams(searchParams);
+    if (searchParams.get('keyword')) {
+      searchParams.delete('keyword');
+      setSearchParams(searchParams);
+    }
   };
 
   const search = (keyword?: string) => {
@@ -24,6 +30,7 @@ export default function useSearchKeyword() {
   };
   const onChangeSearchKeyword = (value: string) => {
     setSearchKeyword(value);
+    setIsOnSearch(true);
   };
 
   return {
@@ -31,6 +38,7 @@ export default function useSearchKeyword() {
     search,
     isOnSearch,
     searchKeyword,
+    setSearchKeyword,
     openSearchInput,
     onChangeSearchKeyword,
   };
