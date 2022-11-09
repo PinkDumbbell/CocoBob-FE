@@ -1,8 +1,8 @@
-import { useCallback } from 'react';
+import { useCallback, ReactElement } from 'react';
 import styled from 'styled-components';
 
 interface ButtonProps {
-  name: string;
+  name: string | ReactElement;
   disabled?: boolean;
   // eslint-disable-next-line no-unused-vars
   onClick?: Function;
@@ -22,8 +22,13 @@ const FormButtonContainer = styled.button<{ disabled: boolean }>`
   letter-spacing: -0.02em;
   color: #fefefe;
 
+  &:hover {
+    animation: push 0.2s ease-out forwards;
+  }
+
   &:active {
     opacity: 0.8;
+    animation: afterpush 0.2s ease-out forwards;
   }
 `;
 export default function FormButton(props: ButtonProps) {

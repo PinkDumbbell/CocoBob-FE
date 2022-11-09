@@ -8,7 +8,7 @@ export function CurrentPosButton({ moveToCurrentPosition }: { moveToCurrentPosit
     <button
       type="button"
       onClick={moveToCurrentPosition}
-      className="flex justify-center items-center absolute top-4 right-4 z-10 bg-white text-primary-main w-9 h-9 rounded-full border border-gray-400 shadow-md"
+      className="flex justify-center items-center absolute top-4 right-4 z-10 bg-white text-primary w-9 h-9 rounded-full border border-secondary-brighters shadow-md"
     >
       <LocationIcon />
     </button>

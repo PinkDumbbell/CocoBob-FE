@@ -13,6 +13,7 @@ import { ReactComponent as ResetIcon } from '@/assets/icon/refresh_icon.svg';
 import { useAppDispatch, useAppSelector } from '@/store/config';
 import { getCurrentFilters, resetFilter } from '@/store/slices/productsSlice';
 import Header from '@/components/layout/Header';
+import { Spinner } from '@/Animation';
 import CategoryTabButton from './components/CategoryTabButton';
 import FilterModal from './components/Filter/FilterModal';
 import ProductList from './components/ProductList/ProductList';
@@ -88,6 +89,12 @@ export default function ProductsPage() {
     openSearchInput();
   }, [location.state]);
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  setTimeout(() => {
+    setIsLoading(false);
+  }, 1000);
+
   return (
     <Layout
       footer
@@ -126,7 +133,7 @@ export default function ProductsPage() {
           setSearchInputValue={onChangeSearchKeyword}
         />
       )}
-      <div className="flex flex-col w-full max-w-[425px] mx-auto h-full relative mt-[50px]">
+      <div className="flex flex-col w-full max-w-full mx-auto h-full relative mt-[50px]">
         <div className="flex flex-col w-full max-w-[425px] bg-white">
           <div className="h-12 w-full flex justify-between items-center">
             {categoryList.map((categoryName) => (
@@ -138,10 +145,10 @@ export default function ProductsPage() {
               />
             ))}
           </div>
-          <div className="w-full px-3 py-1 border-t border-b border-gray-200 flex items-center justify-between">
-            <div className="flex gap-3 h-7 w-full">
+          <div className="w-full px-3 py-1 border-t border-b border-secondary-brightest flex items-center justify-between">
+            <div className="text-caption flex gap-3 h-7 w-full">
               <button
-                className="rounded-lg border w-20 h-full flex items-center gap-1 text-xs justify-center"
+                className="rounded-sm text-black border border-secondary-brightest w-20 h-full flex items-center gap-1 text-xs justify-center"
                 onClick={openFilterModal}
               >
                 <FilterIcon className="h-5" />
@@ -149,7 +156,7 @@ export default function ProductsPage() {
               </button>
               {hasFilter && (
                 <button
-                  className="rounded-lg border w-20 h-full flex items-center gap-1 text-xs justify-center"
+                  className="rounded-full text-black border border-secondary-brightest w-20 h-full flex items-center gap-1 text-xs justify-center"
                   onClick={() => {
                     dispatch(resetFilter());
                   }}
@@ -162,6 +169,7 @@ export default function ProductsPage() {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
+          {isLoading && <Spinner />}
           <ProductList ref={setRefs} products={products} error={isError} isLastPage={isLastData} />
         </div>
       </div>

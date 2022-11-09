@@ -8,18 +8,18 @@ interface ChipButtonWrapperProps {
 export const ChipButtonWrapper = tw.div<ChipButtonWrapperProps>`
   cursor-pointer
   px-[20px]
-  rounded-[10px]
+  py-[4px]
+  rounded
   w-fit
   font-light
   leading-[20px]
-  text-[13px]
   active:opacity-70
   ${({ $border }: ChipButtonWrapperProps) =>
-    $border ? 'border border-primary-main' : 'border-none'}
+    $border ? 'border border-primary' : 'border-primary-darkest'}
   ${({ $filled, theme }: ChipButtonWrapperProps) =>
     theme === 'primary'
       ? $filled
-        ? 'bg-primary-main border-[#114786] text-white'
-        : 'text-primary-main'
-      : 'text-gray-400 border-gray-400'}
+        ? 'bg-primary border-primary-darker text-white'
+        : 'text-primary'
+      : 'text-black border-secondary-brighter'}
 `;

@@ -7,7 +7,15 @@ export const FormContainer = styled.form`
   width: 100%;
   gap: 0.75rem;
 `;
-export const SignUpFooter = styled.div`
+
+export const SignUpFooter = tw.div`
+  text-caption
+  flex
+  gap-3
+  pt-4
+`;
+
+export const SignUpFooter2 = styled.div`
   padding: 1rem 0;
   margin-bottom: 1rem;
   font-size: 14px;

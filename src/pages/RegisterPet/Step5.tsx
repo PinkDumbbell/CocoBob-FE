@@ -76,7 +76,7 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
 
   return (
     <PageContainer>
-      <div className="mb-4">
+      <div className="mb-main">
         <QuestionText>
           <PetNameHighlight>{enrollPetData.name}</PetNameHighlight>에 대해서 더 알려주시겠어요?
         </QuestionText>
@@ -96,16 +96,16 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
                 <label
                   htmlFor="pet-sex-man"
                   className={concatClasses(
-                    'cursor-pointer gap-2 border border-primary-main rounded-md w-full flex items-center justify-center',
-                    watch('sex') === 'MALE' ? 'bg-primary-light text-primary-main' : '',
+                    'py-sm cursor-pointer gap-2 border border-secondary-brightest rounded-md w-full flex items-center justify-center',
+                    watch('sex') === 'MALE' ? 'bg-primary-max  text-primary' : '',
                   )}
                 >
                   <MaleIcon
                     width={14}
                     height={14}
-                    fill={watch('sex') === 'MALE' ? '#1f80ee' : '#222'}
+                    fill={watch('sex') === 'MALE' ? '#1f80ee' : '#999'}
                   />
-                  <span>남자</span>
+                  <span className="text-p">남자</span>
                 </label>
               </div>
               <div className="flex-1 text-center w-1/2">
@@ -119,20 +119,20 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
                 <label
                   htmlFor="pet-sex-woman"
                   className={concatClasses(
-                    'cursor-pointer gap-2 border border-primary-main rounded-md w-full flex items-center justify-center',
-                    watch('sex') === 'FEMALE' ? 'bg-primary-light text-primary-main' : '',
+                    'py-sm cursor-pointer gap-2 border border-secondary-brightest rounded-md w-full flex items-center justify-center',
+                    watch('sex') === 'FEMALE' ? 'bg-primary-max text-primary' : '',
                   )}
                 >
                   <FemaleIcon
                     width={14}
                     height={14}
-                    fill={watch('sex') === 'FEMALE' ? '#1f80ee' : '#222'}
+                    fill={watch('sex') === 'FEMALE' ? '#1f80ee' : '#999'}
                   />
-                  <span>여자</span>
+                  <span className="text-p">여자</span>
                 </label>
               </div>
             </div>
-            <p className="text-primary-main text-sm">{errors.sex?.message}</p>
+            <p className="text-bad text-caption">{errors.sex?.message}</p>
           </div>
           <FormInput
             label="몸무게"

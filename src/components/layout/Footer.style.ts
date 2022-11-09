@@ -49,6 +49,5 @@ export const IconWrapper = tw.div`
 `;
 export const ButtonTitle = tw.p<{ current: string }>`
   text-sm
-  ${({ current }: { current: string }) =>
-    current === 'true' ? 'text-primary-main' : 'text-caption'}
+  ${({ current }: { current: string }) => (current === 'true' ? 'text-primary' : 'text-caption')}
 `;

@@ -39,7 +39,7 @@ const ToastMessageItem = styled.div<{ type: 'success' | 'error' }>`
   top: 16px;
   margin: auto;
   width: 358px;
-  height: 46px;
+  height: 47px;
   background: ${({ type, theme: { colors } }) =>
     type === 'error' ? colors.error : colors.success};
   /* Shadow/default */

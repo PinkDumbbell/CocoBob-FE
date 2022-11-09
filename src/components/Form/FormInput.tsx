@@ -42,10 +42,10 @@ export const InputStyle = styled.input<{ isError: boolean | undefined; unit?: bo
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 46px;
+  height: 47px;
   padding: 0 0.5rem;
   padding-right: ${({ unit }) => (unit ? '3rem' : '0.5rem')};
-  background: #fffdfd;
+  background: white;
   border: 1px solid ${({ isError, theme: { colors } }) => (isError ? colors.error : '#EDEDED')};
   border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -62,7 +62,7 @@ export const InputStyle = styled.input<{ isError: boolean | undefined; unit?: bo
 `;
 
 const UnitText = tw.div`
-  font-light text-gray-500 text-sm bg-slate-100 h-[46px] rounded-r-[10px] absolute right-0 top-0 flex items-center justify-center w-[3rem]
+  font-light text-secondary-dark text-sm bg-primary-max h-[47px] rounded-r absolute right-0 top-0 flex items-center justify-center w-[3rem]
 `;
 
 export default function Input({
@@ -85,7 +85,7 @@ export default function Input({
       </Label>
       <InputWrapper>
         <InputStyle
-          className="focus:outline-none"
+          className="focus:outline-none disabled:bg-disabled"
           id={name}
           required={required}
           type={type}
@@ -98,7 +98,7 @@ export default function Input({
         />
         {!!unit && <UnitText>{unit}</UnitText>}
         {errorMessage && (
-          <p aria-errormessage={errorMessage} className="text-red-500 text-sm pt-1">
+          <p aria-errormessage={errorMessage} className="text-bad text-caption pt-1">
             {errorMessage}
           </p>
         )}
