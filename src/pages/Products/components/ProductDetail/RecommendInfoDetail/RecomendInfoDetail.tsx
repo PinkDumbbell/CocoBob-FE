@@ -32,9 +32,9 @@ export default function RecommendInfoDetail(props: IProps) {
             <span>에게</span>
             <br />
             <span>중요한 </span>
-            <b>식이 관리를</b>
+            <b>식이 관리를</b>
             <br />
-            <b>도와주기 힘든 </b>
+            <b> 도와주기 힘든 </b>
             <span>사료에요 !</span>
           </div>
         </RecomendInfoDetailContainer>
