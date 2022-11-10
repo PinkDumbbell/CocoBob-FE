@@ -31,8 +31,12 @@ const theme = createTheme({
 
 export default function useBottomSheet() {
   const [isOpened, setIsOpened] = useState(false);
-  const openBottomSheet = () => setIsOpened(true);
-  const closeBottomSheet = () => setIsOpened(false);
+  const openBottomSheet = () => {
+    setIsOpened(true);
+  };
+  const closeBottomSheet = () => {
+    setIsOpened(false);
+  };
 
   const BottomSheet = ({ children }: { children: ReactNode }) => (
     <ThemeProvider theme={theme}>

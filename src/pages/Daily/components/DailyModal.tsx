@@ -25,15 +25,12 @@ export default function DailyModal({ closeModal, onSubmit, children }: DailyModa
           <h3 className="text-white">건강기록</h3>
         </div>
         <div className="flex-1 w-full">{children}</div>
-        <div className="h-12 w-full flex items-center rounded-b-[10px] overflow-hidden border-t border-primary-light">
-          <button
-            className="py-sm border-t border-secondary-brightest flex-1 rounded-bl text-primary-bright"
-            onClick={closeModal}
-          >
+        <div className="h-12 w-full flex items-center rounded-b-[10px] overflow-hidden border-t border-primary-brightest">
+          <button className="h-full flex-1 rounded-bl text-primary-bright" onClick={closeModal}>
             취소
           </button>
           <button
-            className="py-sm border-t border-secondary-brightest flex-1 rounded-br bg-primary-dark text-white"
+            className="h-full flex-1 rounded-br bg-primary-dark text-white"
             onClick={onSubmit}
           >
             확인

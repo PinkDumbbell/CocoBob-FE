@@ -8,18 +8,23 @@ import { Spinner } from '@/Animation';
 import { useCurrentPet } from '@/utils/hooks';
 import { useAppSelector } from '@/store/config';
 import { getCurrentPet } from '@/store/slices/userSlice';
-import { useGetDailyRecordOverviewQuery, useGetHealthRecordQuery } from '@/store/api/dailyApi';
+import {
+  useGetDailyRecordOverviewQuery,
+  useGetHealthRecordQuery,
+  useGetRecentBodyWeightsQuery,
+} from '@/store/api/dailyApi';
 import { ReactComponent as PlusIcon } from '@/assets/icon/plus_icon.svg';
+
+import BodyWeightHistory from './components/BodyWeightChart';
 
 import { useBodyWeightModal } from './hooks/useBodyWeightModal';
 import useDate from './hooks/useDate';
-import BodyWeightHistory from './components/BodyWeightChart';
+import useFeedModal from './hooks/useFeedModal';
 
 export default function HealthRecordsPage() {
   const currentPetId = useAppSelector(getCurrentPet);
   const navigate = useNavigate();
   const { currentDate } = useDate();
-
   const { data: currentPet, isLoading } = useCurrentPet();
   const { data: overview } = useGetDailyRecordOverviewQuery(
     { date: String(currentDate), petId: currentPetId! },
@@ -30,17 +35,21 @@ export default function HealthRecordsPage() {
   const { data: healthRecord } = useGetHealthRecordQuery(Number(healthRecordId), {
     skip: !healthRecordId,
   });
+  const { data: recentBodyWeights } = useGetRecentBodyWeightsQuery(Number(currentPetId), {
+    skip: Number.isNaN(currentPetId),
+  });
 
-  const { Modal: BodyWeightModal, openModal } = useBodyWeightModal();
+  const { Modal: BodyWeightModal, openModal: openBodyWeightModal } = useBodyWeightModal();
+  const { Component: FeedModal, openModal: openFeedModal } = useFeedModal(currentDate);
 
   const goDailyPage = () => navigate(`/daily?date=${currentDate}`);
 
   useEffect(() => {
-    if (!healthRecord) {
+    if (!recentBodyWeights) {
       return;
     }
-    console.log('healthRecord', healthRecord);
-  }, [healthRecord]);
+    console.log('recentBodyWeights', recentBodyWeights);
+  }, [recentBodyWeights]);
 
   if (!currentDate || !currentPetId) {
     return <Navigate to="/404" />;
@@ -68,7 +77,7 @@ export default function HealthRecordsPage() {
               ) : (
                 <p className="text-md text-gray-400">몸무게를 기록해주세요</p>
               )}
-              <button onClick={openModal}>
+              <button onClick={openBodyWeightModal}>
                 <PlusIcon />
               </button>
             </div>
@@ -80,11 +89,10 @@ export default function HealthRecordsPage() {
               )}
             </div>
           </div>
-
           <div className="space-y-3">
             <div className="flex items-end justify-between">
               <h4 className="font-semibold text-lg">급여량</h4>
-              <button type="button" onClick={() => {}}>
+              <button type="button" onClick={openFeedModal}>
                 <PlusIcon />
               </button>
             </div>
@@ -96,6 +104,7 @@ export default function HealthRecordsPage() {
         </div>
       </Layout>
       <BodyWeightModal />
+      <FeedModal />
     </>
   );
 }

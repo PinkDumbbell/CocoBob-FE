@@ -8,7 +8,7 @@ type ImageType = {
 };
 export type MealRequestType = {
   amount: number;
-  kcal: number;
+  kcal?: number;
   productId?: number; // id가 있다면 id만 보냄
   productName?: string; // 직접 입력한 상품이면 id를 안보냄
 };
@@ -127,23 +127,26 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
       transformResponse: (response: IGenericResponse<HealthRecordType>) => response.data,
       providesTags: (result, api, args) => ['DailyRecord', { type: 'DailyRecord', id: args }],
     }),
-    getRecentBodyWeights: builder.query<any, number>({
+    getRecentBodyWeights: builder.query<void, number>({
       query: (petId: number) => `/v1/health-records/pets/${petId}/recent-weights`,
       transformResponse: (response: IGenericResponse<any>) => response.data,
       providesTags: () => [{ type: 'DailyRecord', id: 'recentBodyWeights' }],
     }),
-    addMeal: builder.mutation<void, { healthRecordId: number; meal: MealRequestType }>({
-      query: ({ healthRecordId, meal }) => {
+    addMeal: builder.mutation<
+      { healthRecordId: number },
+      { date: string; petId: number; meal: MealRequestType }
+    >({
+      query: ({ date, petId, meal }) => {
         return {
-          url: `/v1/health-records/${healthRecordId}/meals`,
+          url: `/v1/health-records/${petId}/${date}/meals`,
           method: 'POST',
           body: meal,
         };
       },
-      invalidatesTags: (result, api, args) => [
-        'DailyRecord',
-        { type: 'DailyRecord', id: args.healthRecordId },
-      ],
+      invalidatesTags: (result) =>
+        result?.healthRecordId
+          ? ['DailyRecord', { type: 'DailyRecord', id: result.healthRecordId }]
+          : ['DailyRecord'],
     }),
     createHealthRecord: builder.mutation<any, HealthRecordRequestType>({
       query: (data) => {
@@ -164,7 +167,7 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
           body: formData,
         };
       },
-      invalidatesTags: ['DailyRecord', 'Daily'],
+      invalidatesTags: ['DailyRecord', 'Daily', { type: 'DailyRecord', id: 'recentBodyWeights' }],
     }),
     updateHealthRecord: builder.mutation<any, HealthRecordUpdateType>({
       query: (params) => {
@@ -203,6 +206,7 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: (result, api, args) => [
         { type: 'DailyRecord', id: args.healthRecordId },
         { type: 'Daily', id: args.date },
+        { type: 'DailyRecord', id: 'recentBodyWeights' },
       ],
     }),
     createNoteRecord: builder.mutation<any, NoteRequestType>({
@@ -332,4 +336,5 @@ export const {
   useDeleteWalkMutation,
   useGetWalkQuery,
   useGetWalkListQuery,
+  useAddMealMutation,
 } = dailyApiSlice;

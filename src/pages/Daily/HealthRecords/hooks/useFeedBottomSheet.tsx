@@ -89,16 +89,27 @@ function useProducts() {
 
 interface FeedBottomSheetProps {
   // eslint-disable-next-line
-  onSelectProduct: (product: ProductPreviewType) => void;
+  onSelectProduct: (product: ProductPreviewType | string) => void;
 }
 export function FeedBottomSheetContent({ onSelectProduct }: FeedBottomSheetProps) {
-  const { register, handleSubmit } = useForm<SearchInputType>();
+  const { register, handleSubmit, getValues } = useForm<SearchInputType>();
+  const [isSearched, setIsSearched] = useState(false);
   const { search, products, ref, isLast } = useProducts();
   const [selectedProduct, setSelectedProduct] = useState<ProductPreviewType | null>(null);
 
+  const saveProductWithInputValue = () => {
+    const keyword = getValues('keyword').trim();
+    onSelectProduct(keyword);
+  };
+
+  const searchKeyword = (data: SearchInputType) => {
+    search(data);
+    setIsSearched(true);
+  };
+
   return (
     <div className="relative flex flex-col items-center w-full px-3 max-h-[75vh] ">
-      <form className="w-full" onSubmit={handleSubmit(search)}>
+      <form className="w-full" onSubmit={handleSubmit(searchKeyword)}>
         <SearchInput
           rules={register('keyword', {
             required: true,
@@ -130,11 +141,20 @@ export function FeedBottomSheetContent({ onSelectProduct }: FeedBottomSheetProps
             )}
           </>
         ) : (
-          <p className="text-center">상품을 검색해주세요</p>
+          <p className="text-center py-main">
+            {!isSearched ? '상품을 검색해보세요' : '검색 결과가 없습니다'}
+          </p>
         )}
       </div>
 
-      <div className="w-full py-2">
+      <div className="w-full py-2 flex flex-col gap-2">
+        {isSearched && (
+          <div className="flex items-center justify-center py-2">
+            <button type="button" className="text-caption" onClick={saveProductWithInputValue}>
+              현재 입력한 이름으로 등록할게요
+            </button>
+          </div>
+        )}
         <Button
           label="선택"
           width="full"
