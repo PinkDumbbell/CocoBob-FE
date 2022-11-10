@@ -1,7 +1,9 @@
-import { useVh } from '@/utils/hooks';
+import { ReactNode } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
+
+import { useVh } from '@/utils/hooks';
 
 interface InputProps {
   label: string;
@@ -12,7 +14,7 @@ interface InputProps {
   placeholder?: string;
   isError?: boolean | undefined;
   errorMessage?: string;
-  unit?: string;
+  unit?: string | ReactNode;
   disabled?: boolean;
 }
 
