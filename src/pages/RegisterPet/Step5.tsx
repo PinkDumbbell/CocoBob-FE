@@ -37,6 +37,8 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
     handleSubmit,
     setValue,
     watch,
+    trigger,
+    getValues,
     formState: { errors },
   } = useForm<Step4Form>();
 
@@ -138,16 +140,29 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
             label="몸무게"
             name="bodyWeight"
             unit="KG"
+            type="text"
+            errorMessage={errors.bodyWeight?.message}
+            typing={Boolean(watch('bodyWeight'))}
             placeholder="몸무게를 입력해주세요"
             rules={register('bodyWeight', {
               required: true,
-              valueAsNumber: true,
               pattern: {
-                value: /^(0|[1-9]\d*)(\.\d+)?$/,
-                message: '숫자를 입력해주세요',
+                value: /^[\d]*\.?[\d]{0,8}$/,
+                message: '숫자를 입력하세요.',
+              },
+              onChange: () => {
+                trigger('bodyWeight');
+              },
+              validate: {
+                maxLength: () => {
+                  const { bodyWeight } = getValues();
+                  if (bodyWeight.length > 8) {
+                    setValue('bodyWeight', bodyWeight.substring(0, 8));
+                  }
+                  return bodyWeight.length < 9 || '8자리 이상 입력하실 수 없습니다.';
+                },
               },
             })}
-            type="text"
           />
           <div className="flex flex-col gap-2">
             <p className="font-medium text-[14px]">활동수준</p>
@@ -158,7 +173,18 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
                   name="activity-level"
                   id="activity-level"
                   list="tickmarks"
-                  className="w-full h-1.5 rounded-lg bg-gray-200 appearance-none cursor-pointer dark:gray-600"
+                  className={concatClasses(
+                    'w-full h-1.5 rounded-lg appearance-none cursor-pointer',
+                    selectedActivityLevel === 1
+                      ? 'bg-secondary-brightest dark:secondary-dark'
+                      : selectedActivityLevel === 2
+                      ? 'bg-primary-brightest dark:primary-dark'
+                      : selectedActivityLevel === 3
+                      ? 'bg-primary-brighter dark:primary-darker'
+                      : selectedActivityLevel === 4
+                      ? 'bg-primary-bright dark:bg-primary-dark'
+                      : 'bg-primary dark:bg-primary',
+                  )}
                   min="1"
                   max="5"
                   value={selectedActivityLevel}

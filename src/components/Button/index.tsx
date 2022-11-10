@@ -28,7 +28,7 @@ type ButtonPropsWithDefaultProps = DetailedHTMLProps<
 export const Button = (props: ButtonPropsWithDefaultProps) => {
   const {
     width = 'small',
-    primary,
+    primary = 'first',
     backgroundColor,
     label,
     className,
