@@ -144,6 +144,7 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
             errorMessage={errors.bodyWeight?.message}
             typing={Boolean(watch('bodyWeight'))}
             placeholder="몸무게를 입력해주세요"
+            isError={!!errors.bodyWeight?.message}
             rules={register('bodyWeight', {
               required: true,
               pattern: {
@@ -156,10 +157,8 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
               validate: {
                 maxLength: () => {
                   const { bodyWeight } = getValues();
-                  if (bodyWeight.length > 8) {
-                    setValue('bodyWeight', bodyWeight.substring(0, 8));
-                  }
-                  return bodyWeight.length < 9 || '8자리 이상 입력하실 수 없습니다.';
+
+                  return bodyWeight.toString().length < 9 || '8자리 이상 입력하실 수 없습니다.';
                 },
               },
             })}

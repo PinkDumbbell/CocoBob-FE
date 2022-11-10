@@ -14,6 +14,7 @@ export default function Step1({ goNextStep, enrollPetData, setEnrollData }: Step
     formState: { errors },
     setValue,
     watch,
+    trigger,
   } = useForm<Step1Form>();
 
   const isButtonDisabled = !watch('name');
@@ -37,18 +38,24 @@ export default function Step1({ goNextStep, enrollPetData, setEnrollData }: Step
         <Form onSubmit={handleSubmit(onSubmitForm)}>
           <FormInput
             label=""
+            type="text"
             name="pet-name"
+            errorMessage={errors.name?.message}
             placeholder="반려동물의 이름을 입력해주세요"
             rules={register('name', {
               required: '이름을 입력해주세요',
-              maxLength: 20,
+              maxLength: {
+                value: 20,
+                message: '너무 긴 이름 같아요!',
+              },
+              onChange: () => {
+                trigger('name');
+              },
             })}
-            type="text"
             isError={!!errors.name?.message}
-            errorMessage={errors.name?.message}
           />
           <ButtonWrapper>
-            <FormButton name="다음으로" disabled={isButtonDisabled} />
+            <FormButton name="다음으로" disabled={isButtonDisabled || !!errors.name?.message} />
           </ButtonWrapper>
         </Form>
       </div>

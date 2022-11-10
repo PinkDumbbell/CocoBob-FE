@@ -139,7 +139,7 @@ export default function Step4({ goNextStep, enrollPetData, setEnrollData }: Step
           </div>
         </div>
         <ButtonWrapper>
-          <FormButton name="다음으로" disabled={false} />
+          <FormButton name="다음으로" disabled={!age.birthday && !age.months} />
         </ButtonWrapper>
       </Form>
       <BottomSheet isOpen={isBirthdayBottomSheetOpen}>

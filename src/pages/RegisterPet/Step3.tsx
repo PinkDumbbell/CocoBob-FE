@@ -92,7 +92,7 @@ export default function Step3({ goNextStep, enrollPetData, setEnrollData }: Step
           </div>
         </div>
         <ButtonWrapper>
-          <FormButton name="다음으로" disabled={false} />
+          <FormButton name="다음으로" disabled={!breed} />
         </ButtonWrapper>
       </Form>
       <BreedBottomSheet
