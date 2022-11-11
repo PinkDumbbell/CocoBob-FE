@@ -47,7 +47,7 @@ export function BodyWeightModal({
   }, [initBodyWeight]);
 
   return (
-    <DailyModal onSubmit={onSubmit} closeModal={close}>
+    <DailyModal onSubmit={onSubmit} closeModal={close} title="몸무게 기록">
       <div className="p-4 flex flex-col gap-1">
         <FormInput
           unit="KG"
@@ -84,7 +84,7 @@ export function useBodyWeightModal() {
     if (!currentDate || !currentPetId) {
       return;
     }
-    if (healthRecord) {
+    if (healthRecordId && healthRecord) {
       updateRecord({
         date: currentDate,
         bodyWeight,
