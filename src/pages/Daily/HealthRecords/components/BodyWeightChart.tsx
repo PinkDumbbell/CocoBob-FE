@@ -27,7 +27,7 @@ export default function BodyWeightHistory({ data }: { data: BodyWeightHistoryTyp
       }}
       series={[
         {
-          name: 'bodyWeights',
+          name: '몸무게',
           data: data.map(({ bodyWeight }) => bodyWeight),
         },
       ]}

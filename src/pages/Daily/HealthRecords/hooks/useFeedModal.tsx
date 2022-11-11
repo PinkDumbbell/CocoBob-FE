@@ -25,10 +25,18 @@ function useModal(onClose?: () => void) {
   useKeyHandler('Escape', closeModal);
 
   const el = document.getElementById('modal');
-  const Modal = ({ children, onSubmit }: { children: ReactNode; onSubmit: () => void }) =>
+  const Modal = ({
+    children,
+    onSubmit,
+    title,
+  }: {
+    children: ReactNode;
+    onSubmit: () => void;
+    title?: string;
+  }) =>
     opened && el
       ? createPortal(
-          <DailyModal closeModal={closeModal} onSubmit={onSubmit}>
+          <DailyModal closeModal={closeModal} onSubmit={onSubmit} title={title}>
             {children}
           </DailyModal>,
           el,
@@ -70,7 +78,7 @@ function useMealMutation(currentDate: string | null) {
 }
 export default function useFeedModal(currentDate: string | null) {
   const { addMeal, mutationSuccess } = useMealMutation(currentDate);
-  const { register, handleSubmit } = useForm<{ feedAmount: number }>();
+  const { register, handleSubmit, resetField } = useForm<{ feedAmount: number }>();
 
   const [selectedProduct, setSelectedProduct] = useState<string | ProductPreviewType | null>(null);
   const { Modal, closeModal, openModal, opened } = useModal(() => setSelectedProduct(null));
@@ -106,17 +114,16 @@ export default function useFeedModal(currentDate: string | null) {
     if (!mutationSuccess) {
       return;
     }
+    resetField('feedAmount');
     closeModal();
   }, [mutationSuccess]);
 
   const Component = () => (
     <>
-      <Modal onSubmit={handleSubmit(saveFeed)}>
-        <div className="p-2 flex flex-col w-full items-center gap-2">
-          <h3>급여량 기록</h3>
-
-          <div className="flex flex-col space-y-4">
-            <div className="flex flex-col space-y-2">
+      <Modal onSubmit={handleSubmit(saveFeed)} title="급여량 기록">
+        <div className="p-4 flex flex-col w-full items-center gap-2">
+          <div className="flex flex-col space-y-4 w-full">
+            <div className="flex flex-col space-y-2 w-full">
               <label htmlFor="btn-feed-seasrch" className="text-sm font-medium">
                 급여사료
               </label>
@@ -124,15 +131,19 @@ export default function useFeedModal(currentDate: string | null) {
                 id="btn-feed-search"
                 onClick={openBottomSheet}
                 className={concatClasses(
-                  'text-left p-2 border rounded border-secondary-brightest',
+                  'w-full block text-left p-2 border rounded border-secondary-brightest overflow-hidden',
                   selectedProduct ? 'text-black' : 'text-gray',
                 )}
               >
-                {!selectedProduct
-                  ? '사료를 찾아보세요'
-                  : typeof selectedProduct === 'string'
-                  ? selectedProduct
-                  : selectedProduct.name}
+                {!selectedProduct ? (
+                  '사료를 찾아보세요'
+                ) : typeof selectedProduct === 'string' ? (
+                  selectedProduct
+                ) : (
+                  <span className="whitespace-nowrap text-ellipsis overflow-hidden">
+                    {`${selectedProduct.brand} ${selectedProduct.name}`}
+                  </span>
+                )}
               </button>
             </div>
             <FormInput

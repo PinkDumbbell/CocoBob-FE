@@ -13,16 +13,22 @@ type DailyModalWrapperProps = {
   closeModal: () => void;
   onSubmit: () => void;
   children: ReactNode;
+  title?: string;
 };
 
-export default function DailyModal({ closeModal, onSubmit, children }: DailyModalWrapperProps) {
+export default function DailyModal({
+  closeModal,
+  onSubmit,
+  children,
+  title = '건강기록',
+}: DailyModalWrapperProps) {
   useKeyHandler('Escape', closeModal);
 
   return (
     <div className="z-[1000] max-w-[425px] flex flex-col items-center justify-center w-full h-screen fixed top-0  left-1/2 -translate-x-1/2 bg-[#00000029] p-4">
       <div className="w-full bg-white flex flex-col items-center justify-between rounded-[10px]">
         <div className="h-14 bg-primary-dark rounded-t-[10px] w-full flex items-center justify-center">
-          <h3 className="text-white">건강기록</h3>
+          <h3 className="text-white">{title}</h3>
         </div>
         <div className="flex-1 w-full">{children}</div>
         <div className="h-12 w-full flex items-center rounded-b-[10px] overflow-hidden border-t border-primary-brightest">

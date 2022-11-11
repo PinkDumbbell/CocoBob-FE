@@ -138,15 +138,19 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
     >({
       query: ({ date, petId, meal }) => {
         return {
-          url: `/v1/health-records/${petId}/${date}/meals`,
+          url: `/v1/health-records/pets/${petId}/dates/${date}/meal`,
           method: 'POST',
           body: meal,
         };
       },
-      invalidatesTags: (result) =>
+      invalidatesTags: (result, api, args) =>
         result?.healthRecordId
-          ? ['DailyRecord', { type: 'DailyRecord', id: result.healthRecordId }]
-          : ['DailyRecord'],
+          ? [
+              'DailyRecord',
+              { type: 'Daily', id: args.date },
+              { type: 'DailyRecord', id: result.healthRecordId },
+            ]
+          : ['DailyRecord', { type: 'Daily', id: args.date }],
     }),
     createHealthRecord: builder.mutation<any, HealthRecordRequestType>({
       query: (data) => {
@@ -171,7 +175,6 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
     }),
     updateHealthRecord: builder.mutation<any, HealthRecordUpdateType>({
       query: (params) => {
-        console.log(params);
         const formData = new FormData();
 
         if (params?.bodyWeight) {
@@ -240,7 +243,7 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
       query: ({ noteId }) => {
         return {
           url: `/v1/dailys/${noteId}`,
-          method: 'DELETe',
+          method: 'DELETE',
         };
       },
       invalidatesTags: ['DailyRecord', 'Daily'],

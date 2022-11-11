@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import { Navigate, useNavigate } from 'react-router-dom';
 
@@ -8,11 +7,7 @@ import { Spinner } from '@/Animation';
 import { useCurrentPet } from '@/utils/hooks';
 import { useAppSelector } from '@/store/config';
 import { getCurrentPet } from '@/store/slices/userSlice';
-import {
-  useGetDailyRecordOverviewQuery,
-  useGetHealthRecordQuery,
-  useGetRecentBodyWeightsQuery,
-} from '@/store/api/dailyApi';
+import { useGetDailyRecordOverviewQuery, useGetHealthRecordQuery } from '@/store/api/dailyApi';
 import { ReactComponent as PlusIcon } from '@/assets/icon/plus_icon.svg';
 
 import BodyWeightHistory from './components/BodyWeightChart';
@@ -31,25 +26,14 @@ export default function HealthRecordsPage() {
     { skip: !currentDate || !currentPetId },
   );
   const healthRecordId = overview?.healthRecordId;
-
   const { data: healthRecord } = useGetHealthRecordQuery(Number(healthRecordId), {
     skip: !healthRecordId,
-  });
-  const { data: recentBodyWeights } = useGetRecentBodyWeightsQuery(Number(currentPetId), {
-    skip: Number.isNaN(currentPetId),
   });
 
   const { Modal: BodyWeightModal, openModal: openBodyWeightModal } = useBodyWeightModal();
   const { Component: FeedModal, openModal: openFeedModal } = useFeedModal(currentDate);
 
   const goDailyPage = () => navigate(`/daily?date=${currentDate}`);
-
-  useEffect(() => {
-    if (!recentBodyWeights) {
-      return;
-    }
-    console.log('recentBodyWeights', recentBodyWeights);
-  }, [recentBodyWeights]);
 
   if (!currentDate || !currentPetId) {
     return <Navigate to="/404" />;
@@ -71,7 +55,7 @@ export default function HealthRecordsPage() {
             <div className="flex items-center justify-between">
               {healthRecord?.bodyWeight ? (
                 <p className="font-bold">
-                  <span className="text-primary text-2xl">{healthRecord.bodyWeight}</span>
+                  <span className="text-primary text-h2">{healthRecord.bodyWeight}</span>
                   <span className="ml-1 ">kg</span>
                 </p>
               ) : (
@@ -96,9 +80,23 @@ export default function HealthRecordsPage() {
                 <PlusIcon />
               </button>
             </div>
-            <div className="rounded-[10px] border border-primary-bright p-3 min-h-[100px] flex items-center justify-center">
-              <p className="text-md text-gray-400">오늘의 급여를 기록해보세요!</p>
-            </div>
+            {(!healthRecord?.meals || healthRecord.meals.length === 0) && (
+              <div className="rounded-[10px] border border-primary-bright p-3 min-h-[100px] flex items-center justify-center">
+                <p className="text-md text-gray-400">오늘의 급여를 기록해보세요!</p>
+              </div>
+            )}
+            {healthRecord?.meals &&
+              healthRecord.meals.map((meal) => (
+                <div
+                  key={meal.mealId}
+                  className="p-main rounded-[10px] border border-primary-bright min-h-section flex items-center"
+                >
+                  <div>
+                    <p>{meal.productInfo.productName}</p>
+                    <p className="text-h3 text-primary">{meal.amount}g</p>
+                  </div>
+                </div>
+              ))}
             <div className="rounded border border-primary-max p-3"></div>
           </div>
         </div>
