@@ -12,6 +12,7 @@ import { ReactComponent as SearchIcon } from '@/assets/icon/search_icon.svg';
 import { useLazyGetProductQuery } from '@/store/api/productApi';
 import { ProductPreviewType } from '@/@type/product';
 import { concatClasses } from '@/utils/libs/concatClasses';
+import { usePrevious } from '@/utils/hooks';
 
 const SearchInput = ({ rules }: { rules: UseFormRegisterReturn }) => {
   return (
@@ -43,15 +44,18 @@ function useProducts() {
     keyword: '',
     page: 0,
   });
+  const prevKeyword = usePrevious<string>('');
+
   const [fetchProduct, { data, isLoading }] = useLazyGetProductQuery();
   const [products, setProducts] = useState<ProductPreviewType[]>([]);
   const isLast = data?.last;
 
   const search = ({ keyword }: SearchInputType) => {
     const searchKeyword = keyword.trim();
-    if (!searchKeyword) {
+    if (!searchKeyword || prevKeyword === searchKeyword) {
       return;
     }
+    setProducts([]);
     setFetchParams({
       keyword: searchKeyword,
       page: 0,

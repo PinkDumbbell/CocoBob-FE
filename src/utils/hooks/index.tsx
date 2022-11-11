@@ -13,6 +13,7 @@ import useUser from './useUser';
 import useWatchPosition from './useWatchPosition';
 import useWithdrawal from './useWithdrawal';
 import useVh from './useVh';
+import usePrevious from './usePrevious';
 
 export {
   useBottomSheet,
@@ -30,4 +31,5 @@ export {
   useWatchPosition,
   useWithdrawal,
   useVh,
+  usePrevious,
 };
