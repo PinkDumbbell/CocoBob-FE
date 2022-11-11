@@ -7,7 +7,11 @@ import { Spinner } from '@/Animation';
 import { useCurrentPet } from '@/utils/hooks';
 import { useAppSelector } from '@/store/config';
 import { getCurrentPet } from '@/store/slices/userSlice';
-import { useGetDailyRecordOverviewQuery, useGetHealthRecordQuery } from '@/store/api/dailyApi';
+import {
+  useGetDailyRecordOverviewQuery,
+  useGetHealthRecordQuery,
+  useGetRecentBodyWeightsQuery,
+} from '@/store/api/dailyApi';
 import { ReactComponent as PlusIcon } from '@/assets/icon/plus_icon.svg';
 
 import BodyWeightHistory from './components/BodyWeightChart';
@@ -29,7 +33,9 @@ export default function HealthRecordsPage() {
   const { data: healthRecord } = useGetHealthRecordQuery(Number(healthRecordId), {
     skip: !healthRecordId,
   });
-
+  const { data: recentBodyWeights } = useGetRecentBodyWeightsQuery(Number(currentPetId), {
+    skip: Number.isNaN(currentPetId),
+  });
   const { Modal: BodyWeightModal, openModal: openBodyWeightModal } = useBodyWeightModal();
   const { Component: FeedModal, openModal: openFeedModal } = useFeedModal(currentDate);
 
@@ -66,8 +72,8 @@ export default function HealthRecordsPage() {
               </button>
             </div>
             <div className="rounded-[10px] border border-primary-bright min-h-[100px] w-full flex items-center justify-center">
-              {healthRecord?.bodyWeights && healthRecord.bodyWeights.length > 0 ? (
-                <BodyWeightHistory data={healthRecord.bodyWeights} />
+              {recentBodyWeights ? (
+                <BodyWeightHistory data={recentBodyWeights} />
               ) : (
                 <p className="text-md text-gray-400">최근 기록이 없습니다.</p>
               )}

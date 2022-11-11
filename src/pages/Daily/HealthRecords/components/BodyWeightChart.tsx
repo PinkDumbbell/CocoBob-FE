@@ -1,8 +1,8 @@
-import { BodyWeightHistoryType } from '@/store/api/dailyApi';
+import { RecentBodyWeightType } from '@/store/api/dailyApi';
 import { theme } from '@/styles/theme';
 import Chart from 'react-apexcharts';
 
-export default function BodyWeightHistory({ data }: { data: BodyWeightHistoryType[] }) {
+export default function BodyWeightHistory({ data }: { data: RecentBodyWeightType }) {
   return (
     <Chart
       type="line"
@@ -10,7 +10,7 @@ export default function BodyWeightHistory({ data }: { data: BodyWeightHistoryTyp
       height="250"
       options={{
         xaxis: {
-          categories: data.map(({ date }) => date),
+          categories: Object.keys(data).reverse(),
         },
         chart: {
           toolbar: { show: false },
@@ -28,7 +28,7 @@ export default function BodyWeightHistory({ data }: { data: BodyWeightHistoryTyp
       series={[
         {
           name: '몸무게',
-          data: data.map(({ bodyWeight }) => bodyWeight),
+          data: Object.values(data).reverse(),
         },
       ]}
     />

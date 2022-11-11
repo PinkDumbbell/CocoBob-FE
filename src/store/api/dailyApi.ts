@@ -35,6 +35,9 @@ export type BodyWeightHistoryType = {
   date: string;
   bodyWeight: number;
 };
+export type RecentBodyWeightType = {
+  [key: string]: number;
+};
 export type HealthRecordType = {
   abnormals: any[];
   bodyWeight: number;
@@ -127,9 +130,10 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
       transformResponse: (response: IGenericResponse<HealthRecordType>) => response.data,
       providesTags: (result, api, args) => ['DailyRecord', { type: 'DailyRecord', id: args }],
     }),
-    getRecentBodyWeights: builder.query<void, number>({
+    getRecentBodyWeights: builder.query<RecentBodyWeightType, number>({
       query: (petId: number) => `/v1/health-records/pets/${petId}/recent-weights`,
-      transformResponse: (response: IGenericResponse<any>) => response.data,
+      transformResponse: (response: IGenericResponse<{ weightPerDate: RecentBodyWeightType }>) =>
+        response.data.weightPerDate,
       providesTags: () => [{ type: 'DailyRecord', id: 'recentBodyWeights' }],
     }),
     addMeal: builder.mutation<
