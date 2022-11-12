@@ -191,7 +191,7 @@ export default function ProductDetailPage() {
           <div className="m-4 flex flex-col">
             <h4>영양성분</h4>
             {nutrientList.map((nutrient, index) => {
-              if (index % 2 !== 0) return <></>;
+              if (index % 2 !== 0) return null;
               return (
                 <div className="border-b h-14 flex" key={`${nutrient}-${index}`}>
                   <Nutrient
