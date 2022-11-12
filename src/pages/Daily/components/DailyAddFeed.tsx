@@ -61,7 +61,7 @@ export default function DailyAddFeed({ closeModal, healthRecord }: DailyModalPro
 
           <div className="flex flex-col space-y-4">
             <div className="flex flex-col space-y-2">
-              <label htmlFor="btn-feed-seasrch" className="text-sm font-medium">
+              <label htmlFor="btn-feed-seasrch" className="text-label font-medium">
                 급여사료
               </label>
               <button

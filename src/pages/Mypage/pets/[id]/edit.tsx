@@ -213,7 +213,7 @@ export default function EditPet() {
                     <InputStyle
                       isError={false}
                       onChange={(e) => e.preventDefault()}
-                      className="text-gray-400 text-left p-2 border-b border-b-gray-400"
+                      className="text-gray text-left p-2 border-b border-b-gray-400"
                       onClick={openBreedBottomSheet}
                       placeholder={breed?.id ? breed?.name : '품종을 검색해보세요'}
                     />
@@ -284,7 +284,7 @@ export default function EditPet() {
                         <SexTypeLabel
                           htmlFor="pet-sex-man"
                           className={concatClasses(
-                            'p-1 text-sm',
+                            'p-1 text-label',
                             watch('sex') === 'MALE' ? 'bg-primary-light text-primary' : '',
                           )}
                         >
@@ -302,7 +302,7 @@ export default function EditPet() {
                         <SexTypeLabel
                           htmlFor="pet-sex-woman"
                           className={concatClasses(
-                            'p-1 text-sm',
+                            'p-1 text-label',
                             watch('sex') === 'FEMALE' ? 'bg-primary-light text-primary' : '',
                           )}
                         >

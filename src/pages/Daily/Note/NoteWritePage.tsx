@@ -245,7 +245,10 @@ export default function NoteAddPage() {
               placeholder="글 내용을 입력하세요"
             ></TextArea>
             {errors.contents?.message && (
-              <p aria-errormessage={errors.contents?.message} className="text-red-500 text-sm pt-1">
+              <p
+                aria-errormessage={errors.contents?.message}
+                className="text-red-500 text-label pt-1"
+              >
                 {errors.contents?.message}
               </p>
             )}

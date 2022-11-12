@@ -66,7 +66,7 @@ export default function Step3({ goNextStep, enrollPetData, setEnrollData }: Step
         <div className="flex flex-col gap-4">
           <Input
             isError={false}
-            className={concatClasses('text-black text-left p-2 cursor-pointer')}
+            className={'text-black text-left p-2 cursor-pointer'}
             onClick={openBottomSheet}
             onChange={(e: React.FormEvent<HTMLInputElement>) => e.preventDefault()}
             value={breed?.name}

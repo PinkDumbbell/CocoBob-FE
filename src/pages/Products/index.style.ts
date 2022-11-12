@@ -124,7 +124,7 @@ export const ProductInfoContainer = tw.div`
 `;
 
 export const RecomendInfoDedtail = tw.div<{ isGood: boolean }>`
-  w-[170px] h-[94px] rounded-[10px] bg-[${(isGood: boolean) => (isGood ? '#F2F8FF' : '#F2F2F2')}]
+  w-[170px] h-[94px] rounded bg-[${(isGood: boolean) => (isGood ? '#F2F8FF' : '#F2F2F2')}]
 `;
 
 export const BrComponent = tw.div`

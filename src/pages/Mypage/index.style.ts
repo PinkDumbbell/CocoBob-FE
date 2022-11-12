@@ -19,7 +19,7 @@ export const RemoveProfileButton = tw.button`
 `;
 
 export const AgeSelectButton = tw.button`
-  text-left p-1 border rounded-md text-sm
+  text-left p-1 border rounded-md text-label
 `;
 export const AgeDescription = tw.p`
 text-primary-bright flex gap-2 items-center
