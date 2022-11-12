@@ -164,7 +164,7 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
             })}
           />
           <div className="flex flex-col gap-2">
-            <p className="font-medium text-[14px]">활동수준</p>
+            <p className="font-medium text-label">활동수준</p>
             <div className="flex flex-col gap-3">
               <div>
                 <input
@@ -191,7 +191,7 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
                 />
               </div>
               <div>
-                <p className="text-primary-bright text-sm">
+                <p className="text-primary-bright text-label">
                   {activityLevelStrings[selectedActivityLevel]}
                 </p>
               </div>
