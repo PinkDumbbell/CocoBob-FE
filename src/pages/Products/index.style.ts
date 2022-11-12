@@ -116,7 +116,7 @@ export const FooterLikeContainer = tw.button`
   w-full bg-[#0A2B52] flex items-center text-center justify-center
 `;
 export const NutrientInfoContainer = tw.div`
-  w-full h-[400px] bg-white flex flex-col
+  w-full h-[357px] bg-white flex flex-col
 `;
 
 export const ProductInfoContainer = tw.div`

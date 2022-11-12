@@ -16,6 +16,7 @@ interface InputProps {
   errorMessage?: string;
   unit?: string | ReactNode;
   disabled?: boolean;
+  typing?: boolean;
 }
 
 const InputContainer = styled.div`
@@ -48,7 +49,7 @@ export const InputStyle = styled.input<{ isError: boolean | undefined; unit?: bo
   padding: 0 0.5rem;
   padding-right: ${({ unit }) => (unit ? '3rem' : '0.5rem')};
   background: white;
-  border: 1px solid ${({ isError, theme: { colors } }) => (isError ? colors.error : '#EDEDED')};
+  border: 1px solid ${({ isError, theme: { colors } }) => (isError ? colors.error : '#bbbbbb')};
   border-radius: 10px;
   -webkit-border-radius: 10px;
   -moz-borader-radius: 10px;
@@ -64,7 +65,7 @@ export const InputStyle = styled.input<{ isError: boolean | undefined; unit?: bo
 `;
 
 const UnitText = tw.div`
-  font-light text-secondary-dark text-label bg-primary-max h-[47px] rounded-r absolute right-0 top-0 flex items-center justify-center w-[3rem]
+  font-light border border-secondary-brightest text-sm h-[47px] rounded-r absolute right-0 top-0 flex items-center justify-center w-[3rem]
 `;
 
 export default function Input({
@@ -78,6 +79,7 @@ export default function Input({
   disabled,
   isError,
   errorMessage,
+  typing,
 }: InputProps) {
   const { setVh } = useVh();
   return (
@@ -98,7 +100,13 @@ export default function Input({
           disabled={disabled}
           onBlur={setVh}
         />
-        {!!unit && <UnitText>{unit}</UnitText>}
+        {!!unit && (
+          <UnitText
+            className={typing ? 'text-primary bg-primary-max' : 'text-secondary bg-secondary-max'}
+          >
+            {unit}
+          </UnitText>
+        )}
         {errorMessage && (
           <p aria-errormessage={errorMessage} className="text-bad text-caption pt-1">
             {errorMessage}

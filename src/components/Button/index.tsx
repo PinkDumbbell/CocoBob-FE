@@ -1,5 +1,5 @@
 import { concatClasses } from '@/utils/libs/concatClasses';
-import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
+import { ButtonHTMLAttributes, DetailedHTMLProps, ReactElement } from 'react';
 import {
   common,
   FirstStyle,
@@ -13,8 +13,8 @@ interface ButtonProps {
   primary?: 'first' | 'second' | 'third' | 'fourth' | 'etc';
   backgroundColor?: string;
   width?: 'full' | 'small';
-  label: string;
-  onClick?: () => void;
+  label: string | ReactElement;
+  onClick?: () => void | Function;
   className?: string;
   disabled?: boolean;
 }
@@ -25,16 +25,18 @@ type ButtonPropsWithDefaultProps = DetailedHTMLProps<
 > &
   ButtonProps;
 
-export const Button = ({
-  width = 'small',
-  primary = 'first',
-  backgroundColor,
-  label,
-  className,
-  disabled,
-  type,
-  ...props
-}: ButtonPropsWithDefaultProps) => {
+export const Button = (props: ButtonPropsWithDefaultProps) => {
+  const {
+    width = 'small',
+    primary = 'first',
+    backgroundColor,
+    label,
+    className,
+    disabled,
+    type,
+    onClick,
+  } = props;
+
   const volume = width === 'full' ? 'min-w-full' : 'min-w-sm';
   const totalStyle = [`${volume} ${common}`];
   if (primary === 'first') totalStyle.push(FirstStyle);
@@ -46,6 +48,7 @@ export const Button = ({
   return (
     <button
       {...props}
+      onClick={onClick}
       className={concatClasses(totalStyle.join(' '), className ?? '')}
       disabled={disabled}
       style={{ backgroundColor }}

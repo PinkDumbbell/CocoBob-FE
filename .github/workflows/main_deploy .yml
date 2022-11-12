@@ -58,8 +58,11 @@ jobs:
       - name: Install Dependencies
         run: npm install --frozen-lockfile
 
+      - name: Test
+        run: npm run test
+
       - name: Build
-        run: npm run build
+        run: npm run build --production
 
       - name: zip create
         run: zip -qq -r ./cocobob-fe-build.zip .

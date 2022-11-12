@@ -1,5 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import tw from 'tailwind-styled-components';
+import { InputStyle } from '@/components/Form/FormInput';
 
 export const PageContainer = styled.div`
   display: flex;
@@ -15,18 +16,11 @@ export const QuestionWrapper = styled.div`
   justify-content: flex-start;
 `;
 
-export const QuestionText = styled.h3`
-  /* H3/H3 Bold */
-
-  font-family: 'Noto Sans KR';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 29px;
-  /* identical to box height, or 145% */
-
-  letter-spacing: -0.02em;
+export const QuestionText = tw.h3`
+  text-h3
+  font-bold
 `;
+
 export const SubQuestionText = styled.p`
   font-family: 'Noto Sans KR';
   font-style: normal;
@@ -40,6 +34,15 @@ export const SubQuestionText = styled.p`
 export const PetNameHighlight = tw.span`
   font-bold
   text-primary
+`;
+
+export const Input = styled(InputStyle)`
+  ${(props) =>
+    props.value &&
+    css`
+      border: 1px solid #1a70d2;
+      background-color: #f2f8ff;
+    `}
 `;
 
 export const ButtonWrapper = styled.div`
@@ -84,13 +87,12 @@ export const Form = tw(StyledForm)`
   flex-col
   justify-between
 `;
+
 export const SkipButton = tw.button`
-  font-gray-600;
-  decoration-gray-400
+  decoration-secondary-brighter
   underline
   underline-offset-4
   text-center
-  leading-[20px]
-  text-label
-  text-caption
+  text-[0.8125rem]
+  text-gray
 `;

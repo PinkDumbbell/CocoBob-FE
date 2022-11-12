@@ -229,7 +229,7 @@ export default function ProductDetailPage() {
                 src={questionImg}
               />
             </div>
-            <h2 className="mb-[15px] text-[#1A70D2]">충족</h2>
+            <h2 className="mb-[15px] text-primary">충족</h2>
           </div>
         </NutrientInfoContainer>
         <BrComponent />

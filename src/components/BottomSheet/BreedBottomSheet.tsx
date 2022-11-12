@@ -6,7 +6,7 @@ import { concatClasses } from '@/utils/libs/concatClasses';
 import { DotLoader } from '@/Animation';
 import { InputStyle } from '../Form/FormInput';
 import BottomSheet from './BottomSheet';
-import Button from '../Button';
+import { Button } from '../Button';
 import {
   BottomSheetContentWrapper,
   BreedListContainer,
@@ -24,7 +24,7 @@ const BreedList = ({ breeds, selectedBreed, setBreed }: IBreedList) => (
       <div key={breed.id} onClick={() => setBreed(breed)}>
         <p
           className={concatClasses(
-            selectedBreed?.id === breed.id ? 'bg-blue-50' : '',
+            selectedBreed?.id === breed.id ? 'bg-primary-brightest' : '',
             'px-2 py-2 cursor-pointer',
           )}
         >
@@ -87,7 +87,7 @@ export default function BreedBottomSheet({
             }
           </BreedListContainer>
         )}
-        <Button label="선택" onClick={onClickSelectButton} />
+        <Button label="선택" primary="first" onClick={onClickSelectButton} />
       </BottomSheetContentWrapper>
     </BottomSheet>
   );

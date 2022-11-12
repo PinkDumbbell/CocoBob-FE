@@ -1,5 +1,5 @@
 import { useCallback, ReactElement } from 'react';
-import styled from 'styled-components';
+import { common, FirstStyle } from '@/components/Button/index.style';
 
 interface ButtonProps {
   name: string | ReactElement;
@@ -9,36 +9,19 @@ interface ButtonProps {
   className?: string;
 }
 
-const FormButtonContainer = styled.button<{ disabled: boolean }>`
-  background: var(--primary-main);
-  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
-  border: none;
-  border-radius: 8px;
-  padding: 0.5rem;
-  width: 100%;
-
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: #fefefe;
-
-  &:hover {
-    animation: push 0.2s ease-out forwards;
-  }
-
-  &:active {
-    opacity: 0.8;
-    animation: afterpush 0.2s ease-out forwards;
-  }
-`;
 export default function FormButton(props: ButtonProps) {
   const { name, disabled, onClick, className } = props;
 
   const onClickButton = useCallback(() => !disabled && onClick && onClick(), [onClick]);
 
+  const total = [common, FirstStyle];
+
+  if (className) total.push(className);
+  total.push(`min-w-full`);
+
   return (
-    <FormButtonContainer className={className} onClick={onClickButton} disabled={disabled ?? false}>
+    <button onClick={onClickButton} className={total.join(' ')} disabled={disabled ?? false}>
       {name}
-    </FormButtonContainer>
+    </button>
   );
 }

@@ -63,6 +63,49 @@ module.exports = {
       ],
     },
     extend: {
+      // font
+      fontSize: {
+        h1: [
+          '2rem',
+          {
+            lineHeight: '2.88rem',
+            letterSpacing: '-0.025em',
+            fontWeight: '700',
+          },
+        ],
+        h2: [
+          '1.5rem',
+          {
+            lineHeight: '2.16rem',
+            letterSpacing: '-0.025em',
+            fontWeight: '700',
+          },
+        ],
+        h3: [
+          '1.125rem',
+          {
+            lineHeight: '1.62rem',
+            letterSpacing: '-0.025em',
+            fontWeight: '500',
+          },
+        ],
+        p: [
+          '1rem',
+          {
+            lineHeight: '1.44rem',
+            letterSpacing: '-0.02em',
+            fontWeight: '400',
+          },
+        ],
+        caption: [
+          '0.8125rem',
+          {
+            lineHeight: '1.26rem',
+            letterSpacing: '-0.02em',
+            fontWeight: '300',
+          },
+        ],
+      },
       // custon min-height
       minHeight: {
         btn: '2.9375rem',
