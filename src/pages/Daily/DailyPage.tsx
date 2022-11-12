@@ -87,7 +87,6 @@ export default function DailyMain() {
   const { numberOfOverviewItmes, recordOverview } = useDailyRecordOverview(
     currentPetId,
     dateString,
-    timestamp,
   );
   const { goHealthPage, selectWalkOrNote } = useRecordMenus(dateString);
 

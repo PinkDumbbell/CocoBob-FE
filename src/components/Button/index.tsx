@@ -51,7 +51,7 @@ export const Button = (props: ButtonPropsWithDefaultProps) => {
       onClick={onClick}
       className={concatClasses(totalStyle.join(' '), className ?? '')}
       disabled={disabled}
-      style={{ backgroundColor }}
+      style={{ background: backgroundColor }}
       type={type ?? 'button'}
     >
       {label}
