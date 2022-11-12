@@ -213,7 +213,7 @@ export default function EditPet() {
                     <InputStyle
                       isError={false}
                       onChange={(e) => e.preventDefault()}
-                      className="text-gray-400 text-left p-2 border-b border-b-gray-400"
+                      className="text-gray text-left p-2 border-b border-b-gray-400"
                       onClick={openBreedBottomSheet}
                       placeholder={breed?.id ? breed?.name : '품종을 검색해보세요'}
                     />

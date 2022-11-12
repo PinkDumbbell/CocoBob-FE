@@ -60,7 +60,7 @@ export default function Step3({ goNextStep, enrollPetData, setEnrollData }: Step
         <div className="flex flex-col gap-4">
           <InputStyle
             isError={false}
-            className="text-gray-400 text-left p-2 border-b border-b-gray-400 cursor-pointer"
+            className="text-gray text-left p-2 border-b border-b-gray-400 cursor-pointer"
             onClick={openBottomSheet}
             onChange={(e) => e.preventDefault()}
             value={breed?.name}

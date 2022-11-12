@@ -65,17 +65,17 @@ export default function HealthRecordsPage() {
                   <span className="ml-1 ">kg</span>
                 </p>
               ) : (
-                <p className="text-md text-gray-400">몸무게를 기록해주세요</p>
+                <p className="text-md text-gray">몸무게를 기록해주세요</p>
               )}
               <button onClick={openBodyWeightModal}>
                 <PlusIcon />
               </button>
             </div>
-            <div className="rounded-[10px] border border-primary-bright min-h-[100px] w-full flex items-center justify-center">
+            <div className="rounded border border-primary-bright min-h-[100px] w-full flex items-center justify-center">
               {recentBodyWeights ? (
                 <BodyWeightHistory data={recentBodyWeights} />
               ) : (
-                <p className="text-md text-gray-400">최근 기록이 없습니다.</p>
+                <p className="text-md text-gray">최근 기록이 없습니다.</p>
               )}
             </div>
           </div>
@@ -87,15 +87,15 @@ export default function HealthRecordsPage() {
               </button>
             </div>
             {(!healthRecord?.meals || healthRecord.meals.length === 0) && (
-              <div className="rounded-[10px] border border-primary-bright p-3 min-h-[100px] flex items-center justify-center">
-                <p className="text-md text-gray-400">오늘의 급여를 기록해보세요!</p>
+              <div className="rounded border border-primary-bright p-3 min-h-[100px] flex items-center justify-center">
+                <p className="text-[14px] text-gray">오늘의 급여를 기록해보세요!</p>
               </div>
             )}
             {healthRecord?.meals &&
               healthRecord.meals.map((meal) => (
                 <div
                   key={meal.mealId}
-                  className="p-main rounded-[10px] border border-primary-bright min-h-section flex items-center"
+                  className="p-main rounded border border-primary-bright min-h-section flex items-center"
                 >
                   <div>
                     <p>{meal.productInfo.productName}</p>

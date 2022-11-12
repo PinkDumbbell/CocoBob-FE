@@ -36,7 +36,7 @@ export default function SearchHeader(props: ISearch) {
       </button>
       <div className="relative flex items-center flex-1 px-1">
         <input
-          className="w-full bg-slate-200 p-1 px-3 rounded-[10px]"
+          className="w-full bg-slate-200 p-1 px-3 rounded"
           onChange={(e) => {
             setSearchInputValue(e.target.value);
           }}

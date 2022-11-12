@@ -10,10 +10,7 @@ function WalkHistoryListItem({ walkInfo }: WalkHistoryListItemProps) {
   const { walkId, distance, totalTime, startedAt, finishedAt } = walkInfo;
 
   return (
-    <Link
-      to={`/daily/walk/record/${walkId}`}
-      className="rounded-[10px] overflow-hidden w-full flex"
-    >
+    <Link to={`/daily/walk/record/${walkId}`} className="rounded overflow-hidden w-full flex">
       <div className="flex flex-col flex-1 bg-secondary-max border border-secondary-brightest text-white p-4 space-y-1">
         <div className="flex space-x-2">
           <div className="flex items-baseline">

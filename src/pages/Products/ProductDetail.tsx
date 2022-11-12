@@ -144,15 +144,11 @@ export default function ProductDetailPage() {
         onClick={() => setIsAAFCOOpen(false)}
       >
         <div className="w-full relative mt-[-5rem] z-0 blur">
-          <img
-            className="w-full rounded-[10px] z-[-1]"
-            src={product?.productImage}
-            alt="상품이미지 "
-          />
+          <img className="w-full rounded z-[-1]" src={product?.productImage} alt="상품이미지 " />
         </div>
         <ProductInfoContainer className="z-50 mt-[-150px] relative">
           <ProductImgWrapper>
-            <img className="w-full rounded-[10px]" src={product?.productImage} alt="상품이미지 " />
+            <img className="w-full rounded" src={product?.productImage} alt="상품이미지 " />
           </ProductImgWrapper>
           <h3 className="text-black font-bold break-normal text-center w-full">{product?.name}</h3>
           <div
@@ -210,7 +206,7 @@ export default function ProductDetailPage() {
               );
             })}
           </div>
-          <div className="h-[117px] w-[358px] rounded-[10px] bg-[#F2F8FF] self-center flex flex-col items-center justify-around">
+          <div className="h-[117px] w-[358px] rounded bg-[#F2F8FF] self-center flex flex-col items-center justify-around">
             <img src={flagImg} className="w-[23px] h-[16px] mt-[15px]" />
             <div className="flex items-center">
               {isAAFCOOpen && (
