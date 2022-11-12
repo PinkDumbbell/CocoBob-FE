@@ -124,7 +124,7 @@ export default function useFeedModal(currentDate: string | null) {
         <div className="p-4 flex flex-col w-full items-center gap-2">
           <div className="flex flex-col space-y-4 w-full">
             <div className="flex flex-col space-y-2 w-full">
-              <label htmlFor="btn-feed-seasrch" className="text-sm font-medium">
+              <label htmlFor="btn-feed-seasrch" className="text-label">
                 급여사료
               </label>
               <button
@@ -155,6 +155,7 @@ export default function useFeedModal(currentDate: string | null) {
               disabled={!selectedProduct}
               rules={register('feedAmount', {
                 required: '급여량을 입력해주세요.',
+                valueAsNumber: true,
               })}
             />
           </div>

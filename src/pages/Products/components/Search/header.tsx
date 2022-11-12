@@ -50,7 +50,7 @@ export default function SearchHeader(props: ISearch) {
         />
         {searchInputValue !== '' && (
           <button
-            className="absolute right-1 px-3 h-full font-medium text-sm leading-3"
+            className="absolute right-1 px-3 h-full font-medium text-label leading-3"
             onClick={clearSearchKeyword}
           >
             x

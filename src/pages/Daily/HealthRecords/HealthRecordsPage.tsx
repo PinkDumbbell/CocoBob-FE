@@ -75,7 +75,7 @@ export default function HealthRecordsPage() {
               {recentBodyWeights ? (
                 <BodyWeightHistory data={recentBodyWeights} />
               ) : (
-                <p className="text-md text-gray">최근 기록이 없습니다.</p>
+                <p className="text-md text-gray text-p">최근 기록이 없습니다.</p>
               )}
             </div>
           </div>
@@ -88,7 +88,7 @@ export default function HealthRecordsPage() {
             </div>
             {(!healthRecord?.meals || healthRecord.meals.length === 0) && (
               <div className="rounded border border-primary-bright p-3 min-h-[100px] flex items-center justify-center">
-                <p className="text-[14px] text-gray">오늘의 급여를 기록해보세요!</p>
+                <p className="text-p text-gray">오늘의 급여를 기록해보세요!</p>
               </div>
             )}
             {healthRecord?.meals &&

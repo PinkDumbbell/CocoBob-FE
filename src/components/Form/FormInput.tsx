@@ -64,7 +64,7 @@ export const InputStyle = styled.input<{ isError: boolean | undefined; unit?: bo
 `;
 
 const UnitText = tw.div`
-  font-light text-secondary-dark text-sm bg-primary-max h-[47px] rounded-r absolute right-0 top-0 flex items-center justify-center w-[3rem]
+  font-light text-secondary-dark text-label bg-primary-max h-[47px] rounded-r absolute right-0 top-0 flex items-center justify-center w-[3rem]
 `;
 
 export default function Input({

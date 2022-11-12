@@ -91,6 +91,6 @@ export const SkipButton = tw.button`
   underline-offset-4
   text-center
   leading-[20px]
-  text-[14px]
+  text-label
   text-caption
 `;

@@ -72,7 +72,7 @@ export default function Step3({ goNextStep, enrollPetData, setEnrollData }: Step
             {favBreeds.map((breedChip: IBreeds) => (
               <span
                 className={concatClasses(
-                  'py-1 px-2 text-sm rounded-lg whitespace-nowrap cursor-pointer',
+                  'py-1 px-2 text-label rounded-lg whitespace-nowrap cursor-pointer',
                   breedChip.id === breed?.id
                     ? 'border border-primary bg-primary-max text-primary'
                     : 'border',

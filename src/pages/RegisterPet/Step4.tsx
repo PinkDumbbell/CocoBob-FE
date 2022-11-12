@@ -156,7 +156,7 @@ export default function Step4({ goNextStep, enrollPetData, setEnrollData }: Step
                   if (date) setAge((prev) => ({ ...prev, birthday: getDateString(date) }));
                 }}
               />
-              {age.birthday && <p className="text-sm text-primary">{`나이 : ${ageString}`}</p>}
+              {age.birthday && <p className="text-label text-primary">{`나이 : ${ageString}`}</p>}
             </div>
             <Button label="선택완료" onClick={saveBirthday} />
           </div>

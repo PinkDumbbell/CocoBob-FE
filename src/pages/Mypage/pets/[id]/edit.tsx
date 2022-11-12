@@ -284,7 +284,7 @@ export default function EditPet() {
                         <SexTypeLabel
                           htmlFor="pet-sex-man"
                           className={concatClasses(
-                            'p-1 text-sm',
+                            'p-1 text-label',
                             watch('sex') === 'MALE' ? 'bg-primary-light text-primary' : '',
                           )}
                         >
@@ -302,7 +302,7 @@ export default function EditPet() {
                         <SexTypeLabel
                           htmlFor="pet-sex-woman"
                           className={concatClasses(
-                            'p-1 text-sm',
+                            'p-1 text-label',
                             watch('sex') === 'FEMALE' ? 'bg-primary-light text-primary' : '',
                           )}
                         >

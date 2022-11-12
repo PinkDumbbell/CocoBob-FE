@@ -53,6 +53,14 @@ module.exports = {
           fontWeight: '300',
         },
       ],
+      label: [
+        '0.875rem',
+        {
+          lineHeight: '1.35rem',
+          letterSpacing: '-0.02em',
+          fontWeight: '500',
+        },
+      ],
     },
     extend: {
       // custon min-height
