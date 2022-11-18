@@ -235,6 +235,7 @@ export const dailyApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: (result, api, args) => [
         'DailyRecord',
+        { type: 'Daily', id: args.date },
         { type: 'Daily', id: args.date.substring(0, 7) },
       ],
     }),
