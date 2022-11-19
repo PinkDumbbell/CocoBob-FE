@@ -49,19 +49,15 @@ export default function DailySection() {
               </div>
             </>
           ) : (
-            <div>
-              <div className="flex justify-between">
-                <div className="flex flex-col gap-1">
-                  <p className="text-caption">아직 기록이 없네요!</p>
-                  <Link to={`/daily/health?date=${getDateString(new Date())}`}>
-                    <p className="font-medium">몸무게를 기록해보세요!</p>
-                  </Link>
-                </div>
-                <Link to={`/daily/health?date=${getDateString(new Date())}`}>
-                  <WriteIcon />
-                </Link>
-              </div>
-            </div>
+            <Link
+              className="flex flex-col gap-1 items-center p-4"
+              to={`/daily/health?date=${getDateString(new Date())}`}
+            >
+              <p>
+                아직 <strong>몸무게 기록</strong>이 없네요!
+              </p>
+              <p className="text-caption">기록을 추가하시려면 눌러보세요</p>
+            </Link>
           )}
         </div>
       </div>
