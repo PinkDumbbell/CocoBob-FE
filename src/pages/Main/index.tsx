@@ -89,8 +89,8 @@ export default function Main() {
         <MainContentSection>
           <DoctorImageWrapper>
             <picture>
-              <source srcSet={doctorWebp} type="image/webp" />
-              <img src={doctorPng} alt="메인 배경 이미지 1" className="scale-x-105" />
+              <source srcSet={doctorWebp} type="image/webp" className="w-full" />
+              <img src={doctorPng} alt="메인 배경 이미지 1" className="w-full scale-x-105" />
             </picture>
           </DoctorImageWrapper>
           <VerticalBox className="z-10 min-h-section">

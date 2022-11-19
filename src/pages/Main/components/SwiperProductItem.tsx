@@ -25,7 +25,7 @@ export default function SwiperProductItem({ product, isActive }: SwiperProductIt
         <VerticalBox className="flex-1 justify-between relative overflow-hidden text-ellipsis whitespace-nowrap">
           <div className="min-h-[60%]">
             <VerticalCenterBox onClick={goProductDetailPage}>
-              <img className="rounded-t" src={thumbnail} alt={name} />
+              <img className="rounded-t w-full h-full" src={thumbnail} alt={name} />
             </VerticalCenterBox>
           </div>
           <div className="p-1 flex flex-col flex-1 justify-between">
