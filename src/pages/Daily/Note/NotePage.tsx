@@ -130,9 +130,9 @@ export default function NotePage() {
         style={{ boxShadow: '2px 2px 10px rgba(0, 0, 0, 0.15)' }}
       >
         <div className="flex flex-col gap-2 py-4">
-          <p className="text-center font-bold text-h3">
+          <div className="text-center font-bold text-h3">
             {isLoading ? <SmallSpinner /> : noteData?.title}
-          </p>
+          </div>
           <p className="text-center text-p text-secondary-brighter">{noteData?.date}</p>
         </div>
         <div className="w-full h-1 bg-primary-brightest opacity-50 rounded"></div>
