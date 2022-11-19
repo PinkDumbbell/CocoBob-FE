@@ -87,17 +87,3 @@ export const BackButton = styled.button`
   cursor: pointer;
   padding: 0.5rem;
 `;
-
-export const SideMenuWrapper = styled.div<{ isOpen: boolean }>`
-  position: absolute;
-  z-index: 9999;
-  left: -16px;
-  top: 0;
-  bottom: 0;
-  width: 12rem;
-  height: 100vh;
-  padding: 1rem;
-  background: white;
-  transition: transform 200ms ease;
-  transform: ${({ isOpen }) => (isOpen ? 'translateX(0)' : 'translateX(-100%)')};
-`;
