@@ -10,24 +10,24 @@ import MainPage from '@/pages/Main';
 import Mypage from '@/pages/Mypage';
 import RegisterPet from '@/pages/RegisterPet';
 import RecommendProducts from '@/pages/Products/Recoomend';
+import ProfilePage from '@/pages/Mypage/Profile';
+import ProductsPage from '@/pages/Products';
+import ProductDetailPage from '@/pages/Products/ProductDetail';
+import NotFound from '@/pages/404';
 
 const DailyWalk = lazy(() => import('@/pages/Daily/Walk'));
 const HealthRecords = lazy(() => import('@/pages/Daily/HealthRecords'));
 const MypageMain = lazy(() => import('@/pages/Mypage/Main'));
-const ProfilePage = lazy(() => import('@/pages/Mypage/Profile'));
 const WishPage = lazy(() => import('@/pages/Mypage/Wish'));
 const PetsPage = lazy(() => import('@/pages/Mypage/pets'));
 const PetInfo = lazy(() => import('@/pages/Mypage/pets/[id]'));
 const PetInfoEdit = lazy(() => import('@/pages/Mypage/pets/[id]/edit'));
-const ProductsPage = lazy(() => import('@/pages/Products'));
-const ProductDetailPage = lazy(() => import('@/pages/Products/ProductDetail'));
 const NoteAddPage = lazy(() => import('@/pages/Daily/Note/NoteWritePage'));
 const NotePage = lazy(() => import('@/pages/Daily/Note/NotePage'));
 const WalkHistoryPage = lazy(() => import('@/pages/Daily/Walk/WalkHistoryPage'));
 const WalkHisotyDetailPage = lazy(() => import('@/pages/Daily/Walk/[id]'));
 const WalkRecordPage = lazy(() => import('@/pages/Daily/Walk/WalkRecordPage'));
 const HealthRecordsPage = lazy(() => import('@/pages/Daily/HealthRecords/HealthRecordsPage'));
-const NotFound = lazy(() => import('@/pages/404'));
 
 function PrivateRoute() {
   const { isLoggedIn } = useUser();
