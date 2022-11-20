@@ -49,7 +49,7 @@ export default function DailySection() {
         <FeedInfo healthRecord={healthRecord} />
       </div>
       <NavigateMenu
-        leftButton={{ link: '/product', label: '사료찾기' }}
+        leftButton={{ link: '/products', label: '사료찾기' }}
         rightButton={{ link: '/daily', label: '생활기록' }}
       />
     </div>
