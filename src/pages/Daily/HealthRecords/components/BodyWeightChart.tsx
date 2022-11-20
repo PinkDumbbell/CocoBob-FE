@@ -3,6 +3,7 @@ import { theme } from '@/styles/theme';
 import Chart from 'react-apexcharts';
 
 export default function BodyWeightHistory({ data }: { data: RecentBodyWeightType }) {
+  const chartKeys = Object.keys(data).sort();
   return (
     <Chart
       type="line"
@@ -10,7 +11,7 @@ export default function BodyWeightHistory({ data }: { data: RecentBodyWeightType
       height="250"
       options={{
         xaxis: {
-          categories: Object.keys(data).reverse(),
+          categories: chartKeys,
         },
         chart: {
           toolbar: { show: false },
@@ -28,7 +29,7 @@ export default function BodyWeightHistory({ data }: { data: RecentBodyWeightType
       series={[
         {
           name: '몸무게',
-          data: Object.values(data).reverse(),
+          data: chartKeys.map((xaxis) => data[xaxis]),
         },
       ]}
     />
