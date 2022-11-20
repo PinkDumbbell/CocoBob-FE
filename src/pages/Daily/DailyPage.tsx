@@ -52,18 +52,10 @@ const overviewSwiperDefaultOptions: SwiperProps = {
 export default function DailyMain() {
   const currentPetId = useAppSelector(getCurrentPet);
 
-  if (!currentPetId)
-    return (
-      <Layout header title="데일리 기록" footer>
-        <div className="w-full h-full flex flex-col items-center justify-center">
-          <h3>반려동물을 등록 후 이용가능합니다</h3>
-        </div>
-      </Layout>
-    );
-
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const currentDateString = searchParams.get('date');
+
   useEffect(() => {
     if (currentDateString) {
       return;
@@ -71,22 +63,17 @@ export default function DailyMain() {
     navigate(`/daily?date=${getDateString(new Date())}`, { replace: true });
   }, [currentDateString]);
 
-  const isInvalidDate =
-    currentDateString && new Date(currentDateString).toString() === 'Invalid Date';
-  if (isInvalidDate) {
-    return <Navigate to="/404" replace />;
-  }
   const timestamp = useRef(Date.now()).current;
   const currentDate = currentDateString ? new Date(currentDateString) : new Date();
   const dateString = currentDateString ?? getDateString(new Date());
   const { recordIdList, setActiveStartDate } = useDailyRecordsOfMonth(
     currentPetId,
-    dateString,
     timestamp,
+    dateString,
   );
   const { numberOfOverviewItmes, recordOverview } = useDailyRecordOverview(
-    currentPetId,
     dateString,
+    currentPetId,
   );
   const { goHealthPage, selectWalkOrNote } = useRecordMenus(dateString);
 
@@ -100,6 +87,20 @@ export default function DailyMain() {
         : false,
   };
 
+  const isInvalidDate =
+    currentDateString && new Date(currentDateString).toString() === 'Invalid Date';
+
+  if (!currentPetId)
+    return (
+      <Layout header title="데일리 기록" footer>
+        <div className="w-full h-full flex flex-col items-center justify-center">
+          <h3>반려동물을 등록 후 이용가능합니다</h3>
+        </div>
+      </Layout>
+    );
+  if (isInvalidDate) {
+    return <Navigate to="/404" replace />;
+  }
   return (
     <Layout header footer title="데일리 기록">
       <div className="p-4 flex flex-col items-center gap-4 w-full h-full overflow-y-auto space-y-4">

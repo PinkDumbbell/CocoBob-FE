@@ -9,7 +9,12 @@ import { ReactComponent as PlusIcon } from '@/assets/icon/plus_icon.svg';
 import { useConfirm, useToastMessage } from '@/utils/hooks';
 
 import Button from '@/components/Button';
-import { NoteType, useCreateNoteRecordMutation, useEditNoteMutation } from '@/store/api/dailyApi';
+import {
+  NoteType,
+  useCreateNoteRecordMutation,
+  useEditNoteMutation,
+  useGetDailyRecordOverviewQuery,
+} from '@/store/api/dailyApi';
 import { useAppSelector } from '@/store/config';
 import { getCurrentPet } from '@/store/slices/userSlice';
 import {
@@ -65,7 +70,12 @@ export default function NoteAddPage() {
   const [currentImages, setCurrentImages] = useState<{ imageId: number; path: string }[]>([]);
   const [removeImageIds, setRemoveImageIds] = useState<number[]>([]);
   const canAddImage = images.length < 4;
-
+  const { data: dailyOverview } = useGetDailyRecordOverviewQuery(
+    { date: currentDate, petId: Number(currentPetId) },
+    {
+      skip: Number.isNaN(currentPetId),
+    },
+  );
   const [createNoteMutation, { isLoading: isCreateLoading, isSuccess }] =
     useCreateNoteRecordMutation();
   const [editNoteMutation, { isLoading: isUpdateLoading, isSuccess: isUpdateSuccess }] =
@@ -75,6 +85,11 @@ export default function NoteAddPage() {
 
   const createNote = (formInputs: NoteFormType) => {
     if (!currentPetId) {
+      return;
+    }
+    if (dailyOverview?.dailyId) {
+      openToast('하루에 한 개의 글만 작성할 수 있습니다');
+      navigate(`/daily`);
       return;
     }
     const noteData = {
