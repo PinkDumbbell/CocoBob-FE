@@ -1,3 +1,4 @@
+import { theme } from '@/styles/theme';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
@@ -77,26 +78,10 @@ export const ProductDetailSimpleInfo = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  height: 110px;
-  width: 76px;
-  left: 16px;
-  top: 340px;
+  box-size: border-box;
   border-radius: 10px;
-  border: 1px solid #1a70d2;
+  border: 1px solid ${theme.colors.primary.lightdark};
   overflow: hidden;
-  & > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    & > span {
-      font-family: Noto Sans KR;
-      font-size: 13px;
-      font-weight: 500;
-      line-height: 20px;
-      letter-spacing: -0.02em;
-      text-align: left;
-    }
-  }
 `;
 
 export const ProductImgWrapper = styled.div`
@@ -106,6 +91,11 @@ export const ProductImgWrapper = styled.div`
   margin-top: -5rem;
   margin-bottom: 20px;
   border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  overflow: hidden;
 `;
 
 export const ProductDetailFooter = tw.div`
@@ -120,7 +110,7 @@ export const NutrientInfoContainer = tw.div`
 `;
 
 export const ProductInfoContainer = tw.div`
-  w-full h-[300px] bg-white rounded-t-xl mt-32 flex flex-col items-center
+  w-full h-68 bg-white rounded-t-xl mt-32 flex flex-col items-center
 `;
 
 export const RecomendInfoDedtail = tw.div<{ isGood: boolean }>`

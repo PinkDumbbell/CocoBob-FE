@@ -6,7 +6,7 @@ import {
 } from '@/store/api/productApi';
 import { useToastMessage } from '@/utils/hooks';
 import { ProductType } from '@/@type/product';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { BsHeartFill, BsHeart } from 'react-icons/bs';
 import { Navigate, useParams } from 'react-router-dom';
 import { ingredientInfo } from '@/utils/constants/ingredient';
@@ -14,6 +14,8 @@ import mainIngredientImg from '@/assets/image/main-ingredient.png';
 import questionImg from '@/assets/image/question-mark.png';
 import categoryImg from '@/assets/image/category.png';
 import flagImg from '@/assets/image/flag.png';
+import { DotLoader } from '@/Animation';
+import { concatClasses } from '@/utils/libs/concatClasses';
 import Nutrient from './components/ProductDetail/Nutrient';
 
 import {
@@ -59,6 +61,12 @@ function useLikeProduct() {
   };
 }
 
+type summaryType = {
+  infoName: string;
+  infoDescription: ReactNode | string;
+  img?: string;
+};
+
 export default function ProductDetailPage() {
   const { id } = useParams();
   if (!id) {
@@ -66,7 +74,7 @@ export default function ProductDetailPage() {
   }
   const { data: relatedProduct } = useGetRelatedProductQuery(parseInt(id ?? '1', 10));
   const [mainIngredient, setMainIngredient] = useState<string[]>([]);
-  const [summaryInfo, setSummaryInfo] = useState<any[]>([]);
+  const [summaryInfo, setSummaryInfo] = useState<summaryType[]>([]);
   const { likeProduct } = useLikeProduct();
   const [isAAFCOOpen, setIsAAFCOOpen] = useState<boolean>(false);
   const {
@@ -93,14 +101,19 @@ export default function ProductDetailPage() {
       {
         img: product?.brandImage,
         infoName: '브랜드',
-        infoDescription: <h4 className="text-white">{product?.brand}</h4>,
+        infoDescription: product?.brand,
       },
       {
         img: mainIngredientImg,
         infoName: '주재료',
         infoDescription: (
-          <div className="flex items-center text-center" key={mainIngredient.length}>
-            <span>{mainIngredient.length === 0 ? '분석필요' : mainIngredient[0]} </span>
+          <div
+            className="w-full flex items-center text-center overflow-hidden"
+            key={mainIngredient.length}
+          >
+            <span className="whitespace-pre leading-4">
+              {mainIngredient.length === 0 ? '분석필요' : mainIngredient[0].split(' ').join('\n')}{' '}
+            </span>
             {mainIngredient.length > 1 && (
               <span className="bg-black  text-[6px] w-4 h-4 text-white rounded-[50%] ml-[4px]">
                 +{mainIngredient.length - 1}
@@ -112,12 +125,12 @@ export default function ProductDetailPage() {
       {
         img: DogInfoForAge[getAge(product)].img,
         infoName: '타겟',
-        infoDescription: <h4>{DogInfoForAge[getAge(product)].name}</h4>,
+        infoDescription: DogInfoForAge[getAge(product)].name,
       },
       {
         img: categoryImg,
         infoName: '사료종류',
-        infoDescription: <h4>{product?.category}</h4>,
+        infoDescription: product?.category,
       },
     ]);
   }, [mainIngredient]);
@@ -143,35 +156,34 @@ export default function ProductDetailPage() {
         className="w-full h-full absolute bg-slate-500 overflow-scroll"
         onClick={() => setIsAAFCOOpen(false)}
       >
-        <div className="w-full relative mt-[-5rem] z-0 blur">
-          <img className="w-full rounded z-[-1]" src={product?.productImage} alt="상품이미지 " />
+        <div className="w-full relative mt-[-5rem] z-0 blur aspect-square">
+          {product?.productImage && (
+            <img className="w-full rounded z-[-1]" src={product.productImage} alt="상품이미지" />
+          )}
         </div>
-        <ProductInfoContainer className="z-50 mt-[-150px] relative">
+        <ProductInfoContainer className="z-50 mt-[-150px] relative gap-1">
           <ProductImgWrapper>
-            <img className="w-full rounded" src={product?.productImage} alt="상품이미지 " />
+            {product?.productImage ? (
+              <img className="w-full" src={product.productImage} alt="상품이미지" />
+            ) : (
+              <DotLoader />
+            )}
           </ProductImgWrapper>
-          <h3 className="text-black font-bold break-normal text-center w-full">{product?.name}</h3>
-          <div
-            className="w-full p-4 h-32 flex place-content-around border-gray-800"
-            id="shadow-box"
-          >
+          <h3 className="break-normal text-center w-full font-semibold">{product?.name}</h3>
+          <div className="w-full p-4 h-[9rem] flex justify-around gap-4" id="shadow-box">
             {summaryInfo.map((info: any) => (
-              <ProductDetailSimpleInfo key={info.infoName}>
-                <div className="h-[51px] flex justify-center">
-                  <img src={info.img} />
+              <ProductDetailSimpleInfo key={info.infoName} className="flex-1">
+                <div className="flex justify-center items-center w-full flex-1 ">
+                  <img src={info.img} className="h-8" />
                 </div>
                 <div
-                  className={`bg-[${info.infoName === '브랜드' ? '#0A2B52' : ''}] h-[59px] w-full`}
+                  className={concatClasses(
+                    'flex-1 flex items-center justify-start p-1 flex-col w-full text-[0.9rem]',
+                    info.infoName === '브랜드' ? 'bg-primary-dark text-white' : '',
+                  )}
                 >
-                  <span
-                    className={`flex text-${info.infoName === '브랜드' ? '[#AAC7E9]' : 'gray-500'}`}
-                  >
-                    {info.infoName}
-                  </span>
-                  {/* <h4 className={`${info.infoName === '브랜드' ? 'text-white' : ''}`}>
-                    {info.infoDescription}
-                  </h4> */}
-                  {info.infoDescription}
+                  <span className="text-caption">{info.infoName}</span>
+                  <div className="text-label">{info.infoDescription}</div>
                 </div>
               </ProductDetailSimpleInfo>
             ))}
