@@ -15,7 +15,6 @@ export const RecomendInfoDetailContainer = styled.div<{ isProper: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
 
   & > span {
     font-family: Noto Sans KR;
