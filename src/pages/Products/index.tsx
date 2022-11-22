@@ -96,16 +96,7 @@ export default function ProductsPage() {
   }, 1000);
 
   return (
-    <Layout
-      footer
-      header={false}
-      title="제품목록"
-      customRightChild={
-        <div className="absolute right-4 flex items-center" onClick={openSearchInput}>
-          <SearchIcon />
-        </div>
-      }
-    >
+    <Layout footer header={false} title="제품목록">
       {isOnSearch || !!searchKeyword ? (
         <SearchHeader
           goBack={clearSearch}
@@ -118,7 +109,7 @@ export default function ProductsPage() {
         <Header
           title="제품목록"
           customRightChild={
-            <div className="absolute right-4 flex items-center" onClick={openSearchInput}>
+            <div className="absolute right-0 flex items-center" onClick={openSearchInput}>
               <SearchIcon />
             </div>
           }

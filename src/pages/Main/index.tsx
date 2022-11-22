@@ -84,7 +84,7 @@ export default function Main() {
   }, [pet]);
 
   return (
-    <Layout footer header title="펫탈로그" canSearch>
+    <Layout footer header title="펫탈로그">
       <PageContainer>
         <MainContentSection>
           <DoctorImageWrapper>
