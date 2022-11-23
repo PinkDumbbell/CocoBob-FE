@@ -196,13 +196,13 @@ export default function WalkRecordMap() {
           )}
         </div>
         {locationError && (
-          <div className="z-10 fixed bottom-32 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-red-500 text-white text-sm rounded-[10px] flex items-center justify-center">
+          <div className="z-10 fixed bottom-32 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-red-500 text-white text-label rounded flex items-center justify-center">
             위치 정보를 가져올 수 없습니다.
           </div>
         )}
         {!isMapAvailable && (
           <div className="fixed top-0 z-10 w-full max-w-[425px] mx-auto h-screen bg-[#00000030] flex flex-col items-center">
-            <div className="mt-16 w-4/5 h-12 bg-red-500 text-white text-sm rounded-[10px] flex items-center justify-center">
+            <div className="mt-16 w-4/5 h-12 bg-red-500 text-white text-label rounded flex items-center justify-center">
               모바일 디바이스에서 이용할 수 있습니다
             </div>
           </div>

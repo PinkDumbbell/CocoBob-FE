@@ -48,7 +48,7 @@ export default function DailyCalendar({
           html.push(
             <div
               key={dateString}
-              className="z-0 opacity-50 rounded-full absolute w-10 h-10 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2  bg-primary-light"
+              className="z-0 opacity-50 rounded-full absolute w-10 h-10 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2  bg-primary-brightest"
             ></div>,
           );
         }

@@ -61,15 +61,15 @@ export default function DailyAddFeed({ closeModal, healthRecord }: DailyModalPro
 
           <div className="flex flex-col space-y-4">
             <div className="flex flex-col space-y-2">
-              <label htmlFor="btn-feed-seasrch" className="text-sm font-medium">
+              <label htmlFor="btn-feed-seasrch" className="text-label font-medium">
                 급여사료
               </label>
               <button
                 id="btn-feed-search"
                 onClick={openBottomSheet}
                 className={concatClasses(
-                  'text-left p-2 border rounded-[10px] ',
-                  selectedProduct ? 'text-black' : 'text-gray-400',
+                  'text-left p-2 border rounded border-secondary-brightest',
+                  selectedProduct ? 'text-black' : 'text-gray',
                 )}
               >
                 {selectedProduct ? selectedProduct.name : '급여 사료를 찾아보세요'}

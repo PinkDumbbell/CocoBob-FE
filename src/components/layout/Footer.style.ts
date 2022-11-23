@@ -48,7 +48,6 @@ export const IconWrapper = tw.div`
   flex flex-col items-center justify-center absolute rounded-full w-[44px] h-[44px]
 `;
 export const ButtonTitle = tw.p<{ current: string }>`
-  text-sm
-  ${({ current }: { current: string }) =>
-    current === 'true' ? 'text-primary-main' : 'text-caption'}
+  text-label
+  ${({ current }: { current: string }) => (current === 'true' ? 'text-primary' : 'text-caption')}
 `;

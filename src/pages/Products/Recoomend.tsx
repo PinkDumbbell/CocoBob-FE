@@ -5,6 +5,7 @@ import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
 import Layout from '@/components/layout/Layout';
 import { useGetRecommendProductQuery } from '@/store/api/productApi';
 import useCurrentPet from '@/utils/hooks/useCurrentPet';
+import { DotLoader } from '@/Animation';
 import SwiperProductItem from '../Main/components/SwiperProductItem';
 import { SectionTitle, VerticalBox } from '../Main/index.style';
 
@@ -74,7 +75,7 @@ export default function RecommendProducts() {
               onActiveIndexChange={(swiper) => setSwiperActiveIndexOfAged(swiper.activeIndex)}
             >
               {agedLoading ? (
-                'Loading...'
+                <DotLoader />
               ) : agedSuccess ? (
                 agedProducts?.productList.slice(10).map((product, idx) => (
                   <SwiperSlide key={`aged-${product.productId}`}>
@@ -104,7 +105,7 @@ export default function RecommendProducts() {
               onActiveIndexChange={(swiper) => setSwiperActiveIndexOfPregnancy(swiper.activeIndex)}
             >
               {pregnancyLoading ? (
-                'Loading...'
+                <DotLoader />
               ) : pregnancySuccess ? (
                 pregnancyProducts?.productList.slice(10).map((product, idx) => (
                   <SwiperSlide key={`pregnancy-${product.productId}`}>

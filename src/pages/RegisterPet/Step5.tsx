@@ -37,6 +37,8 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
     handleSubmit,
     setValue,
     watch,
+    trigger,
+    getValues,
     formState: { errors },
   } = useForm<Step4Form>();
 
@@ -76,7 +78,7 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
 
   return (
     <PageContainer>
-      <div className="mb-4">
+      <div className="mb-main">
         <QuestionText>
           <PetNameHighlight>{enrollPetData.name}</PetNameHighlight>에 대해서 더 알려주시겠어요?
         </QuestionText>
@@ -96,16 +98,16 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
                 <label
                   htmlFor="pet-sex-man"
                   className={concatClasses(
-                    'cursor-pointer gap-2 border border-primary-main rounded-md w-full flex items-center justify-center',
-                    watch('sex') === 'MALE' ? 'bg-primary-light text-primary-main' : '',
+                    'py-sm cursor-pointer gap-2 border border-secondary-brightest rounded-md w-full flex items-center justify-center',
+                    watch('sex') === 'MALE' ? 'bg-primary-max  text-primary' : '',
                   )}
                 >
                   <MaleIcon
                     width={14}
                     height={14}
-                    fill={watch('sex') === 'MALE' ? '#1f80ee' : '#222'}
+                    fill={watch('sex') === 'MALE' ? '#1f80ee' : '#999'}
                   />
-                  <span>남자</span>
+                  <span className="text-p">남자</span>
                 </label>
               </div>
               <div className="flex-1 text-center w-1/2">
@@ -119,38 +121,50 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
                 <label
                   htmlFor="pet-sex-woman"
                   className={concatClasses(
-                    'cursor-pointer gap-2 border border-primary-main rounded-md w-full flex items-center justify-center',
-                    watch('sex') === 'FEMALE' ? 'bg-primary-light text-primary-main' : '',
+                    'py-sm cursor-pointer gap-2 border border-secondary-brightest rounded-md w-full flex items-center justify-center',
+                    watch('sex') === 'FEMALE' ? 'bg-primary-max text-primary' : '',
                   )}
                 >
                   <FemaleIcon
                     width={14}
                     height={14}
-                    fill={watch('sex') === 'FEMALE' ? '#1f80ee' : '#222'}
+                    fill={watch('sex') === 'FEMALE' ? '#1f80ee' : '#999'}
                   />
-                  <span>여자</span>
+                  <span className="text-p">여자</span>
                 </label>
               </div>
             </div>
-            <p className="text-primary-main text-sm">{errors.sex?.message}</p>
+            <p className="text-bad text-caption">{errors.sex?.message}</p>
           </div>
           <FormInput
             label="몸무게"
             name="bodyWeight"
             unit="KG"
+            type="text"
+            errorMessage={errors.bodyWeight?.message}
+            typing={Boolean(watch('bodyWeight'))}
             placeholder="몸무게를 입력해주세요"
+            isError={!!errors.bodyWeight?.message}
             rules={register('bodyWeight', {
               required: true,
-              valueAsNumber: true,
               pattern: {
-                value: /^(0|[1-9]\d*)(\.\d+)?$/,
-                message: '숫자를 입력해주세요',
+                value: /^[\d]*\.?[\d]{0,8}$/,
+                message: '숫자를 입력하세요.',
+              },
+              onChange: () => {
+                trigger('bodyWeight');
+              },
+              validate: {
+                maxLength: () => {
+                  const { bodyWeight } = getValues();
+
+                  return bodyWeight.toString().length < 9 || '8자리 이상 입력하실 수 없습니다.';
+                },
               },
             })}
-            type="text"
           />
           <div className="flex flex-col gap-2">
-            <p className="font-medium text-[14px]">활동수준</p>
+            <p className="font-medium text-label">활동수준</p>
             <div className="flex flex-col gap-3">
               <div>
                 <input
@@ -158,7 +172,18 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
                   name="activity-level"
                   id="activity-level"
                   list="tickmarks"
-                  className="w-full h-1.5 rounded-lg bg-gray-200 appearance-none cursor-pointer dark:gray-600"
+                  className={concatClasses(
+                    'w-full h-1.5 rounded-lg appearance-none cursor-pointer',
+                    selectedActivityLevel === 1
+                      ? 'bg-secondary-brightest dark:secondary-dark'
+                      : selectedActivityLevel === 2
+                      ? 'bg-primary-brightest dark:primary-dark'
+                      : selectedActivityLevel === 3
+                      ? 'bg-primary-brighter dark:primary-darker'
+                      : selectedActivityLevel === 4
+                      ? 'bg-primary-bright dark:bg-primary-dark'
+                      : 'bg-primary dark:bg-primary',
+                  )}
                   min="1"
                   max="5"
                   value={selectedActivityLevel}
@@ -166,7 +191,7 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
                 />
               </div>
               <div>
-                <p className="text-primary-bright text-sm">
+                <p className="text-primary-bright text-label">
                   {activityLevelStrings[selectedActivityLevel]}
                 </p>
               </div>

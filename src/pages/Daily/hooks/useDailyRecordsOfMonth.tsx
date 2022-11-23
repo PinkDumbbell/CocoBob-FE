@@ -7,23 +7,28 @@ import { getDateString } from '@/utils/libs/date';
 import { useGetDailyRecordIdListOfMonthQuery } from '@/store/api/dailyApi';
 
 const useDailyRecordsOfMonth = (
-  currentPetId: number,
-  currentDateString: string,
-  timestamp = Date.now(),
+  currentPetId: number | null,
+  timestamp: number,
+  currentDateString?: string,
 ) => {
   const openToast = useToastMessage();
   const navigate = useNavigate();
 
-  const currentDate = new Date(currentDateString);
-
-  const [activeStartDate, setActiveStartDate] = useState<Date>(currentDate);
+  const [activeStartDate, setActiveStartDate] = useState<Date>(
+    currentDateString ? new Date(currentDateString) : new Date(),
+  );
   const activeStartDateString = dayjs(activeStartDate).format('YYYY-MM');
 
-  const { data, isError, isLoading } = useGetDailyRecordIdListOfMonthQuery({
-    date: activeStartDateString,
-    petId: currentPetId,
-    sessionId: timestamp,
-  });
+  const { data, isError, isLoading } = useGetDailyRecordIdListOfMonthQuery(
+    {
+      date: activeStartDateString,
+      petId: Number(currentPetId),
+      sessionId: timestamp,
+    },
+    {
+      skip: !currentPetId || Number.isNaN(Number(currentPetId)),
+    },
+  );
 
   useEffect(() => {
     const _activeStartDateString = getDateString(new Date(activeStartDate));

@@ -46,7 +46,6 @@ function Layout({
   header,
   footer,
   children,
-  menu,
 }: LayoutProps) {
   const { pageRef, hideTitle } = useHeaderWithScroll();
   const location = useLocation();
@@ -64,7 +63,6 @@ function Layout({
           onClickGoBack={onClickGoBack}
           hideTitle={hideTitle}
           title={title}
-          menu={menu}
           canSearch={canSearch}
           customRightChild={customRightChild}
         />

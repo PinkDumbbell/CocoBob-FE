@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { FormInput, FormButton } from '@/components/Form';
+import { SmallSpinner } from '@/Animation';
 import { ILoginForm } from '../types';
 import { LoginForm } from './EmailLoginForm.style';
 
@@ -45,7 +46,8 @@ export default function EmailLoginForm({
         rules={register('password', { required: true })}
         isError={!!errors.password}
       />
-      <FormButton name={!isLoading ? '로그인' : '로그인 중...'} disabled={isLoading} />
+
+      <FormButton name={!isLoading ? '로그인' : <SmallSpinner />} disabled={isLoading} />
     </LoginForm>
   );
 }

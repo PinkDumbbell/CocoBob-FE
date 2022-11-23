@@ -1,28 +1,12 @@
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
-export const LikeNumber = styled.h3`
-  font-family: Noto Sans KR;
-  width: 73px;
-  color: white;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 27px;
-  letter-spacing: -0.02em;
-  text-align: center;
+export const LikeNumber = tw.p`
+  text-[16x]
+  text-white
+  font-medium
 `;
 
-export const FooterReviewButton = styled.button`
-  width: 100%;
-  background: #114d91;
-  font-family: 'Noto Sans KR';
-  font-style: bold;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 29px;
-  color: white;
-  letter-spacing: -2%;
-`;
 export const ProductDescriptionContainer = styled.div`
   background: white;
   h4 {
@@ -37,75 +21,47 @@ export const ProductDescriptionContainer = styled.div`
 `;
 
 export const AAFCOInfoContainer = styled.div`
-  & {
-    position: absolute;
-    padding: 20px;
-    width: 358px;
-    height: 200px;
+  background: #00000029;
+  width: 100vw;
+  heigth: 100vh;
+  margin: 0 auto;
+  max-width: 425px;
+  z-index: 9000;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 
-    margin-left: auto;
-    margin-right: auto;
-    left: 0px;
-    right: 0px;
-    border-radius: 10px;
-    margin-top: -245px;
-    background-color: #dcdcdc;
-  }
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    right: 130px;
-    border-top: 12px solid #dcdcdc;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-  }
-`;
-
-export const ProductDetailMainContainer = styled.div`
-  /* & > div:after {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 10px;
-    background-color: #f2f2f2;
-  } */
-`;
-
-export const ProductDetailSimpleInfo = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: space-around;
-  height: 110px;
-  width: 76px;
-  left: 16px;
-  top: 340px;
-  border-radius: 10px;
-  border: 1px solid #1a70d2;
-  overflow: hidden;
   & > div {
+    background: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+
+    width: 80%;
+    height: auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    & > span {
-      font-family: Noto Sans KR;
-      font-size: 13px;
-      font-weight: 500;
-      line-height: 20px;
-      letter-spacing: -0.02em;
-      text-align: left;
-    }
+    gap: 1rem;
+    padding: 1rem;
   }
 `;
 
-export const ProductImgWrapper = styled.div`
-  box-shadow: 2px 2px 10px 0px #00000026;
-  width: 160px;
-  height: 160px;
-  margin-top: -5rem;
-  margin-bottom: 20px;
-  border-radius: 10px;
+export const ProductImgWrapper = tw.div`
+  z-50
+  flex items-center justify-center
+  rounded
+  overflow-hidden
+  absolute
+  w-[160px]
+  h-[160px]
+  shadow-main
+  top-0
+  -translate-y-[calc(80px+1rem)]
 `;
 
 export const ProductDetailFooter = tw.div`
@@ -113,20 +69,9 @@ export const ProductDetailFooter = tw.div`
 `;
 
 export const FooterLikeContainer = tw.button`
-  w-full bg-[#0A2B52] flex items-center text-center justify-center
-`;
-export const NutrientInfoContainer = tw.div`
-  w-full h-[400px] bg-white flex flex-col
+  w-full bg-primary-dark flex items-center text-center justify-center gap-3 h-full
 `;
 
 export const ProductInfoContainer = tw.div`
-  w-full h-[300px] bg-white rounded-t-xl mt-32 flex flex-col items-center
-`;
-
-export const RecomendInfoDedtail = tw.div<{ isGood: boolean }>`
-  w-[170px] h-[94px] rounded-[10px] bg-[${(isGood: boolean) => (isGood ? '#F2F8FF' : '#F2F2F2')}]
-`;
-
-export const BrComponent = tw.div`
-  w-full h-[10px] bg-[#f2f2f2]
+  w-full bg-white rounded-t-xl flex flex-col items-center z-0 relative gap-1.5 translate-y-48 relative pt-20
 `;

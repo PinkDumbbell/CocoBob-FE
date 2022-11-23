@@ -11,7 +11,7 @@
 }
 
 .react-calendar__navigation {
-    background: var(--primary-dark);
+    background: var(--primary-lightdark);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
@@ -26,11 +26,11 @@
 
 .react-calendar__navigation button:enabled:hover,
 .react-calendar__navigation button:enabled:focus {
-    background: var(--primary-dark);
+    background: var(--primary-lightdark);
 }
 
 .react-calendar__navigation button[disabled] {
-    background: var(--primary-dark);
+    background: var(--primary-lightdark);
 }
 
 abbr[title] {

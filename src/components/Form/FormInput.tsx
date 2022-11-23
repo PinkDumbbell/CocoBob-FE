@@ -1,7 +1,9 @@
-import { useVh } from '@/utils/hooks';
+import { ReactNode } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
+
+import { useVh } from '@/utils/hooks';
 
 interface InputProps {
   label: string;
@@ -12,8 +14,9 @@ interface InputProps {
   placeholder?: string;
   isError?: boolean | undefined;
   errorMessage?: string;
-  unit?: string;
+  unit?: string | ReactNode;
   disabled?: boolean;
+  typing?: boolean;
 }
 
 const InputContainer = styled.div`
@@ -42,11 +45,11 @@ export const InputStyle = styled.input<{ isError: boolean | undefined; unit?: bo
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 46px;
+  height: 47px;
   padding: 0 0.5rem;
   padding-right: ${({ unit }) => (unit ? '3rem' : '0.5rem')};
-  background: #fffdfd;
-  border: 1px solid ${({ isError, theme: { colors } }) => (isError ? colors.error : '#EDEDED')};
+  background: white;
+  border: 1px solid ${({ isError, theme: { colors } }) => (isError ? colors.error : '#bbbbbb')};
   border-radius: 10px;
   -webkit-border-radius: 10px;
   -moz-borader-radius: 10px;
@@ -62,7 +65,7 @@ export const InputStyle = styled.input<{ isError: boolean | undefined; unit?: bo
 `;
 
 const UnitText = tw.div`
-  font-light text-gray-500 text-sm bg-slate-100 h-[46px] rounded-r-[10px] absolute right-0 top-0 flex items-center justify-center w-[3rem]
+  font-light border border-secondary-brightest text-sm h-[47px] rounded-r absolute right-0 top-0 flex items-center justify-center w-[3rem]
 `;
 
 export default function Input({
@@ -76,6 +79,7 @@ export default function Input({
   disabled,
   isError,
   errorMessage,
+  typing,
 }: InputProps) {
   const { setVh } = useVh();
   return (
@@ -85,7 +89,7 @@ export default function Input({
       </Label>
       <InputWrapper>
         <InputStyle
-          className="focus:outline-none"
+          className="focus:outline-none disabled:bg-disabled"
           id={name}
           required={required}
           type={type}
@@ -96,9 +100,15 @@ export default function Input({
           disabled={disabled}
           onBlur={setVh}
         />
-        {!!unit && <UnitText>{unit}</UnitText>}
+        {!!unit && (
+          <UnitText
+            className={typing ? 'text-primary bg-primary-max' : 'text-secondary bg-secondary-max'}
+          >
+            {unit}
+          </UnitText>
+        )}
         {errorMessage && (
-          <p aria-errormessage={errorMessage} className="text-red-500 text-sm pt-1">
+          <p aria-errormessage={errorMessage} className="text-bad text-caption pt-1">
             {errorMessage}
           </p>
         )}

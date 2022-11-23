@@ -17,7 +17,7 @@ export default function NoteImageSwiper({
     <Swiper {...noteSwiperOptions} className="flex items-center h-full">
       {images.map((image) => (
         <SwiperSlide key={image.imageId} className="w-full h-full flex items-center justify-center">
-          <img className="bg-primary-light h-full " src={image.path} />
+          <img className="bg-primary-max h-full " src={image.path} />
         </SwiperSlide>
       ))}
     </Swiper>

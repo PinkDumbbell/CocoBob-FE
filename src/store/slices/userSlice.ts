@@ -51,6 +51,6 @@ export const userSlice = createSlice({
 });
 
 const { reducer, actions } = userSlice;
-export const getCurrentPet = (state: RootState) => state.user.user?.representativeAnimalId;
+export const getCurrentPet = (state: RootState) => state.user.user?.representativeAnimalId ?? null;
 export const { setUserAction, logoutAction, setRepresentativePet, setCurrentPet } = actions;
 export default reducer;

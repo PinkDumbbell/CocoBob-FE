@@ -24,7 +24,7 @@ export const MainSection = tw.div`
   flex-1 w-full h-full flex flex-col gap-1
 `;
 export const TextArea = tw.textarea`
-  p-2 rounded-[10px] border border-gray-200 w-full h-full resize-none
+  p-2 rounded border border-gray-200 w-full h-full resize-none
 `;
 
 export const BottomSection = tw.div`
@@ -34,11 +34,11 @@ export const ImagesContainer = tw.div`
   flex-1 flex items-center
 `;
 export const ImageWrapper = tw.div`
-border border-gray-500 w-full h-full rounded-[10px] flex items-center justify-center overflow-hidden
+border border-gray-500 w-full h-full rounded flex items-center justify-center overflow-hidden
 `;
 export const ImageContainerColumn = tw.div`
   w-1/4 aspect-square p-1
 `;
 export const AddImageButton = tw.button`
-  border border-gray-500 border-dashed  w-full h-full rounded-[10px] flex items-center justify-center
+  border border-gray-500 border-dashed  w-full h-full rounded flex items-center justify-center
 `;

@@ -213,7 +213,7 @@ export default function EditPet() {
                     <InputStyle
                       isError={false}
                       onChange={(e) => e.preventDefault()}
-                      className="text-gray-400 text-left p-2 border-b border-b-gray-400"
+                      className="text-gray text-left p-2 border-b border-b-gray-400"
                       onClick={openBreedBottomSheet}
                       placeholder={breed?.id ? breed?.name : '품종을 검색해보세요'}
                     />
@@ -223,7 +223,7 @@ export default function EditPet() {
                     <FlexColumn className="gap-2">
                       <FlexColumn className="gap-1">
                         <AgeSelectButton
-                          className={birthday ? 'border-primary-main' : 'border-gray-300'}
+                          className={birthday ? 'border-primary' : 'border-gray-300'}
                           type="button"
                           onClick={openBirthdayBottomSheet}
                         >
@@ -238,7 +238,7 @@ export default function EditPet() {
                       </FlexColumn>
                       <div className="flex flex-col gap-1">
                         <AgeSelectButton
-                          className={birthday ? 'border-gray-300' : 'border-primary-main'}
+                          className={birthday ? 'border-gray-300' : 'border-primary'}
                           type="button"
                           onClick={openMonthsAgeBottomSheet}
                         >
@@ -284,8 +284,8 @@ export default function EditPet() {
                         <SexTypeLabel
                           htmlFor="pet-sex-man"
                           className={concatClasses(
-                            'p-1 text-sm',
-                            watch('sex') === 'MALE' ? 'bg-primary-light text-primary-main' : '',
+                            'p-1 text-label',
+                            watch('sex') === 'MALE' ? 'bg-primary-light text-primary' : '',
                           )}
                         >
                           남아
@@ -302,8 +302,8 @@ export default function EditPet() {
                         <SexTypeLabel
                           htmlFor="pet-sex-woman"
                           className={concatClasses(
-                            'p-1 text-sm',
-                            watch('sex') === 'FEMALE' ? 'bg-primary-light text-primary-main' : '',
+                            'p-1 text-label',
+                            watch('sex') === 'FEMALE' ? 'bg-primary-light text-primary' : '',
                           )}
                         >
                           여아

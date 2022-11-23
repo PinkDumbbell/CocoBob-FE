@@ -4,20 +4,20 @@ import dayjs from 'dayjs';
 import { useToastMessage } from '@/utils/hooks';
 import { useGetDailyRecordOverviewQuery } from '@/store/api/dailyApi';
 
-const useDailyRecordOverview = (
-  currentPetId: number,
-  currentDateString: string,
-  timestamp = Date.now(),
-) => {
+const useDailyRecordOverview = (currentDateString: string, currentPetId: number | null) => {
   const openToast = useToastMessage();
   const currentDate = new Date(currentDateString);
   const [idCount, setIdCount] = useState(0);
 
-  const { data, isLoading, isError } = useGetDailyRecordOverviewQuery({
-    date: dayjs(currentDate).format('YYYY-MM-DD'),
-    petId: currentPetId,
-    sessionId: timestamp,
-  });
+  const { data, isLoading, isError } = useGetDailyRecordOverviewQuery(
+    {
+      date: dayjs(currentDate).format('YYYY-MM-DD'),
+      petId: Number(currentPetId),
+    },
+    {
+      skip: !currentPetId || Number.isNaN(Number(currentPetId)),
+    },
+  );
 
   useEffect(() => {
     setIdCount(0);

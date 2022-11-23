@@ -30,7 +30,7 @@ export default function Step2({ goNextStep, enrollPetData, setEnrollData }: Step
       <Form onSubmit={handleSubmit(savePhoto)}>
         <div className="flex flex-col gap-20">
           <div className="space-y-[10px]">
-            <h3 className="text-[24px] leading-[35px]">
+            <h3 className="text-h2 leading-[35px]">
               <PetNameHighlight>{enrollPetData.name}</PetNameHighlight>!
             </h3>
             <div>
@@ -49,7 +49,7 @@ export default function Step2({ goNextStep, enrollPetData, setEnrollData }: Step
               <img
                 alt=""
                 src={petImage}
-                className="bg-gray-200 h-[200px] w-[200px] rounded-full overflow-hidden"
+                className="bg-secondary-brightest h-[200px] w-[200px] rounded-full overflow-hidden"
               />
             </div>
             <input
