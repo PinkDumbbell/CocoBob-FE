@@ -235,9 +235,9 @@ export default function ProductDetailPage() {
                 </button>
               </div>
               {product?.isAAFCOSatisfied ? (
-                <h2 className="mb-[15px] text-primary">충족</h2>
+                <h2 className="text-primary">충족</h2>
               ) : (
-                <h2 className="mb-[15px] text-bad">미달</h2>
+                <h2 className="text-bad">미달</h2>
               )}
             </div>
           </div>
