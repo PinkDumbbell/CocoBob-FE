@@ -13,7 +13,7 @@ const Icon = ({ icon }: { icon: string }) => {
   return <img src={icon} alt="연령 아이콘" className="h-5" />;
 };
 const Label = ({ label, labelColor }: { label?: string | ReactNode; labelColor?: string }) => (
-  <div className={`text-[${labelColor ?? '#222'}] font-medium`}>{label}</div>
+  <div className={`text-[${labelColor ?? '#222'}] font-medium whitespace-nowrap`}>{label}</div>
 );
 
 ProductInfoLabel.Icon = Icon;
