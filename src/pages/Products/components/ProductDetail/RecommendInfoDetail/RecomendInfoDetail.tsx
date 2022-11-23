@@ -14,8 +14,8 @@ export default function RecommendInfoDetail(props: IProps) {
       {isProper ? (
         <RecomendInfoDetailContainer isProper={true}>
           <span>{title}</span>
-          <div>
-            <span className="text-[#1A70D2]">{currentPet?.name}</span>
+          <div className="bg-primary-max text-[14px] p-4 rounded">
+            <span className="text-primary">{currentPet?.name}</span>
             <span>에게</span>
             <br />
             <b>충분한 영양 공급</b>
@@ -27,12 +27,12 @@ export default function RecommendInfoDetail(props: IProps) {
       ) : (
         <RecomendInfoDetailContainer isProper={false}>
           <span>{title}</span>
-          <div>
-            <span className="text-[#1A70D2]">{currentPet?.name}</span>
+          <div className="bg-secondary-brightest text-[14px] p-4 rounded">
+            <span className="text-primary">{currentPet?.name}</span>
             <span>에게</span>
             <br />
             <span>중요한 </span>
-            <b>식이 관리를</b>
+            <b>식이 관리를</b>
             <br />
             <b>도와주기 힘든 </b>
             <span>사료에요 !</span>
