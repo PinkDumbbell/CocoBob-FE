@@ -8,6 +8,7 @@ const GlobalStyle = createGlobalStyle`
   * { // 초기화
     margin : 0;
     padding : 0;
+    -webkit-tap-highlight-color : transparent;
   }
 
   body {
