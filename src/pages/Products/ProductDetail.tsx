@@ -208,7 +208,7 @@ export default function ProductDetailPage() {
                 );
               })}
             </div>
-            <div className="h-[117px] w-[358px] rounded bg-[#F2F8FF] self-center flex flex-col items-center justify-evenly p-min relative">
+            <div className="h-[117px] w-full rounded bg-[#F2F8FF] self-center flex flex-col items-center justify-evenly p-min relative">
               {isAAFCOOpen && (
                 <AAFCOInfoContainer onClick={() => setIsAAFCOOpen(false)}>
                   <div onClick={(e) => e.stopPropagation()}>
