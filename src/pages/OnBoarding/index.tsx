@@ -1,11 +1,15 @@
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
+
 import { EffectCards, Pagination } from 'swiper';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
-import Layout from '@/components/layout/Layout';
 import { Dispatch, SetStateAction, useState } from 'react';
+
+import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/Button/';
+import { OnBoardingContainer } from './index.style';
+import { OnBoardingData } from './index.constant';
 
 const OnBoardingProps: SwiperProps = {
   effect: 'coverflow',
@@ -26,12 +30,6 @@ interface OnBoardingType {
   setNext: Dispatch<SetStateAction<boolean>>;
 }
 
-const OnBoardingData = [
-  { title: '타이틀', sub: '설명입니다.', sub2: '설명입니다2', animate: '애니메이션입니다.' },
-  { title: '타이틀', sub: '설명입니다.', sub2: '설명입니다2', animate: '애니메이션입니다.' },
-  { title: '타이틀', sub: '설명입니다.', sub2: '설명입니다2', animate: '애니메이션입니다.' },
-];
-
 export default function OnBoardingPage(props: OnBoardingType) {
   const { setNext } = props;
   const [last, setLast] = useState(false);
@@ -49,7 +47,7 @@ export default function OnBoardingPage(props: OnBoardingType) {
         )
       }
     >
-      <section className="block w-auto mx-4 h-full">
+      <OnBoardingContainer>
         <Swiper
           className="h-[calc(100%-70px)]"
           onReachEnd={() => setLast(true)}
@@ -58,9 +56,9 @@ export default function OnBoardingPage(props: OnBoardingType) {
           {OnBoardingData.map((data, idx) => (
             <SwiperSlide
               key={idx}
-              className="flex flex-col gap-3 justify-center items-center pt-10"
+              className="flex flex-col gap-1 justify-center items-center pt-10"
             >
-              <h3 className="text-primary">{data.title}</h3>
+              <h3 className="text-primary mb-5">{data.title}</h3>
               <p className="text-secondary">{data.sub}</p>
               <p className="text-secondary">{data.sub2}</p>
               <div className="mt-10 mb-40 bg-primary-max h-80">{data.animate}</div>
@@ -73,7 +71,7 @@ export default function OnBoardingPage(props: OnBoardingType) {
           width="full"
           label="시작하기"
         />
-      </section>
+      </OnBoardingContainer>
     </Layout>
   );
 }
