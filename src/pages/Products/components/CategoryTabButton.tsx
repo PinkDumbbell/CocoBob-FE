@@ -1,21 +1,25 @@
 import { concatClasses } from '@/utils/libs/concatClasses';
+import { CategoryType } from './CategoryTabs';
 
 interface CategoryTabButtonProps {
+  category: CategoryType;
   isOn: boolean;
-  name: string;
-  onClick: () => void;
+  // eslint-disable-next-line
+  changeCategory: (category: CategoryType) => void;
 }
-export default function CategoryTabButton({ isOn, name, onClick }: CategoryTabButtonProps) {
+
+const CategoryTab = ({ category, isOn, changeCategory }: CategoryTabButtonProps) => {
   return (
     <button
-      key={name}
+      type="button"
       className={concatClasses(
-        'h-full flex justify-center items-center flex-1',
-        isOn ? ' border-b border-primary text-primary' : '',
+        'flex items-center justify-center flex-1 h-full w-auto',
+        isOn ? 'font-medium bg-primary' : 'bg-primary-lightbright',
       )}
-      onClick={onClick}
+      onClick={() => changeCategory(category)}
     >
-      {name}
+      {category}
     </button>
   );
-}
+};
+export default CategoryTab;
