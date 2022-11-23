@@ -60,8 +60,8 @@ function useLikeProduct() {
 
 const ProductInformation = ({ label, children }: { label: string; children: ReactNode }) => {
   return (
-    <div className="flex w-1/2 items-center p-3 h-8 rounded border border-gray">
-      <div className="">
+    <div className="flex w-full gap-4 items-center p-3 h-8 rounded border border-gray">
+      <div>
         <p>{label}</p>
       </div>
       <div className="flex-1 flex justify-end">{children}</div>
@@ -144,16 +144,14 @@ export default function ProductDetailPage() {
               brandLogo={product?.brandImage}
             />
             <h3 className="text-center w-full font-semibold px-14">{product?.name}</h3>
-            <div className="w-full p-4 flex flex-col items-center gap-2" id="shadow-box">
+            <div className="p-4 flex flex-col items-center gap-2 " id="shadow-box">
               <ProductInformation label="주재료">
                 <ProductInfoLabel>
                   <ProductInfoLabel.Label
                     label={
-                      <span className="whitespace-pre leading-4">
-                        {mainIngredient.length === 0
-                          ? '분석필요'
-                          : `${mainIngredient[0].split(' ').join('\n')} 등`}
-                      </span>
+                      mainIngredient.length === 0
+                        ? '분석필요'
+                        : `${mainIngredient[0].split(' ').join('\n')} 등`
                     }
                   />
                 </ProductInfoLabel>
