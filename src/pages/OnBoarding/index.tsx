@@ -4,12 +4,16 @@ import 'swiper/css/pagination';
 
 import { EffectCards, Pagination } from 'swiper';
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useState, useRef, useEffect } from 'react';
 
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/Button/';
-import { OnBoardingAnimation } from '@/Animation';
-import { OnBoardingContainer } from './index.style';
+import lottie from 'lottie-web';
+import display from '@/Animation/OnBoarding/assets/display.json';
+import display2 from '@/Animation/OnBoarding/assets/display2.json';
+import display3 from '@/Animation/OnBoarding/assets/display3.json';
+import { OnBoardingContainer, AnimationContainer } from './index.style';
+
 import { OnBoardingData } from './index.constant';
 
 const OnBoardingProps: SwiperProps = {
@@ -28,13 +32,31 @@ const OnBoardingProps: SwiperProps = {
 };
 
 interface OnBoardingType {
-  setNext: Dispatch<SetStateAction<boolean>>;
+  closeOnBoardingScreen: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function OnBoardingPage(props: OnBoardingType) {
-  const { setNext } = props;
+export default function OnBoardingScreen(props: OnBoardingType) {
+  const { closeOnBoardingScreen } = props;
   const [last, setLast] = useState(false);
-  const onNext = () => setNext(true);
+  const isOnboardingShown = () => closeOnBoardingScreen(false);
+
+  const animationContainerRef = useRef<HTMLDivElement[]>([]);
+  const animationData = [display, display2, display3];
+
+  useEffect(() => {
+    if (!last) {
+      animationData.forEach((el, idx) => {
+        lottie.loadAnimation({
+          container: animationContainerRef.current[idx],
+          renderer: 'svg',
+          loop: false,
+          autoplay: idx === 0,
+          name: `part${idx}`,
+          animationData: el,
+        });
+      });
+    }
+  });
 
   return (
     <Layout
@@ -42,7 +64,7 @@ export default function OnBoardingPage(props: OnBoardingType) {
       hideTitle
       customRightChild={
         !last && (
-          <div className="cursor-pointer" onClick={onNext}>
+          <div className="cursor-pointer" onClick={isOnboardingShown}>
             건너뛰기
           </div>
         )
@@ -50,9 +72,14 @@ export default function OnBoardingPage(props: OnBoardingType) {
     >
       <OnBoardingContainer>
         <Swiper
+          {...OnBoardingProps}
+          onSlideChange={(val) => {
+            if (val.activeIndex === 1) return lottie.play('part1');
+            if (val.activeIndex === 2) return lottie.play('part2');
+            return lottie.play('part0');
+          }}
           className="h-[calc(100%-70px)]"
           onReachEnd={() => setLast(true)}
-          {...OnBoardingProps}
         >
           {OnBoardingData.map((data, idx) => (
             <SwiperSlide
@@ -62,12 +89,18 @@ export default function OnBoardingPage(props: OnBoardingType) {
               <h3 className="text-primary mb-5">{data.title}</h3>
               <p className="text-secondary">{data.sub}</p>
               <p className="text-secondary">{data.sub2}</p>
-              <OnBoardingAnimation index={idx} />
+              <AnimationContainer
+                {...{
+                  ref: (el: any) => {
+                    animationContainerRef.current[idx] = el;
+                  },
+                }}
+              />
             </SwiperSlide>
           ))}
         </Swiper>
         <Button
-          onClick={onNext}
+          onClick={isOnboardingShown}
           className={last ? 'visible' : 'invisible'}
           width="full"
           label="시작하기"

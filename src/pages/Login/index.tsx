@@ -6,7 +6,7 @@ import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
 import { useAppDispatch } from '@/store/config';
 import PetalogMain from '@/assets/image/petalog_main.png';
-import OnBoardingPage from '@/pages/OnBoarding';
+import OnBoardingScreen from '@/pages/OnBoarding';
 
 import JoinLink from './components/JoinLink';
 import SocialLoginForm from './components/SocialLoginForm';
@@ -17,7 +17,7 @@ import SignUpSheet from './SignUpSheet';
 export default function LoginPage() {
   const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
-  const [next, setNext] = useState(false);
+  const [isOnboardingShown, setOnboardingShown] = useState(true);
 
   const agreement = searchParams.get('agreement');
   const privacyModal = agreement === 'privacy';
@@ -44,31 +44,26 @@ export default function LoginPage() {
   }, [privacyModal]);
   return (
     <>
-      {next ? (
-        <>
-          <PageContainer>
-            <LogoContainer>
-              <img src={PetalogMain} alt="petalog_main_image" className="max-w-[425px] w-60" />
-            </LogoContainer>
-            <FormContainer>
-              <SocialLoginForm />
-              <Button
-                className="border-[1.5px] border-secondary-brightest text-p h-btn"
-                label="이메일로 로그인"
-                backgroundColor="transparent"
-                width="full"
-                primary="first"
-                onClick={openEmailLoginSheet}
-              />
-              <JoinLink color="white" />
-            </FormContainer>
-          </PageContainer>
-          <EmailLoginSheet isOpen={isEmailBottomSheetOpen} closeBottomSheet={closeBottomSheet} />
-          <SignUpSheet isOpen={isSignUpBottomSheetOpen} />
-        </>
-      ) : (
-        <OnBoardingPage setNext={setNext} />
-      )}
+      {isOnboardingShown && <OnBoardingScreen closeOnBoardingScreen={setOnboardingShown} />}
+      <PageContainer>
+        <LogoContainer>
+          <img src={PetalogMain} alt="petalog_main_image" className="max-w-[425px] w-60" />
+        </LogoContainer>
+        <FormContainer>
+          <SocialLoginForm />
+          <Button
+            className="border-[1.5px] border-secondary-brightest text-p h-btn"
+            label="이메일로 로그인"
+            backgroundColor="transparent"
+            width="full"
+            primary="first"
+            onClick={openEmailLoginSheet}
+          />
+          <JoinLink color="white" />
+        </FormContainer>
+      </PageContainer>
+      <EmailLoginSheet isOpen={isEmailBottomSheetOpen} closeBottomSheet={closeBottomSheet} />
+      <SignUpSheet isOpen={isSignUpBottomSheetOpen} />
     </>
   );
 }
