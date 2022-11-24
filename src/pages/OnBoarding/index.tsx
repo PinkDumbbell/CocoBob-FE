@@ -8,6 +8,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/Button/';
+import { OnBoardingAnimation } from '@/Animation';
 import { OnBoardingContainer } from './index.style';
 import { OnBoardingData } from './index.constant';
 
@@ -61,7 +62,7 @@ export default function OnBoardingPage(props: OnBoardingType) {
               <h3 className="text-primary mb-5">{data.title}</h3>
               <p className="text-secondary">{data.sub}</p>
               <p className="text-secondary">{data.sub2}</p>
-              <div className="mt-10 mb-40 bg-primary-max h-80">{data.animate}</div>
+              <OnBoardingAnimation index={idx} />
             </SwiperSlide>
           ))}
         </Swiper>

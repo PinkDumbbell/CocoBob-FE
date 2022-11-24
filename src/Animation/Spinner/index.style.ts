@@ -12,6 +12,7 @@ export const Container = tw.div`
   bg-white
   bg-opacity-60
   backdrop-blur-sm
+  z-[2000]
 `;
 
 export const BG = tw.div`
