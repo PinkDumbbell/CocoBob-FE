@@ -18,6 +18,7 @@ export const HeaderContents = styled.div`
   width: 100%;
   height: 100%;
   border-bottom: 1px solid #eee;
+  position: relative;
 `;
 export const TitleWrapper = styled.div<{ isBigProfileHide: boolean }>`
   position: absolute;
@@ -72,32 +73,20 @@ export const LeftMenuWrapper = styled.div`
   align-items: center;
   gap: 0.3rem;
   position: absolute;
-  left: 16px;
+  left: 0px;
 `;
 export const RightMenuWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 0.3rem;
   position: absolute;
-  right: 16px;
+  right: 0;
+  height: 100%;
+  width: fit-content;
 `;
 export const BackButton = styled.button`
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
   padding: 0.5rem;
-`;
-
-export const SideMenuWrapper = styled.div<{ isOpen: boolean }>`
-  position: absolute;
-  z-index: 9999;
-  left: -16px;
-  top: 0;
-  bottom: 0;
-  width: 12rem;
-  height: 100vh;
-  padding: 1rem;
-  background: white;
-  transition: transform 200ms ease;
-  transform: ${({ isOpen }) => (isOpen ? 'translateX(0)' : 'translateX(-100%)')};
 `;

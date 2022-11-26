@@ -1,13 +1,24 @@
 import oldDog from '@/assets/image/old-dog.png';
 import growingDog from '@/assets/image/growing-up-dog.png';
 import adultDog from '@/assets/image/adult-dog.png';
-import { InfoContainer, MainContainer } from './index.style';
+import { ReactComponent as DogIcon } from '@/assets/icon/dog_age_icon.svg';
+import { InfoContainer } from './index.style';
+import ProductDetailSection from './ProductDetailSection';
 
 interface IProps {
   age: string;
 }
 
-export const DogInfoForAge: any = {
+type DogInfoType = {
+  [key: string]: {
+    name: string;
+    age: string;
+    color: string;
+    img: string;
+  };
+};
+
+export const DogInfoForAge: DogInfoType = {
   growing: {
     name: '성장기',
     age: '2세 이하의',
@@ -17,7 +28,7 @@ export const DogInfoForAge: any = {
   adult: {
     name: '성견',
     age: '2 ~ 7세의',
-    color: '##1A70D2',
+    color: '#1A70D2',
     img: adultDog,
   },
   old: {
@@ -32,20 +43,27 @@ export default function ProperAge(props: IProps) {
   const { age } = props;
   const DogInfo = DogInfoForAge[age];
   return (
-    <MainContainer color={DogInfo.color}>
-      <h4>급여 대상</h4>
-      <span className="colored">{DogInfo.name}</span>
-      <InfoContainer>
-        <div>
-          <span>이 사료는 </span>
-          <span className="colored">{DogInfo.age} </span>
-          <b>반려견</b>
-          <span>에게</span>
-          <br />
-          <span>적합한 사료에요 !</span>
-        </div>
-        <img className="w-[64px] h-[70px]" src={DogInfo.img} />
-      </InfoContainer>
-    </MainContainer>
+    <ProductDetailSection label="급여 대상">
+      <div className="flex flex-col gap-2">
+        <p className={`text-p font-medium text-[${DogInfo.color}]`}>{DogInfo.name}</p>
+        <InfoContainer>
+          <div>
+            <p className="text-[14px]">
+              이 사료는
+              <strong>
+                <span
+                  className={`text-[${DogInfo.color}] font-semibold`}
+                >{` ${DogInfo.age} `}</span>
+                반려견
+              </strong>
+              에게
+              <br />
+              적합한 사료에요 !
+            </p>
+          </div>
+          <DogIcon fill={DogInfo.color} stroke={DogInfo.color} />
+        </InfoContainer>
+      </div>
+    </ProductDetailSection>
   );
 }

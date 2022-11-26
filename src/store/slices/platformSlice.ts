@@ -14,7 +14,6 @@ export const getPlatformInfo = createAsyncThunk('getPlatform', async () => {
   const { platform }: { platform: PlatformType } = await window.flutter_inappwebview.callHandler(
     'platformHandler',
   );
-  console.log('react platform', platform);
   return platform;
 });
 

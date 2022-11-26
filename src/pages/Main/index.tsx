@@ -11,8 +11,8 @@ import ContentsContainer from '@/components/ContentsContainer';
 
 import { useCurrentPet } from '@/utils/hooks';
 
-import doctorPng from '@/assets/image/main_doctor.png';
-import doctorWebp from '@/assets/image/main_doctor.webp';
+import doctorPng from '@/assets/image/main_background.png';
+import doctorWebp from '@/assets/image/main_background.webp';
 import dogIcon from '@/assets/icon/dog_icon.png';
 import { ReactComponent as RecommendIcon } from '@/assets/icon/navbar_food.svg';
 
@@ -35,6 +35,7 @@ import 'swiper/css/pagination';
 
 import MainContentButton from './components/MainContentButton';
 import SwiperProductItem from './components/SwiperProductItem';
+import DailySection from './components/DailySection';
 
 const productSwiperOption: SwiperProps = {
   effect: 'coverflow',
@@ -59,6 +60,7 @@ export default function Main() {
     getRecommendProducts,
     { data: recommendedProducts, isSuccess, isLoading, isError: recommendError },
   ] = useLazyGetRecommendProductQuery();
+
   const goRegisterPetPage = () => navigate('/register');
   const goProductsRecommendPage = () => navigate('/products/recommend');
 
@@ -82,13 +84,13 @@ export default function Main() {
   }, [pet]);
 
   return (
-    <Layout footer header title="펫탈로그" menu canSearch>
+    <Layout footer header title="펫탈로그">
       <PageContainer>
         <MainContentSection>
           <DoctorImageWrapper>
             <picture>
-              <source srcSet={doctorWebp} type="image/webp" />
-              <img src={doctorPng} alt="메인 배경 이미지 1" className="w-full" />
+              <source srcSet={doctorWebp} type="image/webp" className="w-full" />
+              <img src={doctorPng} alt="메인 배경 이미지 1" className="w-full scale-x-105" />
             </picture>
           </DoctorImageWrapper>
           <VerticalBox className="z-10 min-h-section">
@@ -109,23 +111,7 @@ export default function Main() {
           </VerticalBox>
           <div className="-translate-y-5">
             <ContentsContainer>
-              <div className="w-full overflow-hidden">
-                <div className="p-4"></div>
-                <div className="flex w-full items-center overflow-hidden">
-                  <button
-                    className="p-2 w-1/2 bg-primary text-white rounded-bl"
-                    onClick={() => navigate('/products')}
-                  >
-                    사료찾기
-                  </button>
-                  <button
-                    className="p-2 w-1/2 bg-primary text-white rounded-br"
-                    onClick={() => navigate('/daily')}
-                  >
-                    생활기록
-                  </button>
-                </div>
-              </div>
+              <DailySection />
             </ContentsContainer>
           </div>
         </MainContentSection>
@@ -135,7 +121,7 @@ export default function Main() {
             더보기
           </Link>
         </div>
-        <div className="w-full flex items-center">
+        <div className="w-full flex items-center h-72">
           <Swiper
             {...productSwiperOption}
             className="pt-4 pb-14"

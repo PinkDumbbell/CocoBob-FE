@@ -12,7 +12,7 @@ export const MainContentSection = tw(ContentSection)`
 relative flex flex-col gap-11 w-full
 `;
 export const DoctorImageWrapper = tw.div`
-absolute top-4 right-0 left-0
+	absolute top-4 right-0 left-0 overflow-hidden
 `;
 
 export const VerticalBox = tw.div`

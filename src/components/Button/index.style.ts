@@ -1,5 +1,5 @@
 export const common = `
-max-w-sm
+max-w-full
 py-2
 px-10
 text-h3
@@ -8,6 +8,10 @@ font-bold
 rounded
 h-btn
 
+disabled:animate-none
+disabled:bg-gray
+disabled:opacity-50
+disabled:bg-none
 hover:animate-push
 active:animate-afterpush
 `;

@@ -49,7 +49,7 @@ export default function Step2({ goNextStep, enrollPetData, setEnrollData }: Step
               <img
                 alt=""
                 src={petImage}
-                className="bg-gray-200 h-[200px] w-[200px] rounded-full overflow-hidden"
+                className="bg-secondary-brightest h-[200px] w-[200px] rounded-full overflow-hidden"
               />
             </div>
             <input

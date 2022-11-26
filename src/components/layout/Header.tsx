@@ -1,10 +1,9 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import useCurrentPet from '@/utils/hooks/useCurrentPet';
 import BackButtonImage from '@/assets/icon/header_back.png';
 import { ReactComponent as SearchIcon } from '@/assets/icon/search_icon.svg';
-import { ReactComponent as MenuIcon } from '@/assets/icon/menu_icon.svg';
 import DefaultProfile from '@/assets/icon/navbar_profile.svg';
 
 import {
@@ -14,13 +13,11 @@ import {
   LeftMenuWrapper,
   ProfileWrapper,
   RightMenuWrapper,
-  SideMenuWrapper,
   Title,
   TitleWrapper,
 } from './Header.style';
 
 export interface HeaderProps {
-  menu?: boolean;
   canGoBack?: boolean;
   onClickGoBack?: () => void;
   title?: string;
@@ -28,14 +25,10 @@ export interface HeaderProps {
   hideTitle?: boolean;
   customRightChild?: ReactNode;
 }
-const LeftChild = React.memo(({ canGoBack, onClickGoBack, menu }: HeaderProps) => {
+const LeftChild = React.memo(({ canGoBack, onClickGoBack }: HeaderProps) => {
   const navigator = useNavigate();
-  const [isMenuOpen, setMenu] = useState(false);
 
   const goBackPage = () => navigator(-1);
-
-  const openMenu = () => setMenu(true);
-  const closeMenu = () => setMenu(false);
 
   return (
     <>
@@ -44,20 +37,6 @@ const LeftChild = React.memo(({ canGoBack, onClickGoBack, menu }: HeaderProps) =
           <BackButton onClick={onClickGoBack ?? goBackPage}>
             <img src={BackButtonImage} />
           </BackButton>
-        )}
-        {menu && (
-          <>
-            <div>
-              <button type="button" onClick={openMenu}>
-                <MenuIcon />
-              </button>
-            </div>
-            <SideMenuWrapper isOpen={isMenuOpen}>
-              <button type="button" onClick={closeMenu}>
-                닫기
-              </button>
-            </SideMenuWrapper>
-          </>
         )}
       </LeftMenuWrapper>
     </>
@@ -80,7 +59,6 @@ const RightChild = React.memo(({ canSearch }: { canSearch?: boolean }) => {
 RightChild.displayName = 'HeaderRightChild';
 
 function Header({
-  menu = false,
   canGoBack,
   onClickGoBack,
   title,
@@ -94,7 +72,7 @@ function Header({
   return (
     <HeaderWrapper>
       <HeaderContents>
-        <LeftChild menu={menu} onClickGoBack={onClickGoBack} canGoBack={canGoBack} />
+        <LeftChild onClickGoBack={onClickGoBack} canGoBack={canGoBack} />
         <TitleWrapper isBigProfileHide={!!hideTitle}>
           {location.pathname === '/' && (
             <ProfileWrapper isSmall={!!hideTitle}>

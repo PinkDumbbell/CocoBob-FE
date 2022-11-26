@@ -22,7 +22,7 @@ export default function SignUpPrivacyPolicy({ onClose, onConfirm }: PolicyModalP
             type="button"
             label="전체 동의"
             width="small"
-            className="text-[14px] leading-5"
+            className="text-label leading-5"
             onClick={onConfirm}
           />
         </div>
