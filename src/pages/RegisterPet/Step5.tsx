@@ -1,7 +1,9 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { ActivityLevelType, PetSexType } from '@/@type/pet';
+
+import { PetSexType } from '@/@type/pet';
 import { FormInput, FormButton } from '@/components/Form';
+import ActivityLevelSelector, { useSelectActivityLevel } from '@/components/ActivitySelector';
 import { concatClasses } from '@/utils/libs/concatClasses';
 import { ReactComponent as MaleIcon } from '@/assets/icon/male_icon.svg';
 import { ReactComponent as FemaleIcon } from '@/assets/icon/female_icon.svg';
@@ -23,14 +25,6 @@ interface Step4Form {
   bodyWeight: number;
 }
 
-const activityLevelStrings = [
-  '',
-  '활동이 적은 편이에요',
-  '다른 아이들보다 차분한 편이에요',
-  '잘 움직이는 편이에요',
-  '활발해요!',
-  '엄청 기운이 넘쳐요!',
-];
 export default function Step5({ goNextStep, enrollPetData, setEnrollData }: StepPageProps) {
   const {
     register,
@@ -42,7 +36,7 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
     formState: { errors },
   } = useForm<Step4Form>();
 
-  const [selectedActivityLevel, setSelectedActivityLevel] = useState(
+  const { selectedActivityLevel, handleSelectActivityLevel } = useSelectActivityLevel(
     enrollPetData?.activityLevel ?? 3,
   );
 
@@ -67,14 +61,6 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
       setValue('bodyWeight', enrollPetData.bodyWeight);
     }
   }, [enrollPetData]);
-
-  const handleSelectActivityLevel = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    const level = parseInt(value, 10);
-    if (Number.isNaN(level) || level < 1 || level > 5) {
-      return;
-    }
-    setSelectedActivityLevel(level as ActivityLevelType);
-  };
 
   return (
     <PageContainer>
@@ -165,37 +151,10 @@ export default function Step5({ goNextStep, enrollPetData, setEnrollData }: Step
           />
           <div className="flex flex-col gap-2">
             <p className="font-medium text-label">활동수준</p>
-            <div className="flex flex-col gap-3">
-              <div>
-                <input
-                  type="range"
-                  name="activity-level"
-                  id="activity-level"
-                  list="tickmarks"
-                  className={concatClasses(
-                    'w-full h-1.5 rounded-lg appearance-none cursor-pointer',
-                    selectedActivityLevel === 1
-                      ? 'bg-secondary-brightest dark:secondary-dark'
-                      : selectedActivityLevel === 2
-                      ? 'bg-primary-brightest dark:primary-dark'
-                      : selectedActivityLevel === 3
-                      ? 'bg-primary-brighter dark:primary-darker'
-                      : selectedActivityLevel === 4
-                      ? 'bg-primary-bright dark:bg-primary-dark'
-                      : 'bg-primary dark:bg-primary',
-                  )}
-                  min="1"
-                  max="5"
-                  value={selectedActivityLevel}
-                  onChange={handleSelectActivityLevel}
-                />
-              </div>
-              <div>
-                <p className="text-primary-bright text-label">
-                  {activityLevelStrings[selectedActivityLevel]}
-                </p>
-              </div>
-            </div>
+            <ActivityLevelSelector
+              activityLevel={selectedActivityLevel}
+              handleSelectLevel={handleSelectActivityLevel}
+            />
           </div>
 
           <div>
