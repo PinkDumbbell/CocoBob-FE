@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import { Button } from '@/components/Button';
 import DatePicker from '@/components/DatePicker';
@@ -11,6 +12,7 @@ import {
   getDateString,
 } from '@/utils/libs/date';
 import { useBottomSheet, useToastMessage } from '@/utils/hooks';
+
 import { ButtonWrapper, PageContainer, QuestionText, Form, PetNameHighlight } from './index.style';
 import { StepPageProps } from './type';
 
