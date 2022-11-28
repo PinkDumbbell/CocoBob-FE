@@ -1,4 +1,3 @@
-import React from 'react';
 import Portal from '@/portal';
 import RecommandContent from '@/pages/Products/components/Search';
 
