@@ -7,7 +7,7 @@ import Layout from '@/components/layout/Layout';
 import { FormInput, FormButton } from '@/components/Form';
 import { InputStyle, Label } from '@/components/Form/FormInput';
 
-import { ActivityLevelType, IBreeds, IPetInformation, PetSexType, PetInfoForm } from '@/@type/pet';
+import { IBreeds, IPetInformation, PetSexType, PetInfoForm } from '@/@type/pet';
 import { useGetPetsDetailQuery, useUpdatePetDataMutation } from '@/store/api/petApi';
 
 import { useSelectImage, useBottomSheet, useConfirm, useToastMessage } from '@/utils/hooks';
@@ -18,6 +18,7 @@ import {
   MonthsAgeBottomSheet,
 } from '@/components/BottomSheet';
 import useAgeBottomSheet from '@/components/BottomSheet/hooks/useAgeBottomSheet';
+import ActivityLevelSelector, { useSelectActivityLevel } from '@/components/ActivitySelector';
 
 import { ReactComponent as TrashIcon } from '@/assets/icon/trash_icon.svg';
 import { ReactComponent as EditIcon } from '@/assets/icon/edit_icon.svg';
@@ -46,7 +47,6 @@ interface IPetEditForm {
   isSpayed: boolean;
   isPregnant: boolean;
 }
-const activityLevels: ActivityLevelType[] = [1, 2, 3, 4, 5];
 
 function useUpdatePet() {
   const navigate = useNavigate();
@@ -103,7 +103,8 @@ export default function EditPet() {
     openBirthdayBottomSheet,
   } = useAgeBottomSheet({ petAge: petData?.age ?? 0, petBirthday: petData?.birthday ?? '' });
 
-  const [selectedActivityLevel, setSelectedActivityLevel] = useState<ActivityLevelType>(3);
+  const { selectedActivityLevel, setSelectedActivityLevel, handleSelectActivityLevel } =
+    useSelectActivityLevel();
   const [breed, setBreed] = useState<IBreeds | undefined>();
   const [isImageDeleted, setIsImageDeleted] = useState(false); // 사진을 삭제했을 때 true, 변경하거나 그대로 유지 : false
 
@@ -323,19 +324,10 @@ export default function EditPet() {
                   </div>
                   <FlexColumn className="gap-2">
                     <p>활동수준</p>
-                    <div className="flex gap-4">
-                      {activityLevels.map((value) => (
-                        <input
-                          key={value}
-                          type="radio"
-                          name={String(value)}
-                          id={`activity-level-${value}`}
-                          value={value}
-                          checked={value === selectedActivityLevel}
-                          onChange={() => setSelectedActivityLevel(value)}
-                        />
-                      ))}
-                    </div>
+                    <ActivityLevelSelector
+                      activityLevel={selectedActivityLevel}
+                      handleSelectLevel={handleSelectActivityLevel}
+                    />
                   </FlexColumn>
                 </FlexColumn>
               </div>

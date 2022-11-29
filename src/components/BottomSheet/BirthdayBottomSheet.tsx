@@ -1,13 +1,11 @@
-import { getDateDiff } from '@/utils/libs/date';
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
+import DatePicker from '@/components/DatePicker';
+import { getDateDiff, getDateString } from '@/utils/libs/date';
+
 import BottomSheet from './BottomSheet';
+import { BottomSheetContentWrapper, Title } from './BottomSheet.style';
 import Button from '../Button';
-import {
-  BottomSheetContentWrapper,
-  DatePicker,
-  SelectDateWrapper,
-  Title,
-} from './BottomSheet.style';
 
 interface BirthdayBottomSheetProps {
   isOpen: boolean;
@@ -20,7 +18,7 @@ export default function BirthdayBottomSheet({
   birthday,
   onSave,
 }: BirthdayBottomSheetProps) {
-  const [date, setDate] = useState(birthday);
+  const [date, setDate] = useState<string | undefined>(birthday);
 
   const ageString = useMemo(() => {
     if (!date) return '';
@@ -48,16 +46,21 @@ export default function BirthdayBottomSheet({
   return (
     <BottomSheet isOpen={isOpen}>
       <BottomSheetContentWrapper>
-        <Title>언제 태어났나요?</Title>
-        <SelectDateWrapper className="flex-col">
-          <DatePicker
-            type="date"
-            defaultValue={date}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setDate(e.target.value)}
-          />
-          {ageString && <p className="text-label text-primary">{`나이 : ${ageString}`}</p>}
-        </SelectDateWrapper>
-        <Button label="선택완료" onClick={saveDate} />
+        <div className="flex flex-col gap-1">
+          <Title>언제 태어났나요?</Title>
+          <div className="py-3 w-full flex flex-col items-center justify-center gap-3">
+            <DatePicker
+              currentDate={date ? new Date(date) : new Date()}
+              onChangeDate={(selectedDate) => {
+                if (selectedDate) {
+                  setDate(getDateString(selectedDate));
+                }
+              }}
+            />
+            {date && <p className="text-label text-primary">{`나이 : ${ageString}`}</p>}
+          </div>
+          <Button label="선택완료" onClick={saveDate} />
+        </div>
       </BottomSheetContentWrapper>
     </BottomSheet>
   );
