@@ -69,6 +69,8 @@ export default defineConfig(({ mode }) => {
           },
         },
       },
+      chunkSizeWarningLimit: 650,
+      outDir: path.resolve(__dirname, './build'),
     },
   };
 });
