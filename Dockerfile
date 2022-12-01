@@ -7,9 +7,7 @@ RUN npm install
 ENV VITE_API_BASE_URL="https://api.petalog.xyz"
 ENV VITE_KAKAO_KEY="6d0cbe39d9e87963ffe1f458f28e9cb8"
 
-CMD echo ${VITE_API_BASE_URL}
-
-RUN npm run build
+RUN npm run build --omit=dev
 
 # server environment
 FROM nginx:alpine
