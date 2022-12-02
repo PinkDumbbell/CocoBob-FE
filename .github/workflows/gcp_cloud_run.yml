@@ -1,13 +1,9 @@
-name: Cloud Run Deploy workflow
+name: Cloud Run Deploy workflow in develop branch
 
 on:
   push:
     branches:
-      - 'CB-569-chore/gcp'
-env:
-  PROJECT_ID: quick-cacao-370017 # TODO: update Google Cloud project id
-  SERVICE: petalog-client # TODO: update Cloud Run service name
-  REGION: asia-east1 # TODO: update Cloud Run service region
+      - 'develop'
 
 jobs:
   deploy:
@@ -36,6 +32,6 @@ jobs:
       - name: Upload Docker Image to GCP Registry
         run: gcloud builds submit --tag gcr.io/quick-cacao-370017/cra-clud-run
 
-      - name: Install beta commands and deploy on cloud run
+      - name: Deploy on Cloud Run
         run: |
           gcloud run deploy petalog-client --image gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_DEV_APP_NAME }} --project ${{ secrets.GCP_PROJECT }} --region asia-east1 --platform managed
