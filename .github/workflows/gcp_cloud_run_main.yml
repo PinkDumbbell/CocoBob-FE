@@ -3,7 +3,7 @@ name: Cloud Run Deploy workflow in develop branch
 on:
   push:
     branches:
-      - 'develop'
+      - 'main'
 
 jobs:
   deploy:
@@ -27,11 +27,5 @@ jobs:
       - name: Set up Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v1'
 
-      # - name: Push image to GCP Registry
-      #   run: docker push eu.gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_DEV_APP_NAME }}
-      - name: Upload Docker Image to GCP Registry
-        run: gcloud builds submit --tag gcr.io/quick-cacao-370017/cra-clud-run
-
-      - name: Deploy on Cloud Run
-        run: |
-          gcloud run deploy petalog-client --image gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_DEV_APP_NAME }} --project ${{ secrets.GCP_PROJECT }} --region asia-east1 --platform managed
+      - name: Deploy
+        run: gcloud builds submit --config ./cloudbuild.prod.yml .
