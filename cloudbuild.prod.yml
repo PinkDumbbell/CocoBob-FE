@@ -24,5 +24,7 @@ steps:
       - 'gcr.io/quick-cacao-370017/petalog-client-main'
       - '--region'
       - 'asia-east1'
+      - '--platform'
+      - 'managed'
 images:
   - 'gcr.io/quick-cacao-370017/petalog-client-main'
