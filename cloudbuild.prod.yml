@@ -7,7 +7,7 @@ steps:
         '-t',
         'gcr.io/quick-cacao-370017/petalog-client-main',
         '-f',
-        './Dockerfile.dev',
+        './Dockerfile.prod',
         '.',
       ]
   # Push the container image to Container Registry
@@ -24,7 +24,5 @@ steps:
       - 'gcr.io/quick-cacao-370017/petalog-client-main'
       - '--region'
       - 'asia-east1'
-      - '--platform'
-      - 'managed'
 images:
   - 'gcr.io/quick-cacao-370017/petalog-client-main'
