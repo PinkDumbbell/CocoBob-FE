@@ -59,6 +59,9 @@ export default function LoginPage() {
           <JoinLink color="white" />
         </FormContainer>
       </PageContainer>
+      <div>
+        <p>VITE_API_BASE_URL : {import.meta.env.VITE_API_BASE_URL}</p>
+      </div>
       <EmailLoginSheet isOpen={isEmailBottomSheetOpen} closeBottomSheet={closeBottomSheet} />
       <SignUpSheet isOpen={isSignUpBottomSheetOpen} />
     </>
