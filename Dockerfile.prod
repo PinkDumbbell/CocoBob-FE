@@ -5,7 +5,7 @@ WORKDIR /app
 COPY . ./
 RUN npm install
 
-ENV VITE_API_BASE_URL="api.petalog.us"
+ENV VITE_API_BASE_URL="/api"
 ENV VITE_KAKAO_KEY="6d0cbe39d9e87963ffe1f458f28e9cb8"
 
 RUN npm run build --omit=dev
