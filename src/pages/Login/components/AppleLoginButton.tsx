@@ -63,7 +63,7 @@ const AppleLoginButton = () => {
         authOptions={{
           clientId: 'us.petalog.services',
           scope: 'email name',
-          redirectURI: 'https://petalog.us/auth/apple/callback',
+          redirectURI: 'https://petalog.kr/auth/apple/callback',
           usePopup: true,
           state: 'state',
         }}
