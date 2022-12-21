@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { Button } from '@/components/Button';
@@ -6,6 +6,7 @@ import useBottomSheet from '@/utils/hooks/useBottomSheet';
 import { closeBottomSheetAction } from '@/store/slices/bottomSheetSlice';
 import { useAppDispatch } from '@/store/config';
 import PetalogMain from '@/assets/image/petalog_main.png';
+import OnBoardingScreen from '@/pages/OnBoarding';
 
 import JoinLink from './components/JoinLink';
 import SocialLoginForm from './components/SocialLoginForm';
@@ -16,6 +17,7 @@ import SignUpSheet from './SignUpSheet';
 export default function LoginPage() {
   const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
+  const [isOnboardingShown, setOnboardingShown] = useState(true);
 
   const agreement = searchParams.get('agreement');
   const privacyModal = agreement === 'privacy';
@@ -42,6 +44,7 @@ export default function LoginPage() {
   }, [privacyModal]);
   return (
     <>
+      {isOnboardingShown && <OnBoardingScreen closeOnBoardingScreen={setOnboardingShown} />}
       <PageContainer>
         <LogoContainer>
           <img src={PetalogMain} alt="petalog_main_image" className="max-w-[425px] w-60" />
